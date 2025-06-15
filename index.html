@@ -1,429 +1,74 @@
+
 <!DOCTYPE html>
 
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>
-   Cuide-me - Conectando cuidadores a famílias
-  </title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<title>Cuide-me | Conectando quem cuida e quem precisa de cuidado</title>
+<meta content="Plataforma que conecta cuidadores verificados a famílias. Cuide de quem você ama com empatia e segurança. Ache cuidador de idoso confiável." name="description"/>
+<meta content="cuidador, cuidador de idoso, cuidador confiável, cuidado domiciliar, Cuide-me, encontrar cuidador" name="keywords"/>
+<meta content="Cuide-me" name="author"/>
 <style>
-   :root {
-      --azul-turquesa: #3ddad7;
-      --azul-bebe: #d1f3f2;
-      --texto-escuro: #2c3e50;
-      --branco: #ffffff;
-      --borda: 14px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Inter', sans-serif;
-      background-color: var(--azul-bebe);
-      color: var(--texto-escuro);
-      line-height: 1.6;
-      scroll-behavior: smooth;
+      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
+      color: #245063;
+      font-size: 1.08rem;
+      letter-spacing: 0.01em;
+      margin: 0;
+      padding: 0;
     }
-    header.hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 4rem 1rem 2rem;
-      background: linear-gradient(to bottom, #d1f3f2 0%, #ffffff 100%);
+    h1, h2, h3, h4 {
+      color: #1ba8c2;
+      font-weight: bold;
     }
-    header.hero img {
-      max-width: 160px;
-      height: auto;
-      margin-bottom: 1.5rem;
-    }
-    header.hero h1 {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-      color: #087f8c;
-    }
-    header.hero p {
-      font-size: 1.1rem;
-      color: #4a5d68;
-      max-width: 600px;
-      margin-bottom: 2rem;
-    }
-    .cta {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      max-width: 400px;
-      width: 100%;
-    }
-    .cta a {
-      background-color: var(--azul-turquesa);
-      color: white;
+    .container { max-width: 1200px; margin: auto; padding: 2rem; }
+    .cta-btn {
       padding: 1rem 1.5rem;
-      text-decoration: none;
-      font-weight: 600;
-      border-radius: var(--borda);
-      transition: all 0.3s ease;
-      text-align: center;
-    }
-    .cta a:hover {
-      background-color: #28c9c6;
-      transform: scale(1.03);
-    }
-    section {
-      padding: 4rem 1rem;
-      background-color: var(--branco);
-      margin: 2rem auto;
-      border-radius: 20px;
-      max-width: 800px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-    }
-    section h2 {
-      font-size: 1.8rem;
-      color: #087f8c;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-    section p {
-      margin-bottom: 2rem;
-      color: #555;
-      text-align: center;
-    }
-    footer {
-      margin-top: 3rem;
-      padding: 2rem;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #555;
-    }
-    footer a {
-      color: #087f8c;
-      text-decoration: none;
-      margin: 0 0.5rem;
-    }
-  
-  @media (max-width: 600px) {
-    header.hero h1 {
-      font-size: 1.6rem;
-    }
-    header.hero p {
+      border-radius: 9999px;
+      font-weight: bold;
       font-size: 1rem;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s ease;
     }
-    .cta {
-      width: 100%;
-    }
-    iframe {
-      height: 900px !important;
-    }
-    section {
-      padding: 2rem 1rem;
-    }
-  }
-
-  .carrossel {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    gap: 1rem;
-    padding: 1rem 0;
-  }
-  .depoimento {
-    flex: 0 0 80%;
-    scroll-snap-align: center;
-    background-color: #f8f8f8;
-    padding: 1.5rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-    min-width: 280px;
-    max-width: 400px;
-    margin: auto;
-    text-align: center;
-  }
-  .depoimento h3 {
-    margin-bottom: 0.5rem;
-    font-size: 1.1rem;
-    color: #087f8c;
-  }
-  .depoimento p {
-    font-size: 0.95rem;
-    color: #555;
-  }
-
-  #beneficios {
-    text-align: center;
-    padding: 4rem 1rem;
-    background-color: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
-    margin-top: 3rem;
-  }
-  .benefits-container {
-    display: flex;
-    justify-content: center;
-    gap: 2rem;
-    flex-wrap: wrap;
-    margin-top: 2rem;
-  }
-  .benefit-card {
-    background-color: #d1f3f2;
-    border-radius: 14px;
-    padding: 2rem;
-    max-width: 300px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    text-align: left;
-  }
-  .benefit-card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 0.8rem;
-    color: #087f8c;
-  }
-  .benefit-card p {
-    font-size: 1rem;
-    color: #444;
-  }
-
-  html {
-    scroll-behavior: smooth;
-  }
-  .floating-cta {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    background-color: #3ddad7;
-    color: white;
-    padding: 0.9rem 1.2rem;
-    border-radius: 50px;
-    font-weight: bold;
-    text-decoration: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-    z-index: 1000;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-  }
-  .floating-cta:hover {
-    background-color: #28c9c6;
-    transform: scale(1.05);
-  }
-
-  #splash-screen {
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background-color: #d1f3f2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 2000;
-    animation: fadeIn 0.6s ease-out;
-  }
-  #splash-screen img {
-    max-width: 220px;
-    animation: pulse 1.5s infinite ease-in-out;
-  }
-  .fade-out {
-    animation: fadeOut 0.6s ease-in-out forwards;
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-  @keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-  }
-  @keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-  }
-
-  body.dark-mode {
-    background-color: #1c1c1c;
-    color: #f0f0f0;
-  }
-  body.dark-mode section {
-    background-color: #2b2b2b;
-    color: #f0f0f0;
-  }
-  body.dark-mode .benefit-card,
-  body.dark-mode .depoimento {
-    background-color: #333;
-    color: #f0f0f0;
-  }
-  body.dark-mode .floating-cta {
-    background-color: #444;
-    color: #fff;
-  }
-  body.dark-mode a,
-  body.dark-mode footer a {
-    color: #3ddad7;
-  }
-  body.dark-mode #splash-screen {
-    background-color: #1c1c1c;
-  }
-  
-
-/* Estilos adicionais da seção empática */
-
-    :root {
-      --azul-turquesa: #3ddad7;
-      --azul-bebe: #d1f3f2;
-      --texto-escuro: #2c3e50;
-      --branco: #ffffff;
-      --borda: 14px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--azul-bebe);
-      color: var(--texto-escuro);
-      line-height: 1.6;
-      scroll-behavior: smooth;
-    }
-    header.hero {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 4rem 1rem 2rem;
-      background: linear-gradient(to bottom, #d1f3f2 0%, #ffffff 100%);
-    }
-    header.hero img {
-      max-width: 160px;
-      height: auto;
-      margin-bottom: 1.5rem;
-    }
-    header.hero h1 {
-      font-size: 2.2rem;
-      margin-bottom: 1rem;
-      color: #087f8c;
-    }
-    header.hero p {
-      font-size: 1.1rem;
-      color: #4a5d68;
-      max-width: 600px;
-      margin-bottom: 2rem;
-    }
-    .cta {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      max-width: 400px;
-      width: 100%;
-    }
-    .cta a {
-      background-color: var(--azul-turquesa);
+    .cta-btn.primary {
+      background-color: #44c7e1;
       color: white;
-      padding: 1rem 1.5rem;
-      text-decoration: none;
-      font-weight: 600;
-      border-radius: var(--borda);
-      transition: all 0.3s ease;
+      border: none;
+    }
+    .cta-btn.secondary {
+      background-color: white;
+      color: #44c7e1;
+      border: 2px solid #44c7e1;
+    }
+    .section {
+      padding: 5rem 1rem;
       text-align: center;
     }
-    .cta a:hover {
-      background-color: #28c9c6;
-      transform: scale(1.03);
-    }
-    section {
-      padding: 4rem 1rem;
-      background-color: var(--branco);
-      margin: 2rem auto;
-      border-radius: 20px;
-      max-width: 800px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.05);
-    }
-    section h2 {
-      font-size: 1.8rem;
-      color: #087f8c;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-    section p {
-      margin-bottom: 2rem;
-      color: #555;
-      text-align: center;
-    }
-    footer {
-      margin-top: 3rem;
-      padding: 2rem;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #555;
-    }
-    footer a {
-      color: #087f8c;
-      text-decoration: none;
-      margin: 0 0.5rem;
-    }
-  
-    .benefits {
+    .valores, .passos, .depoimentos {
       display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      padding: 1rem 0;
+      flex-wrap: wrap;
+      gap: 2.5rem;
+      justify-content: center;
     }
-
-    .benefit h3 {
-      color: #087f8c;
-      font-size: 1.2rem;
-      margin-bottom: 0.5rem;
-      text-align: center;
-    }
-
-    .benefit p {
-      color: #555;
-      text-align: center;
-      font-size: 1rem;
-      line-height: 1.5;
-      max-width: 700px;
-      margin: 0 auto;
-    }
-
-    .fade-in {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.6s ease forwards;
-    }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-
-    .benefits-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-      gap: 2rem;
-      padding: 2rem 0;
-    }
-
-    .benefit-card {
-      background-color: #f7fdfd;
+    .card {
+      background-color: white;
+      border-radius: 1.5rem;
       padding: 1.5rem;
-      border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      width: 250px;
+    }
+    footer {
+      background: #fcfcfc;
+      border-top: 1px solid #e2ebe9;
+      padding: 2rem;
       text-align: center;
+      font-size: 0.9rem;
     }
-
-    .benefit-card:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 6px 20px rgba(0,0,0,0.12);
-    }
-
-    .benefit-card h3 {
-      color: #087f8c;
-      font-size: 1.2rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .benefit-card p {
-      color: #555;
-      font-size: 1rem;
-      line-height: 1.5;
-    }
-
-    .fade-in {
+  
+    .fade-in-up {
       opacity: 0;
       transform: translateY(20px);
       animation: fadeInUp 0.6s ease forwards;
@@ -435,145 +80,267 @@
         transform: translateY(0);
       }
     }
+    
+    .fade-out {
+      animation: fadeOut 0.6s ease-in-out forwards;
+    }
 
-</style>
-<script data-domain="cuide-me.com.br" defer="True" src="https://plausible.io/js/plausible.js">
-</script>
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    
+    #splash-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      animation: fadeIn 0.3s ease-out;
+    }
+    #splash-screen img {
+      max-width: 220px;
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+    .fade-out {
+      animation: fadeOut 0.6s ease-in-out forwards;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .floating-cta {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #3ddad7;
+        color: white;
+        padding: 0.9rem 1.2rem;
+        border-radius: 50px;
+        font-weight: bold;
+        text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 1000;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+    .floating-cta:hover {
+        background-color: #28c9c6;
+        transform: scale(1.05);
+    }
+    
+    .cta-btn, .cta a {
+        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+    }
+    .cta-btn:hover, .cta a:hover {
+        transform: scale(1.03);
+    }
+    
+    h1, h2 {
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    header.hero p, section p {
+        font-size: 1.1rem;
+        color: #4a5d68;
+    }
+    
+    .fade-in-up {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease forwards;
+    }
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    .floating-cta {
+        animation: pulseBtn 2.5s infinite ease-in-out;
+    }
+    @keyframes pulseBtn {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+    
+    body.dark-mode {
+        background-color: #1c1c1c;
+        color: #f0f0f0;
+    }
+    body.dark-mode section {
+        background-color: #2b2b2b;
+        color: #f0f0f0;
+    }
+    body.dark-mode .card {
+        background-color: #333;
+        color: #f0f0f0;
+    }
+    body.dark-mode .floating-cta {
+        background-color: #444;
+        color: #fff;
+    }
+    body.dark-mode a, body.dark-mode footer a {
+        color: #3ddad7;
+    }
+    </style>
 </head>
-<body>
-<div id="splash-screen">
+<body><div id="splash-screen">
 <img alt="Logo Cuide-me" src="logo_cuide_me.png"/>
 </div>
-<header class="hero">
-<div style="text-align: center;">
-<img alt="Logo Cuide-me" src="logo_cuide_me.png" style="max-width: 440px; margin-bottom: 0.2rem;"/>
+<header>
+<style>
+    header {
+      background-color: white;
+      border-bottom: 4px solid #1ba8c2;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+    }
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+    }
+    .logo-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #1ba8c2;
+    }
+    .logo-subtitle {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: #333;
+      font-weight: 500;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    nav a {
+      text-decoration: none;
+      color: #000;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .cta-button {
+      background-color: #00d4ff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-decoration: none;
+    }
+  </style>
+<div class="logo-container">
+<img alt="Logo Cuide-me" class="logo-icon" src="logo_cuide_me.png" style="width: 72px; height: auto;"/>
+<div class="logo-text">
+<span class="logo-subtitle">Conectando quem cuida<br/>e quem precisa de cuidado</span>
 </div>
-<h1>
-    Cuide de quem você ama com empatia e segurança
-   </h1>
-<p>
-    Conectamos você a cuidadores verificados e prontos para ajudar — com acolhimento, agilidade e clareza.
-   </p>
-<div class="cta">
-<a href="#form-cliente">
-     🔍 Quero encontrar um cuidador
-    </a>
-<a href="#form-cuidador">
-     💼 Sou cuidador e quero me cadastrar
-    </a>
 </div>
+<nav>
+<a href="#sobre">Quem somos</a> |
+    <a href="#como-funciona">Como Funciona</a> |
+    <a href="#form-cuidador">Quero Cuidar</a> |
+    <a href="#form-cliente">Preciso de Cuidado</a> |
+    <a href="#contato">Contato</a>
+<a class="cta-button" href="#form-cuidador">Cadastre-se</a>
+</nav>
 </header>
-<section id="manifesto" style="margin-top: 2rem;">
-<h2>
-    Compromisso com o cuidado que transforma
-   </h2>
-<p>
-    No Cuide-me, não conectamos apenas cuidadores a famílias. Construímos relações baseadas em empatia, presença e dignidade. Cuidar é um ato humano — e aqui, ele ganha o valor que merece.
-   </p>
-</section>
-<section id="porque-escolher">
-<h2>Por que escolher o Cuide-me?</h2>
-<div class="benefits-grid">
-<div class="benefit-card fade-in" style="animation-delay: 0.2s;">
-<h3>🫂 Cuidar com empatia é nosso ponto de partida</h3>
-<p>Cada conexão na plataforma é pensada com respeito, sensibilidade e escuta. Valorizamos a história de quem cuida e de quem precisa ser cuidado.</p>
-</div>
-<div class="benefit-card fade-in" style="animation-delay: 0.4s;">
-<h3>🔍 Cuidadores verificados, com alma e competência</h3>
-<p>Não é só sobre diploma. É sobre gente preparada, comprometida e com vocação para servir com dignidade. Todos os perfis passam por curadoria e são avaliados pela comunidade.</p>
-</div>
-<div class="benefit-card fade-in" style="animation-delay: 0.6s;">
-<h3>🧭 Contratar nunca foi tão simples — e seguro</h3>
-<p>Geolocalização, filtros inteligentes, histórico de atendimentos e contratos automatizados. O difícil agora é só escolher quem mais combina com sua necessidade.</p>
-</div>
-<div class="benefit-card fade-in" style="animation-delay: 0.8s;">
-<h3>🌱 Aqui, o cuidador também cresce</h3>
-<p>Capacitação contínua, visibilidade, oportunidades reais e liberdade para definir sua própria agenda. No Cuide-me, quem cuida também é cuidado.</p>
-</div>
+<section class="section">
+<h2>Cuide de quem você ama com empatia e segurança</h2>
+<p>Encontre e contrate cuidadores verificados para garantir o melhor cuidado no lar.</p>
+<div>
+<a class="cta-btn primary" href="#form-cliente">⭐ Quero encontrar um cuidador</a>
+<a class="cta-btn secondary" href="#form-cuidador">🛡️ Sou cuidador e quero me cadastrar</a>
 </div>
 </section>
-<section id="form-cliente">
-<h2>
+<section class="section" style="background: white;">
+<h2>Como funciona</h2>
+<div class="passos">
+<div class="card fade-in-up fade-in-up">🛡️ <strong>Cuidadores verificados</strong><br/>Checagem e entrevistas</div>
+<div class="card fade-in-up fade-in-up">⭐ <strong>Escolha personalizada</strong><br/>Você decide o perfil ideal</div>
+<div class="card fade-in-up fade-in-up">⏰ <strong>Acompanhamento</strong><br/>Transparência no processo</div>
+<div class="card fade-in-up fade-in-up">❤️ <strong>Conexão humanizada</strong><br/>Vínculo e confiança</div>
+</div>
+<img alt="Cuidador ao lado de idosa" src="https://cdn.pixabay.com/photo/2016/03/27/21/16/elderly-1280963_1280.jpg" style="margin-top:2rem; max-width:100%; border-radius:1rem; border:4px solid #d1f3f2; box-shadow: 0 8px 20px rgba(0,0,0,0.1);"/>
+</section><section id="form-cliente"><h2 style="text-align: center;">
     Quero encontrar um cuidador
-   </h2>
-<p>
+   </h2><p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
     Preencha o formulário abaixo e encontre um cuidador verificado na sua região:
-   </p>
-<script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script><iframe class="airtable-embed airtable-dynamic-height" frameborder="0" height="1101" onmousewheel="" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K" style="background: transparent; border: 1px solid #ccc;" width="100%"></iframe>
-</section>
-<section id="form-cuidador">
-<h2>
+   </p><div style="background-color: #ffffff; padding: 2rem; border-radius: 16px; max-width: 800px; margin: 2rem auto; box-shadow: 0 6px 24px rgba(0,0,0,0.08);"><iframe class="airtable-embed airtable-dynamic-height" frameborder="0" height="1101" onmousewheel="" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K" style="background: transparent; border: 1px solid #ccc;" width="100%"></iframe></div></section><section id="form-cuidador"><h2 style="text-align: center;">
     Sou cuidador e quero me cadastrar
-   </h2>
-<p>
+   </h2><p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
     Preencha o formulário para se cadastrar na base de profissionais do Cuide-me:
-   </p>
-<script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script><iframe class="airtable-embed airtable-dynamic-height" frameborder="0" height="1302" onmousewheel="" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrP5sKLT00RybPmc" style="background: transparent; border: 1px solid #ccc;" width="100%"></iframe>
+   </p><div style="background-color: #ffffff; padding: 2rem; border-radius: 16px; max-width: 800px; margin: 2rem auto; box-shadow: 0 6px 24px rgba(0,0,0,0.08);"><iframe class="airtable-embed airtable-dynamic-height" frameborder="0" height="1302" onmousewheel="" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrP5sKLT00RybPmc" style="background: transparent; border: 1px solid #ccc;" width="100%"></iframe></div></section>
+<section class="section">
+<h2>Depoimentos reais</h2>
+<div class="depoimentos">
+<div class="card fade-in-up fade-in-up">⭐<br/>"Ter alguém da Cuide-me conosco trouxe paz, carinho e uma confiança renovada."<br/><strong>Sr. Feliciano</strong></div>
+<div class="card fade-in-up fade-in-up">❤️<br/>"Encontrei uma cuidadora atenciosa e pontual."<br/><strong>Dona Maria</strong></div>
+<div class="card fade-in-up fade-in-up">❤️<br/>"Sentimos segurança em todo o processo."<br/><strong>Leonardo, filho</strong></div>
+</div>
 </section>
-<section id="depoimentos">
-<h2>
-    O que dizem sobre o Cuide-me
-   </h2>
-<p>
-    Experiências reais de quem usa a plataforma com confiança e tranquilidade.
-   </p>
-<div class="carrossel">
-<div class="depoimento">
-<h3>
-      Sr. Feliciano
-     </h3>
-<p>
-      O Cuide-me me deu liberdade para cuidar da minha mãe sem abrir mão da minha rotina.
-     </p>
+<section class="section">
+<h2>Sobre o Cuide-me</h2>
+<p>Somos uma plataforma digital que conecta famílias a cuidadores experientes, criando pontes de confiança, acolhimento e autonomia.</p>
+<div class="valores">
+<div class="card fade-in-up fade-in-up">❤️ <strong>Empatia</strong><br/>Presença, escuta e afeto real.</div>
+<div class="card fade-in-up fade-in-up">🛡️ <strong>Autonomia</strong><br/>Respeito ao ritmo de cada um.</div>
+<div class="card fade-in-up fade-in-up">⭐ <strong>Excelência</strong><br/>Seleção criteriosa de cuidadores.</div>
+<div class="card fade-in-up fade-in-up">⏰ <strong>Transparência</strong><br/>Processos e comunicação claros.</div>
+<div class="card fade-in-up fade-in-up">⭐ <strong>Inclusão</strong><br/>Cuidado digno para todos.</div>
 </div>
-<div class="depoimento">
-<h3>
-      Leonardo (cuidador)
-     </h3>
-<p>
-      Graças ao Cuide-me, consegui meus primeiros clientes como cuidador. Hoje sou independente.
-     </p>
+</section>
+<footer>
+<div>Cuide-me</div>
+<div>
+<a href="/termos" target="_blank">Termos de uso</a> | 
+      <a href="/privacidade" target="_blank">Política de privacidade</a> | 
+      <a href="https://www.instagram.com" target="_blank">Instagram</a> | 
+      <a href="https://www.facebook.com" target="_blank">Facebook</a>
 </div>
-<div class="depoimento">
-<h3>
-      Dona Maria
-     </h3>
-<p>
-      Agora posso contratar ajuda com poucos cliques. Me sinto segura e respeitada.
-     </p>
-</div>
-</div>
-</section><footer>
-<p>
-<a href="#">
-     Termos de uso
-    </a>
-    |
-    <a href="#">
-     Política de privacidade
-    </a>
-</p>
+<div style="margin-top: 1rem;">© 2025 Cuide-me. Todos os direitos reservados.</div>
 <button id="toggle-dark" style="margin-top: 1rem; padding: 0.5rem 1rem; border-radius: 8px; background-color: #3ddad7; color: white; border: none; cursor: pointer;">
     🌙 Alternar tema
-   </button>
-</footer>
-<script src="https://static.airtable.com/js/embed/embed_snippet_v1.js">
-</script>
-<a class="floating-cta" href="https://wa.me/5500000000000" target="_blank">
-   📱 Precisa de ajuda?
-  </a>
-<script>
-   window.addEventListener('load', () => {
-    const splash = document.getElementById('splash-screen');
-    splash.classList.add('fade-out');
-    setTimeout(() => splash.style.display = 'none', 600);
-  });
-  </script>
-<script>
+   </button></footer>
+<a class="floating-cta" href="https://wa.me/5599999999999" target="_blank">📱 Precisa de ajuda?</a><script>
    const toggle = document.getElementById('toggle-dark');
   toggle.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
   });
-  </script>
-</body>
+  </script><script>
+        window.addEventListener('load', () => {
+          const splash = document.getElementById('splash-screen');
+          splash.classList.add('fade-out');
+          setTimeout(() => {
+            splash.style.display = 'none';
+          }, 600);
+        });
+        </script></body>
 </html>
