@@ -97,14 +97,29 @@
       text-decoration: none;
       margin: 0 0.5rem;
     }
+  
+    section + section {
+      margin-top: 3rem;
+    }
+    section:hover {
+      box-shadow: 0 12px 20px rgba(0,0,0,0.08);
+      transform: translateY(-2px);
+      transition: all 0.3s ease;
+    }
+    iframe {
+      border-radius: 14px;
+    }
+
   </style>
 </head>
 <body>
 
   <header class="hero">
-    <div style="text-align: center;">
-      <img src="/logo_cuide_me.png" alt="Logo Cuide-me" style="max-width: 440px; margin-bottom: 0.2rem;">
-    </div>
+   <div style="text-align: center;">
+  <img src="logo_cuide_me.png" alt="Logo Cuide-me" style="max-width: 440px; margin-bottom: 0.2rem;">
+  
+</div>
+
 
     <h1>Cuide de quem você ama com empatia e segurança</h1>
     <p>Conectamos você a cuidadores verificados e prontos para ajudar — com acolhimento, agilidade e clareza.</p>
@@ -115,17 +130,24 @@
   </header>
 
   <section id="form-cliente">
-  <h2>Quero encontrar um cuidador</h2>
-  <p>Preencha o formulário abaixo e encontre um cuidador verificado na sua região:</p>
+    <h2>Quero encontrar um cuidador</h2>
+    <p>Preencha o formulário abaixo e encontre um cuidador verificado na sua região:</p>
+    <iframe title="Formulário Cuide-me" class="airtable-embed"
+      src="https://airtable.com/embed/app8GhVyaDSRS7npW/pag6plMJY9zp6I6Vw/form"
+      frameborder="0" onmousewheel="" width="100%" height="700"
+      style="background: transparent; border: 1px solid #ccc; border-radius: 10px;">
+    </iframe>
+  </section>
 
-  <script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script>
-<script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script><iframe class="airtable-embed airtable-dynamic-height" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K" frameborder="0" onmousewheel="" width="100%" height="533" style="background: transparent; border: 1px solid #ccc;"></iframe>
- <section id="form-cuidador">
-  <h2>Sou cuidador e quero me cadastrar</h2>
-  <p>Preencha o formulário para se cadastrar na base de profissionais do Cuide-me:</p>
-
-  <script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script>
-<script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script><iframe class="airtable-embed airtable-dynamic-height" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrP5sKLT00RybPmc" frameborder="0" onmousewheel="" width="100%" height="1180" style="background: transparent; border: 1px solid #ccc;"></iframe>
+  <section id="form-cuidador">
+    <h2>Sou cuidador e quero me cadastrar</h2>
+    <p>Preencha o formulário para se cadastrar na base de profissionais do Cuide-me:</p>
+    <iframe title="Formulário Cuide-me" class="airtable-embed"
+      src="https://airtable.com/embed/appGd9sXTChiO5v9V/shr0RHYGUuGW6LYtK"
+      frameborder="0" onmousewheel="" width="100%" height="700"
+      style="background: transparent; border: 1px solid #ccc; border-radius: 10px;">
+    </iframe>
+  </section>
 
   <footer>
     <p><a href="#">Termos de uso</a> | <a href="#">Política de privacidade</a></p>
