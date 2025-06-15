@@ -5,7 +5,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Cuide-me | Conectando quem cuida e quem precisa de cuidado</title>
+<title>Cuide-meConectando quem cuida e quem precisa de cuidado</title>
 <meta content="Plataforma que conecta cuidadores verificados a famílias. Cuide de quem você ama com empatia e segurança. Ache cuidador de idoso confiável." name="description"/>
 <meta content="cuidador, cuidador de idoso, cuidador confiável, cuidado domiciliar, Cuide-me, encontrar cuidador" name="keywords"/>
 <meta content="Cuide-me" name="author"/>
@@ -279,6 +279,89 @@
   }
 }
 
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  nav a {
+    display: block;
+  }
+
+  .card {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  .valores,
+  .passos,
+  .depoimentos {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  section.section {
+    padding: 3rem 1rem;
+  }
+
+  .cta-btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .cta-btn {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+  }
+
+  .cta-btn.primary,
+  .cta-btn.secondary {
+    font-size: 1rem;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  iframe.airtable-embed {
+    height: 1000px !important;
+  }
+
+  .floating-cta {
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    width: auto;
+    max-width: calc(100% - 20px);
+    text-align: center;
+    padding: 0.8rem 1rem;
+  }
+
+  .logo-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .logo-subtitle {
+    font-size: 0.85rem;
+    text-align: left;
+  }
+}
+
 </style>
 </head>
 <body><div id="splash-screen">
@@ -424,6 +507,89 @@
   }
 }
 
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  nav a {
+    display: block;
+  }
+
+  .card {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  .valores,
+  .passos,
+  .depoimentos {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  section.section {
+    padding: 3rem 1rem;
+  }
+
+  .cta-btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .cta-btn {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+  }
+
+  .cta-btn.primary,
+  .cta-btn.secondary {
+    font-size: 1rem;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  iframe.airtable-embed {
+    height: 1000px !important;
+  }
+
+  .floating-cta {
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    width: auto;
+    max-width: calc(100% - 20px);
+    text-align: center;
+    padding: 0.8rem 1rem;
+  }
+
+  .logo-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .logo-subtitle {
+    font-size: 0.85rem;
+    text-align: left;
+  }
+}
+
 </style>
 <div class="logo-container">
 <img alt="Logo Cuide-me" class="logo-icon" src="logo_cuide_me.png" style="width: 72px; height: auto;"/>
@@ -432,11 +598,7 @@
 </div>
 </div>
 <nav>
-<a href="#sobre">Quem somos</a> |
-    <a href="#como-funciona">Como Funciona</a> |
-    <a href="#form-cuidador">Quero Cuidar</a> |
-    <a href="#form-cliente">Preciso de Cuidado</a> |
-    <a href="#contato">Contato</a>
+<a href="#sobre">Quem somos</a><a href="#como-funciona">Como Funciona</a><a href="#form-cuidador">Quero Cuidar</a><a href="#form-cliente">Preciso de Cuidado</a><a href="#contato">Contato</a>
 <a class="cta-button" href="#form-cuidador">Cadastre-se</a>
 </nav>
 </header>
@@ -488,10 +650,7 @@
 <footer>
 <div>Cuide-me</div>
 <div>
-<a href="/termos" target="_blank">Termos de uso</a> | 
-      <a href="/privacidade" target="_blank">Política de privacidade</a> | 
-      <a href="https://www.instagram.com" target="_blank">Instagram</a> | 
-      <a href="https://www.facebook.com" target="_blank">Facebook</a>
+<a href="/termos" target="_blank">Termos de uso</a><a href="/privacidade" target="_blank">Política de privacidade</a><a href="https://www.instagram.com" target="_blank">Instagram</a><a href="https://www.facebook.com" target="_blank">Facebook</a>
 </div>
 <div style="margin-top: 1rem;">© 2025 Cuide-me. Todos os direitos reservados.</div>
 <button id="toggle-dark" style="margin-top: 1rem; padding: 0.5rem 1rem; border-radius: 8px; background-color: #3ddad7; color: white; border: none; cursor: pointer;">
