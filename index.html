@@ -55,9 +55,9 @@
     }
     .card {
       background-color: white;
-      border-radius: 1.5rem;
-      padding: 1.5rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      border-radius: 2rem;
+      padding: 2rem;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.08); background-color: #f9feff;
       width: 250px;
     }
     footer {
@@ -153,7 +153,7 @@
     }
     header.hero p, section p {
         font-size: 1.1rem;
-        color: #4a5d68;
+        color: #2d3e49;
     }
     
     .fade-in-up {
@@ -598,47 +598,49 @@
 </div>
 </div>
 <nav>
-<a href="#sobre">Quem somos</a><a href="#como-funciona">Como Funciona</a><a href="#form-cuidador">Quero Cuidar</a><a href="#form-cliente">Preciso de Cuidado</a><a href="#contato">Contato</a>
+<a aria-label="Ir para seção Quem somos" href="#sobre">Quem somos</a><a aria-label="Ir para seção Como funciona" href="#como-funciona">Como Funciona</a><a aria-label="Ir para seção Quero Cuidar" href="#form-cuidador">Quero Cuidar</a><a aria-label="Ir para seção Preciso de Cuidado" href="#form-cliente">Preciso de Cuidado</a><a href="#contato">Contato</a>
 <a class="cta-button" href="#form-cuidador">Cadastre-se</a>
 </nav>
 </header>
-<section class="section">
-<h2>Conectamos você a cuidadores confiáveis — com empatia, agilidade e zero estresse.</h2>
-<p style="margin-bottom: 2.5rem; font-size: 1.1rem; color: #4a5d68;">Cuidadores verificados, próximos de você e prontos para ajudar. Tudo em um só lugar.</p>
+<section class="section" role="region" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2rem; text-align: left;">
+<div style="flex: 1; min-width: 300px; max-width: 600px;">
+<h2>Precisa de um cuidador de confiança?</h2>
+<p style="margin-bottom: 2.5rem; font-size: 1.1rem; color: #2d3e49;">
+      A gente conecta você a profissionais verificados, com empatia e sem complicação.<br/>
+      Cuidadores verificados, próximos de você e prontos para ajudar. Tudo em um só lugar.
+    </p>
 <div>
 <a class="cta-btn primary" href="#form-cliente">🔍 Encontrar um cuidador agora</a>
 <a class="cta-btn secondary" href="#form-cuidador">💼 Quero começar a cuidar</a>
 </div>
+</div>
+<div style="flex: 1; min-width: 280px; max-width: 400px;">
+<img alt="Cuidador sorrindo ao lado de uma idosa em casa" src="cuidador_idosa.png" style="max-width: 100%; border-radius: 1rem; border: 4px solid #d1f3f2; box-shadow: 0 6px 16px rgba(0,0,0,0.08);"/>
+</div>
 </section>
 <section class="section" style="background: white;">
 <h2>Como funciona</h2>
-<div class="passos">
-<div class="card fade-in-up fade-in-up">🛡️ <strong>Verificação completa</strong><br/>Checamos documentos, experiência e histórico com rigor.</div>
-<div class="card fade-in-up fade-in-up">⭐ <strong>Você escolhe quem cuida</strong><br/>Compare perfis e contrate quem combina com sua necessidade.</div>
-<div class="card fade-in-up fade-in-up">⏰ <strong>Acompanhamento contínuo</strong><br/>Transparência no processo e suporte disponível sempre que precisar.</div>
-<div class="card fade-in-up fade-in-up">❤️ <strong>Relacionamento com propósito</strong><br/>Mais do que um serviço, criamos vínculos de cuidado real.</div>
-</div>
-<img alt="Cuidador ao lado de idosa" src="https://cdn.pixabay.com/photo/2016/03/27/21/16/elderly-1280963_1280.jpg" style="margin-top:2rem; max-width:100%; border-radius:1rem; border:4px solid #d1f3f2; box-shadow: 0 8px 20px rgba(0,0,0,0.1);"/>
-</section><section id="form-cliente"><h2 style="text-align: center;">
+
+<div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 3rem; margin-top: 3rem;"><div style="flex: 1; min-width: 300px; max-width: 480px;"><img alt="Pessoa com dúvida" src="pessoa_com_duvida.png" style="max-width:100%; border-radius:1rem; border:4px solid #d1f3f2; box-shadow: 0 8px 20px rgba(0,0,0,0.1);"/></div><div style="flex: 1; min-width: 280px; max-width: 620px; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;"><div class="card fade-in-up fade-in-up">🛡️ <strong>Cuidadores verificados</strong><br/>Checamos documentos, histórico e experiência.</div><div class="card fade-in-up fade-in-up">⭐ <strong>Você escolhe</strong><br/>Compare perfis e decida com autonomia.</div><div class="card fade-in-up fade-in-up">⏰ <strong>Acompanhamento próximo</strong><br/>Estamos aqui sempre que precisar.</div><div class="card fade-in-up fade-in-up">❤️ <strong>Cuidado com propósito</strong><br/>Conexões que vão além do serviço.</div></div></div></section><section id="form-cliente" role="region"><h2 style="text-align: center;">
     Quero encontrar um cuidador
    </h2><p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
-    Preencha o formulário abaixo e encontre um cuidador verificado na sua região:
-   </p><div style="background-color: #ffffff; padding: 2rem; border-radius: 16px; max-width: 800px; margin: 2rem auto; box-shadow: 0 6px 24px rgba(0,0,0,0.08);"><iframe class="airtable-embed airtable-dynamic-height" frameborder="0" height="1101" onmousewheel="" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K" style="background: transparent; border: 1px solid #ccc;" width="100%"></iframe></div></section><section id="form-cuidador"><h2 style="text-align: center;">
+    É só preencher abaixo. A gente cuida do resto:
+   </p><div style="background-color: #ffffff; padding: 2rem; border-radius: 16px; max-width: 800px; margin: 2rem auto; box-shadow: 0 6px 24px rgba(0,0,0,0.08);"><iframe class="airtable-embed airtable-dynamic-height" frameborder="0" height="1101" onmousewheel="" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K" style="background: transparent; border: 1px solid #ccc;" width="100%"></iframe></div></section><section id="form-cuidador" role="region"><h2 style="text-align: center;">
     Sou cuidador e quero me cadastrar
    </h2><p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
-    Preencha o formulário para se cadastrar na base de profissionais do Cuide-me:
+    Preencha o formulário e entre para a nossa rede de profissionais:
    </p><div style="background-color: #ffffff; padding: 2rem; border-radius: 16px; max-width: 800px; margin: 2rem auto; box-shadow: 0 6px 24px rgba(0,0,0,0.08);"><iframe class="airtable-embed airtable-dynamic-height" frameborder="0" height="1302" onmousewheel="" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrP5sKLT00RybPmc" style="background: transparent; border: 1px solid #ccc;" width="100%"></iframe></div></section>
-<section class="section">
+<section class="section" role="region">
 <h2>Depoimentos reais</h2>
 <div class="depoimentos">
-<div class="card fade-in-up fade-in-up">⭐<br/>"Ter alguém da Cuide-me conosco trouxe paz, carinho e uma confiança renovada."<br/><strong>Sr. Feliciano</strong></div>
-<div class="card fade-in-up fade-in-up">❤️<br/>"Encontrei uma cuidadora atenciosa e pontual."<br/><strong>Dona Maria</strong></div>
-<div class="card fade-in-up fade-in-up">❤️<br/>"Sentimos segurança em todo o processo."<br/><strong>Leonardo, filho</strong></div>
+<div class="card fade-in-up fade-in-up">⭐<br/>"A cuidadora trouxe paz, carinho e uma confiança renovada."<br/><strong>Sr. Feliciano</strong></div>
+<div class="card fade-in-up fade-in-up">❤️<br/>"Encontrei alguém atenciosa, pontual e com empatia real."<br/><strong>Dona Maria</strong></div>
+<div class="card fade-in-up fade-in-up">❤️<br/>"Sentimos segurança em todo o processo, do início ao fim."<br/><strong>Leonardo, filho da Sra. Zuleika</strong></div>
 </div>
 </section>
-<section class="section">
+<section class="section" role="region">
 <h2>Sobre o Cuide-me</h2>
-<p style="margin-bottom: 2.5rem; font-size: 1.1rem; color: #4a5d68;">Cuidar de alguém é um ato de amor — e de responsabilidade. O Cuide-me nasceu pra ser seu apoio nesse momento: conectamos você a cuidadores experientes, com segurança, empatia e agilidade.</p>
+<p style="margin-bottom: 2.5rem; font-size: 1.1rem; color: #2d3e49;">Cuidar de alguém é um gesto de amor. E a gente está aqui para apoiar você nessa jornada — com profissionais experientes, processos claros e muita empatia.</p>
 <div class="valores">
 <div class="card fade-in-up fade-in-up">❤️ <strong>Empatia</strong><br/>Presença, escuta e afeto real.</div>
 <div class="card fade-in-up fade-in-up">🛡️ <strong>Autonomia</strong><br/>Respeito ao ritmo de cada um.</div>
@@ -657,11 +659,10 @@
 <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.403.597 24 1.326 24H12.82v-9.294H9.692V11.11h3.128V8.413c0-3.1 1.893-4.788 4.658-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.795.716-1.795 1.763v2.312h3.587l-.467 3.596h-3.12V24h6.116c.73 0 1.326-.597 1.326-1.326V1.326C24 .597 23.403 0 22.675 0z"></path>
 </svg>
  Facebook</a></div><div style="margin-top: 1rem;">© 2025 Cuide-me. Todos os direitos reservados.</div>
-
-<button id="toggle-dark" style="margin-top: 1rem; padding: 0.5rem 1rem; border-radius: 8px; background-color: #3ddad7; color: white; border: none; cursor: pointer;">
+<button aria-label="Alternar tema escuro/claro" id="toggle-dark" style="margin-top: 1rem; padding: 0.5rem 1rem; border-radius: 8px; background-color: #3ddad7; color: white; border: none; cursor: pointer;">
     🌙 Alternar tema
    </button></footer>
-<a class="floating-cta" href="https://wa.me/5599999999999" target="_blank">📱 Precisa de ajuda?</a><script>
+<a aria-label="Fale com a gente pelo WhatsApp" class="floating-cta" href="https://wa.me/5599999999999" target="_blank" title="Fale com a gente pelo WhatsApp">📱 Atendimento rápido</a><script>
    const toggle = document.getElementById('toggle-dark');
   toggle.addEventListener('click', () => {
     document.body.classList.toggle('dark-mode');
@@ -676,3 +677,9 @@
         });
         </script></body>
 </html>
+<style>
+.card:hover {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+</style>
