@@ -1,11 +1,12 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cuide-me - Conectando cuidadores a famílias</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cuide-me - Conectando cuidadores a famílias</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&amp;display=swap" rel="stylesheet"/>
+<style>
     :root {
       --azul-turquesa: #3ddad7;
       --azul-bebe: #d1f3f2;
@@ -98,53 +99,201 @@
       margin: 0 0.5rem;
     }
   
-    section + section {
-      margin-top: 3rem;
+  @media (max-width: 600px) {
+    header.hero h1 {
+      font-size: 1.6rem;
     }
-    section:hover {
-      box-shadow: 0 12px 20px rgba(0,0,0,0.08);
-      transform: translateY(-2px);
-      transition: all 0.3s ease;
+    header.hero p {
+      font-size: 1rem;
+    }
+    .cta {
+      width: 100%;
     }
     iframe {
-      border-radius: 14px;
+      height: 900px !important;
     }
+    section {
+      padding: 2rem 1rem;
+    }
+  }
 
-  </style>
-</head>
-<body>
+  .carrossel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 1rem;
+    padding: 1rem 0;
+  }
+  .depoimento {
+    flex: 0 0 80%;
+    scroll-snap-align: center;
+    background-color: #f8f8f8;
+    padding: 1.5rem;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    min-width: 280px;
+    max-width: 400px;
+    margin: auto;
+    text-align: center;
+  }
+  .depoimento h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+    color: #087f8c;
+  }
+  .depoimento p {
+    font-size: 0.95rem;
+    color: #555;
+  }
 
-  <header class="hero">
-   <div style="text-align: center;">
-  <img src="logo_cuide_me.png" alt="Logo Cuide-me" style="max-width: 440px; margin-bottom: 0.2rem;">
-  
+  #beneficios {
+    text-align: center;
+    padding: 4rem 1rem;
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.05);
+    margin-top: 3rem;
+  }
+  .benefits-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+  .benefit-card {
+    background-color: #d1f3f2;
+    border-radius: 14px;
+    padding: 2rem;
+    max-width: 300px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    text-align: left;
+  }
+  .benefit-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+    color: #087f8c;
+  }
+  .benefit-card p {
+    font-size: 1rem;
+    color: #444;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+  .floating-cta {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #3ddad7;
+    color: white;
+    padding: 0.9rem 1.2rem;
+    border-radius: 50px;
+    font-weight: bold;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    z-index: 1000;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+  }
+  .floating-cta:hover {
+    background-color: #28c9c6;
+    transform: scale(1.05);
+  }
+
+  #splash-screen {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #d1f3f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    animation: fadeIn 0.6s ease-out;
+  }
+  #splash-screen img {
+    max-width: 220px;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  .fade-out {
+    animation: fadeOut 0.6s ease-in-out forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+  }
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+
+  body.dark-mode {
+    background-color: #1c1c1c;
+    color: #f0f0f0;
+  }
+  body.dark-mode section {
+    background-color: #2b2b2b;
+    color: #f0f0f0;
+  }
+  body.dark-mode .benefit-card,
+  body.dark-mode .depoimento {
+    background-color: #333;
+    color: #f0f0f0;
+  }
+  body.dark-mode .floating-cta {
+    background-color: #444;
+    color: #fff;
+  }
+  body.dark-mode a,
+  body.dark-mode footer a {
+    color: #3ddad7;
+  }
+  body.dark-mode #splash-screen {
+    background-color: #1c1c1c;
+  }
+</style>
+<script data-domain="cuide-me.com.br" defer="True" src="https://plausible.io/js/plausible.js"></script></head>
+<body><div id="splash-screen"><img alt="Logo Cuide-me" src="logo_cuide_me.png"/></div>
+<header class="hero">
+<div style="text-align: center;">
+<img alt="Logo Cuide-me" src="logo_cuide_me.png" style="max-width: 440px; margin-bottom: 0.2rem;"/>
 </div>
-
-
-    <h1>Cuide de quem você ama com empatia e segurança</h1>
-    <p>Conectamos você a cuidadores verificados e prontos para ajudar — com acolhimento, agilidade e clareza.</p>
-    <div class="cta">
-      <a href="#form-cliente">🔍 Quero encontrar um cuidador</a>
-      <a href="#form-cuidador">💼 Sou cuidador e quero me cadastrar</a>
-    </div>
-  </header>
-
-  <section id="form-cliente">
-    <h2>Quero encontrar um cuidador</h2>
-    <p>Preencha o formulário abaixo e encontre um cuidador verificado na sua região:</p>
-    <script src="https://static.airtable.com/js/embed/embed_snippet_v1.js">
-<script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script><iframe class="airtable-embed airtable-dynamic-height" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K" frameborder="0" onmousewheel="" width="100%" height="1101" style="background: transparent; border: 1px solid #ccc;"></iframe>
-  </section>
-
-  <section id="form-cuidador">
-    <h2>Sou cuidador e quero me cadastrar</h2>
-    <p>Preencha o formulário para se cadastrar na base de profissionais do Cuide-me:</p>
-<script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script>
-    </script><iframe class="airtable-embed airtable-dynamic-height" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrP5sKLT00RybPmc" frameborder="0" onmousewheel="" width="100%" height="1302" style="background: transparent; border: 1px solid #ccc;"></iframe>
-
-  <footer>
-    <p><a href="#">Termos de uso</a> | <a href="#">Política de privacidade</a></p>
-  </footer>
-
-</body>
+<h1>Cuide de quem você ama com empatia e segurança</h1>
+<p>Conectamos você a cuidadores verificados e prontos para ajudar — com acolhimento, agilidade e clareza.</p>
+<div class="cta">
+<a href="#form-cliente">🔍 Quero encontrar um cuidador</a>
+<a href="#form-cuidador">💼 Sou cuidador e quero me cadastrar</a>
+</div>
+</header><section id="manifesto" style="margin-top: 2rem;"><h2>Nosso Compromisso com o Cuidado</h2><p>Somos mais que uma plataforma. Somos uma comunidade de cuidado, construída sobre empatia, confiança e acolhimento. Acreditamos que todo mundo merece ser bem cuidado — com dignidade e humanidade.</p></section><section id="depoimentos"><h2>O que dizem sobre o Cuide-me</h2><p>Experiências reais de quem usa a plataforma com confiança e tranquilidade.</p><div class="carrossel"><div class="depoimento"><h3>Sr. Feliciano</h3><p>O Cuide-me me deu liberdade para cuidar da minha mãe sem abrir mão da minha rotina.</p></div><div class="depoimento"><h3>Leonardo (cuidador)</h3><p>Graças ao Cuide-me, consegui meus primeiros clientes como cuidador. Hoje sou independente.</p></div><div class="depoimento"><h3>Dona Maria</h3><p>Agora posso contratar ajuda com poucos cliques. Me sinto segura e respeitada.</p></div></div></section><section id="beneficios"><h2>Por que escolher o Cuide-me?</h2><div class="benefits-container"><div class="benefit-card"><h3>Conexão segura</h3><p>Profissionais verificados, avaliações reais e proximidade geográfica para garantir confiança e agilidade.</p></div><div class="benefit-card"><h3>Autonomia para quem cuida e para quem precisa</h3><p>Famílias contratam com facilidade, cuidadores atuam com liberdade e visibilidade profissional.</p></div><div class="benefit-card"><h3>Atendimento humanizado</h3><p>Equipe dedicada, escuta ativa e suporte em cada etapa da jornada de cuidado.</p></div></div></section>
+<section id="form-cliente">
+<h2>Quero encontrar um cuidador</h2>
+<p>Preencha o formulário abaixo e encontre um cuidador verificado na sua região:</p>
+<iframe class="airtable-embed" frameborder="0" height="700" onmousewheel="" src="https://airtable.com/embed/app8GhVyaDSRS7npW/pag6plMJY9zp6I6Vw/form" style="background: transparent; border: 1px solid #ccc; border-radius: 10px;" width="100%">
+</iframe>
+</section><section id="form-cuidador"><h2>Sou cuidador e quero me cadastrar</h2><p>Preencha o formulário para se cadastrar na base de profissionais do Cuide-me:</p><iframe class="airtable-embed" frameborder="0" height="700" src="https://airtable.com/embed/appGd9sXTChiO5v9V/shr0RHYGUuGW6LYtK" style="background: transparent; border: 1px solid #ccc; border-radius: 10px;" title="Formulário Cuide-me Cuidador" width="100%"></iframe></section>
+<section id="form-cuidador">
+<h2>Sou cuidador e quero me cadastrar</h2>
+<p>Preencha o formulário para se cadastrar na base de profissionais do Cuide-me:</p>
+<iframe class="airtable-embed" frameborder="0" height="700" onmousewheel="" src="https://airtable.com/embed/appGd9sXTChiO5v9V/shr0RHYGUuGW6LYtK" style="background: transparent; border: 1px solid #ccc; border-radius: 10px;" width="100%">
+</iframe>
+</section>
+<footer>
+<p><a href="#">Termos de uso</a> | <a href="#">Política de privacidade</a></p>
+<button id="toggle-dark" style="margin-top: 1rem; padding: 0.5rem 1rem; border-radius: 8px; background-color: #3ddad7; color: white; border: none; cursor: pointer;">🌙 Alternar tema</button></footer>
+<script src="https://static.airtable.com/js/embed/embed_snippet_v1.js"></script><a class="floating-cta" href="https://wa.me/5500000000000" target="_blank">📱 Precisa de ajuda?</a><script>
+  window.addEventListener('load', () => {
+    const splash = document.getElementById('splash-screen');
+    splash.classList.add('fade-out');
+    setTimeout(() => splash.style.display = 'none', 600);
+  });
+</script><script>
+  const toggle = document.getElementById('toggle-dark');
+  toggle.addEventListener('click', () => {
+    document.body.classList.toggle('dark-mode');
+  });
+</script></body>
 </html>
