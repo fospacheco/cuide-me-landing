@@ -758,6 +758,19 @@ body.ocultar-atendimento #atendimento-rapido {
 }
 </style>
 
+
+<style>
+#buscar-cuidador {
+  transition: all 0.3s ease;
+}
+
+#buscar-cuidador select {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1;
+}
+</style>
+
 </head>
 <body><div id="splash-screen">
 <img alt="Logo Cuide-me" src="logo_cuide_me.png"/>
@@ -1026,7 +1039,7 @@ window.addEventListener("click", function(e) {
       Cuidadores verificados, próximos de você e prontos para ajudar. Tudo em um só lugar.
     </p>
 <div>
-<a class="cta-btn primary" href="#form-cliente">🔍 Encontrar um cuidador agora</a>
+<a class="cta-btn primary" href="javascript:void(0)" id="abrir-combo">🔍 Encontrar um cuidador agora</a>
 <a class="cta-btn secondary" href="https://cuide-me.vercel.app/cadastro-cuidador.html">💼 Quero começar a cuidar</a>
 </div>
 </div>
@@ -1219,6 +1232,51 @@ window.addEventListener("scroll", function () {
 </script>
 
 
+
+
+<!-- Área de busca por especialidade -->
+<div id="buscar-cuidador" style="margin-top: 2rem; display: none;">
+  <label for="especialidade-select" style="font-weight: bold; display: block; margin-bottom: 0.5rem;">Qual especialidade você procura?</label>
+  <select id="especialidade-select" style="padding: 0.5rem; border-radius: 6px; width: 100%; max-width: 400px;">
+  <option value="">Selecione uma especialidade</option>
+  <option value="Cuidados paliativos">Cuidados paliativos</option>
+<option value="Pós-operatório">Pós-operatório</option>
+<option value="Acompanhamento hospitalar">Acompanhamento hospitalar</option>
+<option value="Idosos com Alzheimer">Idosos com Alzheimer</option>
+<option value="Recuperação de fraturas">Recuperação de fraturas</option>
+<option value="Enfermagem domiciliar">Enfermagem domiciliar</option>
+<option value="Deficiência física">Deficiência física</option>
+<option value="Acompanhamento noturno">Acompanhamento noturno</option>
+<option value="Reabilitação motora">Reabilitação motora</option>
+<option value="Saúde mental">Saúde mental</option>
+</select>
+  <div id="resultado-especialidade" style="margin-top: 1rem; font-weight: bold;"></div>
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const botao = document.querySelector('a[href="#form-cliente"]');
+  if (botao) {
+    botao.addEventListener("click", function(e) {
+      e.preventDefault();
+      document.getElementById("buscar-cuidador").style.display = "block";
+      document.getElementById("buscar-cuidador").scrollIntoView({ behavior: 'smooth' });
+    });
+  }
+
+  const select = document.getElementById("especialidade-select");
+  select?.addEventListener("change", function() {
+    const valor = select.value;
+    const res = document.getElementById("resultado-especialidade");
+    if (valor) {
+      res.innerHTML = `🔍 Encontramos 3 cuidadores disponíveis para <strong>${valor}</strong> na sua região.`;
+    } else {
+      res.innerHTML = "";
+    }
+  });
+});
+</script>
 
 </body>
 </html>
