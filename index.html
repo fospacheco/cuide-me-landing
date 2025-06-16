@@ -446,6 +446,46 @@
 }
 </style>
 
+
+<style>
+/* Garante centralização de imagens e caixas */
+@media (max-width: 600px) {
+  .hero img,
+  .card img {
+    margin: 0 auto;
+    display: block;
+  }
+
+  .card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .cta-btn.primary, .cta-btn.secondary {
+    width: 100%;
+    text-align: center;
+  }
+
+  /* Suaviza visual do botão fixo ao rolar perto do fim */
+  #atendimento-rapido {
+    position: fixed;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    border-radius: 50px;
+    text-align: center;
+    transition: opacity 0.4s ease;
+    z-index: 9999;
+  }
+
+  body.scrolled-to-footer #atendimento-rapido {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+</style>
+
 </head>
 <body><div id="splash-screen">
 <img alt="Logo Cuide-me" src="logo_cuide_me.png"/>
@@ -884,6 +924,22 @@ Encontre cuidadores na sua região.</div></div></div></section><!-- seção form
 <p style="margin-top: 1rem;">Quer encontrar o cuidador ideal? <a href="https://cuide-me.vercel.app/cadastro-cliente.html" style="color: #087f8c; font-weight: bold;">Clique aqui</a> e comece agora.</p>
 
 </footer>
+
+
+<script>
+window.addEventListener("scroll", function () {
+  const contato = document.querySelector("footer") || document.getElementById("contato");
+  const atendimento = document.getElementById("atendimento-rapido");
+  if (!contato || !atendimento) return;
+
+  const rect = contato.getBoundingClientRect();
+  if (rect.top < window.innerHeight) {
+    document.body.classList.add("scrolled-to-footer");
+  } else {
+    document.body.classList.remove("scrolled-to-footer");
+  }
+});
+</script>
 
 </body>
 </html>
