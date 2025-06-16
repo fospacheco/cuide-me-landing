@@ -1337,6 +1337,58 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const select = document.getElementById("especialidade-select");
+  const botao = document.getElementById("abrir-combo");
+  const cuidadoresDiv = document.querySelector("#cuidadores-disponiveis");
+
+  let especialidades = [];
+
+  const url = "https://api.airtable.com/v0/appVxCKjvJAah2r27/Especialidade";
+
+  console.log("🔍 Buscando especialidades da API:", url);
+
+  fetch(url, {
+    headers: {
+      Authorization: "Bearer patvUA5YbiyPmtjwx"
+    }
+  })
+  .then(response => {
+    console.log("🟡 Resposta da API:", response);
+    return response.json();
+  })
+  .then(data => {
+    console.log("✅ Dados recebidos:", data);
+    especialidades = data.records;
+    if (!especialidades || especialidades.length === 0) {
+      select.innerHTML += "<option value=''>⚠️ Nenhuma especialidade encontrada</option>";
+      return;
+    }
+    data.records.forEach(record => {
+      const nome = record.fields["Name"];
+      const id = record.id;
+      if (nome && id) {
+        const option = document.createElement("option");
+        option.value = id;
+        option.textContent = nome;
+        select.appendChild(option);
+      }
+    });
+  })
+  .catch(err => {
+    console.error("❌ Erro ao buscar especialidades:", err);
+    select.innerHTML += "<option value=''>❌ Erro ao carregar especialidades</option>";
+  });
+
+  botao?.addEventListener("click", function (e) {
+    e.preventDefault();
+    document.getElementById("buscar-cuidador").style.display = "block";
+  });
+});
+</script>
+
 </body>
 </html>
 <style>
