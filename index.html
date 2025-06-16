@@ -500,46 +500,23 @@ body.ocultar-atendimento #atendimento-rapido {
 
 <style>
 @media (max-width: 768px) {
-  .feature-box, .valor-box {
+  .feature-box,
+  .info-card,
+  .pill-box,
+  .benefit-card,
+  .value-card,
+  .destaque-box,
+  .caixa-valor,
+  .visao-box {
     width: 100% !important;
-    text-align: center;
-    padding: 1rem;
-    box-sizing: border-box;
-    display: block;
-    margin-bottom: 1rem;
-  }
-
-  .feature-box img,
-  .valor-box img,
-  .feature-box svg,
-  .valor-box svg {
-    margin: 0 auto;
-    display: block;
-  }
-}
-</style>
-
-
-<style>
-@media (max-width: 768px) {
-  body {
-    overflow-x: hidden;
-  }
-
-  .card,
-  .valor-box,
-  .feature-box {
-    width: 100% !important;
-    max-width: 100% !important;
     margin-left: auto !important;
     margin-right: auto !important;
-    box-sizing: border-box !important;
+    text-align: center !important;
+    display: block;
+    box-sizing: border-box;
   }
 
-  .valor-box p,
-  .valor-box h3,
-  .feature-box p,
-  .feature-box h3 {
+  .feature-box * {
     text-align: center !important;
   }
 }
@@ -985,20 +962,22 @@ Encontre cuidadores na sua região.</div></div></div></section><!-- seção form
 </footer>
 
 
+
 <script>
 window.addEventListener("scroll", function () {
-  const footer = document.querySelector("footer") || document.getElementById("contato");
-  const botao = document.getElementById("atendimento-rapido");
-  if (!footer || !botao) return;
+  const contato = document.querySelector("#contato") || document.querySelector("footer");
+  const atendimento = document.getElementById("atendimento-rapido");
+  if (!contato || !atendimento) return;
 
-  const limite = footer.getBoundingClientRect();
-  if (limite.top < window.innerHeight) {
+  const limite = contato.getBoundingClientRect();
+  if (limite.top < window.innerHeight - 100) {
     document.body.classList.add("ocultar-atendimento");
   } else {
     document.body.classList.remove("ocultar-atendimento");
   }
 });
 </script>
+
 
 </body>
 </html>
