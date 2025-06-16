@@ -1,0 +1,277 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>Cuide-me | Para Cuidadores</title>
+  <meta content="Cadastre-se como cuidador e conecte-se a famílias que precisam de você. Plataforma com suporte, empatia e zero burocracia." name="description"/>
+  <meta content="trabalho como cuidador, cadastro cuidador de idosos, emprego de cuidador, Cuide-me" name="keywords"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
+      color: #245063;
+      font-size: 1.08rem;
+      margin: 0;
+      padding: 0;
+    }
+    h1, h2 {
+      color: #1ba8c2;
+      font-weight: bold;
+    }
+    header {
+      background-color: white;
+      border-bottom: 4px solid #1ba8c2;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo-icon {
+      width: 48px;
+      height: 48px;
+    }
+    .logo-subtitle {
+      font-size: 0.9rem;
+      font-style: italic;
+      color: #333;
+      font-weight: 500;
+    }
+    nav {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    nav a {
+      text-decoration: none;
+      color: #000;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .cta-button {
+      background-color: #00d4ff;
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+    .section {
+      padding: 5rem 1rem;
+      text-align: center;
+    }
+    .container {
+      max-width: 1200px;
+      margin: auto;
+    }
+    .cta-btn {
+      display: inline-block;
+      padding: 1rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: bold;
+      font-size: 1rem;
+      text-decoration: none;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s ease;
+    }
+    .cta-btn.primary {
+      background-color: #44c7e1;
+      color: white;
+    }
+    .cta-btn.secondary {
+      background-color: white;
+      color: #44c7e1;
+      border: 2px solid #44c7e1;
+    }
+    .cta-btn:hover {
+      transform: scale(1.05);
+    }
+    .card {
+      background-color: #f9feff;
+      border-radius: 1.5rem;
+      padding: 2rem;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+      width: 250px;
+    }
+    .grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 2rem;
+    }
+    iframe.airtable-embed {
+      border: 1px solid #ccc;
+      background: transparent;
+      width: 100%;
+      height: 1300px;
+    }
+    footer {
+      background: #fcfcfc;
+      border-top: 1px solid #e2ebe9;
+      padding: 2rem;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    @media (max-width: 768px) {
+      header, nav, .logo-container {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .card {
+        width: 100%;
+      }
+      .section {
+        padding: 3rem 1rem;
+      }
+      iframe.airtable-embed {
+        height: 1000px;
+      }
+    }
+  </style>
+
+<script>
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    document.body.style.backgroundColor = '#1c1c1c';
+    document.body.style.color = '#f0f0f0';
+  }
+</script>
+
+<style>
+  .grid-three-cols {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+  }
+  .grid-three-cols .card {
+    flex: 1 1 calc(33.333% - 2rem);
+    max-width: calc(33.333% - 2rem);
+    box-sizing: border-box;
+  }
+  @media (max-width: 768px) {
+    .grid-three-cols .card {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="modal-bloqueio" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, #f2fbfd, #ffffff); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999;">
+  <div style="background: white; padding: 2rem; border-radius: 16px; max-width: 90%; width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center;">
+    <h2 style="color: #1ba8c2; margin-bottom: 1rem;">Antes de continuar...</h2>
+    <p style="color: #2d3e49; margin-bottom: 1rem;">Preencha seus dados e aceite os termos para se cadastrar como cuidador.</p>
+    <div style="margin-bottom: 1rem; text-align: left;">
+      <label style="font-size: 0.9rem; color: #333;">
+        <input id="consentimentoLGPD" style="margin-right: 0.5rem;" type="checkbox"/>
+        Li e concordo com a <a href="/privacidade" style="color: #00aacc; text-decoration: underline;" target="_blank">Política de Privacidade</a>.
+      </label>
+    </div>
+    <a href="#form-cuidador" id="botaoContinuar" onclick="fecharModal()"  style="background-color: #00d4ff; color: white; padding: 0.9rem 1.5rem; border-radius: 9999px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; opacity: 0.6; pointer-events: none;">Quero me cadastrar</a>
+  </div>
+</div>
+<script>
+  document.body.style.overflow = 'hidden';
+  const checkbox = document.getElementById('consentimentoLGPD');
+  const botao = document.getElementById('botaoContinuar');
+  checkbox.addEventListener('change', () => {
+    if (checkbox.checked) {
+      botao.style.opacity = '1';
+      botao.style.pointerEvents = 'auto';
+    } else {
+      botao.style.opacity = '0.6';
+      botao.style.pointerEvents = 'none';
+    }
+  });
+  function fecharModal() {
+    document.getElementById('modal-bloqueio').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+</script>
+<header>
+  <div class="logo-container">
+    <img alt="Logo Cuide-me" class="logo-icon" src="logo_cuide_me.png" style="width: 72px; height: auto;"/>
+    <div class="logo-text">
+      <span class="logo-subtitle">Conectando quem cuida<br/>e quem precisa de cuidado</span>
+    </div>
+  </div>
+  <nav>
+    <a class="cta-button" href="#depoimentos">Depoimentos</a>
+    <a class="cta-button" href="#form-cuidador">Cadastre-se</a>
+  </nav>
+</header>
+<section class="section">
+  <div class="container">
+    <h1>Você cuida de pessoas.<br>O Cuide-me cuida da sua jornada.</h1>
+    <p style="margin: 1rem auto 2rem; font-size: 1.1rem; max-width: 700px;">
+      Conecte-se com oportunidades reais de trabalho, com suporte, autonomia e liberdade para escolher quando e onde atuar.
+    </p>
+    <a class="cta-btn primary" href="#form-cuidador">💼 Quero começar a cuidar</a>
+  </div>
+</section>
+<section class="section" id="beneficios" style="background: white;">
+  <h2>Benefícios de trabalhar com o Cuide-me</h2>
+  <div class="grid grid-three-cols">
+    <div class="card">💼 <strong>Oportunidades reais</strong><br/>Conecte-se com famílias próximas que realmente precisam de cuidado.</div>
+    <div class="card">📱 <strong>Cadastro simples</strong><br/>Formulário direto, sem burocracia ou etapas confusas.</div>
+    <div class="card">🔒 <strong>Ambiente seguro</strong><br/>Verificação de perfis e suporte em caso de dúvidas ou emergências.</div>
+    <div class="card">🧭 <strong>Autonomia total</strong><br/>Você escolhe quando, onde e com quem quer trabalhar.</div>
+    <div class="card">👥 <strong>Rede de apoio</strong><br/>Conte com o time Cuide-me para te orientar e apoiar no dia a dia.</div>
+    <div class="card">🌟 <strong>Valorização do seu trabalho</strong><br/>Mostre sua experiência e seja reconhecido como profissional.</div>
+  </div>
+</section>
+
+<section class="section" id="depoimentos" style="background: white;">
+  <h2>Quem já cuida com a gente</h2>
+  <div class="grid grid-three-cols">
+<div class="card">
+  <img src="https://i.pravatar.cc/100?img=32" style="border-radius: 50%; margin-bottom: 1rem;" alt="Cuidadora Carla">
+  ❤️<br/>"Graças ao Cuide-me, encontrei oportunidades estáveis e fui valorizada como profissional."<br/>
+  <strong>Carla – Cuidadora, SP</strong>
+</div>
+<div class="card">
+  <img src="https://i.pravatar.cc/100?img=45" style="border-radius: 50%; margin-bottom: 1rem;" alt="Cuidador João">
+  ⭐<br/>"A plataforma é simples, direta e com suporte real."<br/>
+  <strong>João – Cuidador domiciliar, RJ</strong>
+</div>
+<div class="card">
+  <img src="https://i.pravatar.cc/100?img=12" style="border-radius: 50%; margin-bottom: 1rem;" alt="Juliana">
+  🛡️<br/>"Me sinto mais segura sabendo que tudo é verificado e organizado."<br/>
+  <strong>Juliana – Técnica em Enfermagem, MG</strong>
+</div>
+
+    <div class="card">❤️<br/>"Graças ao Cuide-me, encontrei oportunidades estáveis e fui valorizada como profissional."<br/><strong>Carla, cuidadora</strong></div>
+    <div class="card">⭐<br/>"A plataforma é simples, direta e com suporte real."<br/><strong>João, cuidador domiciliar</strong></div>
+    <div class="card">🛡️<br/>"Me sinto mais segura sabendo que tudo é verificado e organizado."<br/><strong>Juliana, técnica em enfermagem</strong></div>
+  </div>
+</section>
+<section class="section" id="form-cuidador">
+  <h2>Sou cuidador e quero me cadastrar</h2>
+  <p style="max-width: 800px; margin: 0 auto 2rem;">
+    Preencha o formulário abaixo para se cadastrar na base de profissionais do Cuide-me:
+  </p>
+  <div style="max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 6px 24px rgba(0,0,0,0.08);">
+    <iframe class="airtable-embed" frameborder="0" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrP5sKLT00RybPmc"></iframe>
+  </div>
+</section>
+<footer>
+  <p>© 2025 Cuide-me. Todos os direitos reservados.</p>
+  <div style="margin-top: 1rem;">
+    <a href="/termos">Termos de uso</a> | 
+    <a href="/privacidade">Política de privacidade</a>
+  </div>
+</footer>
+<a href="https://wa.me/5599999999999" target="_blank" style="position: fixed; bottom: 20px; right: 20px; background-color: #3ddad7; color: white; padding: 0.9rem 1.2rem; border-radius: 50px; font-weight: bold; text-decoration: none; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000;">
+  ❓ Dúvidas? Fale com a gente
+</a>
+
+</body>
+</html>
