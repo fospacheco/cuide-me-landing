@@ -405,6 +405,47 @@
 }
 
 </style>
+
+<style>
+/* Animação de entrada do dropdown */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.dropdown-menu.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animação do botão principal */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(0,0,0,0); }
+  50% { box-shadow: 0 0 12px rgba(0, 212, 255, 0.4); }
+}
+.cta-btn.primary {
+  animation: pulseGlow 2.5s infinite;
+}
+
+/* Hover nos cards */
+.card:hover {
+  transform: scale(1.02);
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  cursor: default;
+}
+</style>
+
 </head>
 <body><div id="splash-screen">
 <img alt="Logo Cuide-me" src="logo_cuide_me.png"/>
@@ -840,6 +881,8 @@ Encontre cuidadores na sua região.</div></div></div></section><!-- seção form
   <p><strong>WhatsApp:</strong> (11) 91234-5678</p>
   <p><strong>Endereço:</strong> Rua Exemplo, 123 - São Paulo/SP</p>
   <p style="margin-top: 1rem; color: #888;">© 2025 Cuide-me. Todos os direitos reservados.</p>
+<p style="margin-top: 1rem;">Quer encontrar o cuidador ideal? <a href="https://cuide-me.vercel.app/cadastro-cliente.html" style="color: #087f8c; font-weight: bold;">Clique aqui</a> e comece agora.</p>
+
 </footer>
 
 </body>
