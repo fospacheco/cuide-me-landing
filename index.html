@@ -1389,6 +1389,39 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const select = document.getElementById("especialidade-select");
+  if (!select) return;
+
+  fetch("https://api.airtable.com/v0/appVxCXjvJAAh2r27/Especialidades", {
+    headers: {
+      Authorization: "Bearer patQShaWMxRV561Ib.3bbd21d28884896ae068bd36ba7480b5ba58aab60bf2d1b4dd0f97aa53afc325"
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (!data.records) {
+        const opt = document.createElement("option");
+        opt.textContent = "⚠️ Nenhuma especialidade encontrada";
+        opt.disabled = true;
+        select.appendChild(opt);
+        return;
+      }
+      data.records.forEach(record => {
+        const opt = document.createElement("option");
+        opt.value = record.fields.Name;
+        opt.textContent = record.fields.Name;
+        select.appendChild(opt);
+      });
+    })
+    .catch(error => {
+      console.error("Erro ao buscar especialidades:", error);
+    });
+});
+</script>
+
 </body>
 </html>
 <style>
