@@ -448,8 +448,7 @@
 
 
 <style>
-/* Garante centralização de imagens e caixas */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .hero img,
   .card img {
     margin: 0 auto;
@@ -462,27 +461,37 @@
     text-align: center;
   }
 
+  .info {
+    text-align: center;
+  }
+
   .cta-btn.primary, .cta-btn.secondary {
     width: 100%;
     text-align: center;
   }
 
-  /* Suaviza visual do botão fixo ao rolar perto do fim */
-  #atendimento-rapido {
-    position: fixed;
-    bottom: 16px;
-    left: 16px;
-    right: 16px;
-    border-radius: 50px;
-    text-align: center;
-    transition: opacity 0.4s ease;
-    z-index: 9999;
+  .dropdown-menu {
+    width: 100%;
+    left: 0;
+    right: 0;
   }
+}
 
-  body.scrolled-to-footer #atendimento-rapido {
-    opacity: 0;
-    pointer-events: none;
-  }
+/* Botão atendimento rápido */
+#atendimento-rapido {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  border-radius: 50px;
+  text-align: center;
+  transition: opacity 0.4s ease;
+  z-index: 9999;
+}
+
+body.hide-atendimento #atendimento-rapido {
+  opacity: 0;
+  pointer-events: none;
 }
 </style>
 
@@ -928,15 +937,15 @@ Encontre cuidadores na sua região.</div></div></div></section><!-- seção form
 
 <script>
 window.addEventListener("scroll", function () {
-  const contato = document.querySelector("footer") || document.getElementById("contato");
+  const footer = document.querySelector("footer");
   const atendimento = document.getElementById("atendimento-rapido");
-  if (!contato || !atendimento) return;
+  if (!footer || !atendimento) return;
 
-  const rect = contato.getBoundingClientRect();
+  const rect = footer.getBoundingClientRect();
   if (rect.top < window.innerHeight) {
-    document.body.classList.add("scrolled-to-footer");
+    document.body.classList.add("hide-atendimento");
   } else {
-    document.body.classList.remove("scrolled-to-footer");
+    document.body.classList.remove("hide-atendimento");
   }
 });
 </script>
