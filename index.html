@@ -500,47 +500,260 @@ body.ocultar-atendimento #atendimento-rapido {
 
 <style>
 @media (max-width: 768px) {
-  .feature-box, .valor-box {
+  .feature-box,
+  .info-card,
+  .pill-box,
+  .benefit-card,
+  .value-card,
+  .destaque-box,
+  .caixa-valor,
+  .visao-box {
     width: 100% !important;
-    text-align: center;
-    padding: 1rem;
-    box-sizing: border-box;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
     display: block;
-    margin-bottom: 1rem;
+    box-sizing: border-box;
   }
 
-  .feature-box img,
-  .valor-box img,
-  .feature-box svg,
-  .valor-box svg {
-    margin: 0 auto;
-    display: block;
+  .feature-box * {
+    text-align: center !important;
   }
 }
 </style>
 
 
 <style>
-@media (max-width: 768px) {
-  body {
-    overflow-x: hidden;
+@media (max-width: 1100px) {
+  .cta-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    width: 100%;
   }
 
-  .card,
-  .valor-box,
-  .feature-box {
+  .cta-container .cta-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+</style>
+
+
+<style>
+@media (max-width: 1100px) {
+  .cta-box,
+  .cta-button-group,
+  .cta-group,
+  .hero-buttons,
+  .botao-container,
+  .cta-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem;
+    align-items: stretch;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .cta-box .cta-btn,
+  .cta-button-group .cta-btn,
+  .cta-group .cta-btn,
+  .hero-buttons .cta-btn,
+  .botao-container .cta-btn,
+  .cta-container .cta-btn {
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+</style>
+
+
+<style>
+@media (max-width: 1100px) {
+  .hero .cta-container,
+  .hero .cta-group,
+  .hero .cta-wrapper,
+  .hero .cta-box,
+  .hero-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .hero .cta-container .cta-btn,
+  .hero .cta-group .cta-btn,
+  .hero .cta-wrapper .cta-btn,
+  .hero .cta-box .cta-btn,
+  .hero-buttons .cta-btn {
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+</style>
+
+
+<style>
+@media (max-width: 1024px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero a.cta-btn {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .hero .cta-btn + .cta-btn {
+    margin-left: 0;
+  }
+}
+</style>
+
+
+<style>
+@media (max-width: 1024px) {
+  a.cta-btn {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  a.cta-btn + a.cta-btn {
+    margin-left: 0 !important;
+  }
+
+  /* Garante que o bloco onde há dois botões se comporte corretamente */
+  a.cta-btn:only-child {
+    margin-bottom: 0;
+  }
+
+  /* Se os botões estiverem em um container comum e não .hero */
+  .cta-btn-container,
+  .hero-content,
+  .hero-buttons,
+  .section-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    align-items: stretch;
+  }
+}
+</style>
+
+
+<style>
+@media (max-width: 1024px) {
+  .hero {
+    max-width: 95vw;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .hero .cta-btn {
     width: 100% !important;
     max-width: 100% !important;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    box-sizing: border-box !important;
+    box-sizing: border-box;
   }
 
-  .valor-box p,
-  .valor-box h3,
-  .feature-box p,
-  .feature-box h3 {
-    text-align: center !important;
+  .hero img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+</style>
+
+
+<style>
+@media (max-width: 1024px) {
+  .hero {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero .cta-btn {
+    max-width: 100%;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .hero img {
+    margin-top: 2rem;
+    max-width: 100%;
+    height: auto;
+  }
+}
+</style>
+
+
+<style>
+@media (max-width: 1024px) {
+  .hero {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2rem;
+  }
+
+  .hero > div {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero img {
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero .cta-btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+}
+</style>
+
+
+<style>
+@media (max-width: 1024px) {
+  .hero {
+    position: relative;
+    z-index: 0;
+    flex-direction: column !important;
+  }
+
+  .hero a.cta-btn {
+    position: relative;
+    z-index: 1;
+    max-width: 90vw !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 2rem auto 0;
   }
 }
 </style>
@@ -956,7 +1169,7 @@ Encontre cuidadores na sua região.</div></div></div></section><!-- seção form
 <svg fill="#087f8c" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
 <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.403.597 24 1.326 24H12.82v-9.294H9.692V11.11h3.128V8.413c0-3.1 1.893-4.788 4.658-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.795.716-1.795 1.763v2.312h3.587l-.467 3.596h-3.12V24h6.116c.73 0 1.326-.597 1.326-1.326V1.326C24 .597 23.403 0 22.675 0z"></path>
 </svg>
- Facebook</a></div></div>
+ Facebook</a></div><div style="margin-top: 1rem;">© 2025 Cuide-me. Todos os direitos reservados.</div>
 <button aria-label="Alternar tema escuro/claro" id="toggle-dark" style="margin-top: 1rem; padding: 0.5rem 1rem; border-radius: 8px; background-color: #3ddad7; color: white; border: none; cursor: pointer;">
     🌙 Alternar tema
    </button></footer>
@@ -979,26 +1192,33 @@ Encontre cuidadores na sua região.</div></div></div></section><!-- seção form
   <p><strong>E-mail:</strong> contato@cuide-me.app</p>
   <p><strong>WhatsApp:</strong> (11) 91234-5678</p>
   <p><strong>Endereço:</strong> Rua Exemplo, 123 - São Paulo/SP</p>
-  
+  <p style="margin-top: 1rem; color: #888;">© 2025 Cuide-me. Todos os direitos reservados.</p>
 <p style="margin-top: 1rem;">Quer encontrar o cuidador ideal? <a href="https://cuide-me.vercel.app/cadastro-cliente.html" style="color: #087f8c; font-weight: bold;">Clique aqui</a> e comece agora.</p>
-<p style="margin-top: 1rem; color: #888;">© 2025 Cuide-me. Todos os direitos reservados.</p>
+
 </footer>
+
+
 
 
 <script>
 window.addEventListener("scroll", function () {
-  const footer = document.querySelector("footer") || document.getElementById("contato");
-  const botao = document.getElementById("atendimento-rapido");
-  if (!footer || !botao) return;
+  const contato = document.querySelector("#contato");
+  const rodape = document.querySelector("footer");
+  const atendimento = document.getElementById("atendimento-rapido");
+  if (!atendimento) return;
 
-  const limite = footer.getBoundingClientRect();
-  if (limite.top < window.innerHeight) {
+  const limiteContato = contato ? contato.getBoundingClientRect().top : Infinity;
+  const limiteRodape = rodape ? rodape.getBoundingClientRect().top : Infinity;
+
+  if (Math.min(limiteContato, limiteRodape) < window.innerHeight - 80) {
     document.body.classList.add("ocultar-atendimento");
   } else {
     document.body.classList.remove("ocultar-atendimento");
   }
 });
 </script>
+
+
 
 </body>
 </html>
