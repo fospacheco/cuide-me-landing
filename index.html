@@ -1040,6 +1040,29 @@ window.addEventListener("click", function(e) {
     </p>
 <div>
 <a class="cta-btn primary" href="javascript:void(0)" id="abrir-combo">🔍 Encontrar um cuidador agora</a>
+<!-- Área de busca por especialidade visível após clique -->
+<div id="buscar-cuidador" style="display: none; margin-top: 1rem;">
+  <div style="border: 1px solid #cceef2; padding: 1rem; border-radius: 8px; max-width: 420px; background: #f9feff;">
+    <label for="especialidade-select" style="font-weight: bold; display: block; margin-bottom: 0.5rem; color: #087f8c;">
+      Qual especialidade você procura?
+    </label>
+    <select id="especialidade-select" style="padding: 0.6rem; border-radius: 6px; width: 100%; border: 1px solid #b2e4ea;">
+      <option value="">Selecione uma especialidade</option>
+      <option value="Cuidados paliativos">Cuidados paliativos</option>
+      <option value="Pós-operatório">Pós-operatório</option>
+      <option value="Acompanhamento hospitalar">Acompanhamento hospitalar</option>
+      <option value="Idosos com Alzheimer">Idosos com Alzheimer</option>
+      <option value="Recuperação de fraturas">Recuperação de fraturas</option>
+      <option value="Enfermagem domiciliar">Enfermagem domiciliar</option>
+      <option value="Deficiência física">Deficiência física</option>
+      <option value="Acompanhamento noturno">Acompanhamento noturno</option>
+      <option value="Reabilitação motora">Reabilitação motora</option>
+      <option value="Saúde mental">Saúde mental</option>
+    </select>
+    <div id="resultado-especialidade" style="margin-top: 1rem; font-weight: bold; color: #044f55;"></div>
+  </div>
+</div>
+
 <a class="cta-btn secondary" href="https://cuide-me.vercel.app/cadastro-cuidador.html">💼 Quero começar a cuidar</a>
 </div>
 </div>
@@ -1275,6 +1298,33 @@ document.addEventListener("DOMContentLoaded", function() {
       res.innerHTML = "";
     }
   });
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const botao = document.getElementById("abrir-combo");
+  if (botao) {
+    botao.addEventListener("click", function (e) {
+      e.preventDefault();
+      const box = document.getElementById("buscar-cuidador");
+      box.style.display = "block";
+    });
+  }
+
+  const select = document.getElementById("especialidade-select");
+  if (select) {
+    select.addEventListener("change", function () {
+      const valor = select.value;
+      const res = document.getElementById("resultado-especialidade");
+      if (valor) {
+        res.innerHTML = `🔍 Encontramos 3 cuidadores disponíveis para <strong>${valor}</strong> na sua região.`;
+      } else {
+        res.innerHTML = "";
+      }
+    });
+  }
 });
 </script>
 
