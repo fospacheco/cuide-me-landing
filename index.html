@@ -771,6 +771,35 @@ body.ocultar-atendimento #atendimento-rapido {
 }
 </style>
 
+
+<style>
+@media (max-width: 1024px) {
+  .hero,
+  .cta-container,
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .hero .cta-btn {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  #buscar-cuidador {
+    margin-top: 1rem;
+    order: 3;
+  }
+
+  .hero .cta-btn + .cta-btn {
+    margin-top: 0;
+  }
+}
+</style>
+
 </head>
 <body><div id="splash-screen">
 <img alt="Logo Cuide-me" src="logo_cuide_me.png"/>
