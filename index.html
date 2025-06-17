@@ -117,15 +117,15 @@
 
     <p style="margin: 1rem 0; font-weight: bold;">ou entre com</p>
 
-    <a href="auth-handler.html?provider=google">
-      <button class="social-btn google">
+    
+      <button class="social-btn google" onclick="loginWithGoogle()">
         <svg viewBox="0 0 488 512"><path d="M488 261.8C488 403.3 391.5 512 248 512 110.9 512 0 401.1 0 264S110.9 16 248 16c66.3 0 122 24.6 164.8 65.2l-66.8 64.2C321.3 115.5 287.2 104 248 104c-87.6 0-158.4 71.5-158.4 160S160.4 424 248 424c75.3 0 123.4-43 129.8-103.1H248v-81.1h240z"/></svg>
         Entrar com Google
       </button>
     </a>
 
-    <a href="auth-handler.html?provider=facebook">
-      <button class="social-btn facebook">
+    
+      <button class="social-btn facebook" onclick="loginWithFacebook()">
         <svg viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91V127.6c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S270.43 0 240.33 0c-73.1 0-121.36 44.38-121.36 124.72v70.62H89.09V288h29.88v224h92.4V288z"/></svg>
         Entrar com Facebook
       </button>
@@ -168,7 +168,19 @@
         .catch(error => alert('Erro: ' + error.message));
     }
 
+    
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithRedirect(provider);
+    }
+
+    function loginWithFacebook() {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      auth.signInWithRedirect(provider);
+    }
+
     function loginWithLinkedIn() {
+    
       alert('Login com LinkedIn precisa ser configurado via OAuth2 externo');
     }
   </script>
