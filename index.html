@@ -1075,9 +1075,7 @@ window.addEventListener("click", function(e) {
     <label for="especialidade-select" style="font-weight: bold; display: block; margin-bottom: 0.5rem; color: #087f8c;">
       Qual especialidade você procura?
     </label>
-    <select id="especialidade-select">
-  <option value="">Selecione uma especialidade</option>
-</select>
+    <select id="especialidade-select"></select>
     
   </div>
 </div>
@@ -1279,107 +1277,58 @@ window.addEventListener("scroll", function () {
 <!-- Área de busca por especialidade -->
 <div id="buscar-cuidador" style="margin-top: 2rem; display: none;">
   <label for="especialidade-select" style="font-weight: bold; display: block; margin-bottom: 0.5rem;">Qual especialidade você procura?</label>
-  <select id="especialidade-select">
-  <option value="">Selecione uma especialidade</option>
-</select>
+  <select id="especialidade-select"></select>
   
 </div>
 
 
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  const botao = document.querySelector('a[href="#form-cliente"]');
-  if (botao) {
-    botao.addEventListener("click", function(e) {
-      e.preventDefault();
-      document.getElementById("buscar-cuidador").style.display = "block";
-      document.getElementById("buscar-cuidador").scrollIntoView({ behavior: 'smooth' });
-    });
-  }
-
-  const select = document.getElementById("especialidade-select");
-  select?.addEventListener("change", function() {
-    const valor = select.value;
-    const res = document.getElementById("resultado-especialidade");
-    if (valor) {
-      res.innerHTML = `🔍 Encontramos 3 cuidadores disponíveis para <strong>${valor}</strong> na sua região.`;
-    } else {
-      res.innerHTML = "";
-    }
-  });
-});
-</script>
 
 
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  const botao = document.getElementById("abrir-combo");
-  if (botao) {
-    botao.addEventListener("click", function (e) {
-      e.preventDefault();
-      const box = document.getElementById("buscar-cuidador");
-      box.style.display = "block";
-    });
-  }
 
-  const select = document.getElementById("especialidade-select");
-  if (select) {
-    select.addEventListener("change", function () {
-      const valor = select.value;
-      const res = document.getElementById("resultado-especialidade");
-      if (valor) {
-        res.innerHTML = `🔍 Encontramos 3 cuidadores disponíveis para <strong>${valor}</strong> na sua região.`;
-      } else {
-        res.innerHTML = "";
-      }
-    });
-  }
-});
-</script>
+
+
+
+
 
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const select = document.getElementById("especialidade-select");
   const botao = document.getElementById("abrir-combo");
-  const cuidadoresDiv = document.querySelector("#cuidadores-disponiveis");
 
-  let especialidades = [];
+  const token = "patF0ngRSEbzCI5K9.a5e4c72d08f1f1031ca7c96193112070531462d3d954ab6be1f938c0ba023129";
+  const baseId = "appVxCKjvJAah2r27";
+  const tableName = "Especialidade";
+  const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
 
-  const url = "https://api.airtable.com/v0/appVxCKjvJAah2r27/Especialidade";
-
-  console.log("🔍 Buscando especialidades da API:", url);
+  select.innerHTML = "";
+  const defaultOption = document.createElement("option");
+  defaultOption.value = "";
+  defaultOption.textContent = "Selecione uma especialidade";
+  select.appendChild(defaultOption);
 
   fetch(url, {
     headers: {
-      Authorization: "Bearer patvUA5YbiyPmtjwx"
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json"
     }
   })
-  .then(response => {
-    console.log("🟡 Resposta da API:", response);
-    return response.json();
-  })
+  .then(response => response.json())
   .then(data => {
-    console.log("✅ Dados recebidos:", data);
-    especialidades = data.records;
-    if (!especialidades || especialidades.length === 0) {
-      select.innerHTML += "<option value=''>⚠️ Nenhuma especialidade encontrada</option>";
-      return;
-    }
+    const nomesUnicos = new Set();
     data.records.forEach(record => {
       const nome = record.fields["Name"];
-      const id = record.id;
-      if (nome && id) {
+      if (nome && !nomesUnicos.has(nome)) {
+        nomesUnicos.add(nome);
         const option = document.createElement("option");
-        option.value = id;
+        option.value = nome;
         option.textContent = nome;
         select.appendChild(option);
       }
     });
   })
   .catch(err => {
-    console.error("❌ Erro ao buscar especialidades:", err);
-    select.innerHTML += "<option value=''>❌ Erro ao carregar especialidades</option>";
+    console.error("Erro ao buscar especialidades:", err);
   });
 
   botao?.addEventListener("click", function (e) {
