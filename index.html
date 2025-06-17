@@ -1,194 +1,103 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8"/>
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - Cuide-me</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <title>Login Cuide-me</title>
   <style>
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      color: #245063;
+      font-family: sans-serif;
+      background-color: #f2fcfd;
       margin: 0;
       padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      height: 100vh;
     }
-    .login-card {
-      background: white;
+    .card {
+      background: #fff;
       padding: 2rem;
       border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-      max-width: 420px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
       width: 100%;
+      max-width: 400px;
       text-align: center;
     }
-    h2 {
-      color: #1ba8c2;
-      margin-bottom: 1.5rem;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    input[type="email"], input[type="password"] {
+    input {
       width: 100%;
-      padding: 0.9rem 1rem;
+      padding: 0.8rem;
       margin-bottom: 1rem;
       border: 1px solid #ccc;
       border-radius: 8px;
       font-size: 1rem;
-      box-sizing: border-box;
     }
-    .cta-btn {
-      background-color: #1ba8c2;
-      color: white;
-      padding: 0.9rem 1.2rem;
-      border-radius: 9999px;
-      font-weight: bold;
-      font-size: 1rem;
-      border: none;
-      cursor: pointer;
+    .btn {
       width: 100%;
+      padding: 0.8rem;
       margin-bottom: 1rem;
-    }
-    .social-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 0.75rem;
       border: none;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin: 0.4rem 0;
+      border-radius: 8px;
+      color: white;
+      font-weight: bold;
       cursor: pointer;
-      color: white;
-      gap: 0.5rem;
-      text-decoration: none;
+      font-size: 1rem;
     }
-    .google { background-color: #e45858; }
+    .google { background-color: #db4437; }
     .facebook { background-color: #4267B2; }
-    .linkedin { background-color: #0077B5; }
-    .social-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: white;
-    }
-    .divider {
-      margin: 1.5rem 0;
-      border-top: 1px solid #e0e0e0;
-    }
-    .login-links a {
-      display: block;
-      margin-top: 0.6rem;
-      color: #087f8c;
-      font-size: 0.9rem;
-      text-decoration: none;
-    }
-    .login-links a:hover {
-      text-decoration: underline;
-    }
-  
-    a {
-      text-decoration: none;
-    }
-    a .social-btn {
-      text-decoration: none;
-      color: white;
-    }
-    </style>
+    .login-btn { background-color: #17a2b8; }
+  </style>
 </head>
 <body>
-  <div class="login-card">
+  <div class="card">
     <h2>👋 Seja bem-vindo ao Cuide-me</h2>
-
-    <form onsubmit="event.preventDefault(); loginWithEmail()">
-      <input type="email" id="email" placeholder="E-mail" required />
-      <input type="password" id="password" placeholder="Senha" required />
-      <button type="submit" class="cta-btn">Entrar</button>
-    </form>
-
-    <p style="margin: 1rem 0; font-weight: bold;">ou entre com</p>
-
-    
-      <button class="social-btn google" onclick="loginWithGoogle()">
-        <svg viewBox="0 0 488 512"><path d="M488 261.8C488 403.3 391.5 512 248 512 110.9 512 0 401.1 0 264S110.9 16 248 16c66.3 0 122 24.6 164.8 65.2l-66.8 64.2C321.3 115.5 287.2 104 248 104c-87.6 0-158.4 71.5-158.4 160S160.4 424 248 424c75.3 0 123.4-43 129.8-103.1H248v-81.1h240z"/></svg>
-        Entrar com Google
-      </button>
-    </a>
-
-    
-      <button class="social-btn facebook" onclick="loginWithFacebook()">
-        <svg viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91V127.6c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S270.43 0 240.33 0c-73.1 0-121.36 44.38-121.36 124.72v70.62H89.09V288h29.88v224h92.4V288z"/></svg>
-        Entrar com Facebook
-      </button>
-    </a>
-
-    <button class="social-btn linkedin" onclick="loginWithLinkedIn()">
-      <svg viewBox="0 0 448 512"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8 0 24.1 24.09 0 53.79 0c29.7 0 53.79 24.1 53.79 53.8 0 29.7-24.09 54.3-53.79 54.3zM447.9 448h-92.4V302.4c0-34.7-12.4-58.4-43.4-58.4-23.6 0-37.6 15.8-43.8 31.1-2.3 5.6-2.8 13.4-2.8 21.3V448h-92.4s1.2-270.5 0-298.1h92.4v42.3c12.3-19 34.3-46.1 83.5-46.1 60.9 0 106.6 39.8 106.6 125.3V448z"/></svg>
-      Entrar com LinkedIn
-    </button>
-
-    <div class="divider"></div>
-
-    <div class="login-links">
-      <a href="#">Esqueci minha senha</a>
-      <a href="cadastro.html">Quero me cadastrar</a>
-    </div>
+    <input type="email" id="email" placeholder="E-mail" />
+    <input type="password" id="password" placeholder="Senha" />
+    <button class="btn login-btn" onclick="loginWithEmail()">Entrar</button>
+    <p>ou entre com</p>
+    <button class="btn google" onclick="loginWithGoogle()">G Entrar com Google</button>
+    <button class="btn facebook" onclick="loginWithFacebook()">f Entrar com Facebook</button>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
-  <script>
+  <!-- Firebase via CDN -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
     const firebaseConfig = {
-      apiKey: "AIzaSyCA1q_RBc0Vi2q_xrXucrEVXFDpdA1eBDo",
+      apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
       authDomain: "cuide-me-f57f8.firebaseapp.com",
       projectId: "cuide-me-f57f8",
       storageBucket: "cuide-me-f57f8.appspot.com",
       messagingSenderId: "846926668384",
-      appId: "1:846926668384:web:c0822e110171969f6b5905",
-      measurementId: "G-6EH5LH65WZ"
+      appId: "1:846926668384:web:c8022e110171969f6b5905",
+      measurementId: "G-6EHSLH65WZ"
     };
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
 
-    function loginWithEmail() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      auth.signInWithEmailAndPassword(email, password)
-        .then(result => window.location.href = '/dashboard.html')
-        .catch(error => alert('Erro: ' + error.message));
-    }
+    window.loginWithGoogle = () => {
+      const provider = new GoogleAuthProvider();
+      signInWithPopup(auth, provider)
+        .then(() => window.location.href = "dashboard.html")
+        .catch(err => alert("Erro: " + err.message));
+    };
 
-    
-    auth.getRedirectResult().then((result) => {
-      if (result.user) {
-        window.location.href = "/dashboard.html";
-      }
-    });
+    window.loginWithFacebook = () => {
+      const provider = new FacebookAuthProvider();
+      signInWithPopup(auth, provider)
+        .then(() => window.location.href = "dashboard.html")
+        .catch(err => alert("Erro: " + err.message));
+    };
 
-    function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithRedirect(provider);
-    }
-
-    function loginWithFacebook() {
-      const provider = new firebase.auth.FacebookAuthProvider();
-      auth.signInWithRedirect(provider);
-    }
-
-
-    function loginWithLinkedIn() {
-      alert('Login com LinkedIn precisa ser configurado via OAuth2 externo');
-    }
+    window.loginWithEmail = () => {
+      const email = document.getElementById("email").value;
+      const password = document.getElementById("password").value;
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => window.location.href = "dashboard.html")
+        .catch(err => alert("Erro: " + err.message));
+    };
   </script>
 </body>
 </html>
