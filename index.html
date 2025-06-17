@@ -1360,7 +1360,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const f = record.fields;
         const nome = f["Nome completo"] || "Nome não informado";
         const regiao = f["Região (from Localização)"] || "-";
-        const disponibilidade = (f["Disponibilidade"] || []).join(", ");
+        const disponibilidade = f["Disponibilidade nome"] || "-";
         const linkedin = f["Linkedin"] || "";
         const curriculo = f["Curriculo"]?.[0]?.url || "";
         const foto = f["Foto"]?.[0]?.url || "https://via.placeholder.com/120";
