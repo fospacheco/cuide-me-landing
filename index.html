@@ -1,103 +1,91 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login Cuide-me</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Cuide-me (Final Corrigido)</title>
   <style>
     body {
-      font-family: sans-serif;
-      background-color: #f2fcfd;
-      margin: 0;
-      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f2fbfd;
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
+      margin: 0;
     }
-    .card {
-      background: #fff;
+    .login-card {
+      background: white;
       padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.08);
-      width: 100%;
-      max-width: 400px;
+      border-radius: 1rem;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
       text-align: center;
-    }
-    input {
       width: 100%;
-      padding: 0.8rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
+      max-width: 420px;
     }
-    .btn {
+    button {
       width: 100%;
-      padding: 0.8rem;
-      margin-bottom: 1rem;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
       border: none;
-      border-radius: 8px;
-      color: white;
+      border-radius: 50px;
+      font-size: 1rem;
       font-weight: bold;
       cursor: pointer;
-      font-size: 1rem;
     }
-    .google { background-color: #db4437; }
-    .facebook { background-color: #4267B2; }
-    .login-btn { background-color: #17a2b8; }
+    .google { background: #db4437; color: white; }
+    .facebook { background: #4267B2; color: white; }
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>👋 Seja bem-vindo ao Cuide-me</h2>
-    <input type="email" id="email" placeholder="E-mail" />
-    <input type="password" id="password" placeholder="Senha" />
-    <button class="btn login-btn" onclick="loginWithEmail()">Entrar</button>
-    <p>ou entre com</p>
-    <button class="btn google" onclick="loginWithGoogle()">G Entrar com Google</button>
-    <button class="btn facebook" onclick="loginWithFacebook()">f Entrar com Facebook</button>
+  <div class="login-card">
+    <h2>🔐 Login Cuide-me (Final Corrigido)</h2>
+    <button class="google" onclick="loginWithGoogle()">Entrar com Google</button>
+    <button class="facebook" onclick="loginWithFacebook()">Entrar com Facebook</button>
   </div>
 
-  <!-- Firebase via CDN -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-    import { getAuth, signInWithPopup, GoogleAuthProvider, FacebookAuthProvider, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+  <!-- Firebase versão 9 compatível -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
+  <script>
     const firebaseConfig = {
       apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
       authDomain: "cuide-me-f57f8.firebaseapp.com",
       projectId: "cuide-me-f57f8",
-      storageBucket: "cuide-me-f57f8.appspot.com",
+      storageBucket: "cuide-me-f57f8.firebasestorage.app",
       messagingSenderId: "846926668384",
       appId: "1:846926668384:web:c8022e110171969f6b5905",
       measurementId: "G-6EHSLH65WZ"
     };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth();
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
 
-    window.loginWithGoogle = () => {
-      const provider = new GoogleAuthProvider();
-      signInWithPopup(auth, provider)
-        .then(() => window.location.href = "dashboard.html")
-        .catch(err => alert("Erro: " + err.message));
-    };
+    function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      console.log("🔁 Iniciando login com Google...");
+      auth.signInWithRedirect(provider);
+    }
 
-    window.loginWithFacebook = () => {
-      const provider = new FacebookAuthProvider();
-      signInWithPopup(auth, provider)
-        .then(() => window.location.href = "dashboard.html")
-        .catch(err => alert("Erro: " + err.message));
-    };
+    function loginWithFacebook() {
+      const provider = new firebase.auth.FacebookAuthProvider();
+      console.log("🔁 Iniciando login com Facebook...");
+      auth.signInWithRedirect(provider);
+    }
 
-    window.loginWithEmail = () => {
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      signInWithEmailAndPassword(auth, email, password)
-        .then(() => window.location.href = "dashboard.html")
-        .catch(err => alert("Erro: " + err.message));
-    };
+    auth.getRedirectResult()
+      .then((result) => {
+        console.log("🔁 Resultado do redirect:", result);
+        if (result.user) {
+          console.log("✅ Logado como:", result.user.email);
+          window.location.href = "/dashboard.html";
+        }
+      })
+      .catch((error) => {
+        console.error("❌ Erro no redirect:", error.message);
+      });
   </script>
 </body>
 </html>
