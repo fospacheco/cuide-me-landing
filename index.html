@@ -1,130 +1,63 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login - Cuide-me</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Cuide-me (Final Corrigido)</title>
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      color: #245063;
-      margin: 0;
-      padding: 0;
+      background: #f2fbfd;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
+      height: 100vh;
+      margin: 0;
     }
     .login-card {
       background: white;
       padding: 2rem;
-      border-radius: 16px;
+      border-radius: 1rem;
       box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-      max-width: 420px;
-      width: 100%;
       text-align: center;
-    }
-    h2 {
-      color: #1ba8c2;
-      margin-bottom: 1.5rem;
-    }
-    form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    input[type="email"], input[type="password"] {
       width: 100%;
-      padding: 0.9rem 1rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      box-sizing: border-box;
+      max-width: 420px;
     }
-    .cta-btn {
-      background-color: #1ba8c2;
-      color: white;
-      padding: 0.9rem 1.2rem;
-      border-radius: 9999px;
-      font-weight: bold;
-      font-size: 1rem;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      margin-bottom: 1rem;
-    }
-    .social-btn {
-      display: block;
+    button {
       width: 100%;
       padding: 0.75rem;
+      margin: 0.5rem 0;
       border: none;
-      border-radius: 999px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      margin: 0.4rem 0;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: bold;
       cursor: pointer;
-      color: white;
     }
-    .google { background-color: #db4437; }
-    .facebook { background-color: #4267B2; }
-    .linkedin { background-color: #0077B5; }
-
-    .divider {
-      margin: 1.5rem 0;
-      border-top: 1px solid #e0e0e0;
-    }
-    .login-links a {
-      display: block;
-      margin-top: 0.6rem;
-      color: #087f8c;
-      font-size: 0.9rem;
-      text-decoration: none;
-    }
-    .login-links a:hover {
-      text-decoration: underline;
-    }
+    .google { background: #db4437; color: white; }
+    .facebook { background: #4267B2; color: white; }
   </style>
 </head>
 <body>
   <div class="login-card">
-    <h2>👋 Seja bem-vindo ao Cuide-me</h2>
-
-    <form onsubmit="event.preventDefault(); loginWithEmail()">
-      <input type="email" id="email" placeholder="E-mail" required />
-      <input type="password" id="password" placeholder="Senha" required />
-      <button type="submit" class="cta-btn">Entrar</button>
-    </form>
-
-    <p style="margin: 1rem 0; font-weight: bold;">ou entre com</p>
-
-    <button class="social-btn google" onclick="loginWithGoogle()">🔐 Entrar com Google</button>
-    <button class="social-btn facebook" onclick="loginWithFacebook()">📘 Entrar com Facebook</button>
-    <button class="social-btn linkedin" onclick="loginWithLinkedIn()">💼 Entrar com LinkedIn</button>
-
-    <div class="divider"></div>
-
-    <div class="login-links">
-      <a href="#">Esqueci minha senha</a>
-      <a href="cadastro.html">Quero me cadastrar</a>
-    </div>
+    <h2>🔐 Login Cuide-me (Final Corrigido)</h2>
+    <button class="google" onclick="loginWithGoogle()">Entrar com Google</button>
+    <button class="facebook" onclick="loginWithFacebook()">Entrar com Facebook</button>
   </div>
 
-  <!-- Firebase App (core SDK) -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <!-- Firebase versão 9 compatível -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
   <script>
     const firebaseConfig = {
-      apiKey: "AIzaSyCA1q_RBc0Vi2q_xrXucrEVXFDpdA1eBDo",
+      apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
       authDomain: "cuide-me-f57f8.firebaseapp.com",
       projectId: "cuide-me-f57f8",
-      storageBucket: "cuide-me-f57f8.appspot.com",
+      storageBucket: "cuide-me-f57f8.firebasestorage.app",
       messagingSenderId: "846926668384",
-      appId: "1:846926668384:web:c0822e110171969f6b5905",
-      measurementId: "G-6EH5LH65WZ"
+      appId: "1:846926668384:web:c8022e110171969f6b5905",
+      measurementId: "G-6EHSLH65WZ"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -132,37 +65,26 @@
 
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
+      console.log("🔁 Iniciando login com Google...");
       auth.signInWithRedirect(provider);
     }
 
     function loginWithFacebook() {
       const provider = new firebase.auth.FacebookAuthProvider();
+      console.log("🔁 Iniciando login com Facebook...");
       auth.signInWithRedirect(provider);
     }
 
-    function loginWithLinkedIn() {
-      alert('Login com LinkedIn precisa ser configurado via OAuth2 externo');
-    }
-
-    function loginWithEmail() {
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      auth.signInWithEmailAndPassword(email, password)
-        .then(result => window.location.href = '/dashboard.html')
-        .catch(error => alert('Erro: ' + error.message));
-    }
-
-    // Após redirecionamento, verificar se o login foi bem-sucedido
     auth.getRedirectResult()
-      .then(result => {
+      .then((result) => {
+        console.log("🔁 Resultado do redirect:", result);
         if (result.user) {
-          window.location.href = '/dashboard.html';
+          console.log("✅ Logado como:", result.user.email);
+          window.location.href = "/dashboard.html";
         }
       })
-      .catch(error => {
-        if (error && error.message) {
-          alert('Erro ao retornar do login: ' + error.message);
-        }
+      .catch((error) => {
+        console.error("❌ Erro no redirect:", error.message);
       });
   </script>
 </body>
