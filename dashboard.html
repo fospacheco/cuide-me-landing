@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Dashboard - Cuide-me</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -19,12 +18,11 @@
     }
     .user-info img {
       border-radius: 50%;
-      width: 90px;
-      height: 90px;
+      width: 80px;
+      height: 80px;
       margin-bottom: 1rem;
-      border: 3px solid #1ba8c2;
     }
-    .logout-btn {
+    button.logout-btn {
       margin-top: 2rem;
       background-color: #db4437;
       color: white;
@@ -35,16 +33,11 @@
       font-size: 1rem;
       cursor: pointer;
     }
-    h1 {
-      color: #1ba8c2;
-    }
   </style>
 </head>
 <body>
-  <h1>🎉 Bem-vindo ao Cuide-me</h1>
-  <div class="user-info" id="user-info">
-    <p>Carregando dados do usuário...</p>
-  </div>
+  <h1>Bem-vindo ao Cuide-me!</h1>
+  <div class="user-info" id="user-info"></div>
   <button class="logout-btn" onclick="logout()">Sair</button>
 
   <!-- Firebase SDK -->
@@ -66,26 +59,24 @@
     const auth = firebase.auth();
 
     auth.onAuthStateChanged(user => {
-      if (!user) {
-        window.location.href = '/pagina-login.html';
-        return;
+      if (user) {
+        const container = document.getElementById('user-info');
+        const name = user.displayName || 'Usuário sem nome';
+        const email = user.email;
+        const photo = user.photoURL || 'https://via.placeholder.com/80';
+        container.innerHTML = `
+          <img src="${photo}" alt="Foto do usuário" />
+          <p><strong>${name}</strong></p>
+          <p>${email}</p>
+        `;
+      } else {
+        window.location.href = '/login.html';
       }
-
-      const container = document.getElementById('user-info');
-      const name = user.displayName || 'Usuário sem nome';
-      const email = user.email;
-      const photo = user.photoURL || 'https://via.placeholder.com/90';
-
-      container.innerHTML = `
-        <img src="${photo}" alt="Foto do usuário" />
-        <h2>${name}</h2>
-        <p>${email}</p>
-      `;
     });
 
     function logout() {
       auth.signOut().then(() => {
-        window.location.href = '/pagina-login.html';
+        window.location.href = '/login.html';
       });
     }
   </script>
