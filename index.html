@@ -1,91 +1,169 @@
-
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Cuide-me (Final Corrigido)</title>
-  <style>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - Cuide-me</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Firebase SDK -->
+
+<style>
     body {
       font-family: 'Inter', sans-serif;
-      background: #f2fbfd;
+      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
+      color: #245063;
+      margin: 0;
+      padding: 0;
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
+      min-height: 100vh;
     }
     .login-card {
       background: white;
       padding: 2rem;
-      border-radius: 1rem;
+      border-radius: 16px;
       box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-      text-align: center;
-      width: 100%;
       max-width: 420px;
+      width: 100%;
+      text-align: center;
     }
-    button {
+    h2 {
+      color: #1ba8c2;
+      margin-bottom: 1.5rem;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    .cta-btn {
+      background-color: #1ba8c2;
+      color: white;
+      padding: 0.9rem 1.2rem;
+      border-radius: 9999px;
+      font-weight: bold;
+      font-size: 1rem;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 1rem;
+    }
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       width: 100%;
       padding: 0.75rem;
-      margin: 0.5rem 0;
       border: none;
-      border-radius: 50px;
-      font-size: 1rem;
-      font-weight: bold;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin: 0.4rem 0;
       cursor: pointer;
+      color: white;
+      gap: 0.5rem;
+      text-decoration: none;
     }
-    .google { background: #db4437; color: white; }
-    .facebook { background: #4267B2; color: white; }
+    .google { background-color: #e45858; }
+    .facebook { background-color: #4267B2; }
+    .social-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+    .divider {
+      margin: 1.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+    .login-links a {
+      display: block;
+      margin-top: 0.6rem;
+      color: #087f8c;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+    .login-links a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <div class="login-card">
-    <h2>🔐 Login Cuide-me (Final Corrigido)</h2>
-    <button class="google" onclick="loginWithGoogle()">Entrar com Google</button>
-    <button class="facebook" onclick="loginWithFacebook()">Entrar com Facebook</button>
-  </div>
+<div class="login-card">
+<img alt="Logo Cuide-me" src="logo_cuide_me.png" style="max-width: 160px; margin-bottom: 1rem;"/>
+<form>
+<input id="email" placeholder="E-mail" required="" type="email"/>
+<input id="password" placeholder="Senha" required="" type="password"/>
+<button class="cta-btn" type="submit">Entrar</button>
+</form>
+<p style="margin: 1rem 0; font-weight: bold;">ou entre com</p>
+<button class="social-btn google">
+<svg viewbox="0 0 488 512"><path d="M488 261.8C488 403.3..."></path></svg>
+      Entrar com Google
+    </button>
+<button class="social-btn facebook">
+<svg viewbox="0 0 320 512"><path d="M279.14 288l14.22-92.66..."></path></svg>
+      Entrar com Facebook
+    </button>
+<div class="divider"></div>
+<div class="login-links">
+<a href="#">Esqueci minha senha</a>
+<a href="cadastro.html">Quero me cadastrar</a>
+</div>
+</div>
 
-  <!-- Firebase versão 9 compatível -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
-      authDomain: "cuide-me-f57f8.firebaseapp.com",
-      projectId: "cuide-me-f57f8",
-      storageBucket: "cuide-me-f57f8.firebasestorage.app",
-      messagingSenderId: "846926668384",
-      appId: "1:846926668384:web:c8022e110171969f6b5905",
-      measurementId: "G-6EHSLH65WZ"
-    };
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEXVFDpdA1eBDo",
+    authDomain: "cuide-me-f57f8.firebaseapp.com",
+    projectId: "cuide-me-f57f8",
+    storageBucket: "cuide-me-f57f8.appspot.com",
+    messagingSenderId: "846926668384",
+    appId: "1:846926668384:web:c8022e110171969f6b5905",
+    measurementId: "G-6EHSLH65WZ"
+  };
 
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
 
-    function loginWithGoogle() {
+  document.addEventListener("DOMContentLoaded", function() {
+    document.querySelector('.google').addEventListener('click', () => {
       const provider = new firebase.auth.GoogleAuthProvider();
-      console.log("🔁 Iniciando login com Google...");
-      auth.signInWithRedirect(provider);
-    }
+      auth.signInWithPopup(provider)
+        .then(result => {
+          console.log("Login Google OK", result.user);
+          window.location.href = "home.html";
+        })
+        .catch(error => {
+          alert("Erro no login com Google: " + error.message);
+        });
+    });
 
-    function loginWithFacebook() {
+    document.querySelector('.facebook').addEventListener('click', () => {
       const provider = new firebase.auth.FacebookAuthProvider();
-      console.log("🔁 Iniciando login com Facebook...");
-      auth.signInWithRedirect(provider);
-    }
-
-    auth.getRedirectResult()
-      .then((result) => {
-        console.log("🔁 Resultado do redirect:", result);
-        if (result.user) {
-          console.log("✅ Logado como:", result.user.email);
-          window.location.href = "/dashboard.html";
-        }
-      })
-      .catch((error) => {
-        console.error("❌ Erro no redirect:", error.message);
-      });
-  </script>
+      auth.signInWithPopup(provider)
+        .then(result => {
+          console.log("Login Facebook OK", result.user);
+          window.location.href = "home.html";
+        })
+        .catch(error => {
+          alert("Erro no login com Facebook: " + error.message);
+        });
+    });
+  });
+</script>
 </body>
 </html>
