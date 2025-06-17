@@ -675,8 +675,33 @@
         });
         </script>
 <!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyCA1q_RBc0Vi2q_xrXucrEVXFDpdA1eBDo",
+    authDomain: "cuide-me-f57f8.firebaseapp.com",
+    projectId: "cuide-me-f57f8",
+    storageBucket: "cuide-me-f57f8.appspot.com",
+    messagingSenderId: "846926668384",
+    appId: "1:846926668384:web:c0822e110171969f6b5905",
+    measurementId: "G-6EH5LH65WZ"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const auth = firebase.auth();
+
+  function loginWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    auth.signInWithPopup(provider)
+      .then(() => window.location.href = '/dashboard.html')
+      .catch(error => alert('Erro ao autenticar com Google: ' + error.message));
+  }
+</script>
+
+<!-- Firebase compat SDK -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyCA1q_RBc0Vi2q_xrXucrEVXFDpdA1eBDo",
