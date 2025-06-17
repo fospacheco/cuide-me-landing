@@ -1163,7 +1163,7 @@ window.addEventListener("click", function(e) {
       lista.innerHTML += `
         <div class="card" style="display: flex; gap: 1rem; align-items: center;">
           <img src="${foto}" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover;">
-          <div style="flex: 1;">
+          <div style="flex: 1; text-align: left;">
             <h3 style="margin: 0;">${nome}</h3>
             <p><strong>Especialidades:</strong> ${esp}</p>
             <p><strong>Bairro:</strong> ${bairro}</p>
@@ -1291,15 +1291,20 @@ window.addEventListener("scroll", function () {
 
 
 
+
+
+
+
 <script>
 document.addEventListener("DOMContentLoaded", function () {
   const select = document.getElementById("especialidade-select");
   const botao = document.getElementById("abrir-combo");
+  const lista = document.getElementById("lista-cuidadores");
 
   const token = "patF0ngRSEbzCI5K9.a5e4c72d08f1f1031ca7c96193112070531462d3d954ab6be1f938c0ba023129";
   const baseId = "appVxCKjvJAah2r27";
-  const tableName = "Especialidade";
-  const url = `https://api.airtable.com/v0/${baseId}/${tableName}`;
+  const tabelaEspecialidade = "Especialidade";
+  const tabelaCuidadores = "Cuidadores";
 
   select.innerHTML = "";
   const defaultOption = document.createElement("option");
@@ -1307,36 +1312,105 @@ document.addEventListener("DOMContentLoaded", function () {
   defaultOption.textContent = "Selecione uma especialidade";
   select.appendChild(defaultOption);
 
-  fetch(url, {
+  fetch(`https://api.airtable.com/v0/${baseId}/${tabelaEspecialidade}`, {
     headers: {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json"
     }
   })
-  .then(response => response.json())
-  .then(data => {
-    const nomesUnicos = new Set();
-    data.records.forEach(record => {
-      const nome = record.fields["Name"];
-      if (nome && !nomesUnicos.has(nome)) {
-        nomesUnicos.add(nome);
-        const option = document.createElement("option");
-        option.value = nome;
-        option.textContent = nome;
-        select.appendChild(option);
-      }
+    .then(response => response.json())
+    .then(data => {
+      const nomesUnicos = new Set();
+      data.records.forEach(record => {
+        const nome = record.fields["Name"];
+        if (nome && !nomesUnicos.has(nome)) {
+          nomesUnicos.add(nome);
+          const option = document.createElement("option");
+          option.value = nome;
+          option.textContent = nome;
+          select.appendChild(option);
+        }
+      });
     });
-  })
-  .catch(err => {
-    console.error("Erro ao buscar especialidades:", err);
-  });
 
   botao?.addEventListener("click", function (e) {
     e.preventDefault();
     document.getElementById("buscar-cuidador").style.display = "block";
   });
+
+  select?.addEventListener("change", function () {
+    const especialidade = select.value;
+    lista.innerHTML = "🔄 Buscando cuidadores...";
+
+    fetch(`https://api.airtable.com/v0/${baseId}/${tabelaCuidadores}?filterByFormula=FIND('${especialidade}', {Especialidade})`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json"
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.records || data.records.length === 0) {
+        lista.innerHTML = "❌ Nenhum cuidador encontrado para essa especialidade.";
+        return;
+      }
+
+      lista.innerHTML = "";
+      data.records.forEach(record => {
+        const f = record.fields;
+        const nome = f["Nome completo"] || "Nome não informado";
+        const regiao = f["Região (from Localização)"] || "-";
+        const disponibilidade = (f["Disponibilidade"] || []).join(", ");
+        const linkedin = f["Linkedin"] || "";
+        const curriculo = f["Curriculo"]?.[0]?.url || "";
+        const foto = f["Foto"]?.[0]?.url || "https://via.placeholder.com/120";
+
+        const div = document.createElement("div");
+        div.classList.add("card");
+        div.style.display = "flex";
+        div.style.alignItems = "center";
+        div.style.padding = "1rem";
+        div.style.borderRadius = "1rem";
+        div.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
+        div.style.background = "#fff";
+        div.style.marginBottom = "1.5rem";
+        div.style.maxWidth = "100%"; div.style.width = "100%";
+
+        div.innerHTML = `
+          <img src="${foto}" alt="Foto do cuidador" style="width: 120px; height: 120px; border-radius: 12px; object-fit: cover; margin-right: 1rem;">
+          <div style="flex: 1; text-align: left;">
+            <strong>${nome}</strong><br>
+            Região: ${regiao}<br>
+            Disponibilidade: ${disponibilidade}<br>
+            ${linkedin ? `<a href="${linkedin}" target="_blank">LinkedIn</a> | ` : ""}
+            ${curriculo ? `<a href="${curriculo}" target="_blank">Currículo</a>` : ""}
+          </div>
+        `;
+        lista.appendChild(div);
+      });
+    })
+    .catch(err => {
+      console.error("Erro ao buscar cuidadores:", err);
+      lista.innerHTML = "⚠️ Erro ao buscar cuidadores.";
+    });
+  });
+
+  // Splash screen
+  window.addEventListener('load', () => {
+    const splash = document.getElementById('splash-screen');
+    if (splash) {
+      splash.classList.add('fade-out');
+      setTimeout(() => {
+        splash.style.display = 'none';
+      }, 600);
+    }
+  });
 });
 </script>
+
+
+
+
 
 </body>
 </html>
