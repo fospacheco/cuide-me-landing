@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Autenticando...</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f2fbfd;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .card {
+      text-align: center;
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🔄 Validando login...</h2>
+    <p>Aguarde um instante, estamos verificando sua conta.</p>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCA1q_RBc0Vi2q_xrXucrEVXFDpdA1eBDo",
+      authDomain: "cuide-me-f57f8.firebaseapp.com",
+      projectId: "cuide-me-f57f8",
+      storageBucket: "cuide-me-f57f8.appspot.com",
+      messagingSenderId: "846926668384",
+      appId: "1:846926668384:web:c0822e110171969f6b5905",
+      measurementId: "G-6EH5LH65WZ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    auth.getRedirectResult()
+      .then((result) => {
+        if (result && result.user) {
+          window.location.href = "/dashboard.html";
+        } else {
+          window.location.href = "/index.html";
+        }
+      })
+      .catch((error) => {
+        alert("Erro ao autenticar: " + error.message);
+        window.location.href = "/index.html";
+      });
+  </script>
+</body>
+</html>
