@@ -6,11 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login - Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
-
-  <!-- Firebase SDK v8 -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
   <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -81,6 +76,11 @@
     .google { background-color: #e45858; }
     .facebook { background-color: #4267B2; }
     .linkedin { background-color: #0077B5; }
+    .social-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
     .divider {
       margin: 1.5rem 0;
       border-top: 1px solid #e0e0e0;
@@ -95,7 +95,15 @@
     .login-links a:hover {
       text-decoration: underline;
     }
-  </style>
+  
+    a {
+      text-decoration: none;
+    }
+    a .social-btn {
+      text-decoration: none;
+      color: white;
+    }
+    </style>
 </head>
 <body>
   <div class="login-card">
@@ -109,9 +117,24 @@
 
     <p style="margin: 1rem 0; font-weight: bold;">ou entre com</p>
 
-    <button class="social-btn google" onclick="loginWithGoogle()">🔐 Entrar com Google</button>
-    <button class="social-btn facebook" onclick="loginWithFacebook()">📘 Entrar com Facebook</button>
-    <button class="social-btn linkedin" onclick="loginWithLinkedIn()">💼 Entrar com LinkedIn</button>
+    
+      <button class="social-btn google" onclick="loginWithGoogle()">
+        <svg viewBox="0 0 488 512"><path d="M488 261.8C488 403.3 391.5 512 248 512 110.9 512 0 401.1 0 264S110.9 16 248 16c66.3 0 122 24.6 164.8 65.2l-66.8 64.2C321.3 115.5 287.2 104 248 104c-87.6 0-158.4 71.5-158.4 160S160.4 424 248 424c75.3 0 123.4-43 129.8-103.1H248v-81.1h240z"/></svg>
+        Entrar com Google
+      </button>
+    </a>
+
+    
+      <button class="social-btn facebook" onclick="loginWithFacebook()">
+        <svg viewBox="0 0 320 512"><path d="M279.14 288l14.22-92.66h-88.91V127.6c0-25.35 12.42-50.06 52.24-50.06h40.42V6.26S270.43 0 240.33 0c-73.1 0-121.36 44.38-121.36 124.72v70.62H89.09V288h29.88v224h92.4V288z"/></svg>
+        Entrar com Facebook
+      </button>
+    </a>
+
+    <button class="social-btn linkedin" onclick="loginWithLinkedIn()">
+      <svg viewBox="0 0 448 512"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8 0 24.1 24.09 0 53.79 0c29.7 0 53.79 24.1 53.79 53.8 0 29.7-24.09 54.3-53.79 54.3zM447.9 448h-92.4V302.4c0-34.7-12.4-58.4-43.4-58.4-23.6 0-37.6 15.8-43.8 31.1-2.3 5.6-2.8 13.4-2.8 21.3V448h-92.4s1.2-270.5 0-298.1h92.4v42.3c12.3-19 34.3-46.1 83.5-46.1 60.9 0 106.6 39.8 106.6 125.3V448z"/></svg>
+      Entrar com LinkedIn
+    </button>
 
     <div class="divider"></div>
 
@@ -121,8 +144,10 @@
     </div>
   </div>
 
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js"></script>
   <script>
-    var firebaseConfig = {
+    const firebaseConfig = {
       apiKey: "AIzaSyCA1q_RBc0Vi2q_xrXucrEVXFDpdA1eBDo",
       authDomain: "cuide-me-f57f8.firebaseapp.com",
       projectId: "cuide-me-f57f8",
@@ -143,6 +168,7 @@
         .catch(error => alert('Erro: ' + error.message));
     }
 
+    
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithRedirect(provider);
@@ -154,6 +180,7 @@
     }
 
     function loginWithLinkedIn() {
+    
       alert('Login com LinkedIn precisa ser configurado via OAuth2 externo');
     }
   </script>
