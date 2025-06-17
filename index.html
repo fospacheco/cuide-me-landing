@@ -5,700 +5,133 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Cuide-meConectando quem cuida e quem precisa de cuidado</title>
-<meta content="Plataforma que conecta cuidadores verificados a famílias. Cuide de quem você ama com empatia e segurança. Ache cuidador de idoso confiável." name="description"/>
-<meta content="cuidador, cuidador de idoso, cuidador confiável, cuidado domiciliar, Cuide-me, encontrar cuidador" name="keywords"/>
-<meta content="Cuide-me" name="author"/>
+<title>Login - Cuide-me</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to bottom, #f2fbfd, #ffffff);
       color: #245063;
-      font-size: 1.08rem;
-      letter-spacing: 0.01em;
       margin: 0;
       padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
-    h1, h2, h3, h4 {
+    .login-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+    }
+    h2 {
       color: #1ba8c2;
-      font-weight: bold;
+      margin-bottom: 1.5rem;
     }
-    .container { max-width: 1200px; margin: auto; padding: 2rem; }
+    form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    input[type="email"], input[type="password"] {
+      width: 100%;
+      padding: 0.9rem 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
     .cta-btn {
-      padding: 1rem 1.5rem;
+      background-color: #1ba8c2;
+      color: white;
+      padding: 0.9rem 1.2rem;
       border-radius: 9999px;
       font-weight: bold;
       font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-    .cta-btn.primary {
-      background-color: #44c7e1;
-      color: white;
       border: none;
+      cursor: pointer;
+      width: 100%;
+      margin-bottom: 1rem;
     }
-    .cta-btn.secondary {
-      background-color: white;
-      color: #44c7e1;
-      border: 2px solid #44c7e1;
-    }
-    .section {
-      padding: 5rem 1rem;
-      text-align: center;
-    }
-    .valores, .passos, .depoimentos {
+    .social-btn {
       display: flex;
-      flex-wrap: wrap;
-      gap: 2.5rem;
+      align-items: center;
       justify-content: center;
-    }
-    .card {
-      background-color: white;
-      border-radius: 1.5rem;
-      padding: 1.5rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
-      width: 250px;
-    }
-    footer {
-      background: #fcfcfc;
-      border-top: 1px solid #e2ebe9;
-      padding: 2rem;
-      text-align: center;
-      font-size: 0.9rem;
-    }
-  
-    .fade-in-up {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.6s ease forwards;
-    }
-
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .fade-out {
-      animation: fadeOut 0.6s ease-in-out forwards;
-    }
-
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-    
-    #splash-screen {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      animation: fadeIn 0.3s ease-out;
-    }
-    #splash-screen img {
-      max-width: 220px;
-      animation: pulse 1.5s infinite ease-in-out;
-    }
-    .fade-out {
-      animation: fadeOut 0.6s ease-in-out forwards;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes fadeOut {
-      from { opacity: 1; }
-      to { opacity: 0; }
-    }
-    @keyframes pulse {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-    }
-    
-    .floating-cta {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background-color: #3ddad7;
-        color: white;
-        padding: 0.9rem 1.2rem;
-        border-radius: 50px;
-        font-weight: bold;
-        text-decoration: none;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        z-index: 1000;
-        transition: background-color 0.3s ease, transform 0.3s ease;
-    }
-    .floating-cta:hover {
-        background-color: #28c9c6;
-        transform: scale(1.05);
-    }
-    
-    .cta-btn, .cta a {
-        box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-        transition: all 0.3s ease;
-    }
-    .cta-btn:hover, .cta a:hover {
-        transform: scale(1.03);
-    }
-    
-    h1, h2 {
-        font-weight: 700;
-        letter-spacing: -0.5px;
-    }
-    header.hero p, section p {
-        font-size: 1.1rem;
-        color: #4a5d68;
-    }
-    
-    .fade-in-up {
-        opacity: 0;
-        transform: translateY(20px);
-        animation: fadeInUp 0.6s ease forwards;
-    }
-    @keyframes fadeInUp {
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
-    
-    .floating-cta {
-        animation: pulseBtn 2.5s infinite ease-in-out;
-    }
-    @keyframes pulseBtn {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.05); }
-    }
-    
-    body.dark-mode {
-        background-color: #1c1c1c;
-        color: #f0f0f0;
-    }
-    body.dark-mode section {
-        background-color: #2b2b2b;
-        color: #f0f0f0;
-    }
-    body.dark-mode .card {
-        background-color: #333;
-        color: #f0f0f0;
-    }
-    body.dark-mode .floating-cta {
-        background-color: #444;
-        color: #fff;
-    }
-    body.dark-mode a, body.dark-mode footer a {
-        color: #3ddad7;
-    }
-    
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
-  }
-
-  nav {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin-top: 1rem;
-  }
-
-  nav a {
-    display: block;
-  }
-
-  nav a:nth-child(odd)::after {
-    content: "";
-  }
-
-  .card {
-    width: 100% !important;
-    max-width: 100%;
-  }
-
-  .valores,
-  .passos,
-  .depoimentos {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  section.section {
-    padding: 3rem 1rem;
-  }
-
-  .cta-btn {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    margin: 0.5rem 0;
-    box-sizing: border-box;
-  }
-
-  .cta-btn.primary,
-  .cta-btn.secondary {
-    font-size: 1rem;
-    padding: 1rem;
-  }
-
-  iframe.airtable-embed {
-    height: 1000px !important;
-  }
-
-  .floating-cta {
-    right: 10px;
-    left: 10px;
-    bottom: 10px;
-    width: auto;
-    max-width: calc(100% - 20px);
-    text-align: center;
-    padding: 0.8rem 1rem;
-  }
-
-  .logo-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .logo-subtitle {
-    font-size: 0.85rem;
-    text-align: left;
-  }
-
-  .section .cta {
-    flex-direction: column;
-    gap: 1rem;
-  }
-}
-
-
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
-  }
-
-  nav {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin-top: 1rem;
-  }
-
-  nav a {
-    display: block;
-  }
-
-  .card {
-    width: 100% !important;
-    max-width: 100%;
-  }
-
-  .valores,
-  .passos,
-  .depoimentos {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  section.section {
-    padding: 3rem 1rem;
-  }
-
-  .cta-btn-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-  }
-
-  .cta-btn {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    margin: 0.5rem 0;
-    box-sizing: border-box;
-  }
-
-  .cta-btn.primary,
-  .cta-btn.secondary {
-    font-size: 1rem;
-    padding: 1rem;
-    text-align: center;
-  }
-
-  iframe.airtable-embed {
-    height: 1000px !important;
-  }
-
-  .floating-cta {
-    right: 10px;
-    left: 10px;
-    bottom: 10px;
-    width: auto;
-    max-width: calc(100% - 20px);
-    text-align: center;
-    padding: 0.8rem 1rem;
-  }
-
-  .logo-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .logo-subtitle {
-    font-size: 0.85rem;
-    text-align: left;
-  }
-}
-
-</style>
-</head>
-<body><div id="splash-screen">
-<img alt="Logo Cuide-me" src="logo_cuide_me.png"/>
-</div>
-<header>
-<style>
-    header {
-      background-color: white;
-      border-bottom: 4px solid #1ba8c2;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .logo-icon {
-      width: 48px;
-      height: 48px;
-    }
-    .logo-text {
-      display: flex;
-      flex-direction: column;
-    }
-    .logo-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #1ba8c2;
-    }
-    .logo-subtitle {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: #333;
-      font-weight: 500;
-    }
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    nav a {
-      text-decoration: none;
-      color: #000;
-      font-size: 0.9rem;
+      width: 100%;
+      padding: 0.75rem;
+      border: none;
+      border-radius: 999px;
       font-weight: 600;
-    }
-    .cta-button {
-      background-color: #00d4ff;
+      font-size: 0.95rem;
+      margin: 0.4rem 0;
+      cursor: pointer;
       color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.85rem;
+      gap: 0.5rem;
       text-decoration: none;
     }
+    .google { background-color: #e45858; }
+    .facebook { background-color: #4267B2; }
+    .linkedin { background-color: #0077B5; }
+    .social-btn svg {
+      width: 20px;
+      height: 20px;
+      fill: white;
+    }
+    .divider {
+      margin: 1.5rem 0;
+      border-top: 1px solid #e0e0e0;
+    }
+    .login-links a {
+      display: block;
+      margin-top: 0.6rem;
+      color: #087f8c;
+      font-size: 0.9rem;
+      text-decoration: none;
+    }
+    .login-links a:hover {
+      text-decoration: underline;
+    }
   
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
-  }
-
-  nav {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin-top: 1rem;
-  }
-
-  nav a {
-    display: block;
-  }
-
-  nav a:nth-child(odd)::after {
-    content: "";
-  }
-
-  .card {
-    width: 100% !important;
-    max-width: 100%;
-  }
-
-  .valores,
-  .passos,
-  .depoimentos {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  section.section {
-    padding: 3rem 1rem;
-  }
-
-  .cta-btn {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    margin: 0.5rem 0;
-    box-sizing: border-box;
-  }
-
-  .cta-btn.primary,
-  .cta-btn.secondary {
-    font-size: 1rem;
-    padding: 1rem;
-  }
-
-  iframe.airtable-embed {
-    height: 1000px !important;
-  }
-
-  .floating-cta {
-    right: 10px;
-    left: 10px;
-    bottom: 10px;
-    width: auto;
-    max-width: calc(100% - 20px);
-    text-align: center;
-    padding: 0.8rem 1rem;
-  }
-
-  .logo-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .logo-subtitle {
-    font-size: 0.85rem;
-    text-align: left;
-  }
-
-  .section .cta {
-    flex-direction: column;
-    gap: 1rem;
-  }
-}
-
-
-@media (max-width: 768px) {
-  header {
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 1rem;
-  }
-
-  nav {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.75rem;
-    margin-top: 1rem;
-  }
-
-  nav a {
-    display: block;
-  }
-
-  .card {
-    width: 100% !important;
-    max-width: 100%;
-  }
-
-  .valores,
-  .passos,
-  .depoimentos {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
-
-  section.section {
-    padding: 3rem 1rem;
-  }
-
-  .cta-btn-container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-  }
-
-  .cta-btn {
-    display: block;
-    width: 100%;
-    max-width: 100%;
-    margin: 0.5rem 0;
-    box-sizing: border-box;
-  }
-
-  .cta-btn.primary,
-  .cta-btn.secondary {
-    font-size: 1rem;
-    padding: 1rem;
-    text-align: center;
-  }
-
-  iframe.airtable-embed {
-    height: 1000px !important;
-  }
-
-  .floating-cta {
-    right: 10px;
-    left: 10px;
-    bottom: 10px;
-    width: auto;
-    max-width: calc(100% - 20px);
-    text-align: center;
-    padding: 0.8rem 1rem;
-  }
-
-  .logo-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.5rem;
-  }
-
-  .logo-subtitle {
-    font-size: 0.85rem;
-    text-align: left;
-  }
-}
-
-</style>
-<div class="logo-container">
-<img alt="Logo Cuide-me" class="logo-icon" src="logo_cuide_me.png" style="width: 72px; height: auto;"/>
-<div class="logo-text">
-<span class="logo-subtitle">Conectando quem cuida<br/>e quem precisa de cuidado</span>
+    a {
+      text-decoration: none;
+    }
+    a .social-btn {
+      text-decoration: none;
+      color: white;
+    }
+    </style>
+</head>
+<body>
+<div class="login-card">
+<h2>👋 Seja bem-vindo ao Cuide-me</h2>
+<form onsubmit="event.preventDefault(); loginWithEmail()">
+<input id="email" placeholder="E-mail" required="" type="email"/>
+<input id="password" placeholder="Senha" required="" type="password"/>
+<button class="cta-btn" type="submit">Entrar</button>
+</form>
+<p style="margin: 1rem 0; font-weight: bold;">ou entre com</p>
+<button class="social-btn google" onclick="loginWithGoogle()">
+<!-- ícone SVG -->
+  Entrar com Google
+</button>
+<button class="social-btn linkedin" onclick="loginWithLinkedIn()">
+<svg viewbox="0 0 448 512"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8 0 24.1 24.09 0 53.79 0c29.7 0 53.79 24.1 53.79 53.8 0 29.7-24.09 54.3-53.79 54.3zM447.9 448h-92.4V302.4c0-34.7-12.4-58.4-43.4-58.4-23.6 0-37.6 15.8-43.8 31.1-2.3 5.6-2.8 13.4-2.8 21.3V448h-92.4s1.2-270.5 0-298.1h92.4v42.3c12.3-19 34.3-46.1 83.5-46.1 60.9 0 106.6 39.8 106.6 125.3V448z"></path></svg>
+      Entrar com LinkedIn
+    </button>
+<div class="divider"></div>
+<div class="login-links">
+<a href="#">Esqueci minha senha</a>
+<a href="cadastro.html">Quero me cadastrar</a>
 </div>
 </div>
-<nav>
-<a href="#sobre">Quem somos</a><a href="#como-funciona">Como Funciona</a><a href="#form-cuidador">Quero Cuidar</a><a href="#form-cliente">Preciso de Cuidado</a><a href="#contato">Contato</a>
-<a class="cta-button" href="#form-cuidador">Cadastre-se</a>
-<a class="cta-button" href="#" onclick="loginWithGoogle()">Entrar</a></nav>
-</header>
-<section class="section">
-<h2>Conectamos você a cuidadores confiáveis — com empatia, agilidade e zero estresse.</h2>
-<p style="margin-bottom: 2.5rem; font-size: 1.1rem; color: #4a5d68;">Cuidadores verificados, próximos de você e prontos para ajudar. Tudo em um só lugar.</p>
-<div>
-<a class="cta-btn primary" href="#form-cliente">🔍 Encontrar um cuidador agora</a>
-<a class="cta-btn secondary" href="#form-cuidador">💼 Quero começar a cuidar</a>
-</div>
-</section>
-<section class="section" style="background: white;">
-<h2>Como funciona</h2>
-<div class="passos">
-<div class="card fade-in-up fade-in-up">🛡️ <strong>Verificação completa</strong><br/>Checamos documentos, experiência e histórico com rigor.</div>
-<div class="card fade-in-up fade-in-up">⭐ <strong>Você escolhe quem cuida</strong><br/>Compare perfis e contrate quem combina com sua necessidade.</div>
-<div class="card fade-in-up fade-in-up">⏰ <strong>Acompanhamento contínuo</strong><br/>Transparência no processo e suporte disponível sempre que precisar.</div>
-<div class="card fade-in-up fade-in-up">❤️ <strong>Relacionamento com propósito</strong><br/>Mais do que um serviço, criamos vínculos de cuidado real.</div>
-</div>
-<img alt="Cuidador ao lado de idosa" src="https://cdn.pixabay.com/photo/2016/03/27/21/16/elderly-1280963_1280.jpg" style="margin-top:2rem; max-width:100%; border-radius:1rem; border:4px solid #d1f3f2; box-shadow: 0 8px 20px rgba(0,0,0,0.1);"/>
-</section><section id="form-cliente"><h2 style="text-align: center;">
-    Quero encontrar um cuidador
-   </h2><p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
-    Preencha o formulário abaixo e encontre um cuidador verificado na sua região:
-   </p><div style="background-color: #ffffff; padding: 2rem; border-radius: 16px; max-width: 800px; margin: 2rem auto; box-shadow: 0 6px 24px rgba(0,0,0,0.08);"><iframe class="airtable-embed airtable-dynamic-height" frameborder="0" height="1101" onmousewheel="" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K" style="background: transparent; border: 1px solid #ccc;" width="100%"></iframe></div></section><section id="form-cuidador"><h2 style="text-align: center;">
-    Sou cuidador e quero me cadastrar
-   </h2><p style="text-align: center; max-width: 800px; margin: 0 auto 2rem;">
-    Preencha o formulário para se cadastrar na base de profissionais do Cuide-me:
-   </p><div style="background-color: #ffffff; padding: 2rem; border-radius: 16px; max-width: 800px; margin: 2rem auto; box-shadow: 0 6px 24px rgba(0,0,0,0.08);"><iframe class="airtable-embed airtable-dynamic-height" frameborder="0" height="1302" onmousewheel="" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrP5sKLT00RybPmc" style="background: transparent; border: 1px solid #ccc;" width="100%"></iframe></div></section>
-<section class="section">
-<h2>Depoimentos reais</h2>
-<div class="depoimentos">
-<div class="card fade-in-up fade-in-up">⭐<br/>"Ter alguém da Cuide-me conosco trouxe paz, carinho e uma confiança renovada."<br/><strong>Sr. Feliciano</strong></div>
-<div class="card fade-in-up fade-in-up">❤️<br/>"Encontrei uma cuidadora atenciosa e pontual."<br/><strong>Dona Maria</strong></div>
-<div class="card fade-in-up fade-in-up">❤️<br/>"Sentimos segurança em todo o processo."<br/><strong>Leonardo, filho</strong></div>
-</div>
-</section>
-<section class="section">
-<h2>Sobre o Cuide-me</h2>
-<p style="margin-bottom: 2.5rem; font-size: 1.1rem; color: #4a5d68;">Cuidar de alguém é um ato de amor — e de responsabilidade. O Cuide-me nasceu pra ser seu apoio nesse momento: conectamos você a cuidadores experientes, com segurança, empatia e agilidade.</p>
-<div class="valores">
-<div class="card fade-in-up fade-in-up">❤️ <strong>Empatia</strong><br/>Presença, escuta e afeto real.</div>
-<div class="card fade-in-up fade-in-up">🛡️ <strong>Autonomia</strong><br/>Respeito ao ritmo de cada um.</div>
-<div class="card fade-in-up fade-in-up">⭐ <strong>Excelência</strong><br/>Seleção criteriosa de cuidadores.</div>
-<div class="card fade-in-up fade-in-up">⏰ <strong>Transparência</strong><br/>Processos e comunicação claros.</div>
-<div class="card fade-in-up fade-in-up">⭐ <strong>Inclusão</strong><br/>Cuidado digno para todos.</div>
-</div>
-</section>
-<footer><div style="margin: 1rem 0; display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center;"><a href="/termos" style="background: #e8f7fa; color: #087f8c; text-decoration: none; padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 0.4rem;" target="_blank">Termos de uso</a><a href="/privacidade" style="background: #e8f7fa; color: #087f8c; text-decoration: none; padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 0.4rem;" target="_blank">Política de privacidade</a><a href="https://www.instagram.com" style="background: #e8f7fa; color: #087f8c; text-decoration: none; padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 0.4rem;" target="_blank">
-<svg fill="#087f8c" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
-<path d="M12 2.2c3.2 0 3.6 0 4.8.1 1.2.1 1.9.3 2.4.6.6.3 1 .7 1.3 1.3.3.5.5 1.2.6 2.4.1 1.2.1 1.6.1 4.8s0 3.6-.1 4.8c-.1 1.2-.3 1.9-.6 2.4-.3.6-.7 1-1.3 1.3-.5.3-1.2.5-2.4.6-1.2.1-1.6.1-4.8.1s-3.6 0-4.8-.1c-1.2-.1-1.9-.3-2.4-.6-.6-.3-1-.7-1.3-1.3-.3-.5-.5-1.2-.6-2.4C2.2 15.6 2.2 15.2 2.2 12s0-3.6.1-4.8c.1-1.2.3-1.9.6-2.4.3-.6.7-1 1.3-1.3.5-.3 1.2-.5 2.4-.6C8.4 2.2 8.8 2.2 12 2.2m0-2.2C8.7 0 8.3 0 7.1.1 5.9.2 5 .4 4.2.8c-.8.4-1.4.9-2 1.5s-1.1 1.2-1.5 2C.4 5 .2 5.9.1 7.1 0 8.3 0 8.7 0 12s0 3.7.1 4.9c.1 1.2.3 2.1.7 2.9.4.8.9 1.4 1.5 2s1.2 1.1 2 1.5c.8.4 1.7.6 2.9.7 1.2.1 1.6.1 4.9.1s3.7 0 4.9-.1c1.2-.1 2.1-.3 2.9-.7.8-.4 1.4-.9 2-1.5s1.1-1.2 1.5-2c.4-.8.6-1.7.7-2.9.1-1.2.1-1.6.1-4.9s0-3.7-.1-4.9c-.1-1.2-.3-2.1-.7-2.9-.4-.8-.9-1.4-1.5-2s-1.2-1.1-2-1.5c-.8-.4-1.7-.6-2.9-.7C15.7 0 15.3 0 12 0z"></path>
-<path d="M12 5.8a6.2 6.2 0 1 0 0 12.4 6.2 6.2 0 0 0 0-12.4zm0 10.2a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.4-11.3a1.4 1.4 0 1 1-2.8 0 1.4 1.4 0 0 1 2.8 0z"></path>
-</svg>
- Instagram</a><a href="https://www.facebook.com" style="background: #e8f7fa; color: #087f8c; text-decoration: none; padding: 0.5rem 0.8rem; border-radius: 8px; font-size: 0.9rem; font-weight: 500; display: inline-flex; align-items: center; gap: 0.4rem;" target="_blank">
-<svg fill="#087f8c" height="18" viewbox="0 0 24 24" width="18" xmlns="http://www.w3.org/2000/svg">
-<path d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.403.597 24 1.326 24H12.82v-9.294H9.692V11.11h3.128V8.413c0-3.1 1.893-4.788 4.658-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.795.716-1.795 1.763v2.312h3.587l-.467 3.596h-3.12V24h6.116c.73 0 1.326-.597 1.326-1.326V1.326C24 .597 23.403 0 22.675 0z"></path>
-</svg>
- Facebook</a></div><div style="margin-top: 1rem;">© 2025 Cuide-me. Todos os direitos reservados.</div>
-<button id="toggle-dark" style="margin-top: 1rem; padding: 0.5rem 1rem; border-radius: 8px; background-color: #3ddad7; color: white; border: none; cursor: pointer;">
-    🌙 Alternar tema
-   </button></footer>
-<a class="floating-cta" href="https://wa.me/5599999999999" target="_blank">📱 Precisa de ajuda?</a><script>
-   const toggle = document.getElementById('toggle-dark');
-  toggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark-mode');
-  });
-  </script><script>
-        window.addEventListener('load', () => {
-          const splash = document.getElementById('splash-screen');
-          splash.classList.add('fade-out');
-          setTimeout(() => {
-            splash.style.display = 'none';
-          }, 600);
-        });
-        </script>
-<!-- Firebase SDK -->
 
 
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCA1q_RBc0Vi2q_xrXucrEVXFDpdA1eBDo",
-    authDomain: "cuide-me-f57f8.firebaseapp.com",
-    projectId: "cuide-me-f57f8",
-    storageBucket: "cuide-me-f57f8.appspot.com",
-    messagingSenderId: "846926668384",
-    appId: "1:846926668384:web:c0822e110171969f6b5905",
-    measurementId: "G-6EH5LH65WZ"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-
-  function loginWithGoogle() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-      .then(() => window.location.href = '/dashboard.html')
-      .catch(error => alert('Erro ao autenticar com Google: ' + error.message));
-  }
-</script>
-
+<script></script>
 <!-- Firebase compat SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -716,12 +149,29 @@
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
+  function loginWithEmail() {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    auth.signInWithEmailAndPassword(email, password)
+      .then(result => window.location.href = '/dashboard.html')
+      .catch(error => alert('Erro: ' + error.message));
+  }
+
+  function loginWithLinkedIn() {
+    alert('Login com LinkedIn precisa ser configurado via OAuth2 externo');
+  }
+
   function loginWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider)
-      .then(() => window.location.href = '/dashboard.html')
-      .catch(error => alert('Erro ao autenticar com Google: ' + error.message));
+      .then(result => {
+        console.log('Usuário autenticado:', result.user);
+        window.location.href = '/dashboard.html';
+      })
+      .catch(error => {
+        console.error('Erro ao autenticar com Google:', error);
+        alert('Erro ao autenticar com Google: ' + error.message);
+      });
   }
 </script>
-</body>
-</html>
+</body></html>
