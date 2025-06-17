@@ -1297,37 +1297,43 @@ document.addEventListener("DOMContentLoaded", function () {
       }
 
       lista.innerHTML = "";
-      data.records.forEach(record => {
-        const f = record.fields;
-        const nome = f["Nome completo"] || "Nome não informado";
-        const regiao = f["Região (from Localização)"] || "-";
-        const disponibilidade = f["Disponibilidade nome"] || "-";
-        const linkedin = f["Linkedin"] || "";
-        const curriculo = f["Curriculo"]?.[0]?.url || "";
-        const foto = f["Foto"]?.[0]?.url || "https://via.placeholder.com/120";
+data.records.forEach(record => {
+  const f = record.fields;
+  const nome = f["Nome completo"] || "Nome não informado";
+  const status = f["Status"] || "-";
+  const regiao = f["Região (from Localização)"] || "-";
+  const disponibilidade = f["Disponibilidade nome"] || "-";
+  const horario = f["Horário (from Disponibilidade)"] || "-";
+  const linkedin = f["Linkedin"] || "";
+  const curriculo = f["Curriculo"]?.[0]?.url || "";
+  const foto = f["Foto"]?.[0]?.url || "https://via.placeholder.com/120";
 
-        const div = document.createElement("div");
-        div.classList.add("card");
-        div.style.display = "flex";
-        div.style.alignItems = "center";
-        div.style.padding = "1rem";
-        div.style.borderRadius = "1rem";
-        div.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
-        div.style.background = "#fff";
-        div.style.marginBottom = "1.5rem";
-        div.style.maxWidth = "100%"; div.style.width = "100%";
+  const div = document.createElement("div");
+  div.classList.add("card");
+  div.style.display = "flex";
+  div.style.alignItems = "center";
+  div.style.padding = "1rem";
+  div.style.borderRadius = "1rem";
+  div.style.boxShadow = "0 4px 12px rgba(0,0,0,0.08)";
+  div.style.background = "#fff";
+  div.style.marginBottom = "1.5rem";
+  div.style.maxWidth = "100%";
+  div.style.width = "100%";
 
-        div.innerHTML = `
-          <img src="${foto}" alt="Foto do cuidador" style="width: 120px; height: 120px; border-radius: 12px; object-fit: cover; margin-right: 1rem;">
-          <div style="flex: 1; text-align: left;">
-            <strong>${nome}</strong><br>
-            Região: ${regiao}<br>
-            Disponibilidade: ${disponibilidade}<br>
-            ${linkedin ? `<a href="${linkedin}" target="_blank">LinkedIn</a> | ` : ""}
-            ${curriculo ? `<a href="${curriculo}" target="_blank">Currículo</a>` : ""}
-          </div>
-        `;
-        lista.appendChild(div);
+  div.innerHTML = `
+    <img src="${foto}" alt="Foto do cuidador" style="width: 120px; height: 120px; border-radius: 12px; object-fit: cover; margin-right: 1rem;">
+    <div style="flex: 1; text-align: left;">
+      <strong>${nome}</strong><br>
+      Status: ${status}<br>
+      Região: ${regiao}<br>
+      Disponibilidade: ${disponibilidade}<br>
+      Horário: ${horario}<br>
+      ${linkedin ? `<a href="${linkedin}" target="_blank">LinkedIn</a>` : ""}
+      ${linkedin && curriculo ? " | " : ""}
+      ${curriculo ? `<a href="${curriculo}" target="_blank">Currículo</a>` : ""}
+    </div>
+  `;
+  lista.appendChild(div);
       });
     })
     .catch(err => {
