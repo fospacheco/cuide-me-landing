@@ -132,16 +132,12 @@
 
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider)
-        .then(result => window.location.href = '/dashboard.html')
-        .catch(error => alert('Erro: ' + error.message));
+      auth.signInWithRedirect(provider);
     }
 
     function loginWithFacebook() {
       const provider = new firebase.auth.FacebookAuthProvider();
-      auth.signInWithPopup(provider)
-        .then(result => window.location.href = '/dashboard.html')
-        .catch(error => alert('Erro: ' + error.message));
+      auth.signInWithRedirect(provider);
     }
 
     function loginWithLinkedIn() {
@@ -155,6 +151,19 @@
         .then(result => window.location.href = '/dashboard.html')
         .catch(error => alert('Erro: ' + error.message));
     }
+
+    // Após redirecionamento, verificar se o login foi bem-sucedido
+    auth.getRedirectResult()
+      .then(result => {
+        if (result.user) {
+          window.location.href = '/dashboard.html';
+        }
+      })
+      .catch(error => {
+        if (error && error.message) {
+          alert('Erro ao retornar do login: ' + error.message);
+        }
+      });
   </script>
 </body>
 </html>
