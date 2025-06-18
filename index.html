@@ -5,15 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login/Cadastro - Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  
-  <!-- SDKs das redes sociais -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js"></script>
   <script type="text/javascript" src="https://platform.linkedin.com/in.js">
     api_key: YOUR_LINKEDIN_CLIENT_ID
     authorize: true
   </script>
-
   <style>
     * { box-sizing: border-box; }
     body {
@@ -181,12 +176,52 @@
 
   function renderLogin() {
     document.getElementById("formSlide").innerHTML = `
-      <div class="social-text">Acesse com uma rede social</div>
+      <input id="email" type="email" placeholder="E-mail" required />
+      <input id="password" type="password" placeholder="Senha" required />
+      <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
+      <div class="social-text">ou acesse com redes sociais</div>
       <div class="social-icons">
         <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" />
         <img src="https://img.icons8.com/color/48/facebook-new.png" onclick="loginWithFacebook()" alt="Facebook" />
-        <img src="https://img.icons8.com/color/48/linkedin.png" onclick="loginWithLinkedin()" alt="LinkedIn" />
+        <a href="/api/auth/linkedin/login">
+          <img src="https://img.icons8.com/color/48/linkedin.png" alt="LinkedIn" />
+        </a>
+      </div>
+      <div class="toggle-text">Ainda não tem conta?
+        <a onclick="renderCadastro()">Crie aqui</a>
       </div>`;
+  }
+
+  function renderCadastro() {
+    document.getElementById("formSlide").innerHTML = `
+      <input id="nome" type="text" placeholder="Nome completo" required />
+      <input id="email" type="email" placeholder="E-mail" required />
+      <input id="password" type="password" placeholder="Senha" required />
+      <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
+      <div class="toggle-text">Já tem uma conta?
+        <a onclick="renderLogin()">Faça login</a>
+      </div>`;
+  }
+
+  function loginWithEmail() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    auth.signInWithEmailAndPassword(email, password)
+      .then(() => window.location.href = "dashboard.html")
+      .catch(error => alert("Erro: " + error.message));
+  }
+
+  function cadastrarUsuario() {
+    const nome = document.getElementById("nome").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        alert("Cadastro realizado com sucesso!");
+        window.location.href = "dashboard.html";
+      })
+      .catch(error => alert("Erro ao cadastrar: " + error.message));
   }
 
   function loginWithGoogle() {
@@ -203,25 +238,13 @@
       .catch(error => alert("Erro com Facebook: " + error.message));
   }
 
-  function loginWithLinkedin() {
-    IN.User.authorize();
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token");
+  if (token) {
+    auth.signInWithCustomToken(token)
+      .then(() => window.location.href = "dashboard.html")
+      .catch(error => alert("Erro ao autenticar com LinkedIn: " + error.message));
   }
-
-  function onLinkedInAuth() {
-    IN.API.Raw("/people/~:(id,first-name,last-name,email-address)")
-      .result(profile => {
-        const fakePassword = Math.random().toString(36).substring(2);
-        const email = profile.emailAddress;
-        auth.signInWithEmailAndPassword(email, fakePassword)
-          .then(() => window.location.href = "dashboard.html")
-          .catch(() => {
-            auth.createUserWithEmailAndPassword(email, fakePassword)
-              .then(() => window.location.href = "dashboard.html")
-              .catch(error => alert("Erro com LinkedIn: " + error.message));
-          });
-      });
-  }
-  IN.Event.on(IN, "auth", onLinkedInAuth);
 
   auth.onAuthStateChanged(user => {
     if (user) {
