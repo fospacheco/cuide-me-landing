@@ -1,177 +1,239 @@
-
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8"/>
-<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Login - Cuide-me</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
-<style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login/Cadastro - Cuide-me</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- SDKs das redes sociais -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script async defer crossorigin="anonymous" src="https://connect.facebook.net/pt_BR/sdk.js"></script>
+  <script type="text/javascript" src="https://platform.linkedin.com/in.js">
+    api_key: YOUR_LINKEDIN_CLIENT_ID
+    authorize: true
+  </script>
+
+  <style>
+    * { box-sizing: border-box; }
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      color: #245063;
       margin: 0;
-      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background: #f2fbfd;
+      color: #245063;
+    }
+    .container {
+      display: none;
+      flex-wrap: wrap;
+      min-height: 100vh;
+      position: relative;
+    }
+    .left, .right {
+      flex: 1;
+      padding: 3rem;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
     }
-    .login-card {
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-      max-width: 420px;
-      width: 100%;
+    .left {
+      background-color: #1ba8c2;
+      color: white;
       text-align: center;
+      z-index: 1;
     }
-    h2 {
+    .left h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .left p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    .left a {
+      background-color: white;
       color: #1ba8c2;
-      margin-bottom: 1.5rem;
+      text-decoration: none;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
     }
-    form {
+    .right {
+      background-color: white;
+      position: relative;
+      overflow: hidden;
+    }
+    .form-overlay {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      width: 100%;
+      height: 100%;
+      background-color: #ffffff;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      gap: 1rem;
+      transition: left 0.6s ease;
+      z-index: 2;
     }
-    input[type="email"], input[type="password"] {
-      width: 100%;
-      padding: 0.9rem 1rem;
-      margin-bottom: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 1rem;
-      box-sizing: border-box;
+    .form-overlay.active {
+      left: 0;
     }
     .cta-btn {
       background-color: #1ba8c2;
       color: white;
-      padding: 0.9rem 1.2rem;
-      border-radius: 9999px;
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
       font-weight: bold;
+      border: none;
+      cursor: pointer;
       font-size: 1rem;
-      border: none;
-      cursor: pointer;
-      width: 100%;
-      margin-bottom: 1rem;
     }
-    .social-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      padding: 0.75rem;
-      border: none;
-      border-radius: 999px;
-      font-weight: 600;
+    .social-text {
+      font-weight: 500;
       font-size: 0.95rem;
-      margin: 0.4rem 0;
+    }
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+    }
+    .social-icons img {
+      width: 36px;
+      height: 36px;
       cursor: pointer;
-      color: white;
-      gap: 0.5rem;
-      text-decoration: none;
     }
-    .google { background-color: #e45858; }
-    .facebook { background-color: #4267B2; }
-    .linkedin { background-color: #0077B5; }
-    .social-btn svg {
-      width: 20px;
-      height: 20px;
-      fill: white;
+    #splash-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
     }
-    .divider {
-      margin: 1.5rem 0;
-      border-top: 1px solid #e0e0e0;
+    #splash-screen img {
+      max-width: 220px;
+      animation: pulse 1.5s infinite ease-in-out;
     }
-    .login-links a {
-      display: block;
-      margin-top: 0.6rem;
-      color: #087f8c;
-      font-size: 0.9rem;
-      text-decoration: none;
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
     }
-    .login-links a:hover {
-      text-decoration: underline;
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .left, .right {
+        padding: 2rem;
+      }
     }
-  
-    a {
-      text-decoration: none;
-    }
-    a .social-btn {
-      text-decoration: none;
-      color: white;
-    }
-    </style>
+  </style>
 </head>
 <body>
-<div class="login-card">
-<h2>👋 Seja bem-vindo ao Cuide-me</h2>
-<form onsubmit="event.preventDefault(); loginWithEmail()">
-<input id="email" placeholder="E-mail" required="" type="email"/>
-<input id="password" placeholder="Senha" required="" type="password"/>
-<button class="cta-btn" type="submit">Entrar</button>
-</form>
-<p style="margin: 1rem 0; font-weight: bold;">ou entre com</p>
-<button class="social-btn google" onclick="loginWithGoogle()">
-<!-- ícone SVG -->
-  Entrar com Google
-</button>
-<button class="social-btn linkedin" onclick="loginWithLinkedIn()">
-<svg viewbox="0 0 448 512"><path d="M100.28 448H7.4V148.9h92.88zM53.79 108.1C24.09 108.1 0 83.5 0 53.8 0 24.1 24.09 0 53.79 0c29.7 0 53.79 24.1 53.79 53.8 0 29.7-24.09 54.3-53.79 54.3zM447.9 448h-92.4V302.4c0-34.7-12.4-58.4-43.4-58.4-23.6 0-37.6 15.8-43.8 31.1-2.3 5.6-2.8 13.4-2.8 21.3V448h-92.4s1.2-270.5 0-298.1h92.4v42.3c12.3-19 34.3-46.1 83.5-46.1 60.9 0 106.6 39.8 106.6 125.3V448z"></path></svg>
-      Entrar com LinkedIn
-    </button>
-<div class="divider"></div>
-<div class="login-links">
-<a href="#">Esqueci minha senha</a>
-<a href="cadastro.html">Quero me cadastrar</a>
-</div>
+<div id="splash-screen">
+  <img src="logo_cuide_me.png" alt="Carregando Cuide-me" />
 </div>
 
+<div class="container" id="main-content">
+  <div class="left">
+    <h2>Bem-vindo de volta!</h2>
+    <p>Para continuar conectado, clique abaixo:</p>
+    <a onclick="mostrarFormulario()">Acessar</a>
+  </div>
+  <div class="right">
+    <img src="logo_cuide_me.png" alt="Logo Cuide-me" />
+    <h2>Cuide-me</h2>
+    <div id="formSlide" class="form-overlay"></div>
+  </div>
+</div>
 
-<script></script>
-<!-- Firebase compat SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script>
   const firebaseConfig = {
-    apiKey: "AIzaSyCA1q_RBc0Vi2q_xrXucrEVXFDpdA1eBDo",
+    apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
     authDomain: "cuide-me-f57f8.firebaseapp.com",
     projectId: "cuide-me-f57f8",
     storageBucket: "cuide-me-f57f8.appspot.com",
     messagingSenderId: "846926668384",
-    appId: "1:846926668384:web:c0822e110171969f6b5905",
-    measurementId: "G-6EH5LH65WZ"
+    appId: "1:846926668384:web:c8022e110171969f6b5905"
   };
 
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
 
-  function loginWithEmail() {
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
-    auth.signInWithEmailAndPassword(email, password)
-      .then(result => window.location.href = '/dashboard.html')
-      .catch(error => alert('Erro: ' + error.message));
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('splash-screen').style.display = 'none';
+      document.getElementById('main-content').style.display = 'flex';
+    }, 1500);
+  });
+
+  function mostrarFormulario() {
+    document.getElementById("formSlide").classList.add("active");
+    renderLogin();
   }
 
-  function loginWithLinkedIn() {
-    alert('Login com LinkedIn precisa ser configurado via OAuth2 externo');
+  function renderLogin() {
+    document.getElementById("formSlide").innerHTML = `
+      <div class="social-text">Acesse com uma rede social</div>
+      <div class="social-icons">
+        <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" />
+        <img src="https://img.icons8.com/color/48/facebook-new.png" onclick="loginWithFacebook()" alt="Facebook" />
+        <img src="https://img.icons8.com/color/48/linkedin.png" onclick="loginWithLinkedin()" alt="LinkedIn" />
+      </div>`;
   }
 
   function loginWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider)
-      .then(result => {
-        console.log('Usuário autenticado:', result.user);
-        window.location.href = '/dashboard.html';
-      })
-      .catch(error => {
-        console.error('Erro ao autenticar com Google:', error);
-        alert('Erro ao autenticar com Google: ' + error.message);
+      .then(() => window.location.href = "dashboard.html")
+      .catch(error => alert("Erro com Google: " + error.message));
+  }
+
+  function loginWithFacebook() {
+    const provider = new firebase.auth.FacebookAuthProvider();
+    auth.signInWithPopup(provider)
+      .then(() => window.location.href = "dashboard.html")
+      .catch(error => alert("Erro com Facebook: " + error.message));
+  }
+
+  function loginWithLinkedin() {
+    IN.User.authorize();
+  }
+
+  function onLinkedInAuth() {
+    IN.API.Raw("/people/~:(id,first-name,last-name,email-address)")
+      .result(profile => {
+        const fakePassword = Math.random().toString(36).substring(2);
+        const email = profile.emailAddress;
+        auth.signInWithEmailAndPassword(email, fakePassword)
+          .then(() => window.location.href = "dashboard.html")
+          .catch(() => {
+            auth.createUserWithEmailAndPassword(email, fakePassword)
+              .then(() => window.location.href = "dashboard.html")
+              .catch(error => alert("Erro com LinkedIn: " + error.message));
+          });
       });
   }
+  IN.Event.on(IN, "auth", onLinkedInAuth);
+
+  auth.onAuthStateChanged(user => {
+    if (user) {
+      window.location.href = "dashboard.html";
+    }
+  });
 </script>
-</body></html>
+
+<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
+  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: #087f8c; text-decoration: underline;">Termos de Uso</a>
+  <a href="politica_privacidade.html" target="_blank" style="color: #087f8c; text-decoration: underline;">Política de Privacidade</a>
+</div>
+
+</body>
+</html>
