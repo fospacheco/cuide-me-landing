@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -6,11 +7,10 @@
   <title>Login/Cadastro - Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script type="text/javascript" src="https://platform.linkedin.com/in.js">
-  api_key: YOUR_LINKEDIN_CLIENT_ID
-  authorize: true
-  scope: r_liteprofile r_emailaddress
-  IN.Event.on(IN, "auth", onLinkedInAuth);
-</script>
+    api_key: YOUR_LINKEDIN_CLIENT_ID
+    authorize: true
+    scope: r_liteprofile r_emailaddress
+  </script>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -149,136 +149,148 @@
   </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js">  IN.Event.on(IN, "auth", onLinkedInAuth);
-</script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js">  IN.Event.on(IN, "auth", onLinkedInAuth);
-</script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js">  IN.Event.on(IN, "auth", onLinkedInAuth);
-</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
-    authDomain: "cuide-me-f57f8.firebaseapp.com",
-    projectId: "cuide-me-f57f8",
-    storageBucket: "cuide-me-f57f8.appspot.com",
-    messagingSenderId: "846926668384",
-    appId: "1:846926668384:web:c8022e110171969f6b5905"
-  };
+const firebaseConfig = {
+  apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
+  authDomain: "cuide-me-f57f8.firebaseapp.com",
+  projectId: "cuide-me-f57f8",
+  storageBucket: "cuide-me-f57f8.appspot.com",
+  messagingSenderId: "846926668384",
+  appId: "1:846926668384:web:c8022e110171969f6b5905"
+};
 
-  firebase.initializeApp(firebaseConfig);
-  const auth = firebase.auth();
-  const db = firebase.firestore();
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
 
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      document.getElementById('splash-screen').style.display = 'none';
-      document.getElementById('main-content').style.display = 'flex';
-    }, 1500);
-  });
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash-screen').style.display = 'none';
+    document.getElementById('main-content').style.display = 'flex';
+  }, 1500);
+});
 
-  function mostrarFormulario() {
-    document.getElementById("formSlide").classList.add("active");
-    renderLogin();
-  }
+function mostrarFormulario() {
+  document.getElementById("formSlide").classList.add("active");
+  renderLogin();
+}
 
-  function renderLogin() {
-    document.getElementById("formSlide").innerHTML = `
-      <input id="email" type="email" placeholder="E-mail" required />
-      <input id="password" type="password" placeholder="Senha" required />
-      <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
-      <div class="social-text">ou acesse com redes sociais</div>
-      <div class="social-icons">
-        <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" />
-        <img src="https://img.icons8.com/color/48/facebook-new.png" onclick="loginWithFacebook()" alt="Facebook" />
-        <a href="/api/auth/linkedin/login">
-          <img src="https://img.icons8.com/color/48/linkedin.png" alt="LinkedIn" />
-        </a>
-      </div>
-      <div class="toggle-text">Ainda não tem conta?
-        <a onclick="renderCadastro()">Crie aqui</a>
-      </div>`;
-  }
+function renderLogin() {
+  document.getElementById("formSlide").innerHTML = `
+    <input id="email" type="email" placeholder="E-mail" required />
+    <input id="password" type="password" placeholder="Senha" required />
+    <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
+    <div class="social-text">ou acesse com redes sociais</div>
+    <div class="social-icons">
+      <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" />
+      <img src="https://img.icons8.com/color/48/facebook-new.png" onclick="loginWithFacebook()" alt="Facebook" />
+      <img src="https://img.icons8.com/color/48/linkedin.png" onclick="loginWithLinkedin()" alt="Login com LinkedIn" />
+    </div>
+    <div class="toggle-text">Ainda não tem conta?
+      <a onclick="renderCadastro()">Crie aqui</a>
+    </div>`;
+}
 
-  function renderCadastro() {
-    document.getElementById("formSlide").innerHTML = `
-      <input id="nome" type="text" placeholder="Nome completo" required />
-      <input id="email" type="email" placeholder="E-mail" required />
-      <input id="password" type="password" placeholder="Senha" required />
-      <select id="perfil">
-        <option value="cuidador">Sou Cuidador</option>
-        <option value="familia">Sou Família</option>
-        <option value="instituicao">Sou Instituição</option>
-      </select>
-      <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
-      <div class="toggle-text">Já tem uma conta?
-        <a onclick="renderLogin()">Faça login</a>
-      </div>`;
-  }
+function renderCadastro() {
+  document.getElementById("formSlide").innerHTML = `
+    <input id="nome" type="text" placeholder="Nome completo" required />
+    <input id="email" type="email" placeholder="E-mail" required />
+    <input id="password" type="password" placeholder="Senha" required />
+    <select id="perfil">
+      <option value="cuidador">Sou Cuidador</option>
+      <option value="familia">Sou Família</option>
+      <option value="instituicao">Sou Instituição</option>
+    </select>
+    <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
+    <div class="toggle-text">Já tem uma conta?
+      <a onclick="renderLogin()">Faça login</a>
+    </div>`;
+}
 
-  function loginWithEmail() {
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    auth.signInWithEmailAndPassword(email, password)
-      .then(() => window.location.href = "pagina-homepage.html")
-      .catch(error => alert("Erro: " + error.message));
-  }
+function loginWithEmail() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => window.location.href = "pagina-homepage.html")
+    .catch(error => alert("Erro: " + error.message));
+}
 
-  function cadastrarUsuario() {
-    const nome = document.getElementById("nome").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
-    const perfil = document.getElementById("perfil").value;
+function cadastrarUsuario() {
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const perfil = document.getElementById("perfil").value;
 
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(cred => {
-        return db.collection("usuarios").doc(cred.user.uid).set({
-          nome,
-          email,
-          perfil
-        });
-      })
-      .then(() => {
-        alert("Cadastro realizado com sucesso!");
-        window.location.href = "pagina-homepage.html";
-      })
-      .catch(error => alert("Erro ao cadastrar: " + error.message));
-  }
-
-  function loginWithGoogle() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider)
-      .then(() => window.location.href = "pagina-homepage.html")
-      .catch(error => alert("Erro com Google: " + error.message));
-  }
-
-  function loginWithFacebook() {
-    const provider = new firebase.auth.FacebookAuthProvider();
-    auth.signInWithPopup(provider)
-      .then(() => window.location.href = "pagina-homepage.html")
-      .catch(error => alert("Erro com Facebook: " + error.message));
-  }
-
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get("token");
-  if (token) {
-    auth.signInWithCustomToken(token)
-      .then(() => window.location.href = "pagina-homepage.html")
-      .catch(error => alert("Erro ao autenticar com LinkedIn: " + error.message));
-  }
-
-  auth.onAuthStateChanged(user => {
-    if (user) {
-      db.collection("usuarios").doc(user.uid).get().then(doc => {
-        const perfil = doc.exists ? doc.data().perfil : "cuidador";
-        if (perfil === "familia") {
-          window.location.href = "pagina-homepage.html";
-        } else {
-          window.location.href = "pagina-homepage.html";
-        }
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(cred => {
+      return db.collection("usuarios").doc(cred.user.uid).set({
+        nome,
+        email,
+        perfil
       });
-    }
-  });
-  IN.Event.on(IN, "auth", onLinkedInAuth);
+    })
+    .then(() => {
+      alert("Cadastro realizado com sucesso!");
+      window.location.href = "pagina-homepage.html";
+    })
+    .catch(error => alert("Erro ao cadastrar: " + error.message));
+}
+
+function loginWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+    .then(() => window.location.href = "pagina-homepage.html")
+    .catch(error => alert("Erro com Google: " + error.message));
+}
+
+function loginWithFacebook() {
+  const provider = new firebase.auth.FacebookAuthProvider();
+  auth.signInWithPopup(provider)
+    .then(() => window.location.href = "pagina-homepage.html")
+    .catch(error => alert("Erro com Facebook: " + error.message));
+}
+
+function loginWithLinkedin() {
+  IN.User.authorize();
+}
+
+function onLinkedInAuth() {
+  IN.API.Raw("/people/~:(id,firstName,lastName,email-address)")
+    .result(function(profile) {
+      const email = profile.emailAddress;
+      const nome = profile.firstName + " " + profile.lastName;
+      const fakePassword = email + "_linkedin";
+
+      auth.signInWithEmailAndPassword(email, fakePassword)
+        .then(() => window.location.href = "pagina-homepage.html")
+        .catch(() => {
+          auth.createUserWithEmailAndPassword(email, fakePassword)
+            .then(cred => {
+              return db.collection("usuarios").doc(cred.user.uid).set({
+                nome: nome,
+                email: email,
+                perfil: "cuidador"
+              });
+            })
+            .then(() => window.location.href = "pagina-homepage.html")
+            .catch(error => alert("Erro com LinkedIn: " + error.message));
+        });
+    });
+}
+IN.Event.on(IN, "auth", onLinkedInAuth);
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    db.collection("usuarios").doc(user.uid).get().then(doc => {
+      const perfil = doc.exists ? doc.data().perfil : "cuidador";
+      window.location.href = "pagina-homepage.html";
+    });
+  }
+});
 </script>
 
 <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
@@ -286,11 +298,5 @@
   <a href="politica_privacidade.html" target="_blank" style="color: #087f8c; text-decoration: underline;">Política de Privacidade</a>
 </div>
 
-<script>
-function loginWithLinkedin() {
-  IN.User.authorize();
-}
-  IN.Event.on(IN, "auth", onLinkedInAuth);
-</script>
 </body>
 </html>
