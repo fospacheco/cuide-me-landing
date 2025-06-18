@@ -149,6 +149,7 @@
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
@@ -161,6 +162,7 @@
 
   firebase.initializeApp(firebaseConfig);
   const auth = firebase.auth();
+  const db = firebase.firestore();
 
   window.addEventListener('load', () => {
     setTimeout(() => {
@@ -197,6 +199,11 @@
       <input id="nome" type="text" placeholder="Nome completo" required />
       <input id="email" type="email" placeholder="E-mail" required />
       <input id="password" type="password" placeholder="Senha" required />
+      <select id="perfil">
+        <option value="cuidador">Sou Cuidador</option>
+        <option value="familia">Sou Família</option>
+        <option value="instituicao">Sou Instituição</option>
+      </select>
       <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
       <div class="toggle-text">Já tem uma conta?
         <a onclick="renderLogin()">Faça login</a>
@@ -215,8 +222,16 @@
     const nome = document.getElementById("nome").value;
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
+    const perfil = document.getElementById("perfil").value;
 
     auth.createUserWithEmailAndPassword(email, password)
+      .then(cred => {
+        return db.collection("usuarios").doc(cred.user.uid).set({
+          nome,
+          email,
+          perfil
+        });
+      })
       .then(() => {
         alert("Cadastro realizado com sucesso!");
         window.location.href = "dashboard.html";
@@ -248,7 +263,14 @@
 
   auth.onAuthStateChanged(user => {
     if (user) {
-      window.location.href = "dashboard.html";
+      db.collection("usuarios").doc(user.uid).get().then(doc => {
+        const perfil = doc.exists ? doc.data().perfil : "cuidador";
+        if (perfil === "familia") {
+          window.location.href = "dashboard_familia.html";
+        } else {
+          window.location.href = "dashboard.html";
+        }
+      });
     }
   });
 </script>
