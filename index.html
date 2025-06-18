@@ -214,7 +214,7 @@
     const email = document.getElementById("email").value;
     const password = document.getElementById("password").value;
     auth.signInWithEmailAndPassword(email, password)
-      .then(() => window.location.href = "dashboard.html")
+      .then(() => window.location.href = "pagina_homepage.html")
       .catch(error => alert("Erro: " + error.message));
   }
 
@@ -234,7 +234,7 @@
       })
       .then(() => {
         alert("Cadastro realizado com sucesso!");
-        window.location.href = "dashboard.html";
+        window.location.href = "pagina_homepage.html";
       })
       .catch(error => alert("Erro ao cadastrar: " + error.message));
   }
@@ -242,14 +242,14 @@
   function loginWithGoogle() {
     const provider = new firebase.auth.GoogleAuthProvider();
     auth.signInWithPopup(provider)
-      .then(() => window.location.href = "dashboard.html")
+      .then(() => window.location.href = "pagina_homepage.html")
       .catch(error => alert("Erro com Google: " + error.message));
   }
 
   function loginWithFacebook() {
     const provider = new firebase.auth.FacebookAuthProvider();
     auth.signInWithPopup(provider)
-      .then(() => window.location.href = "dashboard.html")
+      .then(() => window.location.href = "pagina_homepage.html")
       .catch(error => alert("Erro com Facebook: " + error.message));
   }
 
@@ -257,7 +257,7 @@
   const token = params.get("token");
   if (token) {
     auth.signInWithCustomToken(token)
-      .then(() => window.location.href = "dashboard.html")
+      .then(() => window.location.href = "pagina_homepage.html")
       .catch(error => alert("Erro ao autenticar com LinkedIn: " + error.message));
   }
 
@@ -266,9 +266,9 @@
       db.collection("usuarios").doc(user.uid).get().then(doc => {
         const perfil = doc.exists ? doc.data().perfil : "cuidador";
         if (perfil === "familia") {
-          window.location.href = "dashboard_familia.html";
+          window.location.href = "pagina_homepage.html";
         } else {
-          window.location.href = "dashboard.html";
+          window.location.href = "pagina_homepage.html";
         }
       });
     }
