@@ -6,9 +6,11 @@
   <title>Login/Cadastro - Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <script type="text/javascript" src="https://platform.linkedin.com/in.js">
-    api_key: YOUR_LINKEDIN_CLIENT_ID
-    authorize: true
-  </script>
+  api_key: YOUR_LINKEDIN_CLIENT_ID
+  authorize: true
+  scope: r_liteprofile r_emailaddress
+  IN.Event.on(IN, "auth", onLinkedInAuth);
+</script>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -147,9 +149,12 @@
   </div>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js">  IN.Event.on(IN, "auth", onLinkedInAuth);
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js">  IN.Event.on(IN, "auth", onLinkedInAuth);
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js">  IN.Event.on(IN, "auth", onLinkedInAuth);
+</script>
 <script>
   const firebaseConfig = {
     apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
@@ -273,6 +278,7 @@
       });
     }
   });
+  IN.Event.on(IN, "auth", onLinkedInAuth);
 </script>
 
 <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
@@ -280,5 +286,11 @@
   <a href="politica_privacidade.html" target="_blank" style="color: #087f8c; text-decoration: underline;">Política de Privacidade</a>
 </div>
 
+<script>
+function loginWithLinkedin() {
+  IN.User.authorize();
+}
+  IN.Event.on(IN, "auth", onLinkedInAuth);
+</script>
 </body>
 </html>
