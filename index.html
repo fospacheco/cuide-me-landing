@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login/Cadastro • Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -10,62 +10,64 @@
       --primary: #42c2d3;
       --secondary: #E0F7FA;
       --white: #ffffff;
+      --black: #000000;
       --font-base: 'Inter', sans-serif;
     }
-    * { box-sizing: border-box; }
-    body { margin: 0; font-family: var(--font-base); background: var(--secondary); color: #333; }
+    *, *::before, *::after { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font-base); background: var(--secondary); color: var(--black); }
     #splash-screen {
-      position: fixed; top:0; left:0; right:0; bottom:0;
+      position: fixed; inset: 0;
       background: var(--secondary);
-      display: flex; justify-content:center; align-items:center;
+      display: flex; justify-content: center; align-items: center;
       z-index: 9999;
     }
-    #splash-screen img { max-width:200px; animation:pulse 1.5s infinite; }
+    #splash-screen img { width: 180px; animation: pulse 1.5s infinite; }
     @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
-    .container { display:none; min-height:100vh; }
-    .split { display:flex; flex-wrap:wrap; min-height:100vh; }
+    .container { display: none; min-height: 100vh; }
+    .split { display: flex; flex-wrap: wrap; min-height: 100vh; }
     .left, .right {
-      flex:1; padding:3rem; display:flex; flex-direction:column;
-      justify-content:center; align-items:center;
+      flex: 1; padding: 3rem; display:flex; flex-direction: column;
+      justify-content: center; align-items: center;
     }
-    .left { background: var(--primary); color: var(--white); text-align:center; }
-    .left h2 { font-size:2rem; margin-bottom:1rem; }
-    .left p  { font-size:1.1rem; margin-bottom:2rem; }
-    .left a { background: var(--white); color: var(--primary); padding:0.8rem 2rem; border-radius:50px; font-weight:bold; text-decoration:none; }
+    .left { background: var(--primary); color: var(--white); text-align: center; }
+    .left h2 { font-size: 2rem; margin-bottom: 1rem; }
+    .left p  { font-size: 1.1rem; margin-bottom: 2rem; }
+    .left a { background: var(--white); color: var(--primary); padding: 0.8rem 2rem; border-radius: 50px; font-weight: bold; text-decoration: none; }
     .right { background: var(--white); }
     .form-overlay {
-      width:100%; max-width:320px; display:flex; flex-direction:column;
-      gap:1rem; opacity:0; transform:translateX(100%);
+      width: 100%; max-width: 320px; display: flex; flex-direction: column;
+      gap:1rem; opacity:0; transform: translateX(100%);
       transition: all 0.6s ease;
     }
-    .form-overlay.active { opacity:1; transform:translateX(0); }
+    .form-overlay.active { opacity:1; transform: translateX(0); }
     input { width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:4px; }
-    .cta-btn { background: var(--primary); color: #fff; border:none; padding:0.9rem 2rem; border-radius:50px; font-weight:bold; cursor:pointer; }
+    .cta-btn { background: var(--primary); color: var(--white); border:none; padding:0.9rem 2rem; border-radius:50px; font-weight:bold; cursor:pointer; }
     .social-text { margin-top:1rem; font-size:0.95rem; }
     .social-icons { display:flex; gap:1rem; margin-top:0.5rem; }
     .social-icons img { width:36px; cursor:pointer; }
     .toggle-text { margin-top:1rem; font-size:0.9rem; }
-    .toggle-text a { color: var(--primary); cursor:pointer; text-decoration:underline; }
+    .toggle-text a { color: var(--primary); text-decoration:underline; cursor:pointer; }
     footer { text-align:center; padding:1rem; font-size:0.85rem; }
     footer a { color: var(--primary); text-decoration:underline; margin:0 0.5rem; }
   </style>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+  <script>
+    // Inicialização do Firebase
+    const firebaseConfig = { /* seu config */ };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Credenciais Airtable
+    const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';
+    const AIRTABLE_API_KEY = 'YOUR_API_KEY';
+  </script>
 </head>
 <body>
   <div id="splash-screen">
     <img src="logo_cuide_me.png" alt="Carregando Cuide-me">
   </div>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    setTimeout(() => {
-      const splash = document.getElementById('splash-screen');
-      const main = document.getElementById('main-content');
-      if (splash) splash.style.display = 'none';
-      if (main) main.style.display = 'block';
-    }, 1500);
-  });
-</script>
-
-
   <div class="container" id="main-content">
     <div class="split">
       <div class="left">
@@ -74,52 +76,37 @@
         <a onclick="mostrarFormulario()">Acessar</a>
       </div>
       <div class="right">
-        <img src="logo_cuide_me.png" alt="Logo Cuide-me" width="100" style="margin-bottom:1rem;">
+        <img src="logo_cuide_me.png" alt="Logo Cuide-me" width="100" style="margin-bottom:1rem">
         <h2>Cuide-me</h2>
         <div id="formSlide" class="form-overlay"></div>
       </div>
     </div>
   </div>
-
   <footer>
     <a href="termos_de_uso_cuide_me.html" target="_blank">Termos de Uso</a>|
     <a href="politica_privacidade.html" target="_blank">Política de Privacidade</a>
   </footer>
-
-  <!-- Firebase e configuração -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script>
-    const firebaseConfig = {
-      // ... SEU CONFIGUR...
-    };
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
+    // Esconder splash e mostrar conteúdo
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.getElementById('splash-screen').remove();
+        document.getElementById('main-content').style.display = 'block';
+      }, 1500);
+      setTimeout(() => {
+        const splash = document.getElementById('splash-screen');
+        if (splash) splash.remove();
+      }, 5000);
+    });
 
-    // Airtable
-    const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';
-    const AIRTABLE_API_KEY = 'YOUR_API_KEY';
-
-    // Splash logic
-    function hideSplash() {
-      document.getElementById('splash-screen').style.display = 'none';
-      document.getElementById('main-content').style.display = 'block';
-    }
-    if (document.readyState === 'complete') {
-      setTimeout(hideSplash, 1500);
-    } else {
-      window.addEventListener('load', () => setTimeout(hideSplash, 1500));
-    }
-    setTimeout(hideSplash, 5000);
-
-    // Form rendering
+    // Mostrar formulários
     function mostrarFormulario() {
       renderLogin();
       document.getElementById('formSlide').classList.add('active');
     }
     function renderLogin() {
       document.getElementById('formSlide').innerHTML = `
-        <input id="email"    type="email"    placeholder="E-mail" required>
+        <input id="email" type="email" placeholder="E-mail" required>
         <input id="password" type="password" placeholder="Senha" required>
         <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
         <div class="social-text">ou acesse com redes sociais</div>
@@ -133,91 +120,73 @@
     }
     function renderCadastro() {
       document.getElementById('formSlide').innerHTML = `
-        <input id="nome"    type="text" placeholder="Nome completo" required>
-        <input id="email"   type="email" placeholder="E-mail" required>
-        <input id="password"type="password" placeholder="Senha" required>
-        <select id="perfil">
-          <option value="cuidador">Sou Cuidador</option>
-          <option value="familia">Sou Família</option>
-        </select>
+        <input id="nome" type="text" placeholder="Nome completo" required>
+        <input id="email" type="email" placeholder="E-mail" required>
+        <input id="password" type="password" placeholder="Senha" required>
+        <select id="perfil"><option value="cuidador">Sou Cuidador</option><option value="familia">Sou Família</option></select>
         <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
         <div class="toggle-text">Já tem uma conta? <a onclick="renderLogin()">Faça login</a></div>
       `;
     }
 
-    // Email/Password
+    // Autenticação com email/senha
     async function loginWithEmail() {
-      const email = document.getElementById('email').value;
-      const pass  = document.getElementById('password').value;
       try {
-        await auth.signInWithEmailAndPassword(email, pass);
+        await auth.signInWithEmailAndPassword(
+          document.getElementById('email').value,
+          document.getElementById('password').value
+        );
         window.location.href = 'pagina_homepage.html';
       } catch(e) {
         alert(e.message);
       }
     }
     async function cadastrarUsuario() {
-      const nome   = document.getElementById('nome').value;
-      const email  = document.getElementById('email').value;
-      const pass   = document.getElementById('password').value;
-      const perfil = document.getElementById('perfil').value;
       try {
-        const cred = await auth.createUserWithEmailAndPassword(email, pass);
-        // Grava no Airtable
-        const table = perfil === 'cuidador' ? 'Caregivers' : 'Clients';
+        const nome   = document.getElementById('nome').value;
+        const email  = document.getElementById('email').value;
+        const pass   = document.getElementById('password').value;
+        const perfil = document.getElementById('perfil').value;
+        const cred   = await auth.createUserWithEmailAndPassword(email, pass);
+        // Gravar no Airtable
+        const table  = perfil==='cuidador'?'Caregivers':'Clients';
         await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${AIRTABLE_API_KEY}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ fields: { email, name: nome } })
+          method:'POST',
+          headers:{Authorization:`Bearer ${AIRTABLE_API_KEY}`, 'Content-Type':'application/json'},
+          body: JSON.stringify({fields:{email, name:nome}})
         });
-        alert('Cadastro realizado!');
-        window.location.href = 'pagina_homepage.html';
+        window.location.href='pagina_homepage.html';
       } catch(e) {
-        alert('Erro: ' + e.message);
+        alert('Erro: '+e.message);
       }
     }
 
     // Social logins
     async function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
       try {
-        const result = await auth.signInWithPopup(provider);
+        const result = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
         const user   = result.user;
         const email  = user.email;
         const formula= encodeURIComponent(`{email}="${email}"`);
-        const headers= { Authorization:`Bearer ${AIRTABLE_API_KEY}`, 'Content-Type':'application/json' };
-
-        // Verifica tabelas
-        const [clRes, cgRes] = await Promise.all([
-          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clients?filterByFormula=${formula}`, { headers }),
-          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Caregivers?filterByFormula=${formula}`, { headers })
+        const headers={Authorization:`Bearer ${AIRTABLE_API_KEY}`, 'Content-Type':'application/json'};
+        const [cRes, gRes] = await Promise.all([
+          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clients?filterByFormula=${formula}`,{headers}),
+          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Caregivers?filterByFormula=${formula}`,{headers})
         ]);
-        const clData = await clRes.json(), cgData = await cgRes.json();
-        const clRecs = Array.isArray(clData.records)? clData.records: [];
-        const cgRecs = Array.isArray(cgData.records)? cgData.records: [];
+        const cData = await cRes.json(), gData = await gRes.json();
+        const cRecs = Array.isArray(cData.records)?cData.records:[], gRecs = Array.isArray(gData.records)?gData.records:[];
         let perfil;
-        if (clRecs.length===0 && cgRecs.length===0) {
-          perfil = prompt('Você é cuidador(a) ou cliente/família?', 'familia');
+        if(cRecs.length===0&&gRecs.length===0){
+          perfil=prompt('Você é cuidador(a) ou cliente/família?','familia');
           const table = perfil==='cuidador'?'Caregivers':'Clients';
-          await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
-            method:'POST', headers, body:JSON.stringify({ fields:{ email, name:user.displayName } })
-          });
+          await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`,{method:'POST',headers,body:JSON.stringify({fields:{email,name:user.displayName}})});
         }
-        if (cgRecs.length>0 || perfil==='cuidador') {
-          window.location.href = 'dashboard_cuidador_final.html';
-        } else {
-          window.location.href = 'dashboard_cliente_final.html';
-        }
-      } catch(err) {
-        console.error(err);
-        alert('Não foi possível logar: '+err.message);
-      }
+        if(gRecs.length>0||perfil==='cuidador') window.location.href='dashboard_cuidador_final.html';
+        else window.location.href='dashboard_cliente_final.html';
+      } catch(err){console.error(err);alert('Não foi possível logar: '+err.message);}
     }
-    async function loginWithFacebook() { alert('Em breve!'); }
-    function loginWithLinkedin(){ IN.User.authorize(); }
+    async function loginWithFacebook(){alert('Em breve!');}
+    function loginWithLinkedin(){IN.User.authorize();}
   </script>
 </body>
 </html>
