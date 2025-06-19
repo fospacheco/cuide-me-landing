@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Cliente • Cuide-me</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --baby-blue: #E0F7FA;
+      --turquoise: #42c2d3;
+      --black: #000000;
+      --white: #FFFFFF;
+      --font: 'Inter', sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--black);
+    }
+    /* Skip link */
+    .skip-link {
+      position: absolute; top: -40px; left: 0;
+      background: var(--turquoise); color: #fff; padding: 8px;
+      z-index: 100;
+    }
+    .skip-link:focus { top: 0; }
+    /* Header */
+    .header-banner {
+      background: var(--baby-blue);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 24px; gap: 16px;
+    }
+    .header-banner img {
+      width: 64px; height: 64px; object-fit: contain;
+    }
+    .header-banner h1 {
+      font-size: 1.25rem; font-weight: 600; color: var(--black);
+    }
+    .menu-toggle {
+      display: none; background: none; border: none;
+      font-size: 1.5rem; cursor: pointer; color: var(--black);
+    }
+    /* Layout */
+    .container { display: flex; height: calc(100vh - 96px); }
+    /* Sidebar */
+    .sidebar {
+      z-index: 1000;
+      background: var(--baby-blue); width: 220px;
+      padding: 16px; display: flex; flex-direction: column; gap: 12px;
+      transition: left 0.3s ease;
+    }
+    .sidebar a {
+      display: block; text-decoration: none; text-align: center;
+      padding: 8px 12px; border-radius: 8px; font-size: 1rem;
+      font-weight: 600; position: relative;
+    }
+    .sidebar a.nav-back {
+      background: var(--black); color: var(--white);
+    }
+    .sidebar a.nav-item {
+      background: var(--turquoise); color: var(--black);
+    }
+    .sidebar a.nav-item.active {
+      /* Indicador sutil para botão ativo */
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .sidebar a.nav-logout {
+      background: var(--black); color: var(--white); margin-top: auto;
+    }
+    .sidebar a:hover, .sidebar a:focus {
+      opacity: 0.9; outline: 2px solid var(--turquoise);
+    }
+    /* Main */
+    main {
+      flex: 1; padding: 24px; overflow-y: auto; background: var(--white);
+    }
+    .card {
+      background: var(--white); border-radius: 8px;
+      padding: 24px; margin-bottom: 24px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      max-width: 800px;
+    }
+    .card h2 {
+      font-size: 1.25rem; margin-bottom: 16px;
+    }
+    /* Skeleton */
+    .skeleton {
+      background: #e0e0e0; height: 1rem; margin-bottom: 12px;
+      border-radius: 4px; animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .empty-state {
+      display: flex; align-items: center; gap: 8px;
+      color: var(--black); margin-top: 8px;
+    }
+    .empty-state button.action-btn {
+      background: var(--turquoise); color: var(--black);
+      border: none; padding: 8px 16px; border-radius: 8px;
+      font-size: 1rem; cursor: pointer; margin-left: auto;
+    }
+    /* Footer */
+    footer {
+      padding: 16px 24px; text-align: center;
+      font-size: 0.875rem; background: var(--baby-blue);
+    }
+    footer a { color: var(--black); text-decoration: underline; }
+    /* Responsive */
+    @media (max-width: 768px) {
+      .menu-toggle { display: block; }
+      .sidebar {
+      z-index: 1000; position: absolute; top: 96px; left: -240px; height: calc(100% - 96px); }
+      .sidebar.open { left: 0; }
+      .container { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">Ir ao conteúdo</a>
+  <header class="header-banner" role="banner">
+    <img src="logo_cuide_me.png" alt="Logo Cuide-me" />
+    <h1>Bem-vindo ao Painel Pessoal do Cuidador</h1>
+    <button class="menu-toggle" aria-label="Abrir menu">☰</button>
+  </header>
+  <div class="container">
+    <nav class="sidebar" aria-label="Menu de navegação">
+      <a href="index.html" class="nav-back">Voltar a Home</a>
+      <a href="#" class="nav-item active" aria-current="page">🏠 Início</a>
+      <a href="#servicos" class="nav-item">📜 Histórico</a>
+      <a href="#avaliacoes" class="nav-item">⭐ Avaliações</a>
+      <a href="#perfil" class="nav-item">👤 Perfil</a>
+      <a href="#" onclick="logout()" class="nav-logout">Logout</a>
+    </nav>
+    <main id="main-content" tabindex="-1">
+      <section id="historico" class="card">
+        <h2>Serviços Agendados</h2>
+        <div class="skeleton" style="width:60%;"></div>
+        <div class="skeleton" style="width:80%;"></div>
+        <div class="empty-state">
+          📅 Ainda sem registros.
+          <button class="action-btn" onclick="location.href='#';">Agende um serviço agora</button>
+        </div>
+      </section>
+      <section id="avaliacoes" class="card">
+        <h2>Minhas Avaliações</h2>
+        <div class="skeleton" style="width:70%;"></div>
+        <div class="skeleton" style="width:50%;"></div>
+        <div class="empty-state">
+          💬 Sem avaliações até o momento.
+        </div>
+      </section>
+      <section id="perfil" class="card">
+        <h2>Meus Dados</h2>
+        <div class="skeleton" style="width:50%;"></div>
+        <div class="skeleton" style="width:40%;"></div>
+        <div class="empty-state">
+          👤 Erro ao carregar dados.
+          <button class="action-btn" onclick="reloadProfile()">Tentar novamente</button>
+        </div>
+      </section>
+    </main>
+  </div>
+  <footer>
+    <a href="termos_de_uso_cuide_me.html" target="_blank">Termos de Uso</a> |
+    <a href="politica_privacidade.html" target="_blank">Política de Privacidade</a>
+  </footer>
+  <script>
+    const menuToggle = document.querySelector('.menu-toggle');
+    const sidebar = document.querySelector('.sidebar');
+    menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+    function logout() { window.location.href='index.html'; }
+    function reloadProfile() { location.reload(); }
+  </script>
+</body>
+</html>
