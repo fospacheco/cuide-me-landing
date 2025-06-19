@@ -24,7 +24,7 @@
     .container { display:none; min-height:100vh; }
     .split { display:flex; flex-wrap:wrap; min-height:100vh; }
     .left, .right {
-      flex:1; padding:3rem; display:flex; flex-direction: column;
+      flex:1; padding:3rem; display:flex; flex-direction:column;
       justify-content:center; align-items:center;
     }
     .left { background: var(--primary); color: var(--white); text-align:center; }
@@ -38,7 +38,7 @@
       transition: all 0.6s ease;
     }
     .form-overlay.active { opacity:1; transform:translateX(0); }
-    input { width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:4px; }
+    input, select { width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:4px; }
     .cta-btn { background: var(--primary); color: var(--white); border:none; padding:0.9rem 2rem; border-radius:50px; font-weight:bold; cursor:pointer; }
     .social-text { margin-top:1rem; font-size:0.95rem; }
     .social-icons { display:flex; gap:1rem; margin-top:0.5rem; }
@@ -52,7 +52,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script>
-    // Web app's Firebase configuration
+    // Configuração do Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
       authDomain: "cuide-me-f57f8.firebaseapp.com",
@@ -88,6 +88,7 @@
     <a href="politica_privacidade.html" target="_blank">Política de Privacidade</a>
   </footer>
   <script>
+    // Splash logic
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById('splash-screen').remove();
@@ -99,9 +100,11 @@
       }, 5000);
     });
 
+    // Airtable
     const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';
     const AIRTABLE_API_KEY = 'YOUR_API_KEY';
 
+    // Render forms
     function mostrarFormulario() {
       renderLogin();
       document.getElementById('formSlide').classList.add('active');
@@ -126,12 +129,15 @@
         <input id="email" type="email" placeholder="E-mail" required>
         <input id="password" type="password" placeholder="Senha" required>
         <select id="perfil">
+          <option value="cliente">Sou Cliente</option>
           <option value="cuidador">Sou Cuidador</option>
-          <option value="familia">Sou Família</option>
         </select>
         <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
-        <div class="toggle-text">Já tem uma conta? <a onclick="renderLogin()">Faça login</a></div>`
+        <div class="toggle-text">Já tem conta? <a onclick="renderLogin()">Faça login</a></div>
+      `;
     }
+
+    // Email/Password
     async function loginWithEmail() {
       try {
         await firebase.auth().signInWithEmailAndPassword(
@@ -139,71 +145,83 @@
           document.getElementById('password').value
         );
         window.location.href = 'pagina_homepage.html';
-      } catch(e) {
+      } catch (e) {
         alert(e.message);
       }
     }
     async function cadastrarUsuario() {
       try {
-        const nome   = document.getElementById('nome').value;
-        const email  = document.getElementById('email').value;
-        const pass   = document.getElementById('password').value;
+        const nome = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('password').value;
         const perfil = document.getElementById('perfil').value;
         await firebase.auth().createUserWithEmailAndPassword(email, pass);
-        const table = perfil==='cuidador'?'Caregivers':'Clients';
+        const table = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
         await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
-          method:'POST',
-          headers:{ Authorization:`Bearer ${AIRTABLE_API_KEY}`, 'Content-Type':'application/json' },
-          body: JSON.stringify({ fields:{ email, name:nome } })
+          method: 'POST',
+          headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ fields: { 'E-mail': email, 'Nome completo': nome } })
         });
-        window.location.href='pagina_homepage.html';
-      } catch(e) { alert('Erro: '+e.message) }
+        window.location.href = 'pagina_homepage.html';
+      } catch (e) {
+        alert('Erro: ' + e.message);
+      }
     }
 
-    // Social login with PATCH update
+    // Google login with PATCH update
     async function loginWithGoogle() {
       try {
         const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
         const user = result.user;
         const email = user.email;
-        const name  = user.displayName;
-        const formula = encodeURIComponent(`{email}="${email}"`);
-        const headers = { Authorization:`Bearer ${AIRTABLE_API_KEY}`, 'Content-Type':'application/json' };
+        const name = user.displayName;
+        const formula = encodeURIComponent(`{E-mail}="${email}"`);
+        const headers = { Authorization: `Bearer ${AIRTABLE_API_KEY}`, 'Content-Type': 'application/json' };
 
+        // GET Clients and Cuidadores
         const [clRes, cgRes] = await Promise.all([
-          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clients?filterByFormula=${formula}`, { headers }),
-          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Caregivers?filterByFormula=${formula}`, { headers })
+          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clientes?filterByFormula=${formula}`, { headers }),
+          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Cuidadores?filterByFormula=${formula}`, { headers })
         ]);
         const clData = await clRes.json();
         const cgData = await cgRes.json();
-        const clRecs = Array.isArray(clData.records)?clData.records:[];
-        const cgRecs = Array.isArray(cgData.records)?cgData.records:[];
+        const clRecs = Array.isArray(clData.records) ? clData.records : [];
+        const cgRecs = Array.isArray(cgData.records) ? cgData.records : [];
 
         let table, recId;
         if (cgRecs.length) {
-          table = 'Caregivers';
+          table = 'Cuidadores';
           recId = cgRecs[0].id;
         } else if (clRecs.length) {
-          table = 'Clients';
+          table = 'Clientes';
           recId = clRecs[0].id;
         } else {
-          // create new
-          const perfil = prompt('Você é cuidador(a) ou cliente/família?','familia');
-          table = perfil==='cuidador'?'Caregivers':'Clients';
+          const perfil = prompt('Você é cuidador(a) ou cliente?','cliente');
+          table = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
           const postRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
-            method:'POST', headers, body: JSON.stringify({ fields:{ email, name } })
+            method: 'POST', headers, body: JSON.stringify({ fields: { 'E-mail': email, 'Nome completo': name } })
           });
           const postData = await postRes.json();
-          recId = postData.records[0].id;
+          recId = Array.isArray(postData.records) && postData.records[0] ? postData.records[0].id : postData.id;
         }
-        // PATCH update name
-        await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}/${recId}`, {
-          method:'PATCH', headers, body: JSON.stringify({ fields:{ name } })
-        });
 
-        if (table==='Caregivers') window.location.href='dashboard_cuidador_final.html';
-        else window.location.href='dashboard_cliente_final.html';
-      } catch(err) { console.error(err); alert('Não foi possível logar: '+err.message); }
+        // PATCH update Nome completo
+        if (recId) {
+          await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}/${recId}`, {
+            method: 'PATCH', headers, body: JSON.stringify({ fields: { 'Nome completo': name } })
+          });
+        }
+
+        // Redirect
+        if (table === 'Cuidadores') {
+          window.location.href = 'dashboard_cuidador_final.html';
+        } else {
+          window.location.href = 'dashboard_cliente_final.html';
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Não foi possível logar: ' + err.message);
+      }
     }
     async function loginWithFacebook() { alert('Em breve!'); }
     function loginWithLinkedin() { IN.User.authorize(); }
