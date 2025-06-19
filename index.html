@@ -54,6 +54,17 @@
   <div id="splash-screen">
     <img src="logo_cuide_me.png" alt="Carregando Cuide-me">
   </div>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    setTimeout(() => {
+      const splash = document.getElementById('splash-screen');
+      const main = document.getElementById('main-content');
+      if (splash) splash.style.display = 'none';
+      if (main) main.style.display = 'block';
+    }, 1500);
+  });
+</script>
+
 
   <div class="container" id="main-content">
     <div class="split">
