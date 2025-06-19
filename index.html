@@ -57,8 +57,6 @@
     // Inicialização do Firebase
     const firebaseConfig = { /* seu config */ };
     firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-
     // Credenciais Airtable
     const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';
     const AIRTABLE_API_KEY = 'YOUR_API_KEY';
@@ -132,7 +130,7 @@
     // Autenticação com email/senha
     async function loginWithEmail() {
       try {
-        await auth.signInWithEmailAndPassword(
+        await firebase.auth().signInWithEmailAndPassword(
           document.getElementById('email').value,
           document.getElementById('password').value
         );
@@ -147,7 +145,7 @@
         const email  = document.getElementById('email').value;
         const pass   = document.getElementById('password').value;
         const perfil = document.getElementById('perfil').value;
-        const cred   = await auth.createUserWithEmailAndPassword(email, pass);
+        const cred   = await firebase.auth().createUserWithEmailAndPassword(email, pass);
         // Gravar no Airtable
         const table  = perfil==='cuidador'?'Caregivers':'Clients';
         await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
@@ -164,7 +162,7 @@
     // Social logins
     async function loginWithGoogle() {
       try {
-        const result = await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+        const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
         const user   = result.user;
         const email  = user.email;
         const formula= encodeURIComponent(`{email}="${email}"`);
