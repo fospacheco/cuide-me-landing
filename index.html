@@ -243,6 +243,7 @@ function cadastrarUsuario() {
     .catch(error => alert("Erro ao cadastrar: " + error.message));
 }
 
+
 async function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
@@ -253,6 +254,51 @@ async function loginWithGoogle() {
 
     // Verifica existência no Airtable
     const formula = encodeURIComponent(`{email}="${email}"`);
+    const headers = {
+      Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+      'Content-Type': 'application/json'
+    };
+    // Faz requisições
+    const [clRes, cgRes] = await Promise.all([
+      fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clients?filterByFormula=${formula}`, { headers }),
+      fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Caregivers?filterByFormula=${formula}`, { headers })
+    ]);
+    // Valida respostas
+    if (!clRes.ok || !cgRes.ok) {
+      console.error('Erro HTTP Airtable', clRes.status, cgRes.status);
+      alert('Erro de conexão com o Airtable. Confira as credenciais.');
+      return;
+    }
+    const clData = await clRes.json();
+    const cgData = await cgRes.json();
+    // Garante arrays
+    const clRecords = Array.isArray(clData.records) ? clData.records : [];
+    const cgRecords = Array.isArray(cgData.records) ? cgData.records : [];
+
+    let perfil;
+    // Se não existe em nenhuma das tabelas, solicita perfil e cria registro
+    if (clRecords.length === 0 && cgRecords.length === 0) {
+      perfil = prompt('Você é cuidador(a) ou cliente/família? Digite "cuidador" ou "familia":','familia');
+      const table = perfil === 'cuidador' ? 'Caregivers' : 'Clients';
+      await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ fields: { email, name: user.displayName } })
+      });
+    }
+
+    // Redireciona para o dashboard correto
+    if (cgRecords.length > 0 || perfil === 'cuidador') {
+      window.location.href = 'dashboard_cuidador_final.html';
+    } else {
+      window.location.href = 'dashboard_cliente_final.html';
+    }
+  } catch (err) {
+    console.error('Erro no login com Google:', err);
+    alert('Não foi possível logar: ' + err.message);
+  }
+}
+="${email}"`);
     const headers = {
       Authorization: `Bearer ${AIRTABLE_API_KEY}`,
       'Content-Type': 'application/json'
@@ -285,55 +331,3 @@ async function loginWithGoogle() {
   } catch (err) {
     console.error('Erro no login com Google:', err);
     alert('Não foi possível logar: ' + err.message);
-  }
-}
-function loginWithFacebook() {
-  const provider = new firebase.auth.FacebookAuthProvider();
-  auth.signInWithPopup(provider)
-    .then(() => window.location.href = "pagina-homepage.html")
-    .catch(error => alert("Erro com Facebook: " + error.message));
-}
-function loginWithLinkedin() {
-  IN.User.authorize();
-}
-function onLinkedInAuth() {
-  IN.API.Raw("/people/~:(id,firstName,lastName,email-address)")
-    .result(function(profile) {
-      const email = profile.emailAddress;
-      const nome = profile.firstName + " " + profile.lastName;
-      const fakePassword = email + "_linkedin";
-
-      auth.signInWithEmailAndPassword(email, fakePassword)
-        .then(() => window.location.href = "pagina-homepage.html")
-        .catch(() => {
-          auth.createUserWithEmailAndPassword(email, fakePassword)
-            .then(cred => {
-              return db.collection("usuarios").doc(cred.user.uid).set({
-                nome: nome,
-                email: email,
-                perfil: "cuidador"
-              });
-            })
-            .then(() => window.location.href = "pagina-homepage.html")
-            .catch(error => alert("Erro com LinkedIn: " + error.message));
-        });
-    });
-}
-IN.Event.on(IN, "auth", onLinkedInAuth);
-
-auth.onAuthStateChanged(user => {
-  if (user) {
-    db.collection("usuarios").doc(user.uid).get().then(doc => {
-      window.location.href = "pagina-homepage.html";
-    });
-  }
-});
-</script>
-
-<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
-  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
-  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
-</div>
-
-</body>
-</html>
