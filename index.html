@@ -1,16 +1,17 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login/Cadastro - Cuide-me</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <script type="text/javascript" src="https://platform.linkedin.com/in.js">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login/Cadastro - Cuide-me</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<script src="https://platform.linkedin.com/in.js" type="text/javascript">
     api_key: 7710u7rleeoaky
     authorize: true
     scope: r_liteprofile r_emailaddress
   </script>
-  <style>
+<style>
     :root {
       --primary: #42c2d3;
       --secondary: #E0F7FA;
@@ -136,7 +137,13 @@
       }
     }
   </style>
+<script>
 
+
+const AIRTABLE_BASE_ID = 'appVxCKjvJAah2r27';
+const AIRTABLE_READ_TOKEN = 'patF0ngRSEbzCI5K9';
+const AIRTABLE_WRITE_TOKEN = 'patkmoC5jr7PpnyzQ';
+</script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script>
@@ -159,35 +166,25 @@
 </head>
 <body>
 <div id="splash-screen">
-  <img src="logo_cuide_me.png" alt="Carregando Cuide-me" />
+<img alt="Carregando Cuide-me" src="logo_cuide_me.png"/>
 </div>
-
-<div class="container" id="main-content">
-  <div class="left">
-    <h2>Bem-vindo de volta!</h2>
-    <p>Para continuar conectado, clique abaixo:</p>
-    <a onclick="mostrarFormulario()">Acessar</a>
-  </div>
-  <div class="right">
-    <img src="logo_cuide_me.png" alt="Logo Cuide-me" />
-    <h2>Cuide-me</h2>
-    <div id="formSlide" class="form-overlay"></div>
-  </div>
+<div class="container" id="main-content" style="display: none;">
+<div class="left">
+<h2>Bem-vindo de volta!</h2>
+<p>Para continuar conectado, clique abaixo:</p>
+<a onclick="mostrarFormulario()">Acessar</a>
 </div>
-
+<div class="right">
+<img alt="Logo Cuide-me" src="logo_cuide_me.png"/>
+<h2>Cuide-me</h2>
+<div class="form-overlay" id="formSlide"></div>
+</div>
+</div>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
-const firebaseConfig = {
-  apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
-  authDomain: "cuide-me-f57f8.firebaseapp.com",
-  projectId: "cuide-me-f57f8",
-  storageBucket: "cuide-me-f57f8.appspot.com",
-  messagingSenderId: "846926668384",
-  appId: "1:846926668384:web:c8022e110171969f6b5905"
-};
-firebase.initializeApp(firebaseConfig);
+
 const auth = firebase.auth();
 const db = firebase.firestore();
 
@@ -223,8 +220,8 @@ function renderCadastro() {
     <input id="password" type="password" placeholder="Senha" required />
     <select id="perfil">
       <option value="cuidador">Sou Cuidador</option>
-      <option value="familia">Sou Família</option>
-      <option value="instituicao">Sou Instituição</option>
+      <option value="cliente">Sou Família</option>
+      <option value="cliente">Sou Instituição</option>
     </select>
     <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
     <div class="toggle-text">Já tem uma conta?
@@ -306,22 +303,85 @@ auth.onAuthStateChanged(user => {
   }
 });
 </script>
-
 <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
-  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
-  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
+<a href="termos_de_uso_cuide_me.html" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;" target="_blank">Termos de Uso</a>
+<a href="politica_privacidade.html" style="color: var(--primary); text-decoration: underline;" target="_blank">Política de Privacidade</a>
 </div>
-
 
 <div class="modal-backdrop" id="profile-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
-  <div class="modal" style="background:#fff; padding:2rem; border-radius:8px; max-width:300px; text-align:center;">
-    <h3>Você é cuidador(a) ou cliente?</h3>
-    <button id="btnCuidador" style="margin:0.5rem; padding:0.6rem 1.2rem; background:#42c2d3; color:#fff; border:none; border-radius:4px;">Sou cuidador</button>
-    <button id="btnCliente" style="margin:0.5rem; padding:0.6rem 1.2rem; background:#000; color:#fff; border:none; border-radius:4px;">Cliente</button>
-  </div>
+<div class="modal" style="background:#fff; padding:2rem; border-radius:8px; max-width:300px; text-align:center;">
+<h3>Você é cuidador(a) ou cliente?</h3>
+<button id="btnCuidador" style="margin:0.5rem; padding:0.6rem 1.2rem; background:#42c2d3; color:#fff; border:none; border-radius:4px;">Sou cuidador</button>
+<button id="btnCliente" style="margin:0.5rem; padding:0.6rem 1.2rem; background:#000; color:#fff; border:none; border-radius:4px;">Cliente</button>
 </div>
+</div>
+<script>
+function selectProfile() {
+  return new Promise(resolve => {
+    const backdrop = document.getElementById("profile-backdrop");
+    backdrop.style.display = 'flex';
+    document.getElementById("btnCuidador").onclick = () => {
+      backdrop.style.display = 'none';
+      resolve('cuidador');
+    };
+    document.getElementById("btnCliente").onclick = () => {
+      backdrop.style.display = 'none';
+      resolve('cliente');
+    };
+  });
+}
 
+async function loginWithGoogle() {
+  try {
+    const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
+    const user = result.user;
+    const email = user.email;
+    const name = user.displayName;
+    const formula = encodeURIComponent(`{E-mail}="${email}"`);
+    const headersGet = { Authorization: `Bearer ${AIRTABLE_READ_TOKEN}`, 'Content-Type': 'application/json' };
 
+    const [clRes, cgRes] = await Promise.all([
+      fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clientes?filterByFormula=${formula}`, { headers: headersGet }),
+      fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Cuidadores?filterByFormula=${formula}`, { headers: headersGet })
+    ]);
+
+    const clData = await clRes.json(), cgData = await cgRes.json();
+    const clRecs = Array.isArray(clData.records) ? clData.records : [];
+    const cgRecs = Array.isArray(cgData.records) ? cgData.records : [];
+
+    let table, recId;
+    if (cgRecs.length) {
+      table = 'Cuidadores'; recId = cgRecs[0].id;
+    } else if (clRecs.length) {
+      table = 'Clientes'; recId = clRecs[0].id;
+    } else {
+      const perfil = await selectProfile();
+      table = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
+      const postRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields: { 'E-mail': email, 'Nome completo': name } })
+      });
+      const postData = await postRes.json();
+      recId = Array.isArray(postData.records) && postData.records[0] ? postData.records[0].id : postData.id;
+    }
+
+    if (recId) {
+      await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}/${recId}`, {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields: { 'Nome completo': name } })
+      });
+    }
+
+    window.location.href = 'pagina-homepage.html';
+
+  } catch (err) {
+    console.error(err);
+    alert('Erro no login: ' + err.message);
+  }
+}
+</script>
 <script>
   function hideSplash() {
     const splash = document.getElementById("splash-screen");
@@ -330,76 +390,8 @@ auth.onAuthStateChanged(user => {
     if (main) main.style.display = "flex";
   }
 
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(hideSplash, 1500);
-  });
+  setTimeout(hideSplash, 1500);
   setTimeout(hideSplash, 5000);
-
-  function selectProfile() {
-    return new Promise(resolve => {
-      const backdrop = document.getElementById("profile-backdrop");
-      backdrop.style.display = 'flex';
-      document.getElementById("btnCuidador").onclick = () => {
-        backdrop.style.display = 'none';
-        resolve('cuidador');
-      };
-      document.getElementById("btnCliente").onclick = () => {
-        backdrop.style.display = 'none';
-        resolve('cliente');
-      };
-    });
-  }
-
-  async function loginWithGoogle() {
-    try {
-      const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      const user = result.user;
-      const email = user.email;
-      const name = user.displayName;
-      const formula = encodeURIComponent(`{E-mail}="${email}"`);
-      const headersGet = { Authorization: `Bearer ${AIRTABLE_READ_TOKEN}`, 'Content-Type': 'application/json' };
-
-      const [clRes, cgRes] = await Promise.all([
-        fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clientes?filterByFormula=${formula}`, { headers: headersGet }),
-        fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Cuidadores?filterByFormula=${formula}`, { headers: headersGet })
-      ]);
-
-      const clData = await clRes.json(), cgData = await cgRes.json();
-      const clRecs = Array.isArray(clData.records) ? clData.records : [];
-      const cgRecs = Array.isArray(cgData.records) ? cgData.records : [];
-
-      let table, recId;
-      if (cgRecs.length) {
-        table = 'Cuidadores'; recId = cgRecs[0].id;
-      } else if (clRecs.length) {
-        table = 'Clientes'; recId = clRecs[0].id;
-      } else {
-        const perfil = await selectProfile();
-        table = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
-        const postRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields: { 'E-mail': email, 'Nome completo': name } })
-        });
-        const postData = await postRes.json();
-        recId = Array.isArray(postData.records) && postData.records[0] ? postData.records[0].id : postData.id;
-      }
-
-      if (recId) {
-        await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}/${recId}`, {
-          method: 'PATCH',
-          headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields: { 'Nome completo': name } })
-        });
-      }
-
-      window.location.href = 'pagina-homepage.html';
-
-    } catch (err) {
-      console.error(err);
-      alert('Não foi possível logar: ' + err.message);
-    }
-  }
 </script>
 
 </body>
