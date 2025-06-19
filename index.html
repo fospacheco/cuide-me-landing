@@ -175,12 +175,22 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('splash-screen').style.display = 'none';
-    document.getElementById('main-content').style.display = 'flex';
-  }, 1500);
-});
+
+// Controla o splash screen: esconde após 1.5s, mesmo que o load já tenha ocorrido
+function hideSplash() {
+  const splash = document.getElementById('splash-screen');
+  const main   = document.getElementById('main-content');
+  if (splash) splash.style.display = 'none';
+  if (main) main.style.display = 'flex';
+}
+if (document.readyState === 'complete') {
+  setTimeout(hideSplash, 1500);
+} else {
+  window.addEventListener('load', () => {
+    setTimeout(hideSplash, 1500);
+  });
+}
+
 function mostrarFormulario() {
   document.getElementById("formSlide").classList.add("active");
   renderLogin();
@@ -331,3 +341,55 @@ async function loginWithGoogle() {
   } catch (err) {
     console.error('Erro no login com Google:', err);
     alert('Não foi possível logar: ' + err.message);
+  }
+}
+function loginWithFacebook() {
+  const provider = new firebase.auth.FacebookAuthProvider();
+  auth.signInWithPopup(provider)
+    .then(() => window.location.href = "pagina-homepage.html")
+    .catch(error => alert("Erro com Facebook: " + error.message));
+}
+function loginWithLinkedin() {
+  IN.User.authorize();
+}
+function onLinkedInAuth() {
+  IN.API.Raw("/people/~:(id,firstName,lastName,email-address)")
+    .result(function(profile) {
+      const email = profile.emailAddress;
+      const nome = profile.firstName + " " + profile.lastName;
+      const fakePassword = email + "_linkedin";
+
+      auth.signInWithEmailAndPassword(email, fakePassword)
+        .then(() => window.location.href = "pagina-homepage.html")
+        .catch(() => {
+          auth.createUserWithEmailAndPassword(email, fakePassword)
+            .then(cred => {
+              return db.collection("usuarios").doc(cred.user.uid).set({
+                nome: nome,
+                email: email,
+                perfil: "cuidador"
+              });
+            })
+            .then(() => window.location.href = "pagina-homepage.html")
+            .catch(error => alert("Erro com LinkedIn: " + error.message));
+        });
+    });
+}
+IN.Event.on(IN, "auth", onLinkedInAuth);
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    db.collection("usuarios").doc(user.uid).get().then(doc => {
+      window.location.href = "pagina-homepage.html";
+    });
+  }
+});
+</script>
+
+<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
+  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
+  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
+</div>
+
+</body>
+</html>
