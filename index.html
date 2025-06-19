@@ -101,8 +101,8 @@
     });
 
     // Airtable
-    const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';
-    const AIRTABLE_API_KEY = 'YOUR_API_KEY';
+    const AIRTABLE_BASE_ID  = 'appVxCKjvJAah2r27';          // Seu Base ID
+    const AIRTABLE_API_KEY  = 'patkmoC5jr7PpnyzQ';          // Token com permissão de escrita
 
     // Render forms
     function mostrarFormulario() {
@@ -117,8 +117,6 @@
         <div class="social-text">ou acesse com redes sociais</div>
         <div class="social-icons">
           <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google"/>
-          <img src="https://img.icons8.com/color/48/facebook-new.png" onclick="loginWithFacebook()" alt="Facebook"/>
-          <img src="https://img.icons8.com/color/48/linkedin.png" onclick="loginWithLinkedin()" alt="LinkedIn"/>
         </div>
         <div class="toggle-text">Ainda não tem conta? <a onclick="renderCadastro()">Crie aqui</a></div>
       `;
@@ -137,7 +135,7 @@
       `;
     }
 
-    // Email/Password
+    // Email/Password auth
     async function loginWithEmail() {
       try {
         await firebase.auth().signInWithEmailAndPassword(
@@ -151,9 +149,9 @@
     }
     async function cadastrarUsuario() {
       try {
-        const nome = document.getElementById('nome').value;
-        const email = document.getElementById('email').value;
-        const pass = document.getElementById('password').value;
+        const nome   = document.getElementById('nome').value;
+        const email  = document.getElementById('email').value;
+        const pass   = document.getElementById('password').value;
         const perfil = document.getElementById('perfil').value;
         await firebase.auth().createUserWithEmailAndPassword(email, pass);
         const table = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
@@ -168,63 +166,53 @@
       }
     }
 
-    // Google login with PATCH update
+    // Google login with PATCH
     async function loginWithGoogle() {
       try {
         const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-        const user = result.user;
-        const email = user.email;
-        const name = user.displayName;
-        const formula = encodeURIComponent(`{E-mail}="${email}"`);
-        const headers = { Authorization: `Bearer ${AIRTABLE_API_KEY}`, 'Content-Type': 'application/json' };
+        const user   = result.user;
+        const email  = user.email;
+        const name   = user.displayName;
+        const formula= encodeURIComponent(`{E-mail}="${email}"`);
+        const headers= { Authorization: `Bearer ${AIRTABLE_API_KEY}`, 'Content-Type': 'application/json' };
 
-        // GET Clients and Cuidadores
+        // Busca registros
         const [clRes, cgRes] = await Promise.all([
           fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clientes?filterByFormula=${formula}`, { headers }),
           fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Cuidadores?filterByFormula=${formula}`, { headers })
         ]);
-        const clData = await clRes.json();
-        const cgData = await cgRes.json();
-        const clRecs = Array.isArray(clData.records) ? clData.records : [];
-        const cgRecs = Array.isArray(cgData.records) ? cgData.records : [];
+        const clData = await clRes.json(), cgData = await cgRes.json();
+        const clRecs = Array.isArray(clData.records)?clData.records:[], cgRecs = Array.isArray(cgData.records)?cgData.records:[];
 
         let table, recId;
         if (cgRecs.length) {
-          table = 'Cuidadores';
-          recId = cgRecs[0].id;
+          table = 'Cuidadores'; recId = cgRecs[0].id;
         } else if (clRecs.length) {
-          table = 'Clientes';
-          recId = clRecs[0].id;
+          table = 'Clientes'; recId = clRecs[0].id;
         } else {
-          const perfil = prompt('Você é cuidador(a) ou cliente?','cliente');
-          table = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
+          const perfil = confirm('Você é cuidador(a)?\nOK para Cuidador, Cancel para Cliente') ? 'cuidador' : 'cliente';
+          table = perfil==='cuidador'?'Cuidadores':'Clientes';
           const postRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
             method: 'POST', headers, body: JSON.stringify({ fields: { 'E-mail': email, 'Nome completo': name } })
           });
           const postData = await postRes.json();
-          recId = Array.isArray(postData.records) && postData.records[0] ? postData.records[0].id : postData.id;
+          recId = Array.isArray(postData.records) && postData.records[0]? postData.records[0].id : postData.id;
         }
 
-        // PATCH update Nome completo
+        // Atualiza nome
         if (recId) {
           await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}/${recId}`, {
             method: 'PATCH', headers, body: JSON.stringify({ fields: { 'Nome completo': name } })
           });
         }
 
-        // Redirect
-        if (table === 'Cuidadores') {
-          window.location.href = 'pagina-homepage.html';
-        } else {
-          window.location.href = 'pagina-homepage.html';
-        }
+        // Redireciona
+        window.location.href = 'pagina-homepage.html';
       } catch (err) {
         console.error(err);
         alert('Não foi possível logar: ' + err.message);
       }
     }
-    async function loginWithFacebook() { alert('Em breve!'); }
-    function loginWithLinkedin() { IN.User.authorize(); }
   </script>
 </body>
 </html>
