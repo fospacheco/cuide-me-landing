@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login/Cadastro • Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
@@ -13,33 +13,31 @@
       --black: #000000;
       --font-base: 'Inter', sans-serif;
     }
-    *, *::before, *::after { box-sizing: border-box; }
-    body { margin: 0; font-family: var(--font-base); background: var(--secondary); color: var(--black); }
+    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
+    body { font-family: var(--font-base); background: var(--secondary); color: var(--black); }
     #splash-screen {
-      position: fixed; inset: 0;
-      background: var(--secondary);
-      display: flex; justify-content: center; align-items: center;
-      z-index: 9999;
+      position: fixed; inset: 0; background: var(--secondary);
+      display: flex; justify-content: center; align-items: center; z-index: 9999;
     }
     #splash-screen img { width: 180px; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
-    .container { display: none; min-height: 100vh; }
-    .split { display: flex; flex-wrap: wrap; min-height: 100vh; }
+    @keyframes pulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.05)} }
+    .container { display:none; min-height:100vh; }
+    .split { display:flex; flex-wrap:wrap; min-height:100vh; }
     .left, .right {
-      flex: 1; padding: 3rem; display:flex; flex-direction: column;
-      justify-content: center; align-items: center;
+      flex:1; padding:3rem; display:flex; flex-direction: column;
+      justify-content:center; align-items:center;
     }
-    .left { background: var(--primary); color: var(--white); text-align: center; }
-    .left h2 { font-size: 2rem; margin-bottom: 1rem; }
-    .left p  { font-size: 1.1rem; margin-bottom: 2rem; }
-    .left a { background: var(--white); color: var(--primary); padding: 0.8rem 2rem; border-radius: 50px; font-weight: bold; text-decoration: none; }
+    .left { background: var(--primary); color: var(--white); text-align:center; }
+    .left h2 { font-size:2rem; margin-bottom:1rem; }
+    .left p { font-size:1.1rem; margin-bottom:2rem; }
+    .left a { background: var(--white); color: var(--primary); padding:0.8rem 2rem; border-radius:50px; font-weight:bold; text-decoration:none; }
     .right { background: var(--white); }
     .form-overlay {
-      width: 100%; max-width: 320px; display: flex; flex-direction: column;
-      gap:1rem; opacity:0; transform: translateX(100%);
+      width:100%; max-width:320px; display:flex; flex-direction:column;
+      gap:1rem; opacity:0; transform:translateX(100%);
       transition: all 0.6s ease;
     }
-    .form-overlay.active { opacity:1; transform: translateX(0); }
+    .form-overlay.active { opacity:1; transform:translateX(0); }
     input { width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:4px; }
     .cta-btn { background: var(--primary); color: var(--white); border:none; padding:0.9rem 2rem; border-radius:50px; font-weight:bold; cursor:pointer; }
     .social-text { margin-top:1rem; font-size:0.95rem; }
@@ -50,25 +48,21 @@
     footer { text-align:center; padding:1rem; font-size:0.85rem; }
     footer a { color: var(--primary); text-decoration:underline; margin:0 0.5rem; }
   </style>
-  <!-- Firebase -->
+  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script>
-    // Inicialização do Firebase
-    // Your web app’s Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
-  authDomain: "cuide-me-f57f8.firebaseapp.com",
-  projectId: "cuide-me-f57f8",
-  storageBucket: "cuide-me-f57f8.appspot.com",
-  messagingSenderId: "846926668384",
-  appId: "1:846926668384:web:c8022e110171969f6b5905",
-  measurementId: "G-6EHSLH65WZ"
-};
-// Initialize Firebase
-// Credenciais Airtable
-    const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';
-    const AIRTABLE_API_KEY = 'YOUR_API_KEY';
+    // Web app's Firebase configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
+      authDomain: "cuide-me-f57f8.firebaseapp.com",
+      projectId: "cuide-me-f57f8",
+      storageBucket: "cuide-me-f57f8.appspot.com",
+      messagingSenderId: "846926668384",
+      appId: "1:846926668384:web:c8022e110171969f6b5905",
+      measurementId: "G-6EHSLH65WZ"
+    };
+    firebase.initializeApp(firebaseConfig);
   </script>
 </head>
 <body>
@@ -83,18 +77,17 @@ const firebaseConfig = {
         <a onclick="mostrarFormulario()">Acessar</a>
       </div>
       <div class="right">
-        <img src="logo_cuide_me.png" alt="Logo Cuide-me" width="100" style="margin-bottom:1rem">
+        <img src="logo_cuide_me.png" alt="Logo Cuide-me" width="100" style="margin-bottom:1rem;">
         <h2>Cuide-me</h2>
         <div id="formSlide" class="form-overlay"></div>
       </div>
     </div>
   </div>
   <footer>
-    <a href="termos_de_uso_cuide_me.html" target="_blank">Termos de Uso</a>|
+    <a href="termos_de_uso_cuide_me.html" target="_blank">Termos de Uso</a> |
     <a href="politica_privacidade.html" target="_blank">Política de Privacidade</a>
   </footer>
   <script>
-    // Esconder splash e mostrar conteúdo
     window.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         document.getElementById('splash-screen').remove();
@@ -106,7 +99,9 @@ const firebaseConfig = {
       }, 5000);
     });
 
-    // Mostrar formulários
+    const AIRTABLE_BASE_ID = 'YOUR_BASE_ID';
+    const AIRTABLE_API_KEY = 'YOUR_API_KEY';
+
     function mostrarFormulario() {
       renderLogin();
       document.getElementById('formSlide').classList.add('active');
@@ -130,13 +125,13 @@ const firebaseConfig = {
         <input id="nome" type="text" placeholder="Nome completo" required>
         <input id="email" type="email" placeholder="E-mail" required>
         <input id="password" type="password" placeholder="Senha" required>
-        <select id="perfil"><option value="cuidador">Sou Cuidador</option><option value="familia">Sou Família</option></select>
+        <select id="perfil">
+          <option value="cuidador">Sou Cuidador</option>
+          <option value="familia">Sou Família</option>
+        </select>
         <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
-        <div class="toggle-text">Já tem uma conta? <a onclick="renderLogin()">Faça login</a></div>
-      `;
+        <div class="toggle-text">Já tem uma conta? <a onclick="renderLogin()">Faça login</a></div>`
     }
-
-    // Autenticação com email/senha
     async function loginWithEmail() {
       try {
         await firebase.auth().signInWithEmailAndPassword(
@@ -154,46 +149,64 @@ const firebaseConfig = {
         const email  = document.getElementById('email').value;
         const pass   = document.getElementById('password').value;
         const perfil = document.getElementById('perfil').value;
-        const cred   = await firebase.auth().createUserWithEmailAndPassword(email, pass);
-        // Gravar no Airtable
-        const table  = perfil==='cuidador'?'Caregivers':'Clients';
+        await firebase.auth().createUserWithEmailAndPassword(email, pass);
+        const table = perfil==='cuidador'?'Caregivers':'Clients';
         await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
           method:'POST',
-          headers:{Authorization:`Bearer ${AIRTABLE_API_KEY}`, 'Content-Type':'application/json'},
-          body: JSON.stringify({fields:{email, name:nome}})
+          headers:{ Authorization:`Bearer ${AIRTABLE_API_KEY}`, 'Content-Type':'application/json' },
+          body: JSON.stringify({ fields:{ email, name:nome } })
         });
         window.location.href='pagina_homepage.html';
-      } catch(e) {
-        alert('Erro: '+e.message);
-      }
+      } catch(e) { alert('Erro: '+e.message) }
     }
 
-    // Social logins
+    // Social login with PATCH update
     async function loginWithGoogle() {
       try {
         const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-        const user   = result.user;
-        const email  = user.email;
-        const formula= encodeURIComponent(`{email}="${email}"`);
-        const headers={Authorization:`Bearer ${AIRTABLE_API_KEY}`, 'Content-Type':'application/json'};
-        const [cRes, gRes] = await Promise.all([
-          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clients?filterByFormula=${formula}`,{headers}),
-          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Caregivers?filterByFormula=${formula}`,{headers})
+        const user = result.user;
+        const email = user.email;
+        const name  = user.displayName;
+        const formula = encodeURIComponent(`{email}="${email}"`);
+        const headers = { Authorization:`Bearer ${AIRTABLE_API_KEY}`, 'Content-Type':'application/json' };
+
+        const [clRes, cgRes] = await Promise.all([
+          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clients?filterByFormula=${formula}`, { headers }),
+          fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Caregivers?filterByFormula=${formula}`, { headers })
         ]);
-        const cData = await cRes.json(), gData = await gRes.json();
-        const cRecs = Array.isArray(cData.records)?cData.records:[], gRecs = Array.isArray(gData.records)?gData.records:[];
-        let perfil;
-        if(cRecs.length===0&&gRecs.length===0){
-          perfil=prompt('Você é cuidador(a) ou cliente/família?','familia');
-          const table = perfil==='cuidador'?'Caregivers':'Clients';
-          await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`,{method:'POST',headers,body:JSON.stringify({fields:{email,name:user.displayName}})});
+        const clData = await clRes.json();
+        const cgData = await cgRes.json();
+        const clRecs = Array.isArray(clData.records)?clData.records:[];
+        const cgRecs = Array.isArray(cgData.records)?cgData.records:[];
+
+        let table, recId;
+        if (cgRecs.length) {
+          table = 'Caregivers';
+          recId = cgRecs[0].id;
+        } else if (clRecs.length) {
+          table = 'Clients';
+          recId = clRecs[0].id;
+        } else {
+          // create new
+          const perfil = prompt('Você é cuidador(a) ou cliente/família?','familia');
+          table = perfil==='cuidador'?'Caregivers':'Clients';
+          const postRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
+            method:'POST', headers, body: JSON.stringify({ fields:{ email, name } })
+          });
+          const postData = await postRes.json();
+          recId = postData.records[0].id;
         }
-        if(gRecs.length>0||perfil==='cuidador') window.location.href='dashboard_cuidador_final.html';
+        // PATCH update name
+        await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}/${recId}`, {
+          method:'PATCH', headers, body: JSON.stringify({ fields:{ name } })
+        });
+
+        if (table==='Caregivers') window.location.href='dashboard_cuidador_final.html';
         else window.location.href='dashboard_cliente_final.html';
-      } catch(err){console.error(err);alert('Não foi possível logar: '+err.message);}
+      } catch(err) { console.error(err); alert('Não foi possível logar: '+err.message); }
     }
-    async function loginWithFacebook(){alert('Em breve!');}
-    function loginWithLinkedin(){IN.User.authorize();}
+    async function loginWithFacebook() { alert('Em breve!'); }
+    function loginWithLinkedin() { IN.User.authorize(); }
   </script>
 </body>
 </html>
