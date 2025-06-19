@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -12,12 +11,19 @@
     scope: r_liteprofile r_emailaddress
   </script>
   <style>
+    :root {
+      --primary: #42c2d3;
+      --secondary: #E0F7FA;
+      --dark-text: #245063;
+      --white: #ffffff;
+      --font-base: 'Inter', sans-serif;
+    }
     * { box-sizing: border-box; }
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
-      background: #f2fbfd;
-      color: #245063;
+      font-family: var(--font-base);
+      background: var(--secondary);
+      color: var(--dark-text);
     }
     .container {
       display: none;
@@ -34,8 +40,8 @@
       align-items: center;
     }
     .left {
-      background-color: #1ba8c2;
-      color: white;
+      background-color: var(--primary);
+      color: var(--white);
       text-align: center;
       z-index: 1;
     }
@@ -48,8 +54,8 @@
       margin-bottom: 2rem;
     }
     .left a {
-      background-color: white;
-      color: #1ba8c2;
+      background-color: var(--white);
+      color: var(--primary);
       text-decoration: none;
       padding: 0.8rem 2rem;
       border-radius: 50px;
@@ -58,7 +64,7 @@
       cursor: pointer;
     }
     .right {
-      background-color: white;
+      background-color: var(--white);
       position: relative;
       overflow: hidden;
     }
@@ -68,7 +74,7 @@
       left: 100%;
       width: 100%;
       height: 100%;
-      background-color: #ffffff;
+      background-color: var(--white);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -82,8 +88,8 @@
       left: 0;
     }
     .cta-btn {
-      background-color: #1ba8c2;
-      color: white;
+      background-color: var(--primary);
+      color: var(--white);
       padding: 0.9rem 2rem;
       border-radius: 50px;
       font-weight: bold;
@@ -107,7 +113,7 @@
     #splash-screen {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
+      background: linear-gradient(to bottom, var(--secondary), var(--white));
       display: flex;
       justify-content: center;
       align-items: center;
@@ -152,7 +158,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
@@ -162,8 +167,11 @@ const firebaseConfig = {
   messagingSenderId: "846926668384",
   appId: "1:846926668384:web:c8022e110171969f6b5905"
 };
-
 firebase.initializeApp(firebaseConfig);
+
+  // Airtable credentials
+  const AIRTABLE_BASE_ID = 'YOUR_AIRTABLE_BASE_ID';
+  const AIRTABLE_API_KEY = 'YOUR_AIRTABLE_API_KEY';
 const auth = firebase.auth();
 const db = firebase.firestore();
 
@@ -173,12 +181,10 @@ window.addEventListener('load', () => {
     document.getElementById('main-content').style.display = 'flex';
   }, 1500);
 });
-
 function mostrarFormulario() {
   document.getElementById("formSlide").classList.add("active");
   renderLogin();
 }
-
 function renderLogin() {
   document.getElementById("formSlide").innerHTML = `
     <input id="email" type="email" placeholder="E-mail" required />
@@ -188,13 +194,12 @@ function renderLogin() {
     <div class="social-icons">
       <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" />
       <img src="https://img.icons8.com/color/48/facebook-new.png" onclick="loginWithFacebook()" alt="Facebook" />
-      <img src="https://img.icons8.com/color/48/linkedin.png" onclick="loginWithLinkedin()" alt="Login com LinkedIn" />
+      <img src="https://img.icons8.com/color/48/linkedin.png" onclick="loginWithLinkedin()" alt="LinkedIn" />
     </div>
     <div class="toggle-text">Ainda não tem conta?
       <a onclick="renderCadastro()">Crie aqui</a>
     </div>`;
 }
-
 function renderCadastro() {
   document.getElementById("formSlide").innerHTML = `
     <input id="nome" type="text" placeholder="Nome completo" required />
@@ -210,7 +215,6 @@ function renderCadastro() {
       <a onclick="renderLogin()">Faça login</a>
     </div>`;
 }
-
 function loginWithEmail() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -218,7 +222,6 @@ function loginWithEmail() {
     .then(() => window.location.href = "pagina-homepage.html")
     .catch(error => alert("Erro: " + error.message));
 }
-
 function cadastrarUsuario() {
   const nome = document.getElementById("nome").value;
   const email = document.getElementById("email").value;
@@ -240,24 +243,59 @@ function cadastrarUsuario() {
     .catch(error => alert("Erro ao cadastrar: " + error.message));
 }
 
-function loginWithGoogle() {
+async function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider)
-    .then(() => window.location.href = "pagina-homepage.html")
-    .catch(error => alert("Erro com Google: " + error.message));
-}
+  try {
+    // Autentica via Google
+    const result = await firebase.auth().signInWithPopup(provider);
+    const user   = result.user;
+    const email  = user.email;
 
+    // Verifica existência no Airtable
+    const formula = encodeURIComponent(`{email}="${email}"`);
+    const headers = {
+      Authorization: `Bearer ${AIRTABLE_API_KEY}`,
+      'Content-Type': 'application/json'
+    };
+    const [clRes, cgRes] = await Promise.all([
+      fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clients?filterByFormula=${formula}`, { headers }),
+      fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Caregivers?filterByFormula=${formula}`, { headers })
+    ]);
+    const clData = await clRes.json();
+    const cgData = await cgRes.json();
+
+    let perfil;
+    // Se não existe em nenhuma das tabelas, solicita perfil e cria registro
+    if (clData.records.length === 0 && cgData.records.length === 0) {
+      perfil = prompt('Você é cuidador(a) ou cliente/família? Digite "cuidador" ou "familia":','familia');
+      const table = perfil === 'cuidador' ? 'Caregivers' : 'Clients';
+      await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ fields: { email, name: user.displayName } })
+      });
+    }
+
+    // Redireciona para o dashboard correto
+    if (cgData.records.length > 0 || perfil === 'cuidador') {
+      window.location.href = 'dashboard_cuidador_final.html';
+    } else {
+      window.location.href = 'dashboard_cliente_final.html';
+    }
+  } catch (err) {
+    console.error('Erro no login com Google:', err);
+    alert('Não foi possível logar: ' + err.message);
+  }
+}
 function loginWithFacebook() {
   const provider = new firebase.auth.FacebookAuthProvider();
   auth.signInWithPopup(provider)
     .then(() => window.location.href = "pagina-homepage.html")
     .catch(error => alert("Erro com Facebook: " + error.message));
 }
-
 function loginWithLinkedin() {
   IN.User.authorize();
 }
-
 function onLinkedInAuth() {
   IN.API.Raw("/people/~:(id,firstName,lastName,email-address)")
     .result(function(profile) {
@@ -286,7 +324,6 @@ IN.Event.on(IN, "auth", onLinkedInAuth);
 auth.onAuthStateChanged(user => {
   if (user) {
     db.collection("usuarios").doc(user.uid).get().then(doc => {
-      const perfil = doc.exists ? doc.data().perfil : "cuidador";
       window.location.href = "pagina-homepage.html";
     });
   }
@@ -294,8 +331,8 @@ auth.onAuthStateChanged(user => {
 </script>
 
 <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
-  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: #087f8c; text-decoration: underline;">Termos de Uso</a>
-  <a href="politica_privacidade.html" target="_blank" style="color: #087f8c; text-decoration: underline;">Política de Privacidade</a>
+  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
+  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
 </div>
 
 </body>
