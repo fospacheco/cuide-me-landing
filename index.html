@@ -81,9 +81,9 @@
   </div>
   <footer><a href="termos_de_uso_cuide_me.html" target="_blank">Termos de Uso</a> | <a href="politica_privacidade.html" target="_blank">Política de Privacidade</a></footer>
   <script>
-    window.addEventListener('DOMContentLoaded', () => {
+    document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => { document.getElementById('splash-screen').remove(); document.getElementById('main-content').style.display='block'; },1500);
-      setTimeout(() => { const s=document.getElementById('splash-screen'); if(s) s.remove(); },5000);
+      setTimeout(() => { const s=document.getElementById('splash-screen'); if(s) s.remove(); document.getElementById('main-content').style.display='block'; },5000);
     });
     function mostrarFormulario(){ renderLogin(); document.getElementById('formSlide').classList.add('active'); }
     function renderLogin(){
