@@ -5,9 +5,7 @@
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Cuide-me | Para Famílias</title>
-<meta content="Encontre cuidadores verificados com empatia e segurança. Conectamos você a profissionais confiáveis na sua região." name="description"/>
-<meta content="cuidador de idoso, encontrar cuidador, confiança, cuidado domiciliar, Cuide-me" name="keywords"/>
+<title>Cadastro Cuidador | Cuide-me</title>
 <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -17,120 +15,79 @@
       margin: 0;
       padding: 0;
     }
-    h1, h2 {
-      color: #1ba8c2;
-      font-weight: bold;
-    }
-    header {
-      background-color: white;
-      border-bottom: 4px solid #1ba8c2;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .logo-icon {
-      width: 48px;
-      height: 48px;
-    }
-    .logo-subtitle {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: #333;
-      font-weight: 500;
-    }
-    nav {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    nav a {
-      text-decoration: none;
-      color: #000;
-      font-size: 0.9rem;
-      font-weight: 600;
-    }
-    .cta-button {
-      background-color: #00d4ff;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.85rem;
-    }
-    .section {
-      padding: 5rem 1rem;
-      text-align: center;
-    }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-    }
-    .cta-btn {
-      display: inline-block;
-      padding: 1rem 1.5rem;
-      border-radius: 9999px;
-      font-weight: bold;
-      font-size: 1rem;
-      text-decoration: none;
-      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
-      transition: transform 0.3s ease;
-    }
-    .cta-btn.primary {
-      background-color: #44c7e1;
-      color: white;
-    }
-    .cta-btn.secondary {
-      background-color: white;
-      color: #44c7e1;
-      border: 2px solid #44c7e1;
-    }
-    .cta-btn:hover {
-      transform: scale(1.05);
-    }
-    .card {
-      background-color: #f9feff;
-      border-radius: 1.5rem;
+    .form-container {
+      max-width: 800px;
+      margin: 4rem auto;
+      background: white;
       padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-      width: 250px;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+      display: none;
     }
-    .grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      justify-content: center;
-      margin-top: 2rem;
+    h2 {
+      color: #1ba8c2;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+    p {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: #4a5d68;
     }
     iframe.airtable-embed {
       border: 1px solid #ccc;
       background: transparent;
       width: 100%;
-      height: 1100px;
+      height: 1300px;
     }
-    footer {
-      background: #fcfcfc;
-      border-top: 1px solid #e2ebe9;
+    .floating-cta {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background-color: #3ddad7;
+      color: white;
+      padding: 0.9rem 1.2rem;
+      border-radius: 50px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+    #modal-bloqueio {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 99999;
+    }
+    #modal-bloqueio .modal-content {
+      background: white;
       padding: 2rem;
+      border-radius: 16px;
+      max-width: 90%;
+      width: 400px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       text-align: center;
-      font-size: 0.9rem;
+    }
+    #aceitarLGPD {
+      background-color: #00d4ff;
+      color: white;
+      padding: 0.9rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      opacity: 0.6;
+      pointer-events: none;
     }
     @media (max-width: 768px) {
-      header, nav, .logo-container {
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .card {
-        width: 100%;
-      }
-      .section {
-        padding: 3rem 1rem;
+      .form-container {
+        margin: 2rem 1rem;
       }
       iframe.airtable-embed {
         height: 1000px;
@@ -139,116 +96,65 @@
   </style>
 </head>
 <body>
-<div id="modal-bloqueio" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(to bottom, #f2fbfd, #ffffff); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 99999;">
-<div style="background: white; padding: 2rem; border-radius: 16px; max-width: 90%; width: 400px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); text-align: center;">
-<h2 style="color: #1ba8c2; margin-bottom: 1rem;">Antes de continuar...</h2>
-<p style="color: #2d3e49; margin-bottom: 1rem;">
-            Preencha seus dados para encontrar cuidadores próximos a você.
-        </p>
-<div style="margin-bottom: 1rem; text-align: left;">
+<!-- Modal LGPD -->
+<div id="modal-bloqueio">
+<div class="modal-content">
+<h2 style="color: #1ba8c2;">Antes de continuar...</h2>
+<p>Para buscar cuidadores, você precisa aceitar nossa política de privacidade.</p>
+<div style="text-align: center; margin: 1rem 0;">
 <label style="font-size: 0.9rem; color: #333;">
 <input id="consentimentoLGPD" style="margin-right: 0.5rem;" type="checkbox"/>
-              Li e concordo com a <a href="/privacidade" style="color: #00aacc; text-decoration: underline;" target="_blank">Política de Privacidade</a>.
-            </label>
+        Li e concordo com a <a href="/privacidade" style="color: #00aacc; text-decoration: underline;" target="_blank">Política de Privacidade</a>.
+      </label>
 </div>
-<a href="#form-cliente" id="botaoContinuar" onclick="fecharModal()" style="background-color: #00d4ff; color: white; padding: 0.9rem 1.5rem; border-radius: 9999px; text-decoration: none; font-weight: bold; box-shadow: 0 4px 10px rgba(0,0,0,0.1); display: inline-block; opacity: 0.6; pointer-events: none;">
-            Quero encontrar um cuidador
-        </a>
+<div style="text-align: center;">
+<button id="aceitarLGPD">Aceitar</button>
 </div>
 </div>
+</div>
+<!-- Formulário -->
+<div class="form-container" id="form-cliente">
+<div style="display: flex; align-items: center; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+<img alt="Logo Cuide-me" src="logo_cuide_me.png" style="height: 48px;"/>
+<h2 style="margin: 0;">Quero me cadastrar</h2>
+</div>
+<p>Preencha o formulário abaixo e encontre um cuidador verificado na sua região:</p>
+<iframe class="airtable-embed" frameborder="0" height="1100" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K"></iframe>
+</div>
+<!-- WhatsApp CTA -->
+<a class="floating-cta" href="https://wa.me/5599999999999" target="_blank">❓ Dúvidas? Fale com a gente</a>
 <script>
-  document.body.style.overflow = 'hidden';
-  function fecharModal() {
-    document.getElementById('modal-bloqueio').style.display = 'none';
-    document.body.style.overflow = 'auto';
-  }
-</script>
-<header>
-<div class="logo-container">
-<img alt="Logo Cuide-me" class="logo-icon" src="logo_cuide_me.png" style="width: 72px; height: auto;"/>
-<div class="logo-text">
-<span class="logo-subtitle">Conectando quem cuida<br/>e quem precisa de cuidado</span>
-</div>
-</div>
-<nav>
-<a class="cta-button" href="#depoimentos" style="background-color: #00d4ff; color: white; padding: 0.5rem 1rem; border-radius: 12px; font-weight: 600; font-size: 0.85rem; text-decoration: none;">Depoimentos</a>
-<a class="cta-button" href="#form-cliente">Cadastre-se</a>
-</nav>
-</header>
-<section class="section">
-<div class="container">
-<h1>Precisa de um cuidador de confiança?</h1>
-<p style="margin: 1rem auto 2rem; font-size: 1.1rem; max-width: 700px;">
-      A gente conecta você a profissionais verificados, com empatia e sem complicação.
-    </p>
-<a class="cta-btn primary" href="#form-cliente">🔍 Encontrar um cuidador agora</a>
-</div>
-</section>
-<section class="section" id="beneficios" style="background-color: #ffffff;">
-<div style="max-width: 1200px; margin: 0 auto; text-align: center;">
-<h2 style="color: #1ba8c2;">Benefícios de usar o Cuide-me</h2>
-<p style="color: #2d3e49; margin-bottom: 2rem;">Muito mais do que encontrar um cuidador. Aqui, você tem suporte, confiança e tranquilidade.</p>
-<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem;">
-<div class="card fade-in-up" style="width: 280px;">
-        🔒 <strong>Segurança</strong><br/>
-        Todos os cuidadores passam por verificação de documentos e histórico.
-      </div>
-<div class="card fade-in-up" style="width: 280px;">
-        💬 <strong>Acompanhamento</strong><br/>
-        Nossa equipe está sempre disponível para te apoiar na jornada do cuidado.
-      </div>
-<div class="card fade-in-up" style="width: 280px;">
-        📍 <strong>Proximidade</strong><br/>
-        Encontramos cuidadores disponíveis perto da sua casa.
-      </div>
-<div class="card fade-in-up" style="width: 280px;">
-        ❤️ <strong>Empatia</strong><br/>
-        Relacionamentos que vão além do serviço — com afeto e respeito.
-      </div>
-</div>
-</div>
-</section>
-
-<section class="section" id="depoimentos" style="padding: 5rem 1rem; background: white;">
-<h2>Depoimentos reais</h2>
-<div class="depoimentos" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin-top: 2rem;">
-<div class="card fade-in-up fade-in-up">⭐<br/>"A cuidadora trouxe paz, carinho e uma confiança renovada."<br/><strong>Sr. Feliciano</strong></div>
-<div class="card fade-in-up fade-in-up">❤️<br/>"Encontrei alguém atenciosa, pontual e com empatia real."<br/><strong>Dona Maria</strong></div>
-<div class="card fade-in-up fade-in-up">❤️<br/>"Sentimos segurança em todo o processo, do início ao fim."<br/><strong>Leonardo, filho da Sra. Zuleika</strong></div>
-</div>
-</section>
-<section class="section" id="form-cliente">
-<h2>Quero encontrar um cuidador</h2>
-<p style="max-width: 800px; margin: 0 auto 2rem;">
-    Preencha o formulário abaixo e encontre um cuidador verificado na sua região:
-  </p>
-<div style="max-width: 800px; margin: 0 auto; background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 6px 24px rgba(0,0,0,0.08);">
-<iframe class="airtable-embed" frameborder="0" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K"></iframe>
-</div>
-</section>
-<footer>
-<p>© 2025 Cuide-me. Todos os direitos reservados.</p>
-<div style="margin-top: 1rem;">
-<a href="/termos">Termos de uso</a> | 
-    <a href="/privacidade">Política de privacidade</a>
-</div>
-</footer>
-<script>
-  document.body.style.overflow = 'hidden';
+  const aceitarBtn = document.getElementById('aceitarLGPD');
   const checkbox = document.getElementById('consentimentoLGPD');
-  const botao = document.getElementById('botaoContinuar');
+  const modal = document.getElementById('modal-bloqueio');
+  const form = document.getElementById('form-cliente');
+
   checkbox.addEventListener('change', () => {
     if (checkbox.checked) {
-      botao.style.opacity = '1';
-      botao.style.pointerEvents = 'auto';
+      aceitarBtn.style.opacity = '1';
+      aceitarBtn.style.pointerEvents = 'auto';
     } else {
-      botao.style.opacity = '0.6';
-      botao.style.pointerEvents = 'none';
+      aceitarBtn.style.opacity = '0.6';
+      aceitarBtn.style.pointerEvents = 'none';
     }
   });
-  function fecharModal() {
-    document.getElementById('modal-bloqueio').style.display = 'none';
-    document.body.style.overflow = 'auto';
-  }
-</script></body>
+
+  aceitarBtn.addEventListener('click', () => {
+    if (checkbox.checked) {
+      modal.style.display = 'none';
+      form.style.display = 'block';
+      document.body.style.overflow = 'auto';
+    }
+  });
+
+  // Impede rolagem enquanto o modal estiver ativo
+  document.body.style.overflow = 'hidden';
+</script>
+
+<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
+  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: #087f8c; text-decoration: underline;">Termos de Uso</a>
+  <a href="politica_privacidade.html" target="_blank" style="color: #087f8c; text-decoration: underline;">Política de Privacidade</a>
+</div>
+
+</body>
 </html>
