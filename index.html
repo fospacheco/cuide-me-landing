@@ -144,7 +144,7 @@
           document.getElementById('email').value,
           document.getElementById('password').value
         );
-        window.location.href = 'pagina_homepage.html';
+        window.location.href = 'pagina-homepage.html';
       } catch (e) {
         alert(e.message);
       }
@@ -162,7 +162,7 @@
           headers: { Authorization: `Bearer ${AIRTABLE_API_KEY}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ fields: { 'E-mail': email, 'Nome completo': nome } })
         });
-        window.location.href = 'pagina_homepage.html';
+        window.location.href = 'pagina-homepage.html';
       } catch (e) {
         alert('Erro: ' + e.message);
       }
@@ -214,9 +214,9 @@
 
         // Redirect
         if (table === 'Cuidadores') {
-          window.location.href = 'dashboard_cuidador_final.html';
+          window.location.href = 'pagina-homepage.html';
         } else {
-          window.location.href = 'dashboard_cliente_final.html';
+          window.location.href = 'pagina-homepage.html';
         }
       } catch (err) {
         console.error(err);
