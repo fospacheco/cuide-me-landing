@@ -10,88 +10,6 @@
     authorize: true
     scope: r_liteprofile r_emailaddress
   </script>
-
-<script>
-  function hideSplash() {
-    const splash = document.getElementById("splash-screen");
-    const main = document.getElementById("main-content");
-    if (splash) splash.style.display = "none";
-    if (main) main.style.display = "flex";
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(hideSplash, 1500);
-  });
-  setTimeout(hideSplash, 5000);
-
-  function selectProfile() {
-    return new Promise(resolve => {
-      const backdrop = document.getElementById("profile-backdrop");
-      backdrop.style.display = 'flex';
-      document.getElementById("btnCuidador").onclick = () => {
-        backdrop.style.display = 'none';
-        resolve('cuidador');
-      };
-      document.getElementById("btnCliente").onclick = () => {
-        backdrop.style.display = 'none';
-        resolve('cliente');
-      };
-    });
-  }
-
-  async function loginWithGoogle() {
-    try {
-      const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      const user = result.user;
-      const email = user.email;
-      const name = user.displayName;
-      const formula = encodeURIComponent(`{E-mail}="${email}"`);
-      const headersGet = { Authorization: `Bearer ${AIRTABLE_READ_TOKEN}`, 'Content-Type': 'application/json' };
-
-      const [clRes, cgRes] = await Promise.all([
-        fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clientes?filterByFormula=${formula}`, { headers: headersGet }),
-        fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Cuidadores?filterByFormula=${formula}`, { headers: headersGet })
-      ]);
-
-      const clData = await clRes.json(), cgData = await cgRes.json();
-      const clRecs = Array.isArray(clData.records) ? clData.records : [];
-      const cgRecs = Array.isArray(cgData.records) ? cgData.records : [];
-
-      let table, recId;
-      if (cgRecs.length) {
-        table = 'Cuidadores'; recId = cgRecs[0].id;
-      } else if (clRecs.length) {
-        table = 'Clientes'; recId = clRecs[0].id;
-      } else {
-        const perfil = await selectProfile();
-        table = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
-        const postRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields: { 'E-mail': email, 'Nome completo': name } })
-        });
-        const postData = await postRes.json();
-        recId = Array.isArray(postData.records) && postData.records[0] ? postData.records[0].id : postData.id;
-      }
-
-      if (recId) {
-        await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}/${recId}`, {
-          method: 'PATCH',
-          headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields: { 'Nome completo': name } })
-        });
-      }
-
-      window.location.href = 'pagina-homepage.html';
-
-    } catch (err) {
-      console.error(err);
-      alert('Não foi possível logar: ' + err.message);
-    }
-  }
-</script>
-
-
   <style>
     :root {
       --primary: #42c2d3;
@@ -258,254 +176,8 @@
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-
-<script>
-  function hideSplash() {
-    const splash = document.getElementById("splash-screen");
-    const main = document.getElementById("main-content");
-    if (splash) splash.style.display = "none";
-    if (main) main.style.display = "flex";
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(hideSplash, 1500);
-  });
-  setTimeout(hideSplash, 5000);
-
-  function selectProfile() {
-    return new Promise(resolve => {
-      const backdrop = document.getElementById("profile-backdrop");
-      backdrop.style.display = 'flex';
-      document.getElementById("btnCuidador").onclick = () => {
-        backdrop.style.display = 'none';
-        resolve('cuidador');
-      };
-      document.getElementById("btnCliente").onclick = () => {
-        backdrop.style.display = 'none';
-        resolve('cliente');
-      };
-    });
-  }
-
-  async function loginWithGoogle() {
-    try {
-      const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      const user = result.user;
-      const email = user.email;
-      const name = user.displayName;
-      const formula = encodeURIComponent(`{E-mail}="${email}"`);
-      const headersGet = { Authorization: `Bearer ${AIRTABLE_READ_TOKEN}`, 'Content-Type': 'application/json' };
-
-      const [clRes, cgRes] = await Promise.all([
-        fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clientes?filterByFormula=${formula}`, { headers: headersGet }),
-        fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Cuidadores?filterByFormula=${formula}`, { headers: headersGet })
-      ]);
-
-      const clData = await clRes.json(), cgData = await cgRes.json();
-      const clRecs = Array.isArray(clData.records) ? clData.records : [];
-      const cgRecs = Array.isArray(cgData.records) ? cgData.records : [];
-
-      let table, recId;
-      if (cgRecs.length) {
-        table = 'Cuidadores'; recId = cgRecs[0].id;
-      } else if (clRecs.length) {
-        table = 'Clientes'; recId = clRecs[0].id;
-      } else {
-        const perfil = await selectProfile();
-        table = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
-        const postRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields: { 'E-mail': email, 'Nome completo': name } })
-        });
-        const postData = await postRes.json();
-        recId = Array.isArray(postData.records) && postData.records[0] ? postData.records[0].id : postData.id;
-      }
-
-      if (recId) {
-        await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}/${recId}`, {
-          method: 'PATCH',
-          headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields: { 'Nome completo': name } })
-        });
-      }
-
-      window.location.href = 'pagina-homepage.html';
-
-    } catch (err) {
-      console.error(err);
-      alert('Não foi possível logar: ' + err.message);
-    }
-  }
-</script>
-
-
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-
-<script>
-  function hideSplash() {
-    const splash = document.getElementById("splash-screen");
-    const main = document.getElementById("main-content");
-    if (splash) splash.style.display = "none";
-    if (main) main.style.display = "flex";
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(hideSplash, 1500);
-  });
-  setTimeout(hideSplash, 5000);
-
-  function selectProfile() {
-    return new Promise(resolve => {
-      const backdrop = document.getElementById("profile-backdrop");
-      backdrop.style.display = 'flex';
-      document.getElementById("btnCuidador").onclick = () => {
-        backdrop.style.display = 'none';
-        resolve('cuidador');
-      };
-      document.getElementById("btnCliente").onclick = () => {
-        backdrop.style.display = 'none';
-        resolve('cliente');
-      };
-    });
-  }
-
-  async function loginWithGoogle() {
-    try {
-      const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      const user = result.user;
-      const email = user.email;
-      const name = user.displayName;
-      const formula = encodeURIComponent(`{E-mail}="${email}"`);
-      const headersGet = { Authorization: `Bearer ${AIRTABLE_READ_TOKEN}`, 'Content-Type': 'application/json' };
-
-      const [clRes, cgRes] = await Promise.all([
-        fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clientes?filterByFormula=${formula}`, { headers: headersGet }),
-        fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Cuidadores?filterByFormula=${formula}`, { headers: headersGet })
-      ]);
-
-      const clData = await clRes.json(), cgData = await cgRes.json();
-      const clRecs = Array.isArray(clData.records) ? clData.records : [];
-      const cgRecs = Array.isArray(cgData.records) ? cgData.records : [];
-
-      let table, recId;
-      if (cgRecs.length) {
-        table = 'Cuidadores'; recId = cgRecs[0].id;
-      } else if (clRecs.length) {
-        table = 'Clientes'; recId = clRecs[0].id;
-      } else {
-        const perfil = await selectProfile();
-        table = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
-        const postRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields: { 'E-mail': email, 'Nome completo': name } })
-        });
-        const postData = await postRes.json();
-        recId = Array.isArray(postData.records) && postData.records[0] ? postData.records[0].id : postData.id;
-      }
-
-      if (recId) {
-        await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}/${recId}`, {
-          method: 'PATCH',
-          headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields: { 'Nome completo': name } })
-        });
-      }
-
-      window.location.href = 'pagina-homepage.html';
-
-    } catch (err) {
-      console.error(err);
-      alert('Não foi possível logar: ' + err.message);
-    }
-  }
-</script>
-
-
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-
-<script>
-  function hideSplash() {
-    const splash = document.getElementById("splash-screen");
-    const main = document.getElementById("main-content");
-    if (splash) splash.style.display = "none";
-    if (main) main.style.display = "flex";
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    setTimeout(hideSplash, 1500);
-  });
-  setTimeout(hideSplash, 5000);
-
-  function selectProfile() {
-    return new Promise(resolve => {
-      const backdrop = document.getElementById("profile-backdrop");
-      backdrop.style.display = 'flex';
-      document.getElementById("btnCuidador").onclick = () => {
-        backdrop.style.display = 'none';
-        resolve('cuidador');
-      };
-      document.getElementById("btnCliente").onclick = () => {
-        backdrop.style.display = 'none';
-        resolve('cliente');
-      };
-    });
-  }
-
-  async function loginWithGoogle() {
-    try {
-      const result = await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-      const user = result.user;
-      const email = user.email;
-      const name = user.displayName;
-      const formula = encodeURIComponent(`{E-mail}="${email}"`);
-      const headersGet = { Authorization: `Bearer ${AIRTABLE_READ_TOKEN}`, 'Content-Type': 'application/json' };
-
-      const [clRes, cgRes] = await Promise.all([
-        fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Clientes?filterByFormula=${formula}`, { headers: headersGet }),
-        fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/Cuidadores?filterByFormula=${formula}`, { headers: headersGet })
-      ]);
-
-      const clData = await clRes.json(), cgData = await cgRes.json();
-      const clRecs = Array.isArray(clData.records) ? clData.records : [];
-      const cgRecs = Array.isArray(cgData.records) ? cgData.records : [];
-
-      let table, recId;
-      if (cgRecs.length) {
-        table = 'Cuidadores'; recId = cgRecs[0].id;
-      } else if (clRecs.length) {
-        table = 'Clientes'; recId = clRecs[0].id;
-      } else {
-        const perfil = await selectProfile();
-        table = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
-        const postRes = await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}`, {
-          method: 'POST',
-          headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields: { 'E-mail': email, 'Nome completo': name } })
-        });
-        const postData = await postRes.json();
-        recId = Array.isArray(postData.records) && postData.records[0] ? postData.records[0].id : postData.id;
-      }
-
-      if (recId) {
-        await fetch(`https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}/${recId}`, {
-          method: 'PATCH',
-          headers: { Authorization: `Bearer ${AIRTABLE_WRITE_TOKEN}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ fields: { 'Nome completo': name } })
-        });
-      }
-
-      window.location.href = 'pagina-homepage.html';
-
-    } catch (err) {
-      console.error(err);
-      alert('Não foi possível logar: ' + err.message);
-    }
-  }
-</script>
-
-
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
@@ -635,6 +307,21 @@ auth.onAuthStateChanged(user => {
 });
 </script>
 
+<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
+  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
+  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
+</div>
+
+
+<div class="modal-backdrop" id="profile-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
+  <div class="modal" style="background:#fff; padding:2rem; border-radius:8px; max-width:300px; text-align:center;">
+    <h3>Você é cuidador(a) ou cliente?</h3>
+    <button id="btnCuidador" style="margin:0.5rem; padding:0.6rem 1.2rem; background:#42c2d3; color:#fff; border:none; border-radius:4px;">Sou cuidador</button>
+    <button id="btnCliente" style="margin:0.5rem; padding:0.6rem 1.2rem; background:#000; color:#fff; border:none; border-radius:4px;">Cliente</button>
+  </div>
+</div>
+
+
 <script>
   function hideSplash() {
     const splash = document.getElementById("splash-screen");
@@ -712,39 +399,6 @@ auth.onAuthStateChanged(user => {
       console.error(err);
       alert('Não foi possível logar: ' + err.message);
     }
-  }
-</script>
-
-
-
-<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
-  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
-  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
-</div>
-
-
-<div class="modal-backdrop" id="profile-backdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:10000; justify-content:center; align-items:center;">
-  <div class="modal" style="background:#fff; padding:2rem; border-radius:8px; max-width:300px; text-align:center;">
-    <h3>Você é cuidador(a) ou cliente?</h3>
-    <button id="btnCuidador" style="margin:0.5rem; padding:0.6rem 1.2rem; background:#42c2d3; color:#fff; border:none; border-radius:4px;">Sou cuidador</button>
-    <button id="btnCliente" style="margin:0.5rem; padding:0.6rem 1.2rem; background:#000; color:#fff; border:none; border-radius:4px;">Cliente</button>
-  </div>
-</div>
-
-
-<script>
-  function mostrarFormulario() {
-    const formSlide = document.getElementById('formSlide');
-    if (!formSlide) return;
-    formSlide.classList.add('active');
-    formSlide.innerHTML = `
-      <div style='display: flex; flex-direction: column; gap: 1rem; width: 100%; max-width: 320px;'>
-        <button onclick="loginWithGoogle()" style="background: #fff; color: #444; border: 1px solid #ccc; border-radius: 4px; padding: 10px; display: flex; align-items: center; justify-content: center; gap: 10px;">
-          <img src="https://img.icons8.com/color/24/google-logo.png" alt="Google"/>
-          Entrar com Google
-        </button>
-      </div>
-    `;
   }
 </script>
 
