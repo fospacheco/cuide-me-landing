@@ -3,169 +3,294 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login/Cadastro • Cuide-me</title>
+  <title>Login/Cadastro - Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <script type="text/javascript" src="https://platform.linkedin.com/in.js">
+    api_key: 7710u7rleeoaky
+    authorize: true
+    scope: r_liteprofile r_emailaddress
+  </script>
   <style>
     :root {
       --primary: #42c2d3;
       --secondary: #E0F7FA;
+      --dark-text: #245063;
       --white: #ffffff;
-      --black: #000000;
       --font-base: 'Inter', sans-serif;
     }
-    *, *::before, *::after { box-sizing: border-box; margin:0; padding:0; }
-    body { font-family: var(--font-base); background: var(--secondary); color: var(--black); }
-    #splash-screen { position: fixed; inset: 0; background: var(--secondary); display: flex; justify-content: center; align-items: center; z-index: 9999; }
-    #splash-screen img { width: 180px; animation: pulse 1.5s infinite; }
-    @keyframes pulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.05)} }
-    .container { display:none; min-height:100vh; }
-    .split { display:flex; flex-wrap:wrap; min-height:100vh; }
-    .left, .right { flex:1; padding:3rem; display:flex; flex-direction:column; justify-content:center; align-items:center; }
-    .left { background: var(--primary); color: var(--white); text-align:center; }
-    .left h2 { font-size:2rem; margin-bottom:1rem; }
-    .left p { font-size:1.1rem; margin-bottom:2rem; }
-    .left a { background: var(--white); color: var(--primary); padding:0.8rem 2rem; border-radius:50px; font-weight:bold; text-decoration:none; }
-    .right { background: var(--white); }
-    .form-overlay { width:100%; max-width:320px; display:flex; flex-direction:column; gap:1rem; opacity:0; transform:translateX(100%); transition: all 0.6s ease; }
-    .form-overlay.active { opacity:1; transform:translateX(0); }
-    input, select { width:100%; padding:0.8rem; border:1px solid #ccc; border-radius:4px; }
-    .cta-btn { background: var(--primary); color: var(--white); border:none; padding:0.9rem 2rem; border-radius:50px; font-weight:bold; cursor:pointer; }
-    .social-text { margin-top:1rem; font-size:0.95rem; }
-    .social-icons { display:flex; gap:1rem; margin-top:0.5rem; }
-    .social-icons img { width:36px; cursor:pointer; }
-    .toggle-text { margin-top:1rem; font-size:0.9rem; }
-    .toggle-text a { color: var(--primary); text-decoration:underline; cursor:pointer; }
-    .modal-backdrop { position: fixed; inset:0; background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 10000; }
-    .modal { background: var(--white); padding:2rem; border-radius:8px; max-width: 300px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-    .modal h3 { margin-bottom:1rem; }
-    .modal button { margin:0.5rem; padding:0.6rem 1.2rem; border:none; border-radius:4px; font-size:1rem; cursor:pointer; }
-    .btn-cuidador { background: var(--primary); color: var(--white); }
-    .btn-cliente { background: #555; color: var(--white); }
-    footer { text-align:center; padding:1rem; font-size:0.85rem; }
-    footer a { color: var(--primary); text-decoration:underline; margin:0 0.5rem; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-base);
+      background: var(--secondary);
+      color: var(--dark-text);
+    }
+    .container {
+      display: none;
+      flex-wrap: wrap;
+      min-height: 100vh;
+      position: relative;
+    }
+    .left, .right {
+      flex: 1;
+      padding: 3rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .left {
+      background-color: var(--primary);
+      color: var(--white);
+      text-align: center;
+      z-index: 1;
+    }
+    .left h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    .left p {
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    .left a {
+      background-color: var(--white);
+      color: var(--primary);
+      text-decoration: none;
+      padding: 0.8rem 2rem;
+      border-radius: 50px;
+      font-weight: bold;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+    }
+    .right {
+      background-color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .form-overlay {
+      position: absolute;
+      top: 0;
+      left: 100%;
+      width: 100%;
+      height: 100%;
+      background-color: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      gap: 1rem;
+      transition: left 0.6s ease;
+      z-index: 2;
+    }
+    .form-overlay.active {
+      left: 0;
+    }
+    .cta-btn {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 0.9rem 2rem;
+      border-radius: 50px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    .social-text {
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+    }
+    .social-icons img {
+      width: 36px;
+      height: 36px;
+      cursor: pointer;
+    }
+    #splash-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(to bottom, var(--secondary), var(--white));
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+    #splash-screen img {
+      max-width: 220px;
+      animation: pulse 1.5s infinite ease-in-out;
+    }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    @media (max-width: 768px) {
+      .container {
+        flex-direction: column;
+      }
+      .left, .right {
+        padding: 2rem;
+      }
+    }
   </style>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script>
-    // Firebase Config
-    const firebaseConfig = {
-      apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
-      authDomain: "cuide-me-f57f8.firebaseapp.com",
-      projectId: "cuide-me-f57f8",
-      storageBucket: "cuide-me-f57f8.appspot.com",
-      messagingSenderId: "846926668384",
-      appId: "1:846926668384:web:c8022e110171969f6b5905",
-      measurementId: "G-6EHSLH65WZ"
-    };
-    firebase.initializeApp(firebaseConfig);
-
-    // Airtable tokens
-    const AIRTABLE_BASE_ID       = 'appVxCKjvJAah2r27';
-    const AIRTABLE_READ_TOKEN    = 'patF0ngRSEbzCI5K9';   // só leitura
-    const AIRTABLE_WRITE_TOKEN   = 'patkmoC5jr7PpnyzQ';   // escrita
-  </script>
 </head>
 <body>
-  <div id="splash-screen"><img src="logo_cuide_me.png" alt="Carregando Cuide-me"></div>
-  <div class="container" id="main-content">
-    <div class="split">
-      <div class="left"><h2>Bem-vindo de volta!</h2><p>Para continuar conectado, clique abaixo:</p><a onclick="mostrarFormulario()">Acessar</a></div>
-      <div class="right"><img src="logo_cuide_me.png" alt="Logo Cuide-me" width="100" style="margin-bottom:1rem;"><h2>Cuide-me</h2><div id="formSlide" class="form-overlay"></div></div>
-    </div>
+<div id="splash-screen">
+  <img src="logo_cuide_me.png" alt="Carregando Cuide-me" />
+</div>
+
+<div class="container" id="main-content">
+  <div class="left">
+    <h2>Bem-vindo de volta!</h2>
+    <p>Para continuar conectado, clique abaixo:</p>
+    <a onclick="mostrarFormulario()">Acessar</a>
   </div>
-  <div class="modal-backdrop" id="profile-backdrop">
-    <div class="modal"><h3>Você é cuidador(a) ou cliente?</h3>
-      <button class="btn-cuidador" id="btnCuidador">Sou cuidador</button>
-      <button class="btn-cliente" id="btnCliente">Cliente</button>
-    </div>
+  <div class="right">
+    <img src="logo_cuide_me.png" alt="Logo Cuide-me" />
+    
+    <div id="formSlide" class="form-overlay"></div>
   </div>
-  <footer><a href="termos_de_uso_cuide_me.html" target="_blank">Termos de Uso</a> | <a href="politica_privacidade.html" target="_blank">Política de Privacidade</a></footer>
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => { document.getElementById('splash-screen').remove(); document.getElementById('main-content').style.display='block'; },1500);
-      setTimeout(() => { const s=document.getElementById('splash-screen'); if(s) s.remove(); document.getElementById('main-content').style.display='block'; },5000);
-    });
-    function mostrarFormulario(){ renderLogin(); document.getElementById('formSlide').classList.add('active'); }
-    function renderLogin(){
-      document.getElementById('formSlide').innerHTML = \`
-        <input id="email" type="email" placeholder="E-mail" required>
-        <input id="password" type="password" placeholder="Senha" required>
-        <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
-        <div class="social-text">ou acesse com redes sociais</div>
-        <div class="social-icons">
-          <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google"/>
-        </div>
-        <div class="toggle-text">Ainda não tem conta? <a onclick="renderCadastro()">Crie aqui</a></div>
-      \`;
-    }
-    function renderCadastro(){
-      document.getElementById('formSlide').innerHTML = \`
-        <input id="nome" type="text" placeholder="Nome completo" required>
-        <input id="email" type="email" placeholder="E-mail" required>
-        <input id="password" type="password" placeholder="Senha" required>
-        <select id="perfil">
-          <option value="cliente">Sou Cliente</option>
-          <option value="cuidador">Sou Cuidador</option>
-        </select>
-        <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
-        <div class="toggle-text">Já tem conta? <a onclick="renderLogin()">Faça login</a></div>
-      \`;
-    }
-    async function loginWithEmail(){
-      try{ await firebase.auth().signInWithEmailAndPassword(document.getElementById('email').value, document.getElementById('password').value);
-        window.location.href='pagina-homepage.html';
-      }catch(e){ alert(e.message); }
-    }
-    async function cadastrarUsuario(){
-      try{
-        const nome=document.getElementById('nome').value, email=document.getElementById('email').value, pass=document.getElementById('password').value, perfil=document.getElementById('perfil').value;
-        await firebase.auth().createUserWithEmailAndPassword(email,pass);
-        const table=perfil==='cuidador'?'Cuidadores':'Clientes';
-        await fetch(\`https://api.airtable.com/v0/\${AIRTABLE_BASE_ID}/\${table}\`, {
-          method:'POST', headers:{ Authorization:\`Bearer \${AIRTABLE_WRITE_TOKEN}\`, 'Content-Type':'application/json' },
-          body: JSON.stringify({ fields:{ 'E-mail':email,'Nome completo':nome } })
-        });
-        window.location.href='pagina-homepage.html';
-      }catch(e){ alert('Erro: '+e.message); }
-    }
-    function selectProfile(){
-      return new Promise(resolve=>{
-        const b=document.getElementById('profile-backdrop'); b.style.display='flex';
-        document.getElementById('btnCuidador').onclick=()=>{ b.style.display='none'; resolve('cuidador'); };
-        document.getElementById('btnCliente').onclick=()=>{ b.style.display='none'; resolve('cliente'); };
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
+  authDomain: "cuide-me-f57f8.firebaseapp.com",
+  projectId: "cuide-me-f57f8",
+  storageBucket: "cuide-me-f57f8.appspot.com",
+  messagingSenderId: "846926668384",
+  appId: "1:846926668384:web:c8022e110171969f6b5905"
+};
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const db = firebase.firestore();
+
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash-screen').style.display = 'none';
+    document.getElementById('main-content').style.display = 'flex';
+  }, 1500);
+});
+function mostrarFormulario() {
+  document.getElementById("formSlide").classList.add("active");
+  renderLogin();
+}
+function renderLogin() {
+  document.getElementById("formSlide").innerHTML = `
+    <input id="email" type="email" placeholder="E-mail" required />
+    <input id="password" type="password" placeholder="Senha" required />
+    <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
+    <div class="social-text">ou acesse com redes sociais</div>
+    <div class="social-icons">
+      <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" />
+      <img src="https://img.icons8.com/color/48/facebook-new.png" onclick="loginWithFacebook()" alt="Facebook" />
+      <img src="https://img.icons8.com/color/48/linkedin.png" onclick="loginWithLinkedin()" alt="LinkedIn" />
+    </div>
+    <div class="toggle-text">Ainda não tem conta?
+      <a onclick="renderCadastro()">Crie aqui</a>
+    </div>`;
+}
+function renderCadastro() {
+  document.getElementById("formSlide").innerHTML = `
+    <input id="nome" type="text" placeholder="Nome completo" required />
+    <input id="email" type="email" placeholder="E-mail" required />
+    <input id="password" type="password" placeholder="Senha" required />
+    <select id="perfil">
+      <option value="cuidador">Sou Cuidador</option>
+      <option value="familia">Sou Família</option>
+      <option value="instituicao">Sou Instituição</option>
+    </select>
+    <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
+    <div class="toggle-text">Já tem uma conta?
+      <a onclick="renderLogin()">Faça login</a>
+    </div>`;
+}
+function loginWithEmail() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => window.location.href = "pagina-homepage.html")
+    .catch(error => alert("Erro: " + error.message));
+}
+function cadastrarUsuario() {
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const perfil = document.getElementById("perfil").value;
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(cred => {
+      return db.collection("usuarios").doc(cred.user.uid).set({
+        nome,
+        email,
+        perfil
       });
-    }
-    async function loginWithGoogle(){
-      try{
-        const result=await firebase.auth().signInWithPopup(new firebase.auth.GoogleAuthProvider());
-        const user=result.user, email=user.email, name=user.displayName, formula=encodeURIComponent(\`{E-mail}="\${email}"\`);
-        const headersGet={ Authorization:\`Bearer \${AIRTABLE_READ_TOKEN}\`, 'Content-Type':'application/json' };
-        const [clRes,cgRes]=await Promise.all([
-          fetch(\`https://api.airtable.com/v0/\${AIRTABLE_BASE_ID}/Clientes?filterByFormula=\${formula}\`,{headers:headersGet}),
-          fetch(\`https://api.airtable.com/v0/\${AIRTABLE_BASE_ID}/Cuidadores?filterByFormula=\${formula}\`,{headers:headersGet})
-        ]);
-        const clData=await clRes.json(), cgData=await cgRes.json();
-        const clRecs=Array.isArray(clData.records)?clData.records:[], cgRecs=Array.isArray(cgData.records)?cgData.records:[];
-        let table, recId;
-        if(cgRecs.length){ table='Cuidadores'; recId=cgRecs[0].id; }
-        else if(clRecs.length){ table='Clientes'; recId=clRecs[0].id; }
-        else{ const perfil=await selectProfile(); table=perfil==='cuidador'?'Cuidadores':'Clientes';
-          const postRes=await fetch(\`https://api.airtable.com/v0/\${AIRTABLE_BASE_ID}/\${table}\`,{
-            method:'POST',headers:{ Authorization:\`Bearer \${AIRTABLE_WRITE_TOKEN}\`, 'Content-Type':'application/json' },
-            body:JSON.stringify({fields:{'E-mail':email,'Nome completo':name}})
-          });
-          const postData=await postRes.json();
-          recId=Array.isArray(postData.records)&&postData.records[0]?postData.records[0].id:postData.id;
-        }
-        if(recId){
-          await fetch(\`https://api.airtable.com/v0/\${AIRTABLE_BASE_ID}/\${table}/\${recId}\`,{
-            method:'PATCH',headers:{ Authorization:\`Bearer \${AIRTABLE_WRITE_TOKEN}\`, 'Content-Type':'application/json' },
-            body:JSON.stringify({fields:{'Nome completo':name}})
-          });
-        }
-        window.location.href='pagina-homepage.html';
-      }catch(err){ console.error(err); alert('Não foi possível logar: '+err.message); }
-    }
-  </script>
+    })
+    .then(() => {
+      alert("Cadastro realizado com sucesso!");
+      window.location.href = "pagina-homepage.html";
+    })
+    .catch(error => alert("Erro ao cadastrar: " + error.message));
+}
+function loginWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+    .then(() => window.location.href = "pagina-homepage.html")
+    .catch(error => alert("Erro com Google: " + error.message));
+}
+function loginWithFacebook() {
+  const provider = new firebase.auth.FacebookAuthProvider();
+  auth.signInWithPopup(provider)
+    .then(() => window.location.href = "pagina-homepage.html")
+    .catch(error => alert("Erro com Facebook: " + error.message));
+}
+function loginWithLinkedin() {
+  IN.User.authorize();
+}
+function onLinkedInAuth() {
+  IN.API.Raw("/people/~:(id,firstName,lastName,email-address)")
+    .result(function(profile) {
+      const email = profile.emailAddress;
+      const nome = profile.firstName + " " + profile.lastName;
+      const fakePassword = email + "_linkedin";
+
+      auth.signInWithEmailAndPassword(email, fakePassword)
+        .then(() => window.location.href = "pagina-homepage.html")
+        .catch(() => {
+          auth.createUserWithEmailAndPassword(email, fakePassword)
+            .then(cred => {
+              return db.collection("usuarios").doc(cred.user.uid).set({
+                nome: nome,
+                email: email,
+                perfil: "cuidador"
+              });
+            })
+            .then(() => window.location.href = "pagina-homepage.html")
+            .catch(error => alert("Erro com LinkedIn: " + error.message));
+        });
+    });
+}
+IN.Event.on(IN, "auth", onLinkedInAuth);
+
+auth.onAuthStateChanged(user => {
+  if (user) {
+    db.collection("usuarios").doc(user.uid).get().then(doc => {
+      window.location.href = "pagina-homepage.html";
+    });
+  }
+});
+</script>
+
+<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
+  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
+  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
+</div>
+
 </body>
 </html>
