@@ -1,11 +1,9 @@
-
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Cadastro Cuidador | Cuide-me</title>
+<title>Cadastro Cliente | Cuide-me</title>
 <style>
     body {
       font-family: 'Inter', sans-serif;
@@ -38,7 +36,7 @@
       border: 1px solid #ccc;
       background: transparent;
       width: 100%;
-      height: 1300px;
+      height: 1100px;
     }
     .floating-cta {
       position: fixed;
@@ -52,6 +50,21 @@
       text-decoration: none;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       z-index: 1000;
+    }
+    /* Botão de voltar à página inicial */
+    .back-button {
+      display: inline-block;
+      background-color: #3ddad7;
+      color: white;
+      padding: 0.9rem 1.2rem;
+      border-radius: 50px;
+      font-weight: bold;
+      text-decoration: none;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: opacity 0.2s ease-in-out;
+    }
+    .back-button:hover {
+      opacity: 0.8;
     }
     #modal-bloqueio {
       position: fixed;
@@ -98,28 +111,32 @@
 <body>
 <!-- Modal LGPD -->
 <div id="modal-bloqueio">
-<div class="modal-content">
-<h2 style="color: #1ba8c2;">Antes de continuar...</h2>
-<p>Para buscar cuidadores, você precisa aceitar nossa política de privacidade.</p>
-<div style="text-align: center; margin: 1rem 0;">
-<label style="font-size: 0.9rem; color: #333;">
-<input id="consentimentoLGPD" style="margin-right: 0.5rem;" type="checkbox"/>
+  <div class="modal-content">
+    <h2 style="color: #1ba8c2;">Antes de continuar...</h2>
+    <p>Para buscar cuidadores, você precisa aceitar nossa política de privacidade.</p>
+    <div style="text-align: center; margin: 1rem 0;">
+      <label style="font-size: 0.9rem; color: #333;">
+        <input id="consentimentoLGPD" style="margin-right: 0.5rem;" type="checkbox"/>
         Li e concordo com a <a href="/privacidade" style="color: #00aacc; text-decoration: underline;" target="_blank">Política de Privacidade</a>.
       </label>
-</div>
-<div style="text-align: center;">
-<button id="aceitarLGPD">Aceitar</button>
-</div>
-</div>
+    </div>
+    <div style="text-align: center;">
+      <button id="aceitarLGPD">Aceitar</button>
+    </div>
+  </div>
 </div>
 <!-- Formulário -->
 <div class="form-container" id="form-cliente">
-<div style="display: flex; align-items: center; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-<img alt="Logo Cuide-me" src="logo_cuide_me.png" style="height: 48px;"/>
-<h2 style="margin: 0;">Quero me cadastrar</h2>
+  <div style="display: flex; align-items: center; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+    <img alt="Logo Cuide-me" src="logo_cuide_me.png" style="height: 48px;"/>
+    <h2 style="margin: 0;">Quero me cadastrar</h2>
+  </div>
+  <p>Preencha o formulário abaixo e encontre um cuidador verificado na sua região:</p>
+  <iframe class="airtable-embed" frameborder="0" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K"></iframe>
 </div>
-<p>Preencha o formulário abaixo e encontre um cuidador verificado na sua região:</p>
-<iframe class="airtable-embed" frameborder="0" height="1100" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrKTk9m4WtHOY79K"></iframe>
+<!-- Botão voltar à página inicial -->
+<div style="text-align: center; margin: 2rem 0;">
+  <a href="pagina-homepage.html" class="back-button">Voltar à Página inicial</a>
 </div>
 <!-- WhatsApp CTA -->
 <a class="floating-cta" href="https://wa.me/5599999999999" target="_blank">❓ Dúvidas? Fale com a gente</a>
