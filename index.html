@@ -175,22 +175,12 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-
-// Controla o splash screen: esconde após 1.5s, mesmo que o load já tenha ocorrido
-function hideSplash() {
-  const splash = document.getElementById('splash-screen');
-  const main   = document.getElementById('main-content');
-  if (splash) splash.style.display = 'none';
-  if (main) main.style.display = 'flex';
-}
-if (document.readyState === 'complete') {
-  setTimeout(hideSplash, 1500);
-} else {
-  window.addEventListener('load', () => {
-    setTimeout(hideSplash, 1500);
-  });
-}
-
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('splash-screen').style.display = 'none';
+    document.getElementById('main-content').style.display = 'flex';
+  }, 1500);
+});
 function mostrarFormulario() {
   document.getElementById("formSlide").classList.add("active");
   renderLogin();
@@ -390,6 +380,23 @@ auth.onAuthStateChanged(user => {
   <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
   <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
 </div>
+
+
+<script>
+  // Função para esconder splash-screen
+  function hideSplash() {
+    const splash = document.getElementById('splash-screen');
+    if (splash) splash.style.display = 'none';
+  }
+  // Se já carregado
+  if (document.readyState === 'complete') {
+    setTimeout(hideSplash, 1500);
+  } else {
+    window.addEventListener('load', () => setTimeout(hideSplash, 1500));
+  }
+  // Emergência: esconde depois de 5s de qualquer forma
+  setTimeout(hideSplash, 5000);
+</script>
 
 </body>
 </html>
