@@ -221,7 +221,6 @@ function renderCadastro() {
 
 // Função para validar nome completo
 function nomeValido(nome) {
-  // Exige pelo menos duas palavras e 5+ caracteres
   return nome.trim().split(' ').length >= 2 && nome.trim().length >= 5;
 }
 
@@ -236,7 +235,6 @@ function cadastrarUsuario() {
     alert("Por favor, informe seu nome completo.");
     return;
   }
-  // reCAPTCHA
   const recaptchaResponse = grecaptcha.getResponse();
   if (!recaptchaResponse) {
     alert("Por favor, confirme que você não é um robô.");
@@ -245,11 +243,17 @@ function cadastrarUsuario() {
   auth.createUserWithEmailAndPassword(email, password)
     .then(cred => {
       cred.user.sendEmailVerification().then(() => {
-        alert("Cadastro realizado! Verifique seu e-mail antes de fazer login.");
-        grecaptcha.reset();
-        renderLogin();
+        // Grava no Firestore igual antes:
+        db.collection("usuarios").doc(cred.user.uid).set({
+          nome,
+          email,
+          perfil
+        }).then(() => {
+          alert("Cadastro realizado! Verifique seu e-mail antes de fazer login.");
+          grecaptcha.reset();
+          renderLogin();
+        });
       });
-      // (Aqui você pode cadastrar o usuário no Airtable também)
     })
     .catch(error => {
       alert("Erro ao cadastrar: " + error.message);
@@ -283,7 +287,18 @@ function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
     .then(cred => {
-      window.location.href = "pagina-homepage.html";
+      // Garante que o usuário está salvo no Firestore (se for o primeiro login)
+      db.collection("usuarios").doc(cred.user.uid).get().then(doc => {
+        if (!doc.exists) {
+          db.collection("usuarios").doc(cred.user.uid).set({
+            nome: cred.user.displayName || "",
+            email: cred.user.email || "",
+            perfil: "cuidador" // ou outro padrão, ou pedir para o usuário escolher depois
+          });
+        }
+      }).then(() => {
+        window.location.href = "pagina-homepage.html";
+      });
     })
     .catch(error => alert("Erro com Google: " + error.message));
 }
@@ -300,5 +315,6 @@ auth.onAuthStateChanged(user => {
   <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
   <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
 </div>
+
 </body>
 </html>
