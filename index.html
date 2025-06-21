@@ -137,6 +137,8 @@
       }
     }
   </style>
+  <!-- Google reCAPTCHA -->
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 </head>
 <body>
 <div id="splash-screen">
@@ -173,16 +175,19 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+// Splash screen
 window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('splash-screen').style.display = 'none';
     document.getElementById('main-content').style.display = 'flex';
   }, 1500);
 });
+
 function mostrarFormulario() {
   document.getElementById("formSlide").classList.add("active");
   renderLogin();
 }
+
 function renderLogin() {
   document.getElementById("formSlide").innerHTML = `
     <input id="email" type="email" placeholder="E-mail" required />
@@ -196,6 +201,7 @@ function renderLogin() {
       <a style="color: var(--primary); cursor:pointer;" onclick="renderCadastro()">Crie aqui</a>
     </div>`;
 }
+
 function renderCadastro() {
   document.getElementById("formSlide").innerHTML = `
     <input id="nome" type="text" placeholder="Nome completo" required />
@@ -206,13 +212,52 @@ function renderCadastro() {
       <option value="familia">Sou Família</option>
       <option value="instituicao">Sou Instituição</option>
     </select>
+    <div class="g-recaptcha" data-sitekey="SUA_CHAVE_SITE_RECAPTCHA"></div>
     <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
     <div class="toggle-text">Já tem uma conta?
       <a style="color: var(--primary); cursor:pointer;" onclick="renderLogin()">Faça login</a>
     </div>`;
 }
 
-// LOGIN COM E-MAIL/SENHA
+// Função para validar nome completo
+function nomeValido(nome) {
+  // Exige pelo menos duas palavras e 5+ caracteres
+  return nome.trim().split(' ').length >= 2 && nome.trim().length >= 5;
+}
+
+// Função de cadastro com validação e reCAPTCHA
+function cadastrarUsuario() {
+  const nome = document.getElementById("nome").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+  const perfil = document.getElementById("perfil").value;
+
+  if (!nomeValido(nome)) {
+    alert("Por favor, informe seu nome completo.");
+    return;
+  }
+  // reCAPTCHA
+  const recaptchaResponse = grecaptcha.getResponse();
+  if (!recaptchaResponse) {
+    alert("Por favor, confirme que você não é um robô.");
+    return;
+  }
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(cred => {
+      cred.user.sendEmailVerification().then(() => {
+        alert("Cadastro realizado! Verifique seu e-mail antes de fazer login.");
+        grecaptcha.reset();
+        renderLogin();
+      });
+      // (Aqui você pode cadastrar o usuário no Airtable também)
+    })
+    .catch(error => {
+      alert("Erro ao cadastrar: " + error.message);
+      grecaptcha.reset();
+    });
+}
+
+// Função login com e-mail/senha
 function loginWithEmail() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -221,32 +266,19 @@ function loginWithEmail() {
       if (cred.user.emailVerified) {
         window.location.href = "pagina-homepage.html";
       } else {
-        alert("Por favor, verifique seu e-mail antes de acessar.");
+        // Botão para reenviar verificação
+        if (confirm("Por favor, verifique seu e-mail antes de acessar. Deseja reenviar o e-mail de verificação?")) {
+          cred.user.sendEmailVerification().then(() => {
+            alert("Novo e-mail de verificação enviado!");
+          });
+        }
         auth.signOut();
       }
     })
     .catch(error => alert("Erro: " + error.message));
 }
 
-// CADASTRO COM E-MAIL/SENHA + VERIFICAÇÃO DE E-MAIL (SEM restrição de domínio!)
-function cadastrarUsuario() {
-  const nome = document.getElementById("nome").value;
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const perfil = document.getElementById("perfil").value;
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(cred => {
-      // Envia e-mail de verificação
-      cred.user.sendEmailVerification().then(() => {
-        alert("Cadastro realizado! Verifique seu e-mail antes de fazer login.");
-      });
-      // Aqui você pode cadastrar no Airtable também, se desejar
-    })
-    .catch(error => alert("Erro ao cadastrar: " + error.message));
-}
-
-// LOGIN COM GOOGLE (sempre verificado)
+// Login com Google (já verificado)
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
@@ -256,7 +288,7 @@ function loginWithGoogle() {
     .catch(error => alert("Erro com Google: " + error.message));
 }
 
-// Mantém logado se já autenticado e e-mail verificado
+// Mantém logado se autenticado e verificado
 auth.onAuthStateChanged(user => {
   if (user && (user.emailVerified || user.providerData[0]?.providerId === 'google.com')) {
     window.location.href = "pagina-homepage.html";
@@ -268,6 +300,5 @@ auth.onAuthStateChanged(user => {
   <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
   <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
 </div>
-
 </body>
 </html>
