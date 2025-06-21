@@ -182,9 +182,13 @@ window.addEventListener('load', () => {
 });
 
 // Redireciona se já está logado
+// e mostra/oculta a tela conforme o estado da autenticação
 auth.onAuthStateChanged(user => {
   if (user) {
+    document.getElementById('main-content').style.display = 'none';
     window.location.href = "pagina-homepage.html";
+  } else {
+    document.getElementById('main-content').style.display = 'flex';
   }
 });
 
