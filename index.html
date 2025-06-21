@@ -151,7 +151,8 @@
   </div>
   <div class="right">
     <img src="logo_cuide_me.png" alt="Logo Cuide-me" />
-      <div id="formSlide" class="form-overlay"></div>
+    <h2>Cuide-me</h2>
+    <div id="formSlide" class="form-overlay"></div>
   </div>
 </div>
 
@@ -210,13 +211,24 @@ function renderCadastro() {
       <a style="color: var(--primary); cursor:pointer;" onclick="renderLogin()">Faça login</a>
     </div>`;
 }
+
+// LOGIN COM E-MAIL/SENHA
 function loginWithEmail() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   auth.signInWithEmailAndPassword(email, password)
-    .then(() => window.location.href = "pagina-homepage.html")
+    .then(cred => {
+      if (cred.user.emailVerified) {
+        window.location.href = "pagina-homepage.html";
+      } else {
+        alert("Por favor, verifique seu e-mail antes de acessar.");
+        auth.signOut();
+      }
+    })
     .catch(error => alert("Erro: " + error.message));
 }
+
+// CADASTRO COM E-MAIL/SENHA + VERIFICAÇÃO DE E-MAIL (SEM restrição de domínio!)
 function cadastrarUsuario() {
   const nome = document.getElementById("nome").value;
   const email = document.getElementById("email").value;
@@ -225,31 +237,29 @@ function cadastrarUsuario() {
 
   auth.createUserWithEmailAndPassword(email, password)
     .then(cred => {
-      return db.collection("usuarios").doc(cred.user.uid).set({
-        nome,
-        email,
-        perfil
+      // Envia e-mail de verificação
+      cred.user.sendEmailVerification().then(() => {
+        alert("Cadastro realizado! Verifique seu e-mail antes de fazer login.");
       });
-    })
-    .then(() => {
-      alert("Cadastro realizado com sucesso!");
-      window.location.href = "pagina-homepage.html";
+      // Aqui você pode cadastrar no Airtable também, se desejar
     })
     .catch(error => alert("Erro ao cadastrar: " + error.message));
 }
+
+// LOGIN COM GOOGLE (sempre verificado)
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
-    .then(() => window.location.href = "pagina-homepage.html")
+    .then(cred => {
+      window.location.href = "pagina-homepage.html";
+    })
     .catch(error => alert("Erro com Google: " + error.message));
 }
 
-// Opcional: manter login automático caso usuário já esteja autenticado
+// Mantém logado se já autenticado e e-mail verificado
 auth.onAuthStateChanged(user => {
-  if (user) {
-    db.collection("usuarios").doc(user.uid).get().then(doc => {
-      window.location.href = "pagina-homepage.html";
-    });
+  if (user && (user.emailVerified || user.providerData[0]?.providerId === 'google.com')) {
+    window.location.href = "pagina-homepage.html";
   }
 });
 </script>
