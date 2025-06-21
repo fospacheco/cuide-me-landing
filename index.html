@@ -175,7 +175,9 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-// Splash screen
+// FORÇA LOGOUT APENAS NA PÁGINA DE LOGIN
+auth.signOut();
+
 window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('splash-screen').style.display = 'none';
@@ -243,7 +245,6 @@ function cadastrarUsuario() {
   auth.createUserWithEmailAndPassword(email, password)
     .then(cred => {
       cred.user.sendEmailVerification().then(() => {
-        // Grava no Firestore igual antes:
         db.collection("usuarios").doc(cred.user.uid).set({
           nome,
           email,
@@ -287,13 +288,12 @@ function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
     .then(cred => {
-      // Garante que o usuário está salvo no Firestore (se for o primeiro login)
       db.collection("usuarios").doc(cred.user.uid).get().then(doc => {
         if (!doc.exists) {
           db.collection("usuarios").doc(cred.user.uid).set({
             nome: cred.user.displayName || "",
             email: cred.user.email || "",
-            perfil: "cuidador" // ou outro padrão, ou pedir para o usuário escolher depois
+            perfil: "cuidador"
           });
         }
       }).then(() => {
@@ -302,13 +302,6 @@ function loginWithGoogle() {
     })
     .catch(error => alert("Erro com Google: " + error.message));
 }
-
-// Mantém logado se autenticado e verificado
-auth.onAuthStateChanged(user => {
-  if (user && (user.emailVerified || user.providerData[0]?.providerId === 'google.com')) {
-    window.location.href = "pagina-homepage.html";
-  }
-});
 </script>
 
 <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
