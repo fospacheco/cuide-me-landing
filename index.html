@@ -158,7 +158,6 @@
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
@@ -170,8 +169,6 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
-const db = firebase.firestore();
-
 auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
 window.addEventListener('load', () => {
@@ -222,43 +219,28 @@ function cadastrarUsuario() {
   const password = document.getElementById("password").value;
   const perfil = document.getElementById("perfil").value;
 
-  db.collection("usuarios").where("cpf", "==", cpf).get()
-    .then(snapshot => {
-      if (!snapshot.empty) {
-        alert("CPF já cadastrado! Use outro CPF ou faça login.");
-        return;
-      }
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(cred => {
-          return db.collection("usuarios").doc(cred.user.uid).set({
-            nome,
-            cpf,
-            email,
-            perfil,
-            fonteCadastro: "email"
-          });
-        })
-        .catch(error => alert("Erro ao cadastrar: " + error.message));
+  // Aqui seria a checagem de duplicidade, se quiser fazer via Airtable, tem que consultar API
+  // Para simplicidade, estamos só enviando para Airtable
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(async (cred) => {
+      await enviarUsuarioParaAirtable({uid: cred.user.uid, email: email, displayName: nome}, perfil, cpf);
+      window.location.href = "pagina-homepage.html";
     })
-    .catch(error => alert("Erro ao verificar CPF: " + error.message));
+    .catch(error => alert("Erro ao cadastrar: " + error.message));
 }
 
 function loginWithEmail() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   auth.signInWithEmailAndPassword(email, password)
-    .then(async (cred) => {
-      const userRef = db.collection("usuarios").doc(cred.user.uid);
-      const userDoc = await userRef.get();
-      if (userDoc.exists && !userDoc.data().fonteCadastro) {
-        await userRef.update({ fonteCadastro: "email" });
-      }
+    .then(() => {
       window.location.href = "pagina-homepage.html";
     })
     .catch(error => alert("Erro: " + error.message));
 }
 
-// ========== NOVO FLUXO PARA GOOGLE COM ESCOLHA DE PERFIL + CPF ==========
+// ========== LOGIN GOOGLE COM TELA INTERMEDIÁRIA ==========
 let googleUser = null;
 
 function loginWithGoogle() {
@@ -300,27 +282,11 @@ async function finalizarCadastroGoogle() {
     return;
   }
 
-  // Checar duplicidade de CPF (Firestore)
-  const cpfSnap = await db.collection("usuarios").where("cpf", "==", cpf).get();
-  if (!cpfSnap.empty) {
-    alert("CPF já cadastrado! Use outro CPF.");
-    return;
-  }
-
-  const userRef = db.collection("usuarios").doc(googleUser.uid);
   let perfis = [];
   if (isCliente) perfis.push("familia");
   if (isCuidador) perfis.push("cuidador");
 
-  await userRef.set({
-    nome: googleUser.displayName || '',
-    email: googleUser.email,
-    cpf: cpf,
-    perfis: perfis,
-    fonteCadastro: "google"
-  });
-
-  // Envia para Airtable para cada perfil selecionado
+  // Só envia para Airtable, não salva no Firestore!
   for (let perfil of perfis) {
     await enviarUsuarioParaAirtable(googleUser, perfil, cpf);
   }
@@ -333,20 +299,12 @@ const airtableBaseId = 'appVxCKjvJAah2r27';
 const airtableApiKey = 'SUA_API_KEY_AQUI'; // Coloque sua chave do Airtable
 
 async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
-  let userDocData = {};
-  try {
-    const userDoc = await db.collection("usuarios").doc(user.uid).get();
-    if (userDoc.exists) {
-      userDocData = userDoc.data();
-    }
-  } catch(e) {}
-
+  // Monta dados para o Airtable conforme o perfil
   const uid = user.uid;
-  const email = user.email || userDocData.email || '';
-  const nome = user.displayName || userDocData.nome || '';
-  const cpf = cpfParam || userDocData.cpf || '';
+  const email = user.email || '';
+  const nome = user.displayName || '';
+  const cpf = cpfParam || '';
   const dataCadastro = new Date().toISOString();
-  const fonteCadastro = userDocData.fonteCadastro || '';
 
   let tabela = '';
   let fields = {};
@@ -358,18 +316,9 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
       "Nome Completo": nome,
       "CPF": cpf,
       "E-mail": email,
-      "Telefone/WahtsApp": userDocData.telefone || '',
-      "Foto": userDocData.foto || '',
-      "Status": userDocData.status || 'ativo',
-      "Localização": userDocData.localizacao || '',
-      "Especialidade": userDocData.especialidade || '',
-      "Disponibilidade": userDocData.disponibilidade || '',
-      "Disponibilidade nome": userDocData.disponibilidade_nome || '',
-      "Linkedin": userDocData.linkedin || '',
-      "Curriculo": userDocData.curriculo || '',
-      "Certificados": userDocData.certificados || '',
+      "Status": "ativo",
       "Data de cadastro": dataCadastro,
-      "Fonte de cadastro": fonteCadastro
+      "Fonte de cadastro": "google"
     };
   } else if (perfil === 'familia') {
     tabela = 'Clientes';
@@ -378,13 +327,18 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
       "Nome Completo": nome,
       "CPF": cpf,
       "E-mail": email,
-      "Telefone/WhatsApp": userDocData.telefone || '',
-      "Bairro": userDocData.bairro || '',
-      "Idade": userDocData.idade || '',
-      "Necessidades": userDocData.necessidades || '',
-      "Observação": userDocData.observacao || '',
       "Data de cadastro": dataCadastro,
-      "Fonte de cadastro": fonteCadastro
+      "Fonte de cadastro": "google"
+    };
+  } else if (perfil === 'instituicao') {
+    tabela = 'Clientes';
+    fields = {
+      "UID": uid,
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Data de cadastro": dataCadastro,
+      "Fonte de cadastro": "google"
     };
   } else {
     return;
@@ -400,19 +354,18 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
   })
   .then(res => res.json())
   .then(data => {
-    console.log('Usuário enviado ao Airtable:', data);
+    // console.log('Usuário enviado ao Airtable:', data);
   })
   .catch(err => {
     console.error('Erro ao enviar para Airtable:', err);
   });
 }
 
-// ---- ATENÇÃO! Aqui está o bloco corrigido! ----
+// ---- NÃO FAZ MAIS NADA NO onAuthStateChanged, só mostra tela de login se deslogar ----
 auth.onAuthStateChanged(async user => {
   if (!user) {
     document.getElementById('main-content').style.display = 'flex';
   }
-  // Não faz nada ao logar, só libera interface para quem não está logado!
 });
 </script>
 
