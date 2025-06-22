@@ -244,7 +244,7 @@
   </div>
 </div>
 
-<!-- Mensagem de erro estilizada -->
+<!-- Mensagem de erro estilizada flutuante (mantida, mas não usada no login) -->
 <div id="msgErro" style="display:none; position:fixed; top:32px; left:50%; transform:translateX(-50%); background:#fff3f3; color:#b00020; padding:1rem 2rem; border-radius:10px; box-shadow:0 2px 12px #0001; z-index:10000; font-weight:600; font-size:1.07rem;"></div>
 
 <!-- Firebase SDK -->
@@ -275,10 +275,12 @@ function mostrarFormulario() {
   renderLogin();
 }
 
+// AJUSTE AQUI: Adicione o div do erro acima do botão Entrar
 function renderLogin() {
   document.getElementById("formSlide").innerHTML = `
     <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
     <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
+    <div id="login-error-msg" style="color:#b00020; font-weight:600; margin-bottom:10px;"></div>
     <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
     <div class="social-text">ou acesse com redes sociais</div>
     <div class="social-icons">
@@ -410,11 +412,22 @@ async function cadastrarUsuario() {
 function loginWithEmail() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  // Limpa mensagem antiga
+  document.getElementById("login-error-msg").innerText = "";
+
   auth.signInWithEmailAndPassword(email, password)
     .then(() => {
       window.location.href = "pagina-homepage.html";
     })
-    .catch(error => showError("Erro: " + error.message));
+    .catch(error => {
+      if (error.code === "auth/user-not-found") {
+        document.getElementById("login-error-msg").innerText = "E-mail não cadastrado";
+      } else if (error.code === "auth/wrong-password") {
+        document.getElementById("login-error-msg").innerText = "Senha incorreta";
+      } else {
+        document.getElementById("login-error-msg").innerText = "Erro: " + error.message;
+      }
+    });
 }
 
 // === FLUXO GOOGLE ===
