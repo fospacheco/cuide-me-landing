@@ -245,14 +245,14 @@ async function cadastrarUsuario() {
     .then(async (cred) => {
       let cadastrou = false;
       if (isFamilia) {
-        const existeFamilia = await checarExistenciaAirtable(cred.user.uid, cpf, "familia");
+        const existeFamilia = await checarExistenciaAirtableCompleta(cred.user.uid, email, cpf, "familia");
         if (!existeFamilia) {
           await enviarUsuarioParaAirtable({uid: cred.user.uid, email, displayName: nome}, "familia", cpf);
           cadastrou = true;
         }
       }
       if (isCuidador) {
-        const existeCuidador = await checarExistenciaAirtable(cred.user.uid, cpf, "cuidador");
+        const existeCuidador = await checarExistenciaAirtableCompleta(cred.user.uid, email, cpf, "cuidador");
         if (!existeCuidador) {
           await enviarUsuarioParaAirtable({uid: cred.user.uid, email, displayName: nome}, "cuidador", cpf);
           cadastrou = true;
@@ -261,7 +261,7 @@ async function cadastrarUsuario() {
       if (cadastrou) {
         window.location.href = "pagina-homepage.html";
       } else {
-        alert("Usuário já cadastrado com esse CPF ou e-mail.");
+        alert("Usuário já cadastrado com esse CPF, e-mail ou UID.");
       }
     })
     .catch(error => alert("Erro ao cadastrar: " + error.message));
@@ -277,7 +277,7 @@ function loginWithEmail() {
     .catch(error => alert("Erro: " + error.message));
 }
 
-// ========== LOGIN GOOGLE COM TELA INTERMEDIÁRIA ==========
+// ========== LOGIN GOOGLE COM FLUXO AJUSTADO ==========
 let googleUser = null;
 
 function loginWithGoogle() {
@@ -285,9 +285,11 @@ function loginWithGoogle() {
   auth.signInWithPopup(provider)
     .then(async (result) => {
       googleUser = result.user;
-      // Checa se usuário já existe
-      const existeCliente = await checarExistenciaAirtable(googleUser.uid, '', 'familia');
-      const existeCuidador = await checarExistenciaAirtable(googleUser.uid, '', 'cuidador');
+      const uid = googleUser.uid;
+      const email = googleUser.email;
+      // Checa UID ou E-mail em AMBAS as tabelas
+      const existeCliente = await checarExistenciaAirtableUidEmail(uid, email, 'familia');
+      const existeCuidador = await checarExistenciaAirtableUidEmail(uid, email, 'cuidador');
       if (existeCliente || existeCuidador) {
         window.location.href = "pagina-homepage.html";
       } else {
@@ -330,14 +332,13 @@ async function finalizarCadastroGoogle() {
   if (isCliente) perfis.push("familia");
   if (isCuidador) perfis.push("cuidador");
 
-  let cadastrou = false;
   for (let perfil of perfis) {
-    const existe = await checarExistenciaAirtable(googleUser.uid, cpf, perfil);
+    const existe = await checarExistenciaAirtableCompleta(googleUser.uid, googleUser.email, cpf, perfil);
     if (!existe) {
       await enviarUsuarioParaAirtable(googleUser, perfil, cpf);
-      cadastrou = true;
     }
   }
+
   window.location.href = "pagina-homepage.html";
 }
 
@@ -345,12 +346,25 @@ async function finalizarCadastroGoogle() {
 const airtableBaseId = 'appVxCKjvJAah2r27';
 const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583';
 
-async function checarExistenciaAirtable(uid, cpf, perfil) {
+// Checa por UID ou e-mail (antes de pedir CPF)
+async function checarExistenciaAirtableUidEmail(uid, email, perfil) {
   let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
-  let filtro = [];
-  if(uid) filtro.push(`{UID}='${uid}'`);
-  if(cpf) filtro.push(`{CPF}='${cpf}'`);
-  if (filtro.length === 0) return false;
+  let filtro = [`{UID}='${uid}'`];
+  if (email) filtro.push(`{E-mail}='${email}'`);
+  const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=OR(${filtro.join(",")})`;
+  const response = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+  });
+  const data = await response.json();
+  return data.records && data.records.length > 0;
+}
+
+// Checa por UID, e-mail ou CPF (após informar CPF)
+async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
+  let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
+  let filtro = [`{UID}='${uid}'`];
+  if (email) filtro.push(`{E-mail}='${email}'`);
+  if (cpf) filtro.push(`{CPF}='${cpf}'`);
   const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=OR(${filtro.join(",")})`;
   const response = await fetch(url, {
     headers: { 'Authorization': `Bearer ${airtableApiKey}` }
@@ -412,7 +426,6 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
   });
 }
 
-// ---- NÃO FAZ MAIS NADA NO onAuthStateChanged, só mostra tela de login se deslogar ----
 auth.onAuthStateChanged(async user => {
   if (!user) {
     document.getElementById('main-content').style.display = 'flex';
