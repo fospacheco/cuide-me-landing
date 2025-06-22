@@ -211,16 +211,14 @@ function renderCadastro() {
 }
 
 const airtableBaseId = 'appVxCKjvJAah2r27';
-const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583'; // Sua chave secreta
+const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583';
 
-// Checa se já existe esse CPF em Clientes OU Cuidadores
+// Checa se já existe esse CPF em qualquer tabela
 async function cpfJaExisteNoAirtable(cpf) {
   const bases = ['Clientes', 'Cuidadores'];
   for (let tabela of bases) {
     const res = await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula={CPF}='${cpf}'`, {
-      headers: {
-        Authorization: `Bearer ${airtableApiKey}`
-      }
+      headers: { Authorization: `Bearer ${airtableApiKey}` }
     });
     const data = await res.json();
     if (data.records && data.records.length > 0) return true;
@@ -239,9 +237,10 @@ function detectarFonteCadastro(email, viaGoogle = false) {
   if (dominio.includes("yahoo.")) return "yahoo";
   if (dominio.includes("icloud.") || dominio.includes("me.com") || dominio.includes("mac.com")) return "icloud";
   if (dominio.includes("bol.")) return "bol";
-  return dominio.split('.')[0]; // fallback para nome do domínio
+  return dominio.split('.')[0];
 }
 
+// Apenas UMA gravação por CPF, sempre na tabela Cuidadores se marcar Cuidador, senão em Clientes
 async function cadastrarUsuario() {
   const nome = document.getElementById("nome").value.trim();
   const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
@@ -260,7 +259,7 @@ async function cadastrarUsuario() {
     return;
   }
 
-  // NOVO: Validação ANTES de qualquer coisa
+  // Validação ANTES de tudo!
   if (await cpfJaExisteNoAirtable(cpf)) {
     alert("CPF já cadastrado!");
     return;
@@ -268,18 +267,20 @@ async function cadastrarUsuario() {
 
   auth.createUserWithEmailAndPassword(email, password)
     .then(async (cred) => {
-      // Checa novamente antes de gravar (garante nunca duplicar!)
       if (await cpfJaExisteNoAirtable(cpf)) {
         alert("CPF já cadastrado!");
         return;
       }
       const fonteCadastro = detectarFonteCadastro(email, false);
       let perfis = [];
-      if (isCliente) perfis.push("cliente");
-      if (isCuidador) perfis.push("cuidador");
-      for (let perfil of perfis) {
-        await enviarUsuarioParaAirtable({uid: cred.user.uid, email: email, displayName: nome}, perfil, cpf, fonteCadastro);
-      }
+      if (isCliente) perfis.push("Cliente / Familiar");
+      if (isCuidador) perfis.push("Cuidador");
+
+      let tabela = isCuidador ? "Cuidadores" : "Clientes";
+      await enviarUsuarioParaAirtable({
+        uid: cred.user.uid, email: email, displayName: nome
+      }, tabela, perfis, cpf, fonteCadastro);
+
       window.location.href = "pagina-homepage.html";
     })
     .catch(error => {
@@ -301,8 +302,7 @@ function loginWithEmail() {
     .catch(error => alert("Erro: " + error.message));
 }
 
-// ========== LOGIN GOOGLE COM TELA INTERMEDIÁRIA ==========
-
+// GOOGLE COM TELA INTERMEDIÁRIA
 let googleUser = null;
 
 function loginWithGoogle() {
@@ -344,65 +344,44 @@ async function finalizarCadastroGoogle() {
     return;
   }
 
-  // Validação FINAL antes de gravar!
   if (await cpfJaExisteNoAirtable(cpf)) {
     alert("CPF já cadastrado!");
     return;
   }
 
   let perfis = [];
-  if (isCliente) perfis.push("cliente");
-  if (isCuidador) perfis.push("cuidador");
+  if (isCliente) perfis.push("Cliente / Familiar");
+  if (isCuidador) perfis.push("Cuidador");
+
+  let tabela = isCuidador ? "Cuidadores" : "Clientes";
   const fonteCadastro = detectarFonteCadastro(googleUser.email, true);
 
-  for (let perfil of perfis) {
-    await enviarUsuarioParaAirtable(googleUser, perfil, cpf, fonteCadastro);
-  }
+  await enviarUsuarioParaAirtable(googleUser, tabela, perfis, cpf, fonteCadastro);
 
   window.location.href = "pagina-homepage.html";
 }
-// ========== FIM NOVO FLUXO GOOGLE ==========
 
-async function enviarUsuarioParaAirtable(user, perfil, cpfParam, fonteCadastro) {
+// Agora grava só UMA VEZ, com os dois perfis se necessário!
+async function enviarUsuarioParaAirtable(user, tabela, perfis, cpfParam, fonteCadastro) {
   const uid = user.uid;
   const email = user.email || '';
   const nome = user.displayName || '';
   const cpf = cpfParam || '';
 
-  let tabela = '';
-  let fields = {};
-
-  // Validação ANTES de inserir (última defesa, nunca duplica)
   if (await cpfJaExisteNoAirtable(cpf)) {
     alert("CPF já cadastrado!");
     return;
   }
 
-  // Atenção aos nomes dos campos exatamente iguais ao Airtable!
-  if (perfil === 'cuidador') {
-    tabela = 'Cuidadores';
-    fields = {
-      "Nome Completo": nome,
-      "CPF": cpf,
-      "E-mail": email,
-      "Status": "Ativo",
-      "Fonte de cadastro": fonteCadastro,
-      "UID": uid,
-      "Perfil": ["Cuidador"]
-    };
-  } else if (perfil === 'cliente') {
-    tabela = 'Clientes';
-    fields = {
-      "Nome Completo": nome,
-      "CPF": cpf,
-      "E-mail": email,
-      "Fonte de cadastro": fonteCadastro,
-      "UID": uid,
-      "Perfil": ["Cliente / Familiar"]
-    };
-  } else {
-    return;
-  }
+  let fields = {
+    "Nome Completo": nome,
+    "CPF": cpf,
+    "E-mail": email,
+    "Fonte de cadastro": fonteCadastro,
+    "UID": uid,
+    "Perfil": perfis
+  };
+  if (tabela === "Cuidadores") fields["Status"] = "Ativo";
 
   await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
     method: 'POST',
@@ -425,7 +404,6 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam, fonteCadastro) 
   });
 }
 
-// ---- NÃO FAZ MAIS NADA NO onAuthStateChanged, só mostra tela de login se deslogar ----
 auth.onAuthStateChanged(async user => {
   if (!user) {
     document.getElementById('main-content').style.display = 'flex';
@@ -434,4 +412,8 @@ auth.onAuthStateChanged(async user => {
 </script>
 
 <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
-  <a href="termos_de_uso_cuide_me.html"
+  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
+  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
+</div>
+</body>
+</html>
