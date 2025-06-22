@@ -257,29 +257,69 @@ function loginWithEmail() {
     .catch(error => alert("Erro: " + error.message));
 }
 
+// ========== NOVO FLUXO PARA GOOGLE COM ESCOLHA DE PERFIL ==========
+let googleUser = null;
+
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
-    .then(async (result) => {
-      const user = result.user;
-      const userRef = db.collection("usuarios").doc(user.uid);
-      const userDoc = await userRef.get();
-      if (!userDoc.exists) {
-        await userRef.set({
-          nome: user.displayName || '',
-          email: user.email,
-          perfil: "familia",
-          fonteCadastro: "google"
-        });
-      } else if (!userDoc.data().fonteCadastro) {
-        await userRef.update({ fonteCadastro: "google" });
-      }
+    .then((result) => {
+      googleUser = result.user;
+      mostrarEscolhaPerfil();
     })
     .catch(error => alert("Erro com Google: " + error.message));
 }
 
+function mostrarEscolhaPerfil() {
+  document.getElementById("formSlide").innerHTML = `
+    <p>Qual seu perfil?</p>
+    <label style="display:block;margin:0.5rem 0;">
+      <input type="checkbox" id="perfil_cliente" /> Cliente
+    </label>
+    <label style="display:block;margin:0.5rem 0;">
+      <input type="checkbox" id="perfil_cuidador" /> Cuidador
+    </label>
+    <button class="cta-btn" onclick="finalizarCadastroGoogle()">Confirmar</button>
+  `;
+}
+
+async function finalizarCadastroGoogle() {
+  const isCliente = document.getElementById("perfil_cliente").checked;
+  const isCuidador = document.getElementById("perfil_cuidador").checked;
+
+  if (!isCliente && !isCuidador) {
+    alert("Escolha pelo menos um perfil.");
+    return;
+  }
+
+  // Você pode pedir CPF nesta etapa, se desejar. Exemplo:
+  // const cpf = prompt("Digite seu CPF:") || "";
+  // (ou criar um campo de input aqui mesmo)
+
+  const userRef = db.collection("usuarios").doc(googleUser.uid);
+  let perfis = [];
+  if (isCliente) perfis.push("familia");
+  if (isCuidador) perfis.push("cuidador");
+
+  await userRef.set({
+    nome: googleUser.displayName || '',
+    email: googleUser.email,
+    perfis: perfis,
+    fonteCadastro: "google"
+    // , cpf: cpf
+  });
+
+  // Envia para Airtable para cada perfil selecionado
+  for (let perfil of perfis) {
+    await enviarUsuarioParaAirtable(googleUser, perfil);
+  }
+
+  window.location.href = "pagina-homepage.html";
+}
+// ========== FIM NOVO FLUXO GOOGLE ==========
+
 const airtableBaseId = 'appVxCKjvJAah2r27';
-const airtableApiKey = 'SUA_API_KEY_AQUI'; // Coloque sua chave do Airtable
+const airtableApiKey = 'airtable.com/appVxCKjvJAah2r27'; // Coloque sua chave do Airtable
 
 async function enviarUsuarioParaAirtable(user, perfil) {
   let userDocData = {};
@@ -366,7 +406,7 @@ auth.onAuthStateChanged(async user => {
       const userDoc = await db.collection("usuarios").doc(user.uid).get();
       if (userDoc.exists) perfil = userDoc.data().perfil;
     } catch (e) {}
-    await enviarUsuarioParaAirtable(user, perfil);
+    // Não envia para Airtable de novo aqui, já foi enviado no fluxo Google/cadastro
     window.location.href = "pagina-homepage.html";
   } else {
     document.getElementById('main-content').style.display = 'flex';
