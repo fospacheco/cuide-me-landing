@@ -213,55 +213,83 @@ function renderCadastro() {
     </div>`;
 }
 
-// Função para checar se o CPF já existe em qualquer tabela
+// Função para extrair provedor do e-mail
+function getEmailProvider(email) {
+  if (!email || typeof email !== "string") return "email";
+  let parts = email.split("@");
+  if (parts.length !== 2) return "email";
+  let domain = parts[1].toLowerCase();
+  let provider = domain.split(".")[0];
+  return provider;
+}
+
+// Verifica duplicidade de CPF nas duas tabelas
 async function cpfJaCadastrado(cpf) {
-  const cpfNumeros = cpf.replace(/\D/g, '');
-  const bases = ['Cuidadores', 'Clientes'];
-  for (let base of bases) {
-    const res = await fetch(`https://api.airtable.com/v0/appVxCKjvJAah2r27/${base}?fields%5B%5D=CPF`, {
-      headers: { 'Authorization': `Bearer pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583` }
-    });
-    const data = await res.json();
-    if (data.records && data.records.length > 0) {
-      const existe = data.records.some(r => 
-        r.fields['CPF'] && r.fields['CPF'].replace(/\D/g, '') === cpfNumeros
-      );
-      if (existe) return true;
+  if (!cpf) return false;
+  const baseId = airtableBaseId;
+  const urlClientes = `https://api.airtable.com/v0/${baseId}/Clientes?filterByFormula={CPF}='${cpf}'`;
+  const urlCuidadores = `https://api.airtable.com/v0/${baseId}/Cuidadores?filterByFormula={CPF}='${cpf}'`;
+  const headers = {
+    'Authorization': `Bearer ${airtableApiKey}`,
+    'Content-Type': 'application/json'
+  };
+  try {
+    const [resClientes, resCuidadores] = await Promise.all([
+      fetch(urlClientes, { headers }),
+      fetch(urlCuidadores, { headers })
+    ]);
+    const dataClientes = await resClientes.json();
+    const dataCuidadores = await resCuidadores.json();
+    if ((dataClientes.records && dataClientes.records.length > 0) ||
+        (dataCuidadores.records && dataCuidadores.records.length > 0)) {
+      return true;
     }
+    return false;
+  } catch (err) {
+    console.error('Erro na verificação de CPF:', err);
+    return false; // Não bloqueia por erro de conexão
   }
-  return false;
 }
 
 async function cadastrarUsuario() {
-  const nome = document.getElementById("nome").value;
+  const nome = document.getElementById("nome").value.trim();
   const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
-  const email = document.getElementById("email").value;
+  const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const isCliente = document.getElementById("perfil_cliente").checked;
   const isCuidador = document.getElementById("perfil_cuidador").checked;
 
-  if (!isCliente && !isCuidador) {
-    alert("Escolha pelo menos um perfil.");
+  if (!nome || !cpf || !email || !password || (!isCliente && !isCuidador)) {
+    alert("Preencha todos os campos e escolha ao menos um perfil.");
     return;
   }
 
-  if (!cpf || cpf.length < 11) {
+  if (cpf.length < 11) {
     alert("Digite um CPF válido.");
-    document.getElementById("cpf").focus();
     return;
   }
 
   if (await cpfJaCadastrado(cpf)) {
-    alert("CPF já cadastrado. Faça login ou use outro CPF.");
+    alert("CPF já cadastrado!");
     return;
   }
 
+  let perfis = [];
+  if (isCliente) perfis.push("Cliente / Familiar");
+  if (isCuidador) perfis.push("Cuidador");
+
   auth.createUserWithEmailAndPassword(email, password)
     .then(async (cred) => {
-      let perfis = [];
-      if (isCliente) perfis.push("Cliente / Familiar");
-      if (isCuidador) perfis.push("Cuidador");
-      await enviarUsuarioParaAirtable({uid: cred.user.uid, email: email, displayName: nome}, perfis, cpf, "email");
+      await enviarUsuarioParaAirtable(
+        {
+          uid: cred.user.uid,
+          email: email,
+          displayName: nome
+        },
+        perfis,
+        cpf,
+        getEmailProvider(email)
+      );
       window.location.href = "pagina-homepage.html";
     })
     .catch(error => alert("Erro ao cadastrar: " + error.message));
@@ -318,9 +346,8 @@ async function finalizarCadastroGoogle() {
     document.getElementById("cpf_google").focus();
     return;
   }
-
   if (await cpfJaCadastrado(cpf)) {
-    alert("CPF já cadastrado. Faça login ou use outro CPF.");
+    alert("CPF já cadastrado!");
     return;
   }
 
@@ -329,7 +356,6 @@ async function finalizarCadastroGoogle() {
   if (isCuidador) perfis.push("Cuidador");
 
   await enviarUsuarioParaAirtable(googleUser, perfis, cpf, "google");
-
   window.location.href = "pagina-homepage.html";
 }
 // ========== FIM NOVO FLUXO GOOGLE ==========
@@ -337,48 +363,73 @@ async function finalizarCadastroGoogle() {
 const airtableBaseId = 'appVxCKjvJAah2r27';
 const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583'; // Sua chave secreta
 
-async function enviarUsuarioParaAirtable(user, perfis, cpfParam, fonte) {
+async function enviarUsuarioParaAirtable(user, perfis, cpfParam, fonteCadastro) {
   const uid = user.uid;
   const email = user.email || '';
   const nome = user.displayName || '';
   const cpf = cpfParam || '';
+  // Campo Perfil multiplo
+  const perfilArray = Array.isArray(perfis) ? perfis : [perfis];
 
-  // Sempre salva sem máscara
-  let fields = {
-    "Nome Completo": nome,
-    "CPF": cpf,
-    "E-mail": email,
-    "Perfil": perfis,
-    "Fonte de cadastro": fonte,
-    "UID": uid
-  };
+  // Cadastra como Cliente se for Cliente / Familiar, como Cuidador se for Cuidador (pode ser ambos!)
+  let promises = [];
 
-  // Decide tabela (Cuidadores ou Clientes)
-  if (perfis.includes("Cuidador")) {
-    // Cuidadores
-    let fieldsCuidador = {...fields};
-    fieldsCuidador["Status"] = "Ativo";
-    await fetch(`https://api.airtable.com/v0/${airtableBaseId}/Cuidadores`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${airtableApiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({fields: fieldsCuidador})
-    });
+  if (perfilArray.includes("Cliente / Familiar")) {
+    let fieldsCliente = {
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Fonte de cadastro": fonteCadastro,
+      "UID": uid,
+      "Perfil": ["Cliente / Familiar"]
+    };
+    promises.push(
+      fetch(`https://api.airtable.com/v0/${airtableBaseId}/Clientes`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${airtableApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({fields: fieldsCliente})
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          alert('Airtable erro: ' + data.error.message);
+          console.error('Airtable error:', data.error);
+        }
+      })
+    );
   }
-  if (perfis.includes("Cliente / Familiar")) {
-    // Clientes
-    let fieldsCliente = {...fields};
-    await fetch(`https://api.airtable.com/v0/${airtableBaseId}/Clientes`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${airtableApiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({fields: fieldsCliente})
-    });
+
+  if (perfilArray.includes("Cuidador")) {
+    let fieldsCuidador = {
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Fonte de cadastro": fonteCadastro,
+      "UID": uid,
+      "Perfil": ["Cuidador"]
+    };
+    promises.push(
+      fetch(`https://api.airtable.com/v0/${airtableBaseId}/Cuidadores`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${airtableApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({fields: fieldsCuidador})
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          alert('Airtable erro: ' + data.error.message);
+          console.error('Airtable error:', data.error);
+        }
+      })
+    );
   }
+  await Promise.all(promises);
 }
 
 // ---- NÃO FAZ MAIS NADA NO onAuthStateChanged, só mostra tela de login se deslogar ----
