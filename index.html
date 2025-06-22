@@ -150,7 +150,7 @@
     <a onclick="mostrarFormulario()">Acessar</a>
   </div>
   <div class="right">
-    <img src="logo_cuide_me.png" alt="Logo Cuide-me" />
+    <img src="logo_cuide_me.png" alt="Logo Cuide-Me" />
     <div id="formSlide" class="form-overlay"></div>
   </div>
 </div>
@@ -171,11 +171,28 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
+const airtableBaseId = 'appVxCKjvJAah2r27';
+const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583';
+
+// ---- CHECAGEM DE CPF DUPLICADO NO AIRTABLE ----
+async function cpfDuplicadoNoAirtable(cpf) {
+  const headers = { 'Authorization': `Bearer ${airtableApiKey}` };
+  let urlClientes = `https://api.airtable.com/v0/${airtableBaseId}/Clientes?filterByFormula={CPF}="${cpf}"`;
+  let urlCuidadores = `https://api.airtable.com/v0/${airtableBaseId}/Cuidadores?filterByFormula={CPF}="${cpf}"`;
+  let resClientes = await fetch(urlClientes, { headers });
+  let dataClientes = await resClientes.json();
+  if (dataClientes.records && dataClientes.records.length > 0) return true;
+  let resCuidadores = await fetch(urlCuidadores, { headers });
+  let dataCuidadores = await resCuidadores.json();
+  if (dataCuidadores.records && dataCuidadores.records.length > 0) return true;
+  return false;
+}
+
 window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('splash-screen').style.display = 'none';
     document.getElementById('main-content').style.display = 'flex';
-  }, 1500);
+  }, 1200);
 });
 
 function mostrarFormulario() {
@@ -195,15 +212,17 @@ function renderLogin() {
       <a style="color: var(--primary); cursor:pointer;" onclick="renderCadastro()">Crie aqui</a>
     </div>`;
 }
+
 function renderCadastro() {
   document.getElementById("formSlide").innerHTML = `
     <input id="nome" type="text" placeholder="Nome completo" required />
     <input id="cpf" type="text" placeholder="CPF" required maxlength="14" />
     <input id="email" type="email" placeholder="E-mail" required />
     <input id="password" type="password" placeholder="Senha" required />
-    <div>
-      <label><input type="checkbox" id="perfil_cliente" /> Cliente / Familiar</label>
-      <label><input type="checkbox" id="perfil_cuidador" /> Cuidador</label>
+    <div style="text-align:left;width:100%;max-width:250px;margin:0 auto 1rem;">
+      <span>Escolha o(s) perfil(is):</span><br>
+      <input type="checkbox" id="perfil_cliente" /> Cliente / Familiar<br>
+      <input type="checkbox" id="perfil_cuidador" /> Cuidador
     </div>
     <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
     <div class="toggle-text">Já tem uma conta?
@@ -211,63 +230,100 @@ function renderCadastro() {
     </div>`;
 }
 
-// Airtable
-const airtableBaseId = 'appVxCKjvJAah2r27';
-const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583';
-
-// Checar duplicidade de CPF
-async function cpfDuplicadoNoAirtable(cpf) {
-  let urlClientes = `https://api.airtable.com/v0/${airtableBaseId}/Clientes?filterByFormula={CPF}="${cpf}"`;
-  let urlCuidadores = `https://api.airtable.com/v0/${airtableBaseId}/Cuidadores?filterByFormula={CPF}="${cpf}"`;
-
-  let headers = { 'Authorization': `Bearer ${airtableApiKey}` };
-
-  let resClientes = await fetch(urlClientes, { headers });
-  let dataClientes = await resClientes.json();
-
-  if (dataClientes.records && dataClientes.records.length > 0) return true;
-
-  let resCuidadores = await fetch(urlCuidadores, { headers });
-  let dataCuidadores = await resCuidadores.json();
-
-  if (dataCuidadores.records && dataCuidadores.records.length > 0) return true;
-
-  return false;
-}
-
 async function cadastrarUsuario() {
-  const nome = document.getElementById("nome").value;
+  const nome = document.getElementById("nome").value.trim();
   const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
-  const email = document.getElementById("email").value;
+  const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const isCliente = document.getElementById("perfil_cliente").checked;
   const isCuidador = document.getElementById("perfil_cuidador").checked;
 
-  // Checagem de perfil obrigatório
-  if (!isCliente && !isCuidador) {
-    alert("Escolha pelo menos um perfil.");
+  let perfis = [];
+  if (isCliente) perfis.push("Cliente / Familiar");
+  if (isCuidador) perfis.push("Cuidador");
+
+  if (!nome || !cpf || !email || !password || perfis.length === 0) {
+    alert("Preencha todos os campos e selecione pelo menos um perfil!");
+    return;
+  }
+  if (cpf.length < 11) {
+    alert("Digite um CPF válido.");
     return;
   }
 
-  // Checagem de duplicidade de CPF
+  // Verifica CPF duplicado
   if (await cpfDuplicadoNoAirtable(cpf)) {
-    alert("CPF já cadastrado! Use outro CPF ou faça login.");
+    alert("CPF já cadastrado!");
     return;
   }
 
+  // Só tenta criar usuário Firebase SE CPF é inédito
   auth.createUserWithEmailAndPassword(email, password)
     .then(async (cred) => {
-      let perfis = [];
-      if (isCliente) perfis.push("Cliente / Familiar");
-      if (isCuidador) perfis.push("Cuidador");
-
-      // Salva uma vez só no Airtable, com ambos perfis se for o caso
-      await enviarUsuarioParaAirtable({uid: cred.user.uid, email: email, displayName: nome}, perfis, cpf, "email");
+      await enviarUsuarioParaAirtableCadastro({uid: cred.user.uid, email, displayName: nome}, perfis, cpf);
       window.location.href = "pagina-homepage.html";
     })
     .catch(error => {
-      alert("Erro ao cadastrar: " + error.message);
+      if (error.code && error.code.includes("email-already-in-use")) {
+        alert("E-mail já cadastrado.");
+      } else {
+        alert("Erro ao cadastrar: " + error.message);
+      }
     });
+}
+
+// Cadastro no Airtable com múltiplos perfis
+async function enviarUsuarioParaAirtableCadastro(user, perfis, cpf) {
+  const uid = user.uid;
+  const email = user.email || '';
+  const nome = user.displayName || '';
+
+  // O campo Perfil é multiple select, então envia todos perfis de uma vez
+  // Se tiver "Cuidador", cadastra na tabela Cuidadores; se tiver Cliente, na tabela Clientes
+  if (perfis.includes("Cuidador")) {
+    await enviarParaAirtable('Cuidadores', {
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Status": "ativo",
+      "Fonte de cadastro": "email",
+      "UID": uid,
+      "Perfil": perfis.includes("Cliente / Familiar") ? ["Cuidador", "Cliente / Familiar"] : ["Cuidador"]
+    });
+  }
+  if (perfis.includes("Cliente / Familiar")) {
+    await enviarParaAirtable('Clientes', {
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Fonte de cadastro": "email",
+      "UID": uid,
+      "Perfil": perfis.includes("Cuidador") ? ["Cliente / Familiar", "Cuidador"] : ["Cliente / Familiar"]
+    });
+  }
+}
+
+// Utilitário para envio ao Airtable
+async function enviarParaAirtable(tabela, fields) {
+  await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${airtableApiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({fields})
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      alert('Airtable erro: ' + data.error.message);
+      console.error('Airtable error:', data.error);
+    }
+  })
+  .catch(err => {
+      alert('Erro geral: ' + err.message);
+      console.error('Erro geral:', err);
+  });
 }
 
 function loginWithEmail() {
@@ -281,6 +337,7 @@ function loginWithEmail() {
 }
 
 // ========== LOGIN GOOGLE COM TELA INTERMEDIÁRIA ==========
+
 let googleUser = null;
 
 function loginWithGoogle() {
@@ -288,19 +345,19 @@ function loginWithGoogle() {
   auth.signInWithPopup(provider)
     .then((result) => {
       googleUser = result.user;
-      mostrarEscolhaPerfil();
+      mostrarEscolhaPerfilGoogle();
     })
     .catch(error => alert("Erro com Google: " + error.message));
 }
 
-function mostrarEscolhaPerfil() {
+function mostrarEscolhaPerfilGoogle() {
   document.getElementById("formSlide").innerHTML = `
     <p style="font-size:1.3rem;margin-bottom:1rem;">Qual seu perfil?</p>
     <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
-      <input type="checkbox" id="perfil_cliente" /> Cliente / Familiar
+      <input type="checkbox" id="perfil_cliente_g" /> Cliente / Familiar
     </label>
     <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
-      <input type="checkbox" id="perfil_cuidador" /> Cuidador
+      <input type="checkbox" id="perfil_cuidador_g" /> Cuidador
     </label>
     <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" style="margin:1rem 0; padding:0.5rem; border-radius:8px; border:1px solid #42c2d3; width:200px; font-size:1rem;" required />
     <button class="cta-btn" style="margin-top:1.3rem;" onclick="finalizarCadastroGoogle()">Confirmar</button>
@@ -308,11 +365,15 @@ function mostrarEscolhaPerfil() {
 }
 
 async function finalizarCadastroGoogle() {
-  const isCliente = document.getElementById("perfil_cliente").checked;
-  const isCuidador = document.getElementById("perfil_cuidador").checked;
+  const isCliente = document.getElementById("perfil_cliente_g").checked;
+  const isCuidador = document.getElementById("perfil_cuidador_g").checked;
   const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
 
-  if (!isCliente && !isCuidador) {
+  let perfis = [];
+  if (isCliente) perfis.push("Cliente / Familiar");
+  if (isCuidador) perfis.push("Cuidador");
+
+  if (perfis.length === 0) {
     alert("Escolha pelo menos um perfil.");
     return;
   }
@@ -322,64 +383,35 @@ async function finalizarCadastroGoogle() {
     return;
   }
 
-  // Checagem de duplicidade de CPF
+  // Checa CPF duplicado (também para Google)
   if (await cpfDuplicadoNoAirtable(cpf)) {
-    alert("CPF já cadastrado! Use outro CPF ou faça login.");
+    alert("CPF já cadastrado!");
     return;
   }
 
-  let perfis = [];
-  if (isCliente) perfis.push("Cliente / Familiar");
-  if (isCuidador) perfis.push("Cuidador");
-
-  await enviarUsuarioParaAirtable(googleUser, perfis, cpf, "google");
-  window.location.href = "pagina-homepage.html";
-}
-// ========== FIM NOVO FLUXO GOOGLE ==========
-
-async function enviarUsuarioParaAirtable(user, perfis, cpf, fonteCadastro) {
-  const uid = user.uid;
-  const email = user.email || '';
-  const nome = user.displayName || '';
-  const cpfFinal = cpf || '';
-
-  // Cliente / Familiar e Cuidador podem ser juntos ou separados!
-  // Registra uma vez só com todos perfis marcados.
-  let tabela = (perfis.includes("Cuidador")) ? "Cuidadores" : "Clientes";
-  if (perfis.includes("Cliente / Familiar")) tabela = "Clientes";
-  // Se marcar os dois, tanto faz, cadastra igual nas duas. Pode ajustar se quiser só um local!
-
-  let fields = {
-    "Nome Completo": nome,
-    "CPF": cpfFinal,
-    "E-mail": email,
-    "Perfil": perfis,
-    "Fonte de cadastro": fonteCadastro,
-    "UID": uid
-  };
-
-  // Clientes
-  if (perfis.includes("Cliente / Familiar")) {
-    await fetch(`https://api.airtable.com/v0/${airtableBaseId}/Clientes`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${airtableApiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({fields})
-    });
-  }
-  // Cuidadores
+  // Mesma lógica: joga para as duas tabelas, conforme perfil
   if (perfis.includes("Cuidador")) {
-    await fetch(`https://api.airtable.com/v0/${airtableBaseId}/Cuidadores`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${airtableApiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({fields})
+    await enviarParaAirtable('Cuidadores', {
+      "Nome Completo": googleUser.displayName || "",
+      "CPF": cpf,
+      "E-mail": googleUser.email,
+      "Status": "ativo",
+      "Fonte de cadastro": "google",
+      "UID": googleUser.uid,
+      "Perfil": perfis.includes("Cliente / Familiar") ? ["Cuidador", "Cliente / Familiar"] : ["Cuidador"]
     });
   }
+  if (perfis.includes("Cliente / Familiar")) {
+    await enviarParaAirtable('Clientes', {
+      "Nome Completo": googleUser.displayName || "",
+      "CPF": cpf,
+      "E-mail": googleUser.email,
+      "Fonte de cadastro": "google",
+      "UID": googleUser.uid,
+      "Perfil": perfis.includes("Cuidador") ? ["Cliente / Familiar", "Cuidador"] : ["Cliente / Familiar"]
+    });
+  }
+  window.location.href = "pagina-homepage.html";
 }
 
 // ---- NÃO FAZ MAIS NADA NO onAuthStateChanged, só mostra tela de login se deslogar ----
