@@ -254,7 +254,7 @@ function mostrarEscolhaPerfil() {
   document.getElementById("formSlide").innerHTML = `
     <p style="font-size:1.3rem;margin-bottom:1rem;">Qual seu perfil?</p>
     <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
-      <input type="checkbox" id="perfil_cliente" /> Cliente / Familiar
+      <input type="checkbox" id="perfil_cliente" /> Cliente
     </label>
     <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
       <input type="checkbox" id="perfil_cuidador" /> Cuidador
@@ -310,7 +310,7 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
       "Nome Completo": nome,
       "CPF": cpf,
       "E-mail": email,
-      "Status": "Disponível",
+      "Status": "ativo",
       "Fonte de cadastro": "google",
       "UID": uid
     };
