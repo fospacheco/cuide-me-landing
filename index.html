@@ -253,4 +253,123 @@ function loginWithGoogle() {
 function mostrarEscolhaPerfil() {
   document.getElementById("formSlide").innerHTML = `
     <p style="font-size:1.3rem;margin-bottom:1rem;">Qual seu perfil?</p>
-    <label style="display:block;margin:0.5rem 0;font-size:1
+    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
+      <input type="checkbox" id="perfil_cliente" /> Cliente
+    </label>
+    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
+      <input type="checkbox" id="perfil_cuidador" /> Cuidador
+    </label>
+    <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" style="margin:1rem 0; padding:0.5rem; border-radius:8px; border:1px solid #42c2d3; width:200px; font-size:1rem;" required />
+    <button class="cta-btn" style="margin-top:1.3rem;" onclick="finalizarCadastroGoogle()">Confirmar</button>
+  `;
+}
+
+async function finalizarCadastroGoogle() {
+  const isCliente = document.getElementById("perfil_cliente").checked;
+  const isCuidador = document.getElementById("perfil_cuidador").checked;
+  const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
+
+  if (!isCliente && !isCuidador) {
+    alert("Escolha pelo menos um perfil.");
+    return;
+  }
+  if (!cpf || cpf.length < 11) {
+    alert("Digite um CPF válido.");
+    document.getElementById("cpf_google").focus();
+    return;
+  }
+
+  let perfis = [];
+  if (isCliente) perfis.push("familia");
+  if (isCuidador) perfis.push("cuidador");
+
+  // Só envia para Airtable, não salva no Firestore!
+  for (let perfil of perfis) {
+    await enviarUsuarioParaAirtable(googleUser, perfil, cpf);
+  }
+
+  window.location.href = "pagina-homepage.html";
+}
+// ========== FIM NOVO FLUXO GOOGLE ==========
+
+const airtableBaseId = 'appVxCKjvJAah2r27';
+const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583'; // Sua chave secreta
+
+async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
+  const uid = user.uid;
+  const email = user.email || '';
+  const nome = user.displayName || '';
+  const cpf = cpfParam || '';
+
+  let tabela = '';
+  let fields = {};
+
+  if (perfil === 'cuidador') {
+    tabela = 'Cuidadores';
+    fields = {
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Status": "ativo",
+      "Fonte de cadastro": "google",
+      "UID": uid
+    };
+  } else if (perfil === 'familia') {
+    tabela = 'Clientes';
+    fields = {
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Fonte de cadastro": "google",
+      "UID": uid
+    };
+  } else if (perfil === 'instituicao') {
+    tabela = 'Clientes';
+    fields = {
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Fonte de cadastro": "google",
+      "UID": uid
+    };
+  } else {
+    return;
+  }
+
+  await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${airtableApiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({fields})
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      alert('Airtable erro: ' + data.error.message);
+      console.error('Airtable error:', data.error);
+    } else {
+      // alert('Cadastro realizado no Airtable!'); // pode remover para não aparecer popup
+    }
+  })
+  .catch(err => {
+      alert('Erro geral: ' + err.message);
+      console.error('Erro geral:', err);
+  });
+}
+
+// ---- NÃO FAZ MAIS NADA NO onAuthStateChanged, só mostra tela de login se deslogar ----
+auth.onAuthStateChanged(async user => {
+  if (!user) {
+    document.getElementById('main-content').style.display = 'flex';
+  }
+});
+</script>
+
+<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
+  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
+  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
+</div>
+</body>
+</html>
