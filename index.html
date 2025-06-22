@@ -253,13 +253,12 @@ function loginWithEmail() {
       if (userDoc.exists && !userDoc.data().fonteCadastro) {
         await userRef.update({ fonteCadastro: "email" });
       }
-      // Redirecionamento só após login
       window.location.href = "pagina-homepage.html";
     })
     .catch(error => alert("Erro: " + error.message));
 }
 
-// ========== NOVO FLUXO PARA GOOGLE COM ESCOLHA DE PERFIL ==========
+// ========== NOVO FLUXO PARA GOOGLE COM ESCOLHA DE PERFIL + CPF ==========
 let googleUser = null;
 
 function loginWithGoogle() {
@@ -274,23 +273,37 @@ function loginWithGoogle() {
 
 function mostrarEscolhaPerfil() {
   document.getElementById("formSlide").innerHTML = `
-    <p>Qual seu perfil?</p>
-    <label style="display:block;margin:0.5rem 0;">
+    <p style="font-size:1.3rem;margin-bottom:1rem;">Qual seu perfil?</p>
+    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
       <input type="checkbox" id="perfil_cliente" /> Cliente
     </label>
-    <label style="display:block;margin:0.5rem 0;">
+    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
       <input type="checkbox" id="perfil_cuidador" /> Cuidador
     </label>
-    <button class="cta-btn" onclick="finalizarCadastroGoogle()">Confirmar</button>
+    <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" style="margin:1rem 0; padding:0.5rem; border-radius:8px; border:1px solid #42c2d3; width:200px; font-size:1rem;" required />
+    <button class="cta-btn" style="margin-top:1.3rem;" onclick="finalizarCadastroGoogle()">Confirmar</button>
   `;
 }
 
 async function finalizarCadastroGoogle() {
   const isCliente = document.getElementById("perfil_cliente").checked;
   const isCuidador = document.getElementById("perfil_cuidador").checked;
+  const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
 
   if (!isCliente && !isCuidador) {
     alert("Escolha pelo menos um perfil.");
+    return;
+  }
+  if (!cpf || cpf.length < 11) {
+    alert("Digite um CPF válido.");
+    document.getElementById("cpf_google").focus();
+    return;
+  }
+
+  // Checar duplicidade de CPF (Firestore)
+  const cpfSnap = await db.collection("usuarios").where("cpf", "==", cpf).get();
+  if (!cpfSnap.empty) {
+    alert("CPF já cadastrado! Use outro CPF.");
     return;
   }
 
@@ -302,13 +315,14 @@ async function finalizarCadastroGoogle() {
   await userRef.set({
     nome: googleUser.displayName || '',
     email: googleUser.email,
+    cpf: cpf,
     perfis: perfis,
     fonteCadastro: "google"
   });
 
   // Envia para Airtable para cada perfil selecionado
   for (let perfil of perfis) {
-    await enviarUsuarioParaAirtable(googleUser, perfil);
+    await enviarUsuarioParaAirtable(googleUser, perfil, cpf);
   }
 
   window.location.href = "pagina-homepage.html";
@@ -318,21 +332,19 @@ async function finalizarCadastroGoogle() {
 const airtableBaseId = 'appVxCKjvJAah2r27';
 const airtableApiKey = 'SUA_API_KEY_AQUI'; // Coloque sua chave do Airtable
 
-async function enviarUsuarioParaAirtable(user, perfil) {
+async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
   let userDocData = {};
   try {
     const userDoc = await db.collection("usuarios").doc(user.uid).get();
     if (userDoc.exists) {
       userDocData = userDoc.data();
     }
-  } catch(e) {
-    console.log("Erro ao buscar Firestore:", e);
-  }
+  } catch(e) {}
 
   const uid = user.uid;
   const email = user.email || userDocData.email || '';
   const nome = user.displayName || userDocData.nome || '';
-  const cpf = userDocData.cpf || '';
+  const cpf = cpfParam || userDocData.cpf || '';
   const dataCadastro = new Date().toISOString();
   const fonteCadastro = userDocData.fonteCadastro || '';
 
@@ -397,13 +409,10 @@ async function enviarUsuarioParaAirtable(user, perfil) {
 
 // ---- ATENÇÃO! Aqui está o bloco corrigido! ----
 auth.onAuthStateChanged(async user => {
-  if (user) {
-    document.getElementById('main-content').style.display = 'none';
-    // NÃO redireciona para homepage aqui!
-    // O redirecionamento acontece APENAS depois de escolher perfil (ou finalizar cadastro)!
-  } else {
+  if (!user) {
     document.getElementById('main-content').style.display = 'flex';
   }
+  // Não faz nada ao logar, só libera interface para quem não está logado!
 });
 </script>
 
