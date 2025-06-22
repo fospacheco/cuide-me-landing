@@ -228,6 +228,14 @@ document.addEventListener('input', function(e) {
   }
 });
 
+// Função para extrair o provedor do e-mail
+function extrairProvedor(email) {
+  if (!email) return '';
+  let provedor = email.split('@')[1] || '';
+  provedor = provedor.split('.')[0];
+  return provedor.toLowerCase();
+}
+
 async function cadastrarUsuario() {
   const nome = document.getElementById("nome").value;
   const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
@@ -382,6 +390,9 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
   const nome = user.displayName || '';
   const cpf = cpfParam || '';
 
+  // Extrai o provedor do e-mail para a fonte de cadastro
+  const fonteCadastro = extrairProvedor(email);
+
   let tabela = '';
   let fields = {};
 
@@ -392,7 +403,7 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
       "CPF": cpf,
       "E-mail": email,
       "Status": "Disponível",
-      "Fonte de cadastro": "google",
+      "Fonte de cadastro": fonteCadastro,
       "UID": uid
     };
   } else if (perfil === 'familia') {
@@ -401,7 +412,7 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
       "Nome Completo": nome,
       "CPF": cpf,
       "E-mail": email,
-      "Fonte de cadastro": "google",
+      "Fonte de cadastro": fonteCadastro,
       "UID": uid
     };
   } else {
@@ -437,8 +448,4 @@ auth.onAuthStateChanged(async user => {
 </script>
 
 <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
-  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
-  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
-</div>
-</body>
-</html>
+  <a href="termos_de_uso
