@@ -277,26 +277,38 @@ function loginWithEmail() {
     .catch(error => alert("Erro: " + error.message));
 }
 
-// ========== LOGIN GOOGLE COM FLUXO AJUSTADO ==========
+// ========== LOGIN GOOGLE COM BUSCA POR E-MAIL ==========
 let googleUser = null;
 
-function loginWithGoogle() {
+async function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
-  auth.signInWithPopup(provider)
-    .then(async (result) => {
-      googleUser = result.user;
-      const uid = googleUser.uid;
-      const email = googleUser.email;
-      // Checa UID ou E-mail em AMBAS as tabelas
-      const existeCliente = await checarExistenciaAirtableUidEmail(uid, email, 'familia');
-      const existeCuidador = await checarExistenciaAirtableUidEmail(uid, email, 'cuidador');
-      if (existeCliente || existeCuidador) {
-        window.location.href = "pagina-homepage.html";
-      } else {
-        mostrarEscolhaPerfil();
-      }
-    })
-    .catch(error => alert("Erro com Google: " + error.message));
+  try {
+    const result = await auth.signInWithPopup(provider);
+    googleUser = result.user;
+    const email = googleUser.email;
+
+    // Busca o e-mail nas duas tabelas
+    const existeCliente = await checarExistenciaAirtablePorEmail(email, 'familia');
+    const existeCuidador = await checarExistenciaAirtablePorEmail(email, 'cuidador');
+
+    if (existeCliente || existeCuidador) {
+      window.location.href = "pagina-homepage.html";
+    } else {
+      mostrarEscolhaPerfil();
+    }
+  } catch (error) {
+    alert("Erro com Google: " + error.message);
+  }
+}
+
+async function checarExistenciaAirtablePorEmail(email, perfil) {
+  let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
+  const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula={E-mail}='${email}'`;
+  const response = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+  });
+  const data = await response.json();
+  return data.records && data.records.length > 0;
 }
 
 function mostrarEscolhaPerfil() {
@@ -345,19 +357,6 @@ async function finalizarCadastroGoogle() {
 // ===== Airtable ======
 const airtableBaseId = 'appVxCKjvJAah2r27';
 const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583';
-
-// Checa por UID ou e-mail (antes de pedir CPF)
-async function checarExistenciaAirtableUidEmail(uid, email, perfil) {
-  let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
-  let filtro = [`{UID}='${uid}'`];
-  if (email) filtro.push(`{E-mail}='${email}'`);
-  const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=OR(${filtro.join(",")})`;
-  const response = await fetch(url, {
-    headers: { 'Authorization': `Bearer ${airtableApiKey}` }
-  });
-  const data = await response.json();
-  return data.records && data.records.length > 0;
-}
 
 // Checa por UID, e-mail ou CPF (após informar CPF)
 async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
