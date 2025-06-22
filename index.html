@@ -90,11 +90,12 @@
       font-weight: bold;
       border: none;
       cursor: pointer;
-      font-size: 1rem;
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
     }
     .social-text {
       font-weight: 500;
-      font-size: 0.95rem;
+      font-size: 1rem;
       margin-top: 1rem;
     }
     .social-icons {
@@ -121,8 +122,32 @@
       max-width: 220px;
       animation: pulse 1.5s infinite ease-in-out;
     }
-
-    /* Ajustes de acessibilidade Google */
+    /* Inputs iguais ao exemplo enviado */
+    input[type="email"],
+    input[type="password"],
+    input[type="text"],
+    input[type="number"],
+    select {
+      width: 320px;
+      max-width: 90vw;
+      font-size: 1.18rem;
+      padding: 0.7rem 1rem;
+      border: 1.5px solid #b3c5cf;
+      border-radius: 5px;
+      background: #eaf1fa;
+      color: #245063;
+      margin-bottom: 1.1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="email"]:focus,
+    input[type="password"]:focus,
+    input[type="text"]:focus,
+    input[type="number"]:focus {
+      border-color: #42c2d3;
+      background: #f3fbfd;
+    }
+    /* Google especial: */
     .perfil-checkboxes-google {
       display: flex;
       gap: 2rem;
@@ -146,14 +171,15 @@
     }
     #cpf_google {
       width: 320px !important;
-      font-size: 1.3rem !important;
-      padding: 1.1rem 1rem !important;
-      border-radius: 12px !important;
-      border: 2px solid #42c2d3 !important;
+      font-size: 1.18rem !important;
+      padding: 0.7rem 1rem !important;
+      border-radius: 5px !important;
+      border: 1.5px solid #b3c5cf !important;
+      background: #eaf1fa;
+      color: #245063;
+      margin-bottom: 1.1rem !important;
       text-align: center !important;
       letter-spacing: 2px !important;
-      margin-bottom: 1.4rem !important;
-      background: #f7fcfd;
     }
     .google-icon-big {
       width: 70px !important;
@@ -180,10 +206,14 @@
       .form-overlay {
         padding: 2rem;
       }
-      #cpf_google {
-        width: 90vw !important;
+      #cpf_google,
+      input[type="email"],
+      input[type="password"],
+      input[type="text"],
+      input[type="number"] {
+        width: 98vw !important;
         min-width: 180px !important;
-        font-size: 1.1rem !important;
+        font-size: 1rem !important;
       }
       .google-icon-big {
         width: 54px !important;
@@ -523,6 +553,9 @@ auth.onAuthStateChanged(async user => {
 });
 </script>
 
+<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
+  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
+  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
 </div>
 </body>
 </html>
