@@ -181,17 +181,6 @@ window.addEventListener('load', () => {
   }, 1500);
 });
 
-// Redireciona se já está logado
-// e mostra/oculta a tela conforme o estado da autenticação
-auth.onAuthStateChanged(user => {
-  if (user) {
-    document.getElementById('main-content').style.display = 'none';
-    window.location.href = "pagina-homepage.html";
-  } else {
-    document.getElementById('main-content').style.display = 'flex';
-  }
-});
-
 function mostrarFormulario() {
   document.getElementById("formSlide").classList.add("active");
   renderLogin();
@@ -212,6 +201,7 @@ function renderLogin() {
 function renderCadastro() {
   document.getElementById("formSlide").innerHTML = `
     <input id="nome" type="text" placeholder="Nome completo" required />
+    <input id="cpf" type="text" placeholder="CPF" required maxlength="14" />
     <input id="email" type="email" placeholder="E-mail" required />
     <input id="password" type="password" placeholder="Senha" required />
     <select id="perfil">
@@ -224,47 +214,164 @@ function renderCadastro() {
       <a style="color: var(--primary); cursor:pointer;" onclick="renderLogin()">Faça login</a>
     </div>`;
 }
-function loginWithEmail() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  auth.signInWithEmailAndPassword(email, password)
-    .catch(error => alert("Erro: " + error.message));
-  // Redireciona via onAuthStateChanged!
-}
+
 function cadastrarUsuario() {
   const nome = document.getElementById("nome").value;
+  const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const perfil = document.getElementById("perfil").value;
 
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(cred => {
-      return db.collection("usuarios").doc(cred.user.uid).set({
-        nome,
-        email,
-        perfil
-      });
+  db.collection("usuarios").where("cpf", "==", cpf).get()
+    .then(snapshot => {
+      if (!snapshot.empty) {
+        alert("CPF já cadastrado! Use outro CPF ou faça login.");
+        return;
+      }
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(cred => {
+          return db.collection("usuarios").doc(cred.user.uid).set({
+            nome,
+            cpf,
+            email,
+            perfil,
+            fonteCadastro: "email"
+          });
+        })
+        .catch(error => alert("Erro ao cadastrar: " + error.message));
     })
-    .catch(error => alert("Erro ao cadastrar: " + error.message));
-  // Redireciona via onAuthStateChanged!
+    .catch(error => alert("Erro ao verificar CPF: " + error.message));
 }
+
+function loginWithEmail() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(async (cred) => {
+      const userRef = db.collection("usuarios").doc(cred.user.uid);
+      const userDoc = await userRef.get();
+      if (userDoc.exists && !userDoc.data().fonteCadastro) {
+        await userRef.update({ fonteCadastro: "email" });
+      }
+    })
+    .catch(error => alert("Erro: " + error.message));
+}
+
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
     .then(async (result) => {
       const user = result.user;
-      const userDoc = await db.collection("usuarios").doc(user.uid).get();
+      const userRef = db.collection("usuarios").doc(user.uid);
+      const userDoc = await userRef.get();
       if (!userDoc.exists) {
-        await db.collection("usuarios").doc(user.uid).set({
+        await userRef.set({
           nome: user.displayName || '',
           email: user.email,
-          perfil: "familia" // ou outro valor padrão
+          perfil: "familia",
+          fonteCadastro: "google"
         });
+      } else if (!userDoc.data().fonteCadastro) {
+        await userRef.update({ fonteCadastro: "google" });
       }
-      // Redireciona via onAuthStateChanged!
     })
     .catch(error => alert("Erro com Google: " + error.message));
 }
+
+const airtableBaseId = 'appVxCKjvJAah2r27';
+const airtableApiKey = 'SUA_API_KEY_AQUI'; // Coloque sua chave do Airtable
+
+async function enviarUsuarioParaAirtable(user, perfil) {
+  let userDocData = {};
+  try {
+    const userDoc = await db.collection("usuarios").doc(user.uid).get();
+    if (userDoc.exists) {
+      userDocData = userDoc.data();
+    }
+  } catch(e) {
+    console.log("Erro ao buscar Firestore:", e);
+  }
+
+  const uid = user.uid;
+  const email = user.email || userDocData.email || '';
+  const nome = user.displayName || userDocData.nome || '';
+  const cpf = userDocData.cpf || '';
+  const dataCadastro = new Date().toISOString();
+  const fonteCadastro = userDocData.fonteCadastro || '';
+
+  let tabela = '';
+  let fields = {};
+
+  if (perfil === 'cuidador') {
+    tabela = 'Cuidadores';
+    fields = {
+      "UID": uid,
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Telefone/WahtsApp": userDocData.telefone || '',
+      "Foto": userDocData.foto || '',
+      "Status": userDocData.status || 'ativo',
+      "Localização": userDocData.localizacao || '',
+      "Especialidade": userDocData.especialidade || '',
+      "Disponibilidade": userDocData.disponibilidade || '',
+      "Disponibilidade nome": userDocData.disponibilidade_nome || '',
+      "Linkedin": userDocData.linkedin || '',
+      "Curriculo": userDocData.curriculo || '',
+      "Certificados": userDocData.certificados || '',
+      "Data de cadastro": dataCadastro,
+      "Fonte de cadastro": fonteCadastro
+    };
+  } else if (perfil === 'familia') {
+    tabela = 'Clientes';
+    fields = {
+      "UID": uid,
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Telefone/WhatsApp": userDocData.telefone || '',
+      "Bairro": userDocData.bairro || '',
+      "Idade": userDocData.idade || '',
+      "Necessidades": userDocData.necessidades || '',
+      "Observação": userDocData.observacao || '',
+      "Data de cadastro": dataCadastro,
+      "Fonte de cadastro": fonteCadastro
+    };
+  } else {
+    return;
+  }
+
+  await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${airtableApiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({fields})
+  })
+  .then(res => res.json())
+  .then(data => {
+    console.log('Usuário enviado ao Airtable:', data);
+  })
+  .catch(err => {
+    console.error('Erro ao enviar para Airtable:', err);
+  });
+}
+
+auth.onAuthStateChanged(async user => {
+  if (user) {
+    document.getElementById('main-content').style.display = 'none';
+    let perfil = '';
+    try {
+      const userDoc = await db.collection("usuarios").doc(user.uid).get();
+      if (userDoc.exists) perfil = userDoc.data().perfil;
+    } catch (e) {}
+    await enviarUsuarioParaAirtable(user, perfil);
+    window.location.href = "pagina-homepage.html";
+  } else {
+    document.getElementById('main-content').style.display = 'flex';
+  }
+});
 </script>
 
 <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
