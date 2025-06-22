@@ -122,7 +122,6 @@
       max-width: 220px;
       animation: pulse 1.5s infinite ease-in-out;
     }
-    /* Inputs iguais ao exemplo enviado */
     input[type="email"],
     input[type="password"],
     input[type="text"],
@@ -147,7 +146,6 @@
       border-color: #42c2d3;
       background: #f3fbfd;
     }
-    /* Google especial: */
     .perfil-checkboxes-google {
       display: flex;
       gap: 2rem;
@@ -236,8 +234,8 @@
 
 <div class="container" id="main-content">
   <div class="left">
-    <h2>SEJA BEM-VINDO</h2>
-    <p>Para acessar, clique abaixo:</p>
+    <h2>Bem-vindo de volta!</h2>
+    <p>Para continuar conectado, clique abaixo:</p>
     <a onclick="mostrarFormulario()">Acessar</a>
   </div>
   <div class="right">
@@ -492,58 +490,26 @@ async function checarExistenciaAirtablePorEmail(email, perfil) {
   return data.records && data.records.length > 0;
 }
 
+// ======= ALTERAÇÃO: NOVA FUNÇÃO enviarUsuarioParaAirtable =========
 async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
+  // Alteração: envia para seu backend seguro na Vercel
+  const url = 'https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable';
   const uid = user.uid;
   const email = user.email || '';
   const nome = user.displayName || '';
   const cpf = cpfParam || '';
-  const fonteCadastro = extrairProvedor(email);
 
-  let tabela = '';
-  let fields = {};
-
-  if (perfil === 'cuidador') {
-    tabela = 'Cuidadores';
-    fields = {
-      "Nome Completo": nome,
-      "CPF": cpf,
-      "E-mail": email,
-      "Status": "Disponível",
-      "Fonte de cadastro": fonteCadastro,
-      "UID": uid
-    };
-  } else if (perfil === 'familia') {
-    tabela = 'Clientes';
-    fields = {
-      "Nome Completo": nome,
-      "CPF": cpf,
-      "E-mail": email,
-      "Fonte de cadastro": fonteCadastro,
-      "UID": uid
-    };
-  } else {
-    return;
-  }
-
-  await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
+  const resposta = await fetch(url, {
     method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${airtableApiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({fields})
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.error) {
-      alert('Airtable erro: ' + data.error.message);
-      console.error('Airtable error:', data.error);
-    }
-  })
-  .catch(err => {
-      alert('Erro geral: ' + err.message);
-      console.error('Erro geral:', err);
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ perfil, uid, email, nome, cpf })
   });
+
+  const data = await resposta.json();
+  if (data.error) {
+    alert('Erro backend: ' + data.error);
+    console.error('Erro backend:', data.error);
+  }
 }
 
 auth.onAuthStateChanged(async user => {
