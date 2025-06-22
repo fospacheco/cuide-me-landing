@@ -201,24 +201,43 @@ function renderCadastro() {
     <input id="cpf" type="text" placeholder="CPF" required maxlength="14" />
     <input id="email" type="email" placeholder="E-mail" required />
     <input id="password" type="password" placeholder="Senha" required />
-    <div style="margin-bottom:1rem;margin-top:0.7rem;">Escolha o(s) perfil(is):</div>
-    <label style="display:block;margin-bottom:0.6rem;"><input type="checkbox" id="perfil_cliente" /> Cliente / Familiar</label>
-    <label style="display:block;"><input type="checkbox" id="perfil_cuidador" /> Cuidador</label>
+    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
+      <input type="checkbox" id="perfil_cliente" /> Cliente / Familiar
+    </label>
+    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
+      <input type="checkbox" id="perfil_cuidador" /> Cuidador
+    </label>
     <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
     <div class="toggle-text">Já tem uma conta?
       <a style="color: var(--primary); cursor:pointer;" onclick="renderLogin()">Faça login</a>
     </div>`;
 }
 
+function getFonteCadastro(email, provider = "") {
+  if (provider === "google") return "google";
+  if (!email) return "";
+  const domain = email.split("@")[1] || "";
+  if (domain.includes("gmail")) return "google";
+  if (domain.includes("hotmail")) return "hotmail";
+  if (domain.includes("outlook")) return "microsoft";
+  if (domain.includes("uol")) return "uol";
+  if (domain.includes("terra")) return "terra";
+  if (domain.includes("yahoo")) return "yahoo";
+  if (domain.includes("bol")) return "bol";
+  if (domain.includes("icloud") || domain.includes("me.com")) return "icloud";
+  return domain.split(".")[0] || "email";
+}
+
 const airtableBaseId = 'appVxCKjvJAah2r27';
 const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583';
 
-// Checa se já existe esse CPF em qualquer tabela
-async function cpfJaExisteNoAirtable(cpf) {
-  const bases = ['Clientes', 'Cuidadores'];
-  for (let tabela of bases) {
-    const res = await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula={CPF}='${cpf}'`, {
-      headers: { Authorization: `Bearer ${airtableApiKey}` }
+async function cpfJaExisteAirtable(cpf) {
+  const tabelas = ["Clientes", "Cuidadores"];
+  for (let tabela of tabelas) {
+    const filter = encodeURIComponent(`{CPF} = "${cpf}"`);
+    const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${filter}&fields[]=CPF`;
+    const res = await fetch(url, {
+      headers: { 'Authorization': `Bearer ${airtableApiKey}` }
     });
     const data = await res.json();
     if (data.records && data.records.length > 0) return true;
@@ -226,83 +245,54 @@ async function cpfJaExisteNoAirtable(cpf) {
   return false;
 }
 
-function detectarFonteCadastro(email, viaGoogle = false) {
-  if (viaGoogle) return "google";
-  if (!email) return "";
-  const dominio = email.split('@')[1].toLowerCase();
-  if (dominio.includes("gmail.com")) return "google";
-  if (dominio.includes("hotmail.") || dominio.includes("outlook.") || dominio.includes("live.") || dominio.includes("msn.")) return "hotmail";
-  if (dominio.includes("uol.")) return "uol";
-  if (dominio.includes("terra.")) return "terra";
-  if (dominio.includes("yahoo.")) return "yahoo";
-  if (dominio.includes("icloud.") || dominio.includes("me.com") || dominio.includes("mac.com")) return "icloud";
-  if (dominio.includes("bol.")) return "bol";
-  return dominio.split('.')[0];
-}
-
-// Apenas UMA gravação por CPF, sempre na tabela Cuidadores se marcar Cuidador, senão em Clientes
 async function cadastrarUsuario() {
   const nome = document.getElementById("nome").value.trim();
-  const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
+  const cpf = (document.getElementById("cpf").value || "").replace(/\D/g, '');
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const isCliente = document.getElementById("perfil_cliente").checked;
   const isCuidador = document.getElementById("perfil_cuidador").checked;
 
+  if (!nome || !cpf || !email || !password) {
+    alert("Preencha todos os campos.");
+    return;
+  }
   if (!isCliente && !isCuidador) {
     alert("Escolha pelo menos um perfil.");
     return;
   }
-  if (!cpf || cpf.length < 11) {
+  if (cpf.length !== 11) {
     alert("Digite um CPF válido.");
-    document.getElementById("cpf").focus();
+    return;
+  }
+  if (await cpfJaExisteAirtable(cpf)) {
+    alert("CPF já cadastrado.");
     return;
   }
 
-  // Validação ANTES de tudo!
-  if (await cpfJaExisteNoAirtable(cpf)) {
-    alert("CPF já cadastrado!");
-    return;
+  let perfilArr = [];
+  if (isCliente) perfilArr.push("Cliente / Familiar");
+  if (isCuidador) perfilArr.push("Cuidador");
+  let tabela = (perfilArr.length === 1 && perfilArr[0] === "Cliente / Familiar") ? "Clientes" : "Cuidadores";
+  let fields = {
+    "Nome Completo": nome,
+    "CPF": cpf,
+    "E-mail": email,
+    "Perfil": perfilArr,
+    "Fonte de cadastro": getFonteCadastro(email),
+    "UID": "",
+  };
+  try {
+    const cred = await auth.createUserWithEmailAndPassword(email, password);
+    fields.UID = cred.user.uid;
+    await enviarUsuarioParaAirtableFinal(tabela, fields);
+    window.location.href = "pagina-homepage.html";
+  } catch (error) {
+    alert("Erro ao cadastrar: " + error.message);
   }
-
-  auth.createUserWithEmailAndPassword(email, password)
-    .then(async (cred) => {
-      if (await cpfJaExisteNoAirtable(cpf)) {
-        alert("CPF já cadastrado!");
-        return;
-      }
-      const fonteCadastro = detectarFonteCadastro(email, false);
-      let perfis = [];
-      if (isCliente) perfis.push("Cliente / Familiar");
-      if (isCuidador) perfis.push("Cuidador");
-
-      let tabela = isCuidador ? "Cuidadores" : "Clientes";
-      await enviarUsuarioParaAirtable({
-        uid: cred.user.uid, email: email, displayName: nome
-      }, tabela, perfis, cpf, fonteCadastro);
-
-      window.location.href = "pagina-homepage.html";
-    })
-    .catch(error => {
-      if (error.code === 'auth/email-already-in-use') {
-        alert("Este e-mail já está em uso.");
-      } else {
-        alert("Erro ao cadastrar: " + error.message);
-      }
-    });
 }
 
-function loginWithEmail() {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  auth.signInWithEmailAndPassword(email, password)
-    .then(() => {
-      window.location.href = "pagina-homepage.html";
-    })
-    .catch(error => alert("Erro: " + error.message));
-}
-
-// GOOGLE COM TELA INTERMEDIÁRIA
+// --- GOOGLE LOGIN ---
 let googleUser = null;
 
 function loginWithGoogle() {
@@ -310,12 +300,12 @@ function loginWithGoogle() {
   auth.signInWithPopup(provider)
     .then((result) => {
       googleUser = result.user;
-      mostrarEscolhaPerfil();
+      mostrarEscolhaPerfilGoogle();
     })
     .catch(error => alert("Erro com Google: " + error.message));
 }
 
-function mostrarEscolhaPerfil() {
+function mostrarEscolhaPerfilGoogle() {
   document.getElementById("formSlide").innerHTML = `
     <p style="font-size:1.3rem;margin-bottom:1rem;">Qual seu perfil?</p>
     <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
@@ -332,57 +322,41 @@ function mostrarEscolhaPerfil() {
 async function finalizarCadastroGoogle() {
   const isCliente = document.getElementById("perfil_cliente").checked;
   const isCuidador = document.getElementById("perfil_cuidador").checked;
-  const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
+  const cpf = (document.getElementById("cpf_google").value || "").replace(/\D/g, '');
 
   if (!isCliente && !isCuidador) {
     alert("Escolha pelo menos um perfil.");
     return;
   }
-  if (!cpf || cpf.length < 11) {
+  if (!cpf || cpf.length !== 11) {
     alert("Digite um CPF válido.");
     document.getElementById("cpf_google").focus();
     return;
   }
-
-  if (await cpfJaExisteNoAirtable(cpf)) {
-    alert("CPF já cadastrado!");
+  if (await cpfJaExisteAirtable(cpf)) {
+    alert("CPF já cadastrado.");
     return;
   }
-
-  let perfis = [];
-  if (isCliente) perfis.push("Cliente / Familiar");
-  if (isCuidador) perfis.push("Cuidador");
-
-  let tabela = isCuidador ? "Cuidadores" : "Clientes";
-  const fonteCadastro = detectarFonteCadastro(googleUser.email, true);
-
-  await enviarUsuarioParaAirtable(googleUser, tabela, perfis, cpf, fonteCadastro);
-
-  window.location.href = "pagina-homepage.html";
-}
-
-// Agora grava só UMA VEZ, com os dois perfis se necessário!
-async function enviarUsuarioParaAirtable(user, tabela, perfis, cpfParam, fonteCadastro) {
-  const uid = user.uid;
-  const email = user.email || '';
-  const nome = user.displayName || '';
-  const cpf = cpfParam || '';
-
-  if (await cpfJaExisteNoAirtable(cpf)) {
-    alert("CPF já cadastrado!");
-    return;
-  }
-
+  let perfilArr = [];
+  if (isCliente) perfilArr.push("Cliente / Familiar");
+  if (isCuidador) perfilArr.push("Cuidador");
+  let tabela = (perfilArr.length === 1 && perfilArr[0] === "Cliente / Familiar") ? "Clientes" : "Cuidadores";
+  let email = googleUser.email || "";
+  let nome = googleUser.displayName || "";
   let fields = {
     "Nome Completo": nome,
     "CPF": cpf,
     "E-mail": email,
-    "Fonte de cadastro": fonteCadastro,
-    "UID": uid,
-    "Perfil": perfis
+    "Perfil": perfilArr,
+    "Fonte de cadastro": getFonteCadastro(email, "google"),
+    "UID": googleUser.uid,
   };
-  if (tabela === "Cuidadores") fields["Status"] = "Ativo";
+  await enviarUsuarioParaAirtableFinal(tabela, fields);
+  window.location.href = "pagina-homepage.html";
+}
 
+// --- ENVIO PARA AIRTABLE (final, sem duplicidade) ---
+async function enviarUsuarioParaAirtableFinal(tabela, fields) {
   await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
     method: 'POST',
     headers: {
@@ -404,6 +378,17 @@ async function enviarUsuarioParaAirtable(user, tabela, perfis, cpfParam, fonteCa
   });
 }
 
+function loginWithEmail() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      window.location.href = "pagina-homepage.html";
+    })
+    .catch(error => alert("Erro: " + error.message));
+}
+
+// ---- NÃO FAZ MAIS NADA NO onAuthStateChanged, só mostra tela de login se deslogar ----
 auth.onAuthStateChanged(async user => {
   if (!user) {
     document.getElementById('main-content').style.display = 'flex';
