@@ -183,7 +183,6 @@ function mostrarFormulario() {
   renderLogin();
 }
 
-// ============================= AJUSTE FINO AQUI =============================
 function renderLogin() {
   document.getElementById("formSlide").innerHTML = `
     <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
@@ -206,7 +205,6 @@ function renderLogin() {
     </div>
   `;
 }
-// ============================================================================
 
 function renderCadastro() {
   document.getElementById("formSlide").innerHTML = `
@@ -314,7 +312,10 @@ async function loginWithGoogle() {
     if (existeCliente || existeCuidador) {
       window.location.href = "pagina-homepage.html";
     } else {
-      mostrarEscolhaPerfil();
+      alert("Usuário não cadastrado");
+      // Desloga para evitar sessão ativa caso queira cadastrar com outro Google
+      await auth.signOut();
+      document.getElementById("formSlide").classList.remove("active");
     }
   } catch (error) {
     alert("Erro com Google: " + error.message);
