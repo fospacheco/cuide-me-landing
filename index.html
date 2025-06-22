@@ -201,10 +201,10 @@ function renderCadastro() {
     <input id="cpf" type="text" placeholder="CPF" required maxlength="14" />
     <input id="email" type="email" placeholder="E-mail" required />
     <input id="password" type="password" placeholder="Senha" required />
-    <select id="perfil" multiple>
-      <option value="Cliente">Cliente</option>
+    <select id="perfil" required>
+      <option value="">Selecione seu perfil</option>
+      <option value="Cliente / Familiar">Cliente / Familiar</option>
       <option value="Cuidador">Cuidador</option>
-      <option value="Familia">Familia</option>
     </select>
     <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
     <div class="toggle-text">Já tem uma conta?
@@ -217,19 +217,16 @@ function cadastrarUsuario() {
   const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  const perfilSel = document.getElementById("perfil");
-  let perfis = [];
-  for (let opt of perfilSel.selectedOptions) {
-    perfis.push(opt.value);
-  }
-  if (perfis.length === 0) {
-    alert('Escolha ao menos um perfil!');
+  const perfil = document.getElementById("perfil").value;
+
+  if (!perfil) {
+    alert("Selecione o perfil.");
     return;
   }
 
   auth.createUserWithEmailAndPassword(email, password)
     .then(async (cred) => {
-      await enviarUsuarioParaAirtable({uid: cred.user.uid, email: email, displayName: nome}, perfis, cpf, "email");
+      await enviarUsuarioParaAirtable({uid: cred.user.uid, email: email, displayName: nome}, [perfil], cpf);
       window.location.href = "pagina-homepage.html";
     })
     .catch(error => alert("Erro ao cadastrar: " + error.message));
@@ -262,13 +259,10 @@ function mostrarEscolhaPerfil() {
   document.getElementById("formSlide").innerHTML = `
     <p style="font-size:1.3rem;margin-bottom:1rem;">Qual seu perfil?</p>
     <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
-      <input type="checkbox" id="perfil_cliente" value="Cliente"/> Cliente
+      <input type="checkbox" id="perfil_cliente" /> Cliente / Familiar
     </label>
     <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
-      <input type="checkbox" id="perfil_cuidador" value="Cuidador"/> Cuidador
-    </label>
-    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
-      <input type="checkbox" id="perfil_familia" value="Familia"/> Familia
+      <input type="checkbox" id="perfil_cuidador" /> Cuidador
     </label>
     <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" style="margin:1rem 0; padding:0.5rem; border-radius:8px; border:1px solid #42c2d3; width:200px; font-size:1rem;" required />
     <button class="cta-btn" style="margin-top:1.3rem;" onclick="finalizarCadastroGoogle()">Confirmar</button>
@@ -276,14 +270,11 @@ function mostrarEscolhaPerfil() {
 }
 
 async function finalizarCadastroGoogle() {
-  let perfis = [];
-  if (document.getElementById("perfil_cliente").checked) perfis.push("Cliente");
-  if (document.getElementById("perfil_cuidador").checked) perfis.push("Cuidador");
-  if (document.getElementById("perfil_familia").checked) perfis.push("Familia");
-
+  const isCliente = document.getElementById("perfil_cliente").checked;
+  const isCuidador = document.getElementById("perfil_cuidador").checked;
   const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
 
-  if (!perfis.length) {
+  if (!isCliente && !isCuidador) {
     alert("Escolha pelo menos um perfil.");
     return;
   }
@@ -293,70 +284,60 @@ async function finalizarCadastroGoogle() {
     return;
   }
 
-  // Só envia para Airtable, não salva no Firestore!
-  await enviarUsuarioParaAirtable(googleUser, perfis, cpf, "google");
+  let perfis = [];
+  if (isCliente) perfis.push("Cliente / Familiar");
+  if (isCuidador) perfis.push("Cuidador");
+
+  await enviarUsuarioParaAirtable(googleUser, perfis, cpf);
 
   window.location.href = "pagina-homepage.html";
 }
 // ========== FIM NOVO FLUXO GOOGLE ==========
 
 const airtableBaseId = 'appVxCKjvJAah2r27';
-const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583';
+const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583'; // Sua chave secreta
 
-async function enviarUsuarioParaAirtable(user, perfis, cpfParam, fonteCadastro) {
+async function enviarUsuarioParaAirtable(user, perfisArray, cpfParam) {
   const uid = user.uid;
   const email = user.email || '';
   const nome = user.displayName || '';
   const cpf = cpfParam || '';
 
+  // O campo Perfil agora será SEMPRE um array
   let fields = {
     "Nome Completo": nome,
     "CPF": cpf,
     "E-mail": email,
-    "Fonte de cadastro": fonteCadastro,
-    "UID": uid,
-    "Perfil": perfis // Array!
+    "Perfil": perfisArray,
+    "Fonte de cadastro": "google",
+    "UID": uid
   };
 
-  // Para evitar erro de campo extra se perfis = ["Cliente", "Cuidador"], manda para ambas tabelas
-  const promises = [];
-  if (perfis.includes("Cliente") || perfis.includes("Familia")) {
-    promises.push(fetch(`https://api.airtable.com/v0/${airtableBaseId}/clientes`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${airtableApiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({fields})
-    }));
-  }
-  if (perfis.includes("Cuidador")) {
-    promises.push(fetch(`https://api.airtable.com/v0/${airtableBaseId}/cuidadores`, {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${airtableApiKey}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({fields})
-    }));
-  }
+  // Decide a tabela pelo perfil principal (padrão: Cliente / Familiar)
+  let tabela = perfisArray.includes("Cuidador") ? "Cuidadores" : "Clientes";
 
-  await Promise.all(promises)
-    .then(async (results) => {
-      for (let res of results) {
-        const data = await res.json();
-        if (data.error) {
-          alert('Airtable erro: ' + data.error.message);
-          console.error('Airtable error:', data.error);
-        }
-      }
-    })
-    .catch(err => {
+  await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${airtableApiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({fields})
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      alert('Airtable erro: ' + data.error.message);
+      console.error('Airtable error:', data.error);
+    }
+  })
+  .catch(err => {
       alert('Erro geral: ' + err.message);
       console.error('Erro geral:', err);
-    });
+  });
 }
 
+// ---- NÃO FAZ MAIS NADA NO onAuthStateChanged, só mostra tela de login se deslogar ----
 auth.onAuthStateChanged(async user => {
   if (!user) {
     document.getElementById('main-content').style.display = 'flex';
