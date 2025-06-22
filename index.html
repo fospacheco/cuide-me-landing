@@ -260,6 +260,7 @@ async function cadastrarUsuario() {
     return;
   }
 
+  // NOVO: Validação ANTES de qualquer coisa
   if (await cpfJaExisteNoAirtable(cpf)) {
     alert("CPF já cadastrado!");
     return;
@@ -267,6 +268,11 @@ async function cadastrarUsuario() {
 
   auth.createUserWithEmailAndPassword(email, password)
     .then(async (cred) => {
+      // Checa novamente antes de gravar (garante nunca duplicar!)
+      if (await cpfJaExisteNoAirtable(cpf)) {
+        alert("CPF já cadastrado!");
+        return;
+      }
       const fonteCadastro = detectarFonteCadastro(email, false);
       let perfis = [];
       if (isCliente) perfis.push("cliente");
@@ -338,6 +344,7 @@ async function finalizarCadastroGoogle() {
     return;
   }
 
+  // Validação FINAL antes de gravar!
   if (await cpfJaExisteNoAirtable(cpf)) {
     alert("CPF já cadastrado!");
     return;
@@ -364,6 +371,12 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam, fonteCadastro) 
 
   let tabela = '';
   let fields = {};
+
+  // Validação ANTES de inserir (última defesa, nunca duplica)
+  if (await cpfJaExisteNoAirtable(cpf)) {
+    alert("CPF já cadastrado!");
+    return;
+  }
 
   // Atenção aos nomes dos campos exatamente iguais ao Airtable!
   if (perfil === 'cuidador') {
@@ -421,8 +434,4 @@ auth.onAuthStateChanged(async user => {
 </script>
 
 <div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
-  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
-  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
-</div>
-</body>
-</html>
+  <a href="termos_de_uso_cuide_me.html"
