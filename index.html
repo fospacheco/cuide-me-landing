@@ -122,7 +122,6 @@
       max-width: 220px;
       animation: pulse 1.5s infinite ease-in-out;
     }
-    /* Inputs iguais ao exemplo enviado */
     input[type="email"],
     input[type="password"],
     input[type="text"],
@@ -147,7 +146,6 @@
       border-color: #42c2d3;
       background: #f3fbfd;
     }
-    /* Google especial: */
     .perfil-checkboxes-google {
       display: flex;
       gap: 2rem;
@@ -419,7 +417,7 @@ function loginWithEmail() {
     .catch(error => showError("Erro: " + error.message));
 }
 
-// === FLUXO GOOGLE: acessibilidade e experiencia melhorada ===
+// === FLUXO GOOGLE ===
 let googleUser = null;
 
 async function loginWithGoogle() {
@@ -427,15 +425,8 @@ async function loginWithGoogle() {
   try {
     const result = await auth.signInWithPopup(provider);
     googleUser = result.user;
-    const email = googleUser.email;
-    // Busca o e-mail (em minúsculo) nas duas tabelas
-    const existeCliente = await checarExistenciaAirtablePorEmail(email, 'familia');
-    const existeCuidador = await checarExistenciaAirtablePorEmail(email, 'cuidador');
-    if (existeCliente || existeCuidador) {
-      window.location.href = "pagina-homepage.html";
-    } else {
-      mostrarPerfilCpfGoogle();
-    }
+    // Usuário autenticado? Vai direto para homepage!
+    window.location.href = "pagina-homepage.html";
   } catch (error) {
     showError("Erro com Google: " + error.message);
   }
