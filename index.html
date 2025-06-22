@@ -158,6 +158,7 @@
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+
 <script>
 const firebaseConfig = {
   apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
@@ -171,17 +172,22 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
+// Airtable settings
+const airtableBaseId = 'appVxCKjvJAah2r27';
+const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583';
+
 window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('splash-screen').style.display = 'none';
     document.getElementById('main-content').style.display = 'flex';
-  }, 1500);
+  }, 1000);
 });
 
 function mostrarFormulario() {
   document.getElementById("formSlide").classList.add("active");
   renderLogin();
 }
+
 function renderLogin() {
   document.getElementById("formSlide").innerHTML = `
     <input id="email" type="email" placeholder="E-mail" required />
@@ -193,119 +199,143 @@ function renderLogin() {
     </div>
     <div class="toggle-text" style="margin-top:1rem;">Ainda não tem conta?
       <a style="color: var(--primary); cursor:pointer;" onclick="renderCadastro()">Crie aqui</a>
-    </div>`;
+    </div>
+    <div style="margin-top:1.5rem; text-align:center; font-size: 0.98rem; color: #245063;">
+      Em caso de problemas: 
+      <a href="mailto:cuideme.cuidados@gmail.com" style="color:#42c2d3; text-decoration:none; font-weight:500; vertical-align:middle;">
+        <img src="https://img.icons8.com/ios-filled/24/42c2d3/new-post.png" alt="E-mail" style="width:20px;vertical-align:middle;margin-right:4px;">cuideme.cuidados@gmail.com
+      </a>
+    </div>
+  `;
 }
+
 function renderCadastro() {
   document.getElementById("formSlide").innerHTML = `
     <input id="nome" type="text" placeholder="Nome completo" required />
     <input id="cpf" type="text" placeholder="CPF" required maxlength="14" />
     <input id="email" type="email" placeholder="E-mail" required />
     <input id="password" type="password" placeholder="Senha" required />
-    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
-      <input type="checkbox" id="perfil_cliente" /> Cliente / Familiar
-    </label>
-    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
-      <input type="checkbox" id="perfil_cuidador" /> Cuidador
-    </label>
+    <select id="perfil">
+      <option value="cuidador">Sou Cuidador</option>
+      <option value="familia">Sou Família</option>
+      <option value="instituicao">Sou Instituição</option>
+    </select>
     <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
     <div class="toggle-text">Já tem uma conta?
       <a style="color: var(--primary); cursor:pointer;" onclick="renderLogin()">Faça login</a>
-    </div>`;
+    </div>
+    <div style="margin-top:1.5rem; text-align:center; font-size: 0.98rem; color: #245063;">
+      Em caso de problemas: 
+      <a href="mailto:cuideme.cuidados@gmail.com" style="color:#42c2d3; text-decoration:none; font-weight:500; vertical-align:middle;">
+        <img src="https://img.icons8.com/ios-filled/24/42c2d3/new-post.png" alt="E-mail" style="width:20px;vertical-align:middle;margin-right:4px;">cuideme.cuidados@gmail.com
+      </a>
+    </div>
+  `;
 }
 
-function getFonteCadastro(email, provider = "") {
-  if (provider === "google") return "google";
-  if (!email) return "";
-  const domain = email.split("@")[1] || "";
-  if (domain.includes("gmail")) return "google";
-  if (domain.includes("hotmail")) return "hotmail";
-  if (domain.includes("outlook")) return "microsoft";
-  if (domain.includes("uol")) return "uol";
-  if (domain.includes("terra")) return "terra";
-  if (domain.includes("yahoo")) return "yahoo";
-  if (domain.includes("bol")) return "bol";
-  if (domain.includes("icloud") || domain.includes("me.com")) return "icloud";
-  return domain.split(".")[0] || "email";
+// Auxiliar para normalizar CPF
+function limparCPF(cpf) {
+  return cpf.replace(/\D/g, '');
 }
 
-const airtableBaseId = 'appVxCKjvJAah2r27';
-const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583';
-
-async function cpfJaExisteAirtable(cpf) {
-  const tabelas = ["Clientes", "Cuidadores"];
-  for (let tabela of tabelas) {
-    const filter = encodeURIComponent(`{CPF} = "${cpf}"`);
-    const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${filter}&fields[]=CPF`;
+// Checar se CPF já existe na base Airtable (clientes e cuidadores)
+async function cpfJaExisteNoAirtable(cpf) {
+  cpf = limparCPF(cpf);
+  const filter = `FIND("${cpf}", {CPF})`;
+  const bases = ["Clientes", "Cuidadores"];
+  for (let tabela of bases) {
+    const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(filter)}`;
     const res = await fetch(url, {
-      headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+      headers: {
+        Authorization: `Bearer ${airtableApiKey}`
+      }
     });
     const data = await res.json();
-    if (data.records && data.records.length > 0) return true;
+    if (data.records && data.records.length > 0) {
+      return data.records[0].fields;
+    }
   }
-  return false;
+  return null;
 }
 
+// Checar se e-mail já existe no Airtable (clientes e cuidadores)
+async function emailJaExisteNoAirtable(email) {
+  const filter = `FIND("${email}", {E-mail})`;
+  const bases = ["Clientes", "Cuidadores"];
+  for (let tabela of bases) {
+    const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(filter)}`;
+    const res = await fetch(url, {
+      headers: {
+        Authorization: `Bearer ${airtableApiKey}`
+      }
+    });
+    const data = await res.json();
+    if (data.records && data.records.length > 0) {
+      return data.records[0].fields;
+    }
+  }
+  return null;
+}
+
+// Cadastro de usuário
 async function cadastrarUsuario() {
   const nome = document.getElementById("nome").value.trim();
-  const cpf = (document.getElementById("cpf").value || "").replace(/\D/g, '');
+  const cpf = limparCPF(document.getElementById("cpf").value);
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
-  const isCliente = document.getElementById("perfil_cliente").checked;
-  const isCuidador = document.getElementById("perfil_cuidador").checked;
+  const perfil = document.getElementById("perfil").value;
 
   if (!nome || !cpf || !email || !password) {
     alert("Preencha todos os campos.");
-    return;
-  }
-  if (!isCliente && !isCuidador) {
-    alert("Escolha pelo menos um perfil.");
     return;
   }
   if (cpf.length !== 11) {
     alert("Digite um CPF válido.");
     return;
   }
-  if (await cpfJaExisteAirtable(cpf)) {
-    alert("CPF já cadastrado.");
+
+  // Verifica se já existe por CPF ou e-mail
+  const jaExiste = await cpfJaExisteNoAirtable(cpf);
+  if (jaExiste) {
+    // Login automático
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      window.location.href = "pagina-homepage.html";
+    } catch (e) {
+      alert("Senha ou e-mail incorretos para este Usuário.");
+    }
+    return;
+  }
+  const jaEmail = await emailJaExisteNoAirtable(email);
+  if (jaEmail) {
+    // Login automático
+    try {
+      await auth.signInWithEmailAndPassword(email, password);
+      window.location.href = "pagina-homepage.html";
+    } catch (e) {
+      alert("Senha ou e-mail incorretos para este Usuário.");
+    }
     return;
   }
 
-  let perfilArr = [];
-  if (isCliente) perfilArr.push("Cliente / Familiar");
-  if (isCuidador) perfilArr.push("Cuidador");
-  let tabela = (perfilArr.length === 1 && perfilArr[0] === "Cliente / Familiar") ? "Clientes" : "Cuidadores";
-  let fields = {
-    "Nome Completo": nome,
-    "CPF": cpf,
-    "E-mail": email,
-    "Perfil": perfilArr,
-    "Fonte de cadastro": getFonteCadastro(email),
-    "UID": "",
-  };
-  try {
-    const cred = await auth.createUserWithEmailAndPassword(email, password);
-    fields.UID = cred.user.uid;
-    await enviarUsuarioParaAirtableFinal(tabela, fields);
-    window.location.href = "pagina-homepage.html";
-  } catch (error) {
-    alert("Erro ao cadastrar: " + error.message);
-  }
+  // Se não existe, mostra mensagem
+  alert("Cadastro não encontrado");
+  return;
 }
 
-// --- GOOGLE LOGIN ---
+// Login e cadastro Google
 let googleUser = null;
-
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
-    .then((result) => {
+    .then(async (result) => {
       googleUser = result.user;
-      mostrarEscolhaPerfilGoogle();
+      mostrarEscolhaPerfil();
     })
     .catch(error => alert("Erro com Google: " + error.message));
 }
 
-function mostrarEscolhaPerfilGoogle() {
+function mostrarEscolhaPerfil() {
   document.getElementById("formSlide").innerHTML = `
     <p style="font-size:1.3rem;margin-bottom:1rem;">Qual seu perfil?</p>
     <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
@@ -316,13 +346,19 @@ function mostrarEscolhaPerfilGoogle() {
     </label>
     <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" style="margin:1rem 0; padding:0.5rem; border-radius:8px; border:1px solid #42c2d3; width:200px; font-size:1rem;" required />
     <button class="cta-btn" style="margin-top:1.3rem;" onclick="finalizarCadastroGoogle()">Confirmar</button>
+    <div style="margin-top:1.5rem; text-align:center; font-size: 0.98rem; color: #245063;">
+      Em caso de problemas: 
+      <a href="mailto:cuideme.cuidados@gmail.com" style="color:#42c2d3; text-decoration:none; font-weight:500; vertical-align:middle;">
+        <img src="https://img.icons8.com/ios-filled/24/42c2d3/new-post.png" alt="E-mail" style="width:20px;vertical-align:middle;margin-right:4px;">cuideme.cuidados@gmail.com
+      </a>
+    </div>
   `;
 }
 
 async function finalizarCadastroGoogle() {
   const isCliente = document.getElementById("perfil_cliente").checked;
   const isCuidador = document.getElementById("perfil_cuidador").checked;
-  const cpf = (document.getElementById("cpf_google").value || "").replace(/\D/g, '');
+  const cpf = limparCPF(document.getElementById("cpf_google").value);
 
   if (!isCliente && !isCuidador) {
     alert("Escolha pelo menos um perfil.");
@@ -333,62 +369,32 @@ async function finalizarCadastroGoogle() {
     document.getElementById("cpf_google").focus();
     return;
   }
-  if (await cpfJaExisteAirtable(cpf)) {
-    alert("CPF já cadastrado.");
+
+  // Se CPF já existe faz login
+  const jaExiste = await cpfJaExisteNoAirtable(cpf);
+  if (jaExiste) {
+    window.location.href = "pagina-homepage.html";
     return;
   }
-  let perfilArr = [];
-  if (isCliente) perfilArr.push("Cliente / Familiar");
-  if (isCuidador) perfilArr.push("Cuidador");
-  let tabela = (perfilArr.length === 1 && perfilArr[0] === "Cliente / Familiar") ? "Clientes" : "Cuidadores";
-  let email = googleUser.email || "";
-  let nome = googleUser.displayName || "";
-  let fields = {
-    "Nome Completo": nome,
-    "CPF": cpf,
-    "E-mail": email,
-    "Perfil": perfilArr,
-    "Fonte de cadastro": getFonteCadastro(email, "google"),
-    "UID": googleUser.uid,
-  };
-  await enviarUsuarioParaAirtableFinal(tabela, fields);
-  window.location.href = "pagina-homepage.html";
+
+  // Se não existe, mostra mensagem
+  alert("Cadastro não encontrado");
+  return;
 }
 
-// --- ENVIO PARA AIRTABLE (final, sem duplicidade) ---
-async function enviarUsuarioParaAirtableFinal(tabela, fields) {
-  await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
-    method: 'POST',
-    headers: {
-      'Authorization': `Bearer ${airtableApiKey}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({fields})
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.error) {
-      alert('Airtable erro: ' + data.error.message);
-      console.error('Airtable error:', data.error);
-    }
-  })
-  .catch(err => {
-      alert('Erro geral: ' + err.message);
-      console.error('Erro geral:', err);
-  });
-}
-
+// Login padrão
 function loginWithEmail() {
-  const email = document.getElementById("email").value;
+  const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   auth.signInWithEmailAndPassword(email, password)
     .then(() => {
       window.location.href = "pagina-homepage.html";
     })
-    .catch(error => alert("Erro: " + error.message));
+    .catch(error => alert("Senha ou e-mail incorretos para este Usuário."));
 }
 
-// ---- NÃO FAZ MAIS NADA NO onAuthStateChanged, só mostra tela de login se deslogar ----
+// --- Fim das funções principais ---
+
 auth.onAuthStateChanged(async user => {
   if (!user) {
     document.getElementById('main-content').style.display = 'flex';
