@@ -155,7 +155,6 @@
   </div>
 </div>
 
-<!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script>
@@ -171,6 +170,11 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
+// Airtable Config
+const airtableBaseId = 'appVxCKjvJAah2r27';
+const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583';
+
+// ==== Splash ====
 window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('splash-screen').style.display = 'none';
@@ -178,10 +182,12 @@ window.addEventListener('load', () => {
   }, 1500);
 });
 
+// ==== Telas ====
 function mostrarFormulario() {
   document.getElementById("formSlide").classList.add("active");
   renderLogin();
 }
+
 function renderLogin() {
   document.getElementById("formSlide").innerHTML = `
     <input id="email" type="email" placeholder="E-mail" required />
@@ -195,38 +201,65 @@ function renderLogin() {
       <a style="color: var(--primary); cursor:pointer;" onclick="renderCadastro()">Crie aqui</a>
     </div>`;
 }
+
 function renderCadastro() {
   document.getElementById("formSlide").innerHTML = `
     <input id="nome" type="text" placeholder="Nome completo" required />
     <input id="cpf" type="text" placeholder="CPF" required maxlength="14" />
     <input id="email" type="email" placeholder="E-mail" required />
     <input id="password" type="password" placeholder="Senha" required />
-    <select id="perfil">
-      <option value="cuidador">Sou Cuidador</option>
-      <option value="familia">Sou Família</option>
-      <option value="instituicao">Sou Instituição</option>
-    </select>
-    <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
+    <button class="cta-btn" onclick="mostrarEscolhaPerfilCadastro()">Avançar</button>
     <div class="toggle-text">Já tem uma conta?
       <a style="color: var(--primary); cursor:pointer;" onclick="renderLogin()">Faça login</a>
     </div>`;
 }
 
-function cadastrarUsuario() {
-  const nome = document.getElementById("nome").value;
-  const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  const perfil = document.getElementById("perfil").value;
+// ==== Cadastro Email + Escolha perfil ====
+let dadosCadastro = {};
+function mostrarEscolhaPerfilCadastro() {
+  dadosCadastro = {
+    nome: document.getElementById("nome").value,
+    cpf: document.getElementById("cpf").value.replace(/\D/g, ''),
+    email: document.getElementById("email").value,
+    password: document.getElementById("password").value
+  };
+  if (!dadosCadastro.nome || !dadosCadastro.cpf || !dadosCadastro.email || !dadosCadastro.password) {
+    alert("Preencha todos os campos!");
+    return;
+  }
+  document.getElementById("formSlide").innerHTML = `
+    <p style="font-size:1.3rem;margin-bottom:1rem;">Qual seu perfil?</p>
+    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
+      <input type="checkbox" id="perfil_cliente" /> Cliente
+    </label>
+    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
+      <input type="checkbox" id="perfil_cuidador" /> Cuidador
+    </label>
+    <button class="cta-btn" style="margin-top:1.3rem;" onclick="cadastrarUsuario()">Cadastrar</button>
+    <div class="toggle-text" style="margin-top:1rem;">
+      <a style="color: var(--primary); cursor:pointer;" onclick="renderLogin()">Cancelar</a>
+    </div>`;
+}
 
-  auth.createUserWithEmailAndPassword(email, password)
+function cadastrarUsuario() {
+  const isCliente = document.getElementById("perfil_cliente").checked;
+  const isCuidador = document.getElementById("perfil_cuidador").checked;
+
+  if (!isCliente && !isCuidador) {
+    alert("Escolha pelo menos um perfil.");
+    return;
+  }
+
+  auth.createUserWithEmailAndPassword(dadosCadastro.email, dadosCadastro.password)
     .then(async (cred) => {
-      await enviarUsuarioParaAirtable({uid: cred.user.uid, email: email, displayName: nome}, perfil, cpf);
+      if (isCliente) await enviarUsuarioParaAirtable({uid: cred.user.uid, displayName: dadosCadastro.nome, email: dadosCadastro.email}, 'Cliente', dadosCadastro.cpf, "email");
+      if (isCuidador) await enviarUsuarioParaAirtable({uid: cred.user.uid, displayName: dadosCadastro.nome, email: dadosCadastro.email}, 'Cuidador', dadosCadastro.cpf, "email");
       window.location.href = "pagina-homepage.html";
     })
     .catch(error => alert("Erro ao cadastrar: " + error.message));
 }
 
+// ==== Login com Email ====
 function loginWithEmail() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -237,20 +270,19 @@ function loginWithEmail() {
     .catch(error => alert("Erro: " + error.message));
 }
 
-// ========== LOGIN GOOGLE COM TELA INTERMEDIÁRIA ==========
+// ==== LOGIN GOOGLE ====
 let googleUser = null;
-
 function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
     .then((result) => {
       googleUser = result.user;
-      mostrarEscolhaPerfil();
+      mostrarEscolhaPerfilGoogle();
     })
     .catch(error => alert("Erro com Google: " + error.message));
 }
 
-function mostrarEscolhaPerfil() {
+function mostrarEscolhaPerfilGoogle() {
   document.getElementById("formSlide").innerHTML = `
     <p style="font-size:1.3rem;margin-bottom:1rem;">Qual seu perfil?</p>
     <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
@@ -261,6 +293,9 @@ function mostrarEscolhaPerfil() {
     </label>
     <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" style="margin:1rem 0; padding:0.5rem; border-radius:8px; border:1px solid #42c2d3; width:200px; font-size:1rem;" required />
     <button class="cta-btn" style="margin-top:1.3rem;" onclick="finalizarCadastroGoogle()">Confirmar</button>
+    <div class="toggle-text" style="margin-top:1rem;">
+      <a style="color: var(--primary); cursor:pointer;" onclick="renderLogin()">Cancelar</a>
+    </div>
   `;
 }
 
@@ -279,62 +314,28 @@ async function finalizarCadastroGoogle() {
     return;
   }
 
-  let perfis = [];
-  if (isCliente) perfis.push("familia");
-  if (isCuidador) perfis.push("cuidador");
-
-  // Só envia para Airtable, não salva no Firestore!
-  for (let perfil of perfis) {
-    await enviarUsuarioParaAirtable(googleUser, perfil, cpf);
-  }
-
+  if (isCliente) await enviarUsuarioParaAirtable(googleUser, 'Cliente', cpf, "google");
+  if (isCuidador) await enviarUsuarioParaAirtable(googleUser, 'Cuidador', cpf, "google");
   window.location.href = "pagina-homepage.html";
 }
-// ========== FIM NOVO FLUXO GOOGLE ==========
 
-const airtableBaseId = 'appVxCKjvJAah2r27';
-const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583'; // Sua chave secreta
-
-async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
-  const uid = user.uid;
-  const email = user.email || '';
-  const nome = user.displayName || '';
-  const cpf = cpfParam || '';
-
+// ==== SALVAR NO AIRTABLE ====
+async function enviarUsuarioParaAirtable(user, perfil, cpf, fonteCadastro) {
   let tabela = '';
-  let fields = {};
+  if (perfil === 'Cliente') tabela = 'Clientes';
+  else if (perfil === 'Cuidador') tabela = 'Cuidadores';
+  else return;
 
-  if (perfil === 'cuidador') {
-    tabela = 'Cuidadores';
-    fields = {
-      "Nome Completo": nome,
-      "CPF": cpf,
-      "E-mail": email,
-      "Status": "ativo",
-      "Fonte de cadastro": "google",
-      "UID": uid
-    };
-  } else if (perfil === 'familia') {
-    tabela = 'Clientes';
-    fields = {
-      "Nome Completo": nome,
-      "CPF": cpf,
-      "E-mail": email,
-      "Fonte de cadastro": "google",
-      "UID": uid
-    };
-  } else if (perfil === 'instituicao') {
-    tabela = 'Clientes';
-    fields = {
-      "Nome Completo": nome,
-      "CPF": cpf,
-      "E-mail": email,
-      "Fonte de cadastro": "google",
-      "UID": uid
-    };
-  } else {
-    return;
-  }
+  // *CUIDADO*: os nomes dos campos devem ser **iguais** ao Airtable!
+  const fields = {
+    "Nome Completo": user.displayName || '',
+    "CPF": cpf,
+    "E-mail": user.email || '',
+    "UID": user.uid || '',
+    "Perfil": perfil,
+    "Fonte de Cadastro": fonteCadastro || ''
+    // NUNCA envie Data de cadastro! (computado)
+  };
 
   await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
     method: 'POST',
@@ -349,8 +350,6 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
     if (data.error) {
       alert('Airtable erro: ' + data.error.message);
       console.error('Airtable error:', data.error);
-    } else {
-      // alert('Cadastro realizado no Airtable!'); // pode remover para não aparecer popup
     }
   })
   .catch(err => {
@@ -359,7 +358,6 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
   });
 }
 
-// ---- NÃO FAZ MAIS NADA NO onAuthStateChanged, só mostra tela de login se deslogar ----
 auth.onAuthStateChanged(async user => {
   if (!user) {
     document.getElementById('main-content').style.display = 'flex';
