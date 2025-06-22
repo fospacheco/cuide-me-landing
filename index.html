@@ -253,6 +253,8 @@ function loginWithEmail() {
       if (userDoc.exists && !userDoc.data().fonteCadastro) {
         await userRef.update({ fonteCadastro: "email" });
       }
+      // Redirecionamento só após login
+      window.location.href = "pagina-homepage.html";
     })
     .catch(error => alert("Erro: " + error.message));
 }
@@ -292,10 +294,6 @@ async function finalizarCadastroGoogle() {
     return;
   }
 
-  // Você pode pedir CPF nesta etapa, se desejar. Exemplo:
-  // const cpf = prompt("Digite seu CPF:") || "";
-  // (ou criar um campo de input aqui mesmo)
-
   const userRef = db.collection("usuarios").doc(googleUser.uid);
   let perfis = [];
   if (isCliente) perfis.push("familia");
@@ -306,7 +304,6 @@ async function finalizarCadastroGoogle() {
     email: googleUser.email,
     perfis: perfis,
     fonteCadastro: "google"
-    // , cpf: cpf
   });
 
   // Envia para Airtable para cada perfil selecionado
@@ -319,7 +316,7 @@ async function finalizarCadastroGoogle() {
 // ========== FIM NOVO FLUXO GOOGLE ==========
 
 const airtableBaseId = 'appVxCKjvJAah2r27';
-const airtableApiKey = 'airtable.com/appVxCKjvJAah2r27'; // Coloque sua chave do Airtable
+const airtableApiKey = 'SUA_API_KEY_AQUI'; // Coloque sua chave do Airtable
 
 async function enviarUsuarioParaAirtable(user, perfil) {
   let userDocData = {};
@@ -398,16 +395,12 @@ async function enviarUsuarioParaAirtable(user, perfil) {
   });
 }
 
+// ---- ATENÇÃO! Aqui está o bloco corrigido! ----
 auth.onAuthStateChanged(async user => {
   if (user) {
     document.getElementById('main-content').style.display = 'none';
-    let perfil = '';
-    try {
-      const userDoc = await db.collection("usuarios").doc(user.uid).get();
-      if (userDoc.exists) perfil = userDoc.data().perfil;
-    } catch (e) {}
-    // Não envia para Airtable de novo aqui, já foi enviado no fluxo Google/cadastro
-    window.location.href = "pagina-homepage.html";
+    // NÃO redireciona para homepage aqui!
+    // O redirecionamento acontece APENAS depois de escolher perfil (ou finalizar cadastro)!
   } else {
     document.getElementById('main-content').style.display = 'flex';
   }
