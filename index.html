@@ -219,9 +219,6 @@ function cadastrarUsuario() {
   const password = document.getElementById("password").value;
   const perfil = document.getElementById("perfil").value;
 
-  // Aqui seria a checagem de duplicidade, se quiser fazer via Airtable, tem que consultar API
-  // Para simplicidade, estamos só enviando para Airtable
-
   auth.createUserWithEmailAndPassword(email, password)
     .then(async (cred) => {
       await enviarUsuarioParaAirtable({uid: cred.user.uid, email: email, displayName: nome}, perfil, cpf);
@@ -296,10 +293,9 @@ async function finalizarCadastroGoogle() {
 // ========== FIM NOVO FLUXO GOOGLE ==========
 
 const airtableBaseId = 'appVxCKjvJAah2r27';
-const airtableApiKey = 'appVxCKjvJAah2r27'; // Coloque sua chave do Airtable
+const airtableApiKey = 'pat9oVJRGCPXYxSLC.66b8ce7f22a0a4595f09547449ee9a4786043b27bfc8ad9e70a3bc723c07e583'; // Sua chave secreta
 
 async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
-  // Monta dados para o Airtable conforme o perfil
   const uid = user.uid;
   const email = user.email || '';
   const nome = user.displayName || '';
@@ -312,33 +308,33 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
   if (perfil === 'cuidador') {
     tabela = 'Cuidadores';
     fields = {
-      "UID": uid,
-      "Nome Completo": nome,
-      "CPF": cpf,
-      "E-mail": email,
-      "Status": "ativo",
-      "Data de cadastro": dataCadastro,
-      "Fonte de cadastro": "google"
+      "nome completo": nome,
+      "cpf": cpf,
+      "e-mail": email,
+      "status": "ativo",
+      "data de cadastro": dataCadastro,
+      "fonte de cadastro": "google",
+      "uid": uid
     };
   } else if (perfil === 'familia') {
     tabela = 'Clientes';
     fields = {
-      "UID": uid,
-      "Nome Completo": nome,
-      "CPF": cpf,
-      "E-mail": email,
-      "Data de cadastro": dataCadastro,
-      "Fonte de cadastro": "google"
+      "nome completo": nome,
+      "cpf": cpf,
+      "e-mail": email,
+      "data de cadastro": dataCadastro,
+      "fonte de cadastro": "google",
+      "uid": uid
     };
   } else if (perfil === 'instituicao') {
     tabela = 'Clientes';
     fields = {
-      "UID": uid,
-      "Nome Completo": nome,
-      "CPF": cpf,
-      "E-mail": email,
-      "Data de cadastro": dataCadastro,
-      "Fonte de cadastro": "google"
+      "nome completo": nome,
+      "cpf": cpf,
+      "e-mail": email,
+      "data de cadastro": dataCadastro,
+      "fonte de cadastro": "google",
+      "uid": uid
     };
   } else {
     return;
@@ -354,10 +350,16 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
   })
   .then(res => res.json())
   .then(data => {
-    // console.log('Usuário enviado ao Airtable:', data);
+    if (data.error) {
+      alert('Airtable erro: ' + data.error.message);
+      console.error('Airtable error:', data.error);
+    } else {
+      alert('Cadastro realizado no Airtable!');
+    }
   })
   .catch(err => {
-    console.error('Erro ao enviar para Airtable:', err);
+      alert('Erro geral: ' + err.message);
+      console.error('Erro geral:', err);
   });
 }
 
