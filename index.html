@@ -6,6 +6,7 @@
   <title>Login/Cadastro - Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
+    /* Seu CSS original, sem alterações */
     :root {
       --primary: #42c2d3;
       --secondary: #E0F7FA;
@@ -122,7 +123,6 @@
       max-width: 220px;
       animation: pulse 1.5s infinite ease-in-out;
     }
-    /* Inputs iguais ao exemplo enviado */
     input[type="email"],
     input[type="password"],
     input[type="text"],
@@ -147,7 +147,6 @@
       border-color: #42c2d3;
       background: #f3fbfd;
     }
-    /* Google especial: */
     .perfil-checkboxes-google {
       display: flex;
       gap: 2rem;
@@ -389,6 +388,13 @@ function loginWithEmail() {
 // === FLUXO GOOGLE: acessibilidade e experiencia melhorada ===
 let googleUser = null;
 
+/*
+FLUXO GOOGLE:
+- Ao clicar no botão Google, autentica o usuário.
+- Verifica nas tabelas do Airtable (Clientes/Cuidadores) se já existe esse e-mail.
+- Se SIM: faz login direto, redireciona para homepage.
+- Se NÃO: pede perfil e CPF para completar o cadastro, e só então faz login.
+*/
 async function loginWithGoogle() {
   const provider = new firebase.auth.GoogleAuthProvider();
   try {
@@ -399,8 +405,10 @@ async function loginWithGoogle() {
     const existeCliente = await checarExistenciaAirtablePorEmail(email, 'familia');
     const existeCuidador = await checarExistenciaAirtablePorEmail(email, 'cuidador');
     if (existeCliente || existeCuidador) {
+      // Usuário já cadastrado: login direto!
       window.location.href = "pagina-homepage.html";
     } else {
+      // Usuário novo: precisa completar o cadastro
       mostrarPerfilCpfGoogle();
     }
   } catch (error) {
@@ -408,6 +416,7 @@ async function loginWithGoogle() {
   }
 }
 
+// Renderiza tela para usuário Google preencher CPF e perfil, caso seja novo
 function mostrarPerfilCpfGoogle() {
   document.getElementById("formSlide").innerHTML = `
     <div class="social-text" style="font-size:1.3rem; font-weight:700;">Acesse com a rede social</div>
