@@ -90,12 +90,11 @@
       font-weight: bold;
       border: none;
       cursor: pointer;
-      font-size: 1.2rem;
-      margin-top: 0.5rem;
+      font-size: 1rem;
     }
     .social-text {
       font-weight: 500;
-      font-size: 1rem;
+      font-size: 0.95rem;
       margin-top: 1rem;
     }
     .social-icons {
@@ -122,54 +121,50 @@
       max-width: 220px;
       animation: pulse 1.5s infinite ease-in-out;
     }
-    input[type="email"],
-    input[type="password"],
-    input[type="text"],
-    input[type="number"],
-    select {
-      width: 320px;
-      max-width: 90vw;
-      font-size: 1.18rem;
-      padding: 0.7rem 1rem;
-      border: 1.5px solid #b3c5cf;
-      border-radius: 5px;
-      background: #eaf1fa;
-      color: #245063;
-      margin-bottom: 1.1rem;
-      outline: none;
-      transition: border-color 0.2s;
+
+    /* Ajustes de acessibilidade Google */
+    .perfil-checkboxes-google {
+      display: flex;
+      gap: 2rem;
+      justify-content: center;
+      margin-bottom: 1.4rem;
     }
-    input[type="email"]:focus,
-    input[type="password"]:focus,
-    input[type="text"]:focus,
-    input[type="number"]:focus {
-      border-color: #42c2d3;
-      background: #f3fbfd;
+    .perfil-checkboxes-google label {
+      font-size: 1.35rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
     }
-    .especialidades-lista {
-      background: #f6fdff;
-      border: 1.5px solid #c2e6ee;
-      border-radius: 10px;
-      margin-top: 1.5rem;
-      max-width: 380px;
-      padding: 1.2rem 1rem 0.6rem 1.3rem;
-      font-size: 1.1rem;
-      box-shadow: 0 1px 8px #a4dce855;
+    .perfil-checkboxes-google input[type="checkbox"] {
+      width: 32px;
+      height: 32px;
+      accent-color: var(--primary);
+      cursor: pointer;
+      margin-right: 0.3rem;
+      margin-left: 0;
     }
-    .especialidades-lista h3 {
-      font-size: 1.22rem;
-      color: #42c2d3;
-      margin-bottom: 0.8rem;
-      margin-top: 0;
-      font-weight: 700;
+    #cpf_google {
+      width: 320px !important;
+      font-size: 1.3rem !important;
+      padding: 1.1rem 1rem !important;
+      border-radius: 12px !important;
+      border: 2px solid #42c2d3 !important;
+      text-align: center !important;
+      letter-spacing: 2px !important;
+      margin-bottom: 1.4rem !important;
+      background: #f7fcfd;
     }
-    .especialidades-lista ul {
-      list-style: disc;
-      padding-left: 1.5em;
-    }
-    .especialidades-lista li {
-      margin-bottom: 0.4em;
-      line-height: 1.3em;
+    .google-icon-big {
+      width: 70px !important;
+      height: 70px !important;
+      border-radius: 12px;
+      border: 2px solid #42c2d3;
+      margin-bottom: 1.4rem;
+      background: #fff;
+      box-shadow: 0 1px 10px #c0f6fa44;
+      pointer-events: none;
+      opacity: 1;
     }
     @keyframes pulse {
       0%, 100% { transform: scale(1); }
@@ -185,14 +180,21 @@
       .form-overlay {
         padding: 2rem;
       }
-      input[type="email"], input[type="password"], input[type="text"], input[type="number"], select {
-        width: 98vw !important;
+      #cpf_google {
+        width: 90vw !important;
         min-width: 180px !important;
-        font-size: 1rem !important;
+        font-size: 1.1rem !important;
       }
-      .especialidades-lista {
-        max-width: 97vw;
-        font-size: 1rem;
+      .google-icon-big {
+        width: 54px !important;
+        height: 54px !important;
+      }
+      .perfil-checkboxes-google label {
+        font-size: 1.12rem !important;
+      }
+      .perfil-checkboxes-google input[type="checkbox"] {
+        width: 26px !important;
+        height: 26px !important;
       }
     }
   </style>
@@ -218,35 +220,6 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
 <script>
-const airtableBaseId = 'appVxCKjvJAah2r27';
-const airtableApiKey = 'pats0YLmu9IF0qyFU.c6a73d5383da6bbb136059d08f289a983f2a19367f65021ce16188b4418dd439'; // token leitura
-
-// Exibir especialidades (funciona em qualquer tela)
-async function buscarEspecialidades() {
-  const listaDiv = document.getElementById('especialidades-lista');
-  listaDiv.innerHTML = '<span style="color:#999;font-size:1.02rem;">Carregando especialidades...</span>';
-  try {
-    const response = await fetch(
-      `https://api.airtable.com/v0/${airtableBaseId}/especialidade`,
-      { headers: { 'Authorization': `Bearer ${airtableApiKey}` } }
-    );
-    const data = await response.json();
-    if (data.records && Array.isArray(data.records)) {
-      let html = '<h3>Especialidades cadastradas</h3><ul>';
-      data.records.forEach(rec => {
-        html += `<li><strong>${rec.fields.Name}</strong>${rec.fields.Notes ? ` – <span style="color:#24506399;">${rec.fields.Notes}</span>` : ''}</li>`;
-      });
-      html += '</ul>';
-      listaDiv.innerHTML = html;
-    } else {
-      listaDiv.innerHTML = '<span style="color:red;">Não foi possível buscar especialidades. Verifique suas permissões.</span>';
-    }
-  } catch (e) {
-    listaDiv.innerHTML = '<span style="color:red;">Erro ao buscar especialidades.</span>';
-  }
-}
-
-// Firebase (restante igual ao seu código)
 const firebaseConfig = {
   apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
   authDomain: "cuide-me-f57f8.firebaseapp.com",
@@ -276,8 +249,6 @@ function renderLogin() {
     <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
     <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
     <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
-    <button class="cta-btn" type="button" style="background:#eaf1fa;color:#42c2d3;font-weight:600;box-shadow:none;" onclick="buscarEspecialidades()">Ver Especialidades</button>
-    <div id="especialidades-lista" class="especialidades-lista" style="display:block;"></div>
     <div class="social-text">ou acesse com redes sociais</div>
     <div class="social-icons">
       <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" />
@@ -296,7 +267,254 @@ function renderLogin() {
   `;
 }
 
-// ... (todo o restante do seu JS permanece igual, pode colar o código anterior aqui)
+function renderCadastro(emailPrePreenchido = "") {
+  document.getElementById("formSlide").innerHTML = `
+    <input id="nome" type="text" placeholder="Nome completo" required />
+    <input id="cpf" type="text" placeholder="CPF" required maxlength="14" />
+    <input id="email" type="email" placeholder="E-mail" required value="${emailPrePreenchido}" />
+    <input id="password" type="password" placeholder="Senha" required />
+    <div style="margin-bottom: 1rem;">
+      <label style="margin-right:1rem;">
+        <input type="checkbox" id="perfil_familia" /> Sou Cliente / Familiar
+      </label>
+      <label>
+        <input type="checkbox" id="perfil_cuidador" /> Sou Cuidador
+      </label>
+    </div>
+    <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
+    <div class="toggle-text">Já tem uma conta?
+      <a style="color: var(--primary); cursor:pointer;" onclick="renderLogin()">Faça login</a>
+    </div>`;
+}
+
+function mascaraCPF(cpf) {
+  return cpf
+    .replace(/\D/g, "")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d)/, "$1.$2")
+    .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+}
+document.addEventListener('input', function(e) {
+  if (e.target.id === "cpf" || e.target.id === "cpf_google") {
+    e.target.value = mascaraCPF(e.target.value);
+  }
+});
+
+function extrairProvedor(email) {
+  if (!email) return '';
+  let provedor = email.split('@')[1] || '';
+  provedor = provedor.split('.')[0];
+  return provedor.toLowerCase();
+}
+
+async function cadastrarUsuario() {
+  const nome = document.getElementById("nome").value;
+  const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  const isFamilia = document.getElementById("perfil_familia").checked;
+  const isCuidador = document.getElementById("perfil_cuidador").checked;
+
+  if (!isFamilia && !isCuidador) {
+    alert("Selecione pelo menos um perfil.");
+    return;
+  }
+
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(async (cred) => {
+      let cadastrou = false;
+      if (isFamilia) {
+        const existeFamilia = await checarExistenciaAirtableCompleta(cred.user.uid, email, cpf, "familia");
+        if (!existeFamilia) {
+          await enviarUsuarioParaAirtable({uid: cred.user.uid, email, displayName: nome}, "familia", cpf);
+          cadastrou = true;
+        }
+      }
+      if (isCuidador) {
+        const existeCuidador = await checarExistenciaAirtableCompleta(cred.user.uid, email, cpf, "cuidador");
+        if (!existeCuidador) {
+          await enviarUsuarioParaAirtable({uid: cred.user.uid, email, displayName: nome}, "cuidador", cpf);
+          cadastrou = true;
+        }
+      }
+      if (cadastrou) {
+        window.location.href = "pagina-homepage.html";
+      } else {
+        alert("Usuário já cadastrado com esse CPF, e-mail ou UID.");
+      }
+    })
+    .catch(error => alert("Erro ao cadastrar: " + error.message));
+}
+
+function loginWithEmail() {
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      window.location.href = "pagina-homepage.html";
+    })
+    .catch(error => alert("Erro: " + error.message));
+}
+
+// === FLUXO GOOGLE: acessibilidade e experiencia melhorada ===
+let googleUser = null;
+
+async function loginWithGoogle() {
+  const provider = new firebase.auth.GoogleAuthProvider();
+  try {
+    const result = await auth.signInWithPopup(provider);
+    googleUser = result.user;
+    const email = googleUser.email;
+    // Busca o e-mail (em minúsculo) nas duas tabelas
+    const existeCliente = await checarExistenciaAirtablePorEmail(email, 'familia');
+    const existeCuidador = await checarExistenciaAirtablePorEmail(email, 'cuidador');
+    if (existeCliente || existeCuidador) {
+      window.location.href = "pagina-homepage.html";
+    } else {
+      mostrarPerfilCpfGoogle();
+    }
+  } catch (error) {
+    alert("Erro com Google: " + error.message);
+  }
+}
+
+function mostrarPerfilCpfGoogle() {
+  document.getElementById("formSlide").innerHTML = `
+    <div class="social-text" style="font-size:1.3rem; font-weight:700;">Acesse com a rede social</div>
+    <div class="social-icons" style="margin-bottom:1.2rem;">
+      <img src="https://img.icons8.com/color/96/google-logo.png" class="google-icon-big" alt="Google" title="Google" />
+    </div>
+    <div class="perfil-checkboxes-google">
+      <label>
+        <input type="checkbox" id="perfil_familia_google" /> Sou Cliente / Familiar
+      </label>
+      <label>
+        <input type="checkbox" id="perfil_cuidador_google" /> Sou Cuidador
+      </label>
+    </div>
+    <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required />
+    <button class="cta-btn" onclick="finalizarCadastroGoogle()">Finalizar Cadastro</button>
+    <div style="font-size:1.05rem; color:#245063; text-align:center; margin-top:1.7rem;">
+      Em caso de problemas:
+      <a href="mailto:cuideme.cuidados@gmail.com" style="color: var(--primary); text-decoration: underline; font-weight: 700;">
+        Entre em contato
+      </a>
+    </div>
+  `;
+}
+
+async function finalizarCadastroGoogle() {
+  const isFamilia = document.getElementById("perfil_familia_google").checked;
+  const isCuidador = document.getElementById("perfil_cuidador_google").checked;
+  const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
+
+  if (!isFamilia && !isCuidador) {
+    alert("Escolha pelo menos um perfil.");
+    return;
+  }
+  if (!cpf || cpf.length < 11) {
+    alert("Digite um CPF válido.");
+    document.getElementById("cpf_google").focus();
+    return;
+  }
+
+  const perfis = [];
+  if (isFamilia) perfis.push("familia");
+  if (isCuidador) perfis.push("cuidador");
+
+  for (let perfil of perfis) {
+    const existe = await checarExistenciaAirtableCompleta(googleUser.uid, googleUser.email, cpf, perfil);
+    if (!existe) {
+      await enviarUsuarioParaAirtable(googleUser, perfil, cpf);
+    }
+  }
+
+  window.location.href = "pagina-homepage.html";
+}
+
+// ===== Airtable ======
+const airtableBaseId = 'appVxCKjvJAah2r27';
+const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
+
+async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
+  let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
+  let filtro = [`{UID}='${uid}'`];
+  if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
+  if (cpf) filtro.push(`{CPF}='${cpf}'`);
+  const formula = `OR(${filtro.join(",")})`;
+  const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
+  const response = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+  });
+  const data = await response.json();
+  return data.records && data.records.length > 0;
+}
+
+async function checarExistenciaAirtablePorEmail(email, perfil) {
+  let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
+  const emailFormatado = email.trim().toLowerCase();
+  const formula = `LOWER({E-mail})='${emailFormatado}'`;
+  const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
+  const response = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+  });
+  const data = await response.json();
+  return data.records && data.records.length > 0;
+}
+
+async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
+  const uid = user.uid;
+  const email = user.email || '';
+  const nome = user.displayName || '';
+  const cpf = cpfParam || '';
+  const fonteCadastro = extrairProvedor(email);
+
+  let tabela = '';
+  let fields = {};
+
+  if (perfil === 'cuidador') {
+    tabela = 'Cuidadores';
+    fields = {
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Status": "Disponível",
+      "Fonte de cadastro": fonteCadastro,
+      "UID": uid
+    };
+  } else if (perfil === 'familia') {
+    tabela = 'Clientes';
+    fields = {
+      "Nome Completo": nome,
+      "CPF": cpf,
+      "E-mail": email,
+      "Fonte de cadastro": fonteCadastro,
+      "UID": uid
+    };
+  } else {
+    return;
+  }
+
+  await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${airtableApiKey}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({fields})
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.error) {
+      alert('Airtable erro: ' + data.error.message);
+      console.error('Airtable error:', data.error);
+    }
+  })
+  .catch(err => {
+      alert('Erro geral: ' + err.message);
+      console.error('Erro geral:', err);
+  });
+}
 
 auth.onAuthStateChanged(async user => {
   if (!user) {
@@ -305,9 +523,6 @@ auth.onAuthStateChanged(async user => {
 });
 </script>
 
-<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
-  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: var(--primary); text-decoration: underline;">Termos de Uso</a>
-  <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration: underline;">Política de Privacidade</a>
 </div>
 </body>
 </html>
