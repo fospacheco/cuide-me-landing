@@ -384,7 +384,6 @@ function loginWithEmail() {
     .catch(error => alert("Erro: " + error.message));
 }
 
-// === FLUXO GOOGLE: acessibilidade e experiencia melhorada ===
 let googleUser = null;
 
 async function loginWithGoogle() {
@@ -393,7 +392,6 @@ async function loginWithGoogle() {
     const result = await auth.signInWithPopup(provider);
     googleUser = result.user;
     const email = googleUser.email;
-    // Busca o e-mail (em minúsculo) nas duas tabelas
     const existeCliente = await checarExistenciaAirtablePorEmail(email, 'familia');
     const existeCuidador = await checarExistenciaAirtablePorEmail(email, 'cuidador');
     if (existeCliente || existeCuidador) {
@@ -460,39 +458,23 @@ async function finalizarCadastroGoogle() {
   window.location.href = "pagina-homepage.html";
 }
 
-// ===== Airtable ======
-const airtableBaseId = 'appVxCKjvJAah2r27';
-const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
-
+// ======================== 100% Seguro: TUDO via backend =========================
 async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
-  let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
-  let filtro = [`{UID}='${uid}'`];
-  if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
-  if (cpf) filtro.push(`{CPF}='${cpf}'`);
-  const formula = `OR(${filtro.join(",")})`;
-  const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
-  const response = await fetch(url, {
-    headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+  const url = 'https://cuide-me-backend.vercel.app/api/auth/linkedin/check';
+  const resposta = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ uid, email, cpf, perfil })
   });
-  const data = await response.json();
-  return data.records && data.records.length > 0;
+  const data = await resposta.json();
+  return data.exists;
 }
 
 async function checarExistenciaAirtablePorEmail(email, perfil) {
-  let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
-  const emailFormatado = email.trim().toLowerCase();
-  const formula = `LOWER({E-mail})='${emailFormatado}'`;
-  const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
-  const response = await fetch(url, {
-    headers: { 'Authorization': `Bearer ${airtableApiKey}` }
-  });
-  const data = await response.json();
-  return data.records && data.records.length > 0;
+  return checarExistenciaAirtableCompleta(null, email, null, perfil);
 }
 
-// ======= ALTERAÇÃO: NOVA FUNÇÃO enviarUsuarioParaAirtable =========
 async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
-  // Alteração: envia para seu backend seguro na Vercel
   const url = 'https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable';
   const uid = user.uid;
   const email = user.email || '';
