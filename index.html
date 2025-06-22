@@ -246,6 +246,9 @@
   </div>
 </div>
 
+<!-- Mensagem de erro estilizada -->
+<div id="msgErro" style="display:none; position:fixed; top:32px; left:50%; transform:translateX(-50%); background:#fff3f3; color:#b00020; padding:1rem 2rem; border-radius:10px; box-shadow:0 2px 12px #0001; z-index:10000; font-weight:600; font-size:1.07rem;"></div>
+
 <!-- Firebase SDK -->
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -337,6 +340,31 @@ function extrairProvedor(email) {
   return provedor.toLowerCase();
 }
 
+// -------------------- Validação de CPF -----------------------
+function validarCPF(cpf) {
+  cpf = cpf.replace(/[^\d]+/g, '');
+  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+  let soma = 0;
+  for (let i = 0; i < 9; i++) soma += parseInt(cpf.charAt(i)) * (10 - i);
+  let resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.charAt(9))) return false;
+  soma = 0;
+  for (let i = 0; i < 10; i++) soma += parseInt(cpf.charAt(i)) * (11 - i);
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) resto = 0;
+  if (resto !== parseInt(cpf.charAt(10))) return false;
+  return true;
+}
+// -------------------- Mensagem de erro estilizada -----------------------
+function showError(mensagem) {
+  const div = document.getElementById('msgErro');
+  div.innerText = mensagem;
+  div.style.display = 'block';
+  setTimeout(() => { div.style.display = 'none'; }, 4500);
+}
+
+// ================ Cadastro tradicional ================
 async function cadastrarUsuario() {
   const nome = document.getElementById("nome").value;
   const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
@@ -346,7 +374,11 @@ async function cadastrarUsuario() {
   const isCuidador = document.getElementById("perfil_cuidador").checked;
 
   if (!isFamilia && !isCuidador) {
-    alert("Selecione pelo menos um perfil.");
+    showError("Selecione pelo menos um perfil.");
+    return;
+  }
+  if (!validarCPF(cpf)) {
+    showError("Digite um CPF válido.");
     return;
   }
 
@@ -370,12 +402,13 @@ async function cadastrarUsuario() {
       if (cadastrou) {
         window.location.href = "pagina-homepage.html";
       } else {
-        alert("Usuário já cadastrado com esse CPF, e-mail ou UID.");
+        showError("Usuário já cadastrado com esse CPF, e-mail ou UID.");
       }
     })
-    .catch(error => alert("Erro ao cadastrar: " + error.message));
+    .catch(error => showError("Erro ao cadastrar: " + error.message));
 }
 
+// ================ Login tradicional ================
 function loginWithEmail() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -383,7 +416,7 @@ function loginWithEmail() {
     .then(() => {
       window.location.href = "pagina-homepage.html";
     })
-    .catch(error => alert("Erro: " + error.message));
+    .catch(error => showError("Erro: " + error.message));
 }
 
 // === FLUXO GOOGLE: acessibilidade e experiencia melhorada ===
@@ -404,7 +437,7 @@ async function loginWithGoogle() {
       mostrarPerfilCpfGoogle();
     }
   } catch (error) {
-    alert("Erro com Google: " + error.message);
+    showError("Erro com Google: " + error.message);
   }
 }
 
@@ -439,11 +472,11 @@ async function finalizarCadastroGoogle() {
   const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
 
   if (!isFamilia && !isCuidador) {
-    alert("Escolha pelo menos um perfil.");
+    showError("Escolha pelo menos um perfil.");
     return;
   }
-  if (!cpf || cpf.length < 11) {
-    alert("Digite um CPF válido.");
+  if (!validarCPF(cpf)) {
+    showError("Digite um CPF válido.");
     document.getElementById("cpf_google").focus();
     return;
   }
@@ -536,12 +569,12 @@ async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
   .then(res => res.json())
   .then(data => {
     if (data.error) {
-      alert('Airtable erro: ' + data.error.message);
+      showError('Airtable erro: ' + data.error.message);
       console.error('Airtable error:', data.error);
     }
   })
   .catch(err => {
-      alert('Erro geral: ' + err.message);
+      showError('Erro geral: ' + err.message);
       console.error('Erro geral:', err);
   });
 }
