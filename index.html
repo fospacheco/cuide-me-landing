@@ -244,7 +244,7 @@
   </div>
 </div>
 
-<!-- Mensagem de erro estilizada flutuante (mantida, mas não usada no login) -->
+<!-- Mensagem de erro estilizada flutuante (mantida para outros fluxos, não login tradicional) -->
 <div id="msgErro" style="display:none; position:fixed; top:32px; left:50%; transform:translateX(-50%); background:#fff3f3; color:#b00020; padding:1rem 2rem; border-radius:10px; box-shadow:0 2px 12px #0001; z-index:10000; font-weight:600; font-size:1.07rem;"></div>
 
 <!-- Firebase SDK -->
@@ -275,7 +275,7 @@ function mostrarFormulario() {
   renderLogin();
 }
 
-// AJUSTE AQUI: Adicione o div do erro acima do botão Entrar
+// AJUSTADO: div de erro acima do botão Entrar
 function renderLogin() {
   document.getElementById("formSlide").innerHTML = `
     <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
@@ -409,10 +409,10 @@ async function cadastrarUsuario() {
 }
 
 // ================ Login tradicional ================
+// SÓ exibe erro no formulário, não no topo
 function loginWithEmail() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  // Limpa mensagem antiga
   document.getElementById("login-error-msg").innerText = "";
 
   auth.signInWithEmailAndPassword(email, password)
@@ -420,13 +420,17 @@ function loginWithEmail() {
       window.location.href = "pagina-homepage.html";
     })
     .catch(error => {
+      let msg = "";
       if (error.code === "auth/user-not-found") {
-        document.getElementById("login-error-msg").innerText = "E-mail não cadastrado";
+        msg = "E-mail não cadastrado";
       } else if (error.code === "auth/wrong-password") {
-        document.getElementById("login-error-msg").innerText = "Senha incorreta";
+        msg = "Senha incorreta";
+      } else if (error.code === "auth/invalid-email") {
+        msg = "E-mail inválido";
       } else {
-        document.getElementById("login-error-msg").innerText = "Erro: " + error.message;
+        msg = "Erro: " + error.message;
       }
+      document.getElementById("login-error-msg").innerText = msg;
     });
 }
 
