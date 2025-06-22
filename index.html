@@ -171,8 +171,6 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
-let emailGoogleTemporario = ""; // Usado para preencher e-mail ao abrir cadastro via Google
-
 window.addEventListener('load', () => {
   setTimeout(() => {
     document.getElementById('splash-screen').style.display = 'none';
@@ -241,7 +239,6 @@ document.addEventListener('input', function(e) {
   }
 });
 
-// Função para extrair o provedor do e-mail
 function extrairProvedor(email) {
   if (!email) return '';
   let provedor = email.split('@')[1] || '';
@@ -298,8 +295,7 @@ function loginWithEmail() {
     .catch(error => alert("Erro: " + error.message));
 }
 
-// ========== LOGIN GOOGLE COM BUSCA POR E-MAIL ==========
-
+// === NOVO FLUXO GOOGLE: pede só perfil e CPF, e já cadastra no Airtable ===
 let googleUser = null;
 
 async function loginWithGoogle() {
@@ -314,50 +310,41 @@ async function loginWithGoogle() {
     if (existeCliente || existeCuidador) {
       window.location.href = "pagina-homepage.html";
     } else {
-      alert("Usuário não cadastrado");
-      // Desloga para evitar sessão ativa caso queira cadastrar com outro Google
-      await auth.signOut();
-      emailGoogleTemporario = email; // salva e-mail do google
-      renderCadastro(emailGoogleTemporario);
+      mostrarPerfilCpfGoogle();
     }
   } catch (error) {
     alert("Erro com Google: " + error.message);
   }
 }
 
-// Checagem robusta por e-mail minúsculo!
-async function checarExistenciaAirtablePorEmail(email, perfil) {
-  let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
-  const emailFormatado = email.trim().toLowerCase();
-  const formula = `LOWER({E-mail})='${emailFormatado}'`;
-  const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
-  const response = await fetch(url, {
-    headers: { 'Authorization': `Bearer ${airtableApiKey}` }
-  });
-  const data = await response.json();
-  return data.records && data.records.length > 0;
-}
-
-function mostrarEscolhaPerfil() {
+function mostrarPerfilCpfGoogle() {
   document.getElementById("formSlide").innerHTML = `
-    <p style="font-size:1.3rem;margin-bottom:1rem;">Qual seu perfil?</p>
-    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
-      <input type="checkbox" id="perfil_cliente" /> Cliente / Familiar
-    </label>
-    <label style="display:block;margin:0.5rem 0;font-size:1.1rem;">
-      <input type="checkbox" id="perfil_cuidador" /> Cuidador
-    </label>
-    <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" style="margin:1rem 0; padding:0.5rem; border-radius:8px; border:1px solid #42c2d3; width:200px; font-size:1rem;" required />
-    <button class="cta-btn" style="margin-top:1.3rem;" onclick="finalizarCadastroGoogle()">Confirmar</button>
+    <p style="font-size:1.3rem;margin-bottom:1rem;">Complete seu cadastro:</p>
+    <div style="margin-bottom: 1rem;">
+      <label style="margin-right:1rem;">
+        <input type="checkbox" id="perfil_familia_google" /> Sou Cliente / Familiar
+      </label>
+      <label>
+        <input type="checkbox" id="perfil_cuidador_google" /> Sou Cuidador
+      </label>
+    </div>
+    <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" style="margin-bottom: 1rem;" required />
+    <button class="cta-btn" onclick="finalizarCadastroGoogle()">Finalizar Cadastro</button>
+    <div style="font-size:1rem; color:#245063; text-align:center; margin-top:1.5rem;">
+      Em caso de problemas:
+      <a href="mailto:cuideme.cuidados@gmail.com" style="color: var(--primary); text-decoration: underline; font-weight: 600;">
+        Entre em contato
+      </a>
+    </div>
   `;
 }
 
 async function finalizarCadastroGoogle() {
-  const isCliente = document.getElementById("perfil_cliente").checked;
-  const isCuidador = document.getElementById("perfil_cuidador").checked;
+  const isFamilia = document.getElementById("perfil_familia_google").checked;
+  const isCuidador = document.getElementById("perfil_cuidador_google").checked;
   const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
 
-  if (!isCliente && !isCuidador) {
+  if (!isFamilia && !isCuidador) {
     alert("Escolha pelo menos um perfil.");
     return;
   }
@@ -368,7 +355,7 @@ async function finalizarCadastroGoogle() {
   }
 
   const perfis = [];
-  if (isCliente) perfis.push("familia");
+  if (isFamilia) perfis.push("familia");
   if (isCuidador) perfis.push("cuidador");
 
   for (let perfil of perfis) {
@@ -383,7 +370,6 @@ async function finalizarCadastroGoogle() {
 
 // ===== Airtable ======
 const airtableBaseId = 'appVxCKjvJAah2r27';
-// Use aqui seu token de escrita (leitura + escrita)
 const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
 
 // Checa por UID, e-mail ou CPF (após informar CPF)
@@ -393,6 +379,18 @@ async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
   if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
   if (cpf) filtro.push(`{CPF}='${cpf}'`);
   const formula = `OR(${filtro.join(",")})`;
+  const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
+  const response = await fetch(url, {
+    headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+  });
+  const data = await response.json();
+  return data.records && data.records.length > 0;
+}
+
+async function checarExistenciaAirtablePorEmail(email, perfil) {
+  let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
+  const emailFormatado = email.trim().toLowerCase();
+  const formula = `LOWER({E-mail})='${emailFormatado}'`;
   const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
   const response = await fetch(url, {
     headers: { 'Authorization': `Bearer ${airtableApiKey}` }
