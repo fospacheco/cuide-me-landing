@@ -320,14 +320,14 @@
         });
     }
 
-    // ----------- FLUXO GOOGLE AJUSTADO -----------  
+    // ----------- FLUXO GOOGLE AJUSTADO COM BACKEND INTERMEDIÁRIO -----------  
     let googleUserTemp = null;
     async function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       try {
         const result = await auth.signInWithPopup(provider);
         const user = result.user;
-        // Checa no Airtable usando UID
+        // Checa no Airtable usando UID (via backend)
         const existe = await checarExistenciaAirtableUID(user.uid);
         if (existe) {
           window.location.href = "pagina-homepage.html";
@@ -396,20 +396,20 @@
       }
     }
 
-    // Airtable
-    const airtableBaseId = 'appVxCKjvJAah2r27';
-    const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
-
+    // Airtable (agora sempre via backend /api/airtable)
     async function checarExistenciaAirtableUID(uid) {
-      // Checa em Clientes e em Cuidadores
       const tables = ['Clientes', 'Cuidadores'];
       for (let tabela of tables) {
-        const formula = `{UID}='${uid}'`;
-        const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
-        const response = await fetch(url, {
-          headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+        const res = await fetch('/api/airtable', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            table: tabela,
+            action: 'get',
+            filter: `{UID}='${uid}'`
+          })
         });
-        const data = await response.json();
+        const data = await res.json();
         if (data.records && data.records.length > 0) {
           return true;
         }
@@ -423,11 +423,16 @@
       if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
       if (cpf) filtro.push(`{CPF}='${cpf}'`);
       const formula = `OR(${filtro.join(",")})`;
-      const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
-      const response = await fetch(url, {
-        headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+      const res = await fetch('/api/airtable', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          table: tabela,
+          action: 'get',
+          filter: formula
+        })
       });
-      const data = await response.json();
+      const data = await res.json();
       return data.records && data.records.length > 0;
     }
 
@@ -461,13 +466,14 @@
       } else {
         return;
       }
-      await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
+      await fetch('/api/airtable', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${airtableApiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({fields})
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({
+          table: tabela,
+          action: 'post',
+          data: fields
+        })
       })
       .then(res => res.json())
       .then(data => {
