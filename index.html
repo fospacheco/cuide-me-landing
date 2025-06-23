@@ -126,7 +126,6 @@
   <div id="msgErro" style="display:none;position:fixed;top:32px;left:50%;transform:translateX(-50%);
        background:#fff3f3;color:#b00020;padding:1rem 2rem;border-radius:10px;
        box-shadow:0 2px 12px #0001;z-index:10000;font-weight:600;font-size:1.07rem;"></div>
-
   <!-- Firebase + Three.js + Vanta.js -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
@@ -252,7 +251,6 @@
       div.style.display = 'block';
       setTimeout(() => { div.style.display = 'none'; }, 4500);
     }
-
     async function cadastrarUsuario() {
       const nome = document.getElementById("nome").value;
       const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
@@ -320,14 +318,14 @@
         });
     }
 
-    // ----------- FLUXO GOOGLE AJUSTADO -----------  
+    // ----------- FLUXO GOOGLE COM BACKEND AJUSTADO -----------
     let googleUserTemp = null;
     async function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       try {
         const result = await auth.signInWithPopup(provider);
         const user = result.user;
-        // Checa no Airtable usando UID
+        // Checa no Airtable usando UID, via backend seguro
         const existe = await checarExistenciaAirtableUID(user.uid);
         if (existe) {
           window.location.href = "pagina-homepage.html";
@@ -378,12 +376,10 @@
         document.getElementById("cpf_google").focus();
         return;
       }
-      // Salva nos dois perfis se for o caso
       if (isFamilia) await enviarUsuarioParaAirtable(googleUserTemp, "familia", cpf);
       if (isCuidador) await enviarUsuarioParaAirtable(googleUserTemp, "cuidador", cpf);
-      // Aguarda aparecer no Airtable ANTES de redirecionar
       let tentativas = 0, achou = false;
-      while (tentativas < 6) { // espera até 3 segundos (500ms x 6 tentativas)
+      while (tentativas < 6) {
         achou = await checarExistenciaAirtableUID(googleUserTemp.uid);
         if (achou) break;
         await new Promise(r => setTimeout(r, 500));
@@ -396,9 +392,9 @@
       }
     }
 
-    // Airtable: sempre via backend, **NUNCA direto do front!**
+    // --- API local segura (proxy para o backend) ---
     async function checarExistenciaAirtableUID(uid) {
-      // Checa em Clientes e em Cuidadores
+      // Checa em Clientes e em Cuidadores via backend seguro
       const tables = ['Clientes', 'Cuidadores'];
       for (let tabela of tables) {
         const filter = `{UID}='${uid}'`;
