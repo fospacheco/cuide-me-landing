@@ -174,8 +174,8 @@
 
     function renderLogin() {
       document.getElementById("formSlide").innerHTML = `
-        <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
-        <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
+        <input id="email" type="email" placeholder="E-mail" required autocomplete="off"/>
+        <input id="password" type="password" placeholder="Senha" required autocomplete="off"/>
         <div id="login-error-msg" style="color:#b00020;font-weight:600;margin-bottom:10px;"></div>
         <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
         <div class="social-text">ou acesse com redes sociais</div>
