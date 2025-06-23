@@ -395,7 +395,7 @@
     // --- API local segura (proxy para o backend) ---
     async function checarExistenciaAirtableUID(uid) {
       // Checa em Clientes e em Cuidadores via backend seguro
-      const tables = ['Clientes', 'Cuidadores'];
+      const tables = ['clientes', 'cuidadores'];
       for (let tabela of tables) {
         const filter = `{UID}='${uid}'`;
         const res = await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable.js', {
@@ -417,7 +417,7 @@
     }
 
     async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
-      let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
+      let tabela = perfil === "cuidador" ? "cuidadores" : "clientes";
       let filtro = [`{UID}='${uid}'`];
       if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
       if (cpf) filtro.push(`{CPF}='${cpf}'`);
@@ -445,7 +445,7 @@
       let tabela = '';
       let fields = {};
       if (perfil === 'cuidador') {
-        tabela = 'Cuidadores';
+        tabela = 'cuidadores';
         fields = {
           "Nome Completo": nome,
           "CPF": cpf,
@@ -455,7 +455,7 @@
           "UID": uid
         };
       } else if (perfil === 'familia') {
-        tabela = 'Clientes';
+        tabela = 'clientes';
         fields = {
           "Nome Completo": nome,
           "CPF": cpf,
