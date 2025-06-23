@@ -320,14 +320,14 @@
         });
     }
 
-    // ----------- FLUXO GOOGLE AJUSTADO COM BACKEND INTERMEDIÁRIO -----------  
+    // ----------- FLUXO GOOGLE AJUSTADO -----------  
     let googleUserTemp = null;
     async function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       try {
         const result = await auth.signInWithPopup(provider);
         const user = result.user;
-        // Checa no Airtable usando UID (via backend)
+        // Checa no Airtable usando UID
         const existe = await checarExistenciaAirtableUID(user.uid);
         if (existe) {
           window.location.href = "pagina-homepage.html";
@@ -396,20 +396,23 @@
       }
     }
 
-    // Airtable (agora sempre via backend /api/airtable)
+    // Airtable: sempre via backend, **NUNCA direto do front!**
     async function checarExistenciaAirtableUID(uid) {
+      // Checa em Clientes e em Cuidadores
       const tables = ['Clientes', 'Cuidadores'];
       for (let tabela of tables) {
-        const res = await fetch('/api/airtable', {
+        const filter = `{UID}='${uid}'`;
+        const res = await fetch('/api/auth/linkedin/airtable', {
           method: 'POST',
-          headers: {'Content-Type': 'application/json'},
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             table: tabela,
             action: 'get',
-            filter: `{UID}='${uid}'`
+            filter
           })
         });
-        const data = await res.json();
+        let data;
+        try { data = await res.json(); } catch (e) { data = {}; }
         if (data.records && data.records.length > 0) {
           return true;
         }
@@ -423,16 +426,17 @@
       if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
       if (cpf) filtro.push(`{CPF}='${cpf}'`);
       const formula = `OR(${filtro.join(",")})`;
-      const res = await fetch('/api/airtable', {
+      const res = await fetch('/api/auth/linkedin/airtable', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           table: tabela,
           action: 'get',
           filter: formula
         })
       });
-      const data = await res.json();
+      let data;
+      try { data = await res.json(); } catch (e) { data = {}; }
       return data.records && data.records.length > 0;
     }
 
@@ -466,9 +470,9 @@
       } else {
         return;
       }
-      await fetch('/api/airtable', {
+      await fetch('/api/auth/linkedin/airtable', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           table: tabela,
           action: 'post',
