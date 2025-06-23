@@ -398,7 +398,7 @@
       const tables = ['clientes', 'cuidadores'];
       for (let tabela of tables) {
         const filter = `{UID}='${uid}'`;
-        const res = await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable.js', {
+        const res = await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -422,7 +422,7 @@
       if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
       if (cpf) filtro.push(`{CPF}='${cpf}'`);
       const formula = `OR(${filtro.join(",")})`;
-      const res = await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable.js', {
+      const res = await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -466,7 +466,7 @@
       } else {
         return;
       }
-      await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable.js', {
+      await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
