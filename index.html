@@ -11,19 +11,23 @@
       --secondary: #E0F7FA;
       --dark-text: #245063;
       --white: #ffffff;
-      --petroleo: #004953;
+      --petroleo: #004953; /* novo: azul petróleo escuro */
       --font-base: 'Inter', sans-serif;
     }
     * { box-sizing: border-box; }
     html, body {
-      margin: 0; height: 100%;
+      margin: 0;
+      height: 100%;
       font-family: var(--font-base);
       background: none;
-      overflow-x: hidden; color: var(--dark-text);
+      overflow-x: hidden;
+      color: var(--dark-text);
     }
     #background {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%; z-index: -1;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
     }
     #splash-screen {
       position: fixed; top:0; left:0; right:0; bottom:0;
@@ -39,44 +43,119 @@
       0%,100% { transform: scale(1); }
       50%     { transform: scale(1.05); }
     }
-    .container { display: none; min-height:100vh; display:flex; }
+    .container {
+      display: none;
+      min-height:100vh;
+      display:flex;
+    }
     .left {
-      flex:1; padding:3rem; display:flex;
-      flex-direction:column; justify-content:center; align-items:center;
-      background:transparent; color:var(--white); text-align:center; z-index:1;
+      flex:1;
+      padding:3rem;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      background:transparent;
+      color:var(--white);
+      text-align:center;
+      z-index:1;
     }
-    .left .logo { width:120px; margin-bottom:1.5rem; }
-    .left h2 { font-size:2rem; margin-bottom:1rem; }
-    .left p { font-size:1.1rem; margin-bottom:2rem; }
+    .left .logo {
+      width:120px;
+      margin-bottom:1.5rem;
+    }
+    .left h2 {
+      font-size:2rem;
+      margin-bottom:1rem;
+    }
+    .left p {
+      font-size:1.1rem;
+      margin-bottom:2rem;
+    }
     .left a {
-      background:var(--white); color:var(--primary); padding:.8rem 2rem;
-      border-radius:50px; font-weight:bold; text-decoration:none;
-      box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer;
+      background:var(--white);
+      color:var(--primary);
+      padding:.8rem 2rem;
+      border-radius:50px;
+      font-weight:bold;
+      text-decoration:none;
+      box-shadow:0 4px 10px rgba(0,0,0,0.1);
+      cursor:pointer;
     }
-    .left h2, .left p { color: var(--petroleo); }
+    .left h2,
+    .left p {
+      color: var(--petroleo);
+    }
     .right {
-      flex:1; position:relative; overflow:hidden; background:var(--white); display:none;
+      flex:1;
+      position:relative;
+      overflow:hidden;
+      background:var(--white);
+      display:none;
     }
     .form-overlay {
-      position: fixed; top: 0; left: 100%; width: 50%; height: 100%;
-      background: var(--white); display: flex; flex-direction: column; align-items: center;
-      justify-content: center; padding: 3rem; gap: 1rem; transition: left 0.6s ease; z-index: 2;
+      position: fixed;
+      top: 0;
+      left: 100%;
+      width: 50%;
+      height: 100%;
+      background: var(--white);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem;
+      gap: 1rem;
+      transition: left 0.6s ease;
+      z-index: 2;
     }
-    .form-overlay.active { left: 50%; }
+    .form-overlay.active {
+      left: 50%;
+    }
     .cta-btn {
-      background-color: var(--primary); color: var(--white); padding: .9rem 2rem;
-      border-radius: 50px; font-weight: bold; border: none; cursor: pointer;
-      font-size: 1.2rem; margin-top: .5rem;
+      background-color: var(--primary);
+      color: var(--white);
+      padding: .9rem 2rem;
+      border-radius: 50px;
+      font-weight: bold;
+      border: none;
+      cursor: pointer;
+      font-size: 1.2rem;
+      margin-top: .5rem;
     }
-    .social-text { font-weight: 500; font-size: 1rem; margin-top: 1rem; }
-    .social-icons { display: flex; gap: 1rem; justify-content: center; margin: .5rem 0; }
-    .social-icons img { width: 48px; height: 48px; cursor: pointer; }
+    .social-text {
+      font-weight: 500;
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin: .5rem 0;
+    }
+    .social-icons img {
+      width: 48px;
+      height: 48px;
+      cursor: pointer;
+    }
     input, select {
-      width: 320px; max-width: 90vw; font-size: 1.18rem; padding: .7rem 1rem;
-      border: 1.5px solid #b3c5cf; border-radius: 5px; background: #eaf1fa;
-      color: #245063; margin-bottom: 1.1rem; outline: none; transition: border-color .2s;
+      width: 320px;
+      max-width: 90vw;
+      font-size: 1.18rem;
+      padding: .7rem 1rem;
+      border: 1.5px solid #b3c5cf;
+      border-radius: 5px;
+      background: #eaf1fa;
+      color: #245063;
+      margin-bottom: 1.1rem;
+      outline: none;
+      transition: border-color .2s;
     }
-    input:focus { border-color: #42c2d3; background: #f3fbfd; }
+    input:focus {
+      border-color: #42c2d3;
+      background: #f3fbfd;
+    }
     .perfil-checkboxes-google {
       display: flex; gap: 2rem; justify-content: center; margin-bottom: 1.4rem;
     }
@@ -109,10 +188,12 @@
   </style>
 </head>
 <body>
+
   <div id="background"></div>
   <div id="splash-screen">
     <img src="logo_cuide_me.png" alt="Carregando Cuide-me"/>
   </div>
+
   <div class="container" id="main-content">
     <div class="left">
       <img src="logo_cuide_me.png" class="logo" alt="Cuide-me"/>
@@ -122,15 +203,19 @@
     </div>
     <div class="right"></div>
   </div>
+
   <div id="formSlide" class="form-overlay"></div>
+
   <div id="msgErro" style="display:none;position:fixed;top:32px;left:50%;transform:translateX(-50%);
        background:#fff3f3;color:#b00020;padding:1rem 2rem;border-radius:10px;
        box-shadow:0 2px 12px #0001;z-index:10000;font-weight:600;font-size:1.07rem;"></div>
+
   <!-- Firebase + Three.js + Vanta.js -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
+
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
@@ -148,6 +233,7 @@
       setTimeout(() => {
         document.getElementById('splash-screen').style.display = 'none';
         document.getElementById('main-content').style.display = 'flex';
+
         VANTA.CLOUDS({
           el: "#background",
           backgroundColor: 0xffffff,
@@ -173,8 +259,8 @@
 
     function renderLogin() {
       document.getElementById("formSlide").innerHTML = `
-        <input id="email" type="email" placeholder="E-mail" required autocomplete="off"/>
-        <input id="password" type="password" placeholder="Senha" required autocomplete="off"/>
+        <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
+        <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
         <div id="login-error-msg" style="color:#b00020;font-weight:600;margin-bottom:10px;"></div>
         <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
         <div class="social-text">ou acesse com redes sociais</div>
@@ -209,9 +295,9 @@
           Já tem uma conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderLogin()">Faça login</a>
         </div>`;
     }
-
     function mascaraCPF(cpf) {
-      return cpf.replace(/\D/g, "")
+      return cpf
+        .replace(/\D/g, "")
         .replace(/(\d{3})(\d)/, "$1.$2")
         .replace(/(\d{3})(\d)/, "$1.$2")
         .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
@@ -251,6 +337,7 @@
       div.style.display = 'block';
       setTimeout(() => { div.style.display = 'none'; }, 4500);
     }
+
     async function cadastrarUsuario() {
       const nome = document.getElementById("nome").value;
       const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
@@ -318,19 +405,22 @@
         });
     }
 
-    // ----------- FLUXO GOOGLE COM BACKEND AJUSTADO -----------
-    let googleUserTemp = null;
+    // *** REFATORAÇÃO DO LOGIN GOOGLE ***
     async function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       try {
         const result = await auth.signInWithPopup(provider);
         const user = result.user;
-        // Checa no Airtable usando UID, via backend seguro
-        const existe = await checarExistenciaAirtableUID(user.uid);
-        if (existe) {
+        // Checa se o usuário já existe como 'familia' ou 'cuidador'
+        const existeFamilia = await checarExistenciaAirtableCompleta(user.uid, user.email, null, "familia");
+        const existeCuidador = await checarExistenciaAirtableCompleta(user.uid, user.email, null, "cuidador");
+        
+        if (existeFamilia || existeCuidador) {
+          // Usuário já tem cadastro, pode acessar home
           window.location.href = "pagina-homepage.html";
         } else {
-          googleUserTemp = user;
+          // Salva user globalmente para uso no cadastro Google
+          window.googleUser = user;
           mostrarPerfilCpfGoogle();
         }
       } catch (error) {
@@ -340,7 +430,7 @@
 
     function mostrarPerfilCpfGoogle() {
       document.getElementById("formSlide").innerHTML = `
-        <div class="social-text" style="font-size:1.3rem; font-weight:700;">Complete seu cadastro</div>
+        <div class="social-text" style="font-size:1.3rem; font-weight:700;">Acesse com a rede social</div>
         <div class="social-icons" style="margin-bottom:1.2rem;">
           <img src="https://img.icons8.com/color/96/google-logo.png" class="google-icon-big" alt="Google" title="Google" />
         </div>
@@ -363,10 +453,7 @@
       const isFamilia = document.getElementById("perfil_familia_google").checked;
       const isCuidador = document.getElementById("perfil_cuidador_google").checked;
       const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
-      if (!googleUserTemp) {
-        showError("Usuário não autenticado. Tente novamente.");
-        return;
-      }
+
       if (!isFamilia && !isCuidador) {
         showError("Escolha pelo menos um perfil.");
         return;
@@ -376,63 +463,51 @@
         document.getElementById("cpf_google").focus();
         return;
       }
-      if (isFamilia) await enviarUsuarioParaAirtable(googleUserTemp, "familia", cpf);
-      if (isCuidador) await enviarUsuarioParaAirtable(googleUserTemp, "cuidador", cpf);
-      let tentativas = 0, achou = false;
-      while (tentativas < 6) {
-        achou = await checarExistenciaAirtableUID(googleUserTemp.uid);
-        if (achou) break;
-        await new Promise(r => setTimeout(r, 500));
-        tentativas++;
-      }
-      if (achou) {
-        window.location.href = "pagina-homepage.html";
-      } else {
-        showError("Erro ao cadastrar. Tente novamente em alguns segundos.");
-      }
-    }
+      
+      const perfis = [];
+      if (isFamilia) perfis.push("familia");
+      if (isCuidador) perfis.push("cuidador");
 
-    // --- API local segura (proxy para o backend) ---
-    async function checarExistenciaAirtableUID(uid) {
-      // Checa em Clientes e em Cuidadores via backend seguro
-      const tables = ['clientes', 'cuidadores'];
-      for (let tabela of tables) {
-        const filter = `{UID}='${uid}'`;
-        const res = await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            table: tabela,
-            action: 'get',
-            filter
-          })
-        });
-        let data;
-        try { data = await res.json(); } catch (e) { data = {}; }
-        if (data.records && data.records.length > 0) {
-          return true;
+      // Recupera usuário do Google salvo globalmente OU pega o atual do Firebase
+      const user = window.googleUser || auth.currentUser;
+      for (let perfil of perfis) {
+        const existe = await checarExistenciaAirtableCompleta(user.uid, user.email, cpf, perfil);
+        if (!existe) {
+          await enviarUsuarioParaAirtable(user, perfil, cpf);
         }
       }
-      return false;
+      window.location.href = "pagina-homepage.html";
     }
 
+    // =========================
+    // Airtable helpers
+    // =========================
+    const airtableBaseId = 'appVxCKjvJAah2r27';
+    const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
+
     async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
-      let tabela = perfil === "cuidador" ? "cuidadores" : "clientes";
+      let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
       let filtro = [`{UID}='${uid}'`];
       if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
       if (cpf) filtro.push(`{CPF}='${cpf}'`);
       const formula = `OR(${filtro.join(",")})`;
-      const res = await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          table: tabela,
-          action: 'get',
-          filter: formula
-        })
+      const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
+      const response = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${airtableApiKey}` }
       });
-      let data;
-      try { data = await res.json(); } catch (e) { data = {}; }
+      const data = await response.json();
+      return data.records && data.records.length > 0;
+    }
+
+    async function checarExistenciaAirtablePorEmail(email, perfil) {
+      let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
+      const emailFormatado = email.trim().toLowerCase();
+      const formula = `LOWER({E-mail})='${emailFormatado}'`;
+      const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
+      const response = await fetch(url, {
+        headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+      });
+      const data = await response.json();
       return data.records && data.records.length > 0;
     }
 
@@ -442,10 +517,12 @@
       const nome = user.displayName || '';
       const cpf = cpfParam || '';
       const fonteCadastro = extrairProvedor(email);
+
       let tabela = '';
       let fields = {};
+
       if (perfil === 'cuidador') {
-        tabela = 'cuidadores';
+        tabela = 'Cuidadores';
         fields = {
           "Nome Completo": nome,
           "CPF": cpf,
@@ -455,7 +532,7 @@
           "UID": uid
         };
       } else if (perfil === 'familia') {
-        tabela = 'clientes';
+        tabela = 'Clientes';
         fields = {
           "Nome Completo": nome,
           "CPF": cpf,
@@ -466,14 +543,14 @@
       } else {
         return;
       }
-      await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable', {
+
+      await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          table: tabela,
-          action: 'post',
-          data: fields
-        })
+        headers: {
+          'Authorization': `Bearer ${airtableApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({fields})
       })
       .then(res => res.json())
       .then(data => {
@@ -492,6 +569,7 @@
       if (!user) document.getElementById('main-content').style.display = 'flex';
     });
   </script>
+
   <div style="text-align:center; margin-top:2rem; font-size:0.9rem;">
     <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right:1rem; color: var(--primary); text-decoration:underline;">
       Termos de Uso
