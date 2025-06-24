@@ -489,7 +489,7 @@
       if (filtro.length === 0) return false;
       const formula = `OR(${filtro.join(",")})`;
 
-      const response = await fetch('/api/auth/linkedin/airtable', {
+      const response = await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -525,7 +525,7 @@
         "UID": uid
       };
 
-      const response = await fetch('/api/auth/linkedin/airtable', {
+      const response = await fetch('https://cuide-me-backend.vercel.app/api/auth/linkedin/airtable', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
