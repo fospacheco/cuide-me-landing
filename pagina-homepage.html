@@ -1,4 +1,6 @@
+
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 <head>
 <meta charset="utf-8"/>
@@ -257,6 +259,90 @@
   }
 }
 
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  nav a {
+    display: block;
+  }
+
+  .card {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  .valores,
+  .passos,
+  .depoimentos {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  section.section {
+    padding: 3rem 1rem;
+  }
+
+  .cta-btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .cta-btn {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+  }
+
+  .cta-btn.primary,
+  .cta-btn.secondary {
+    font-size: 1rem;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  iframe.airtable-embed {
+    height: 1000px !important;
+  }
+
+  .floating-cta {
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    width: auto;
+    max-width: calc(100% - 20px);
+    text-align: center;
+    padding: 0.8rem 1rem;
+  }
+
+  .logo-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .logo-subtitle {
+    font-size: 0.85rem;
+    text-align: left;
+  }
+}
+
+
 .cards-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -272,6 +358,7 @@
     gap: 1rem;
   }
 }
+
 
 @media (max-width: 768px) {
   body, html {
@@ -297,6 +384,8 @@
   }
 }
 
+
+/* Dashboard buttons */
 .dashboard-links {
   display: flex;
   gap: 1rem;
@@ -310,42 +399,388 @@
   text-decoration: none;
   font-weight: bold;
   font-size: 0.9rem;
-  transition: all 0.3s;
-  cursor: pointer;
 }
-.dashboard-btn.disabled {
-  opacity: 0.5 !important;
-  pointer-events: none !important;
-  cursor: not-allowed !important;
-  filter: grayscale(0.5);
-}
+
 
 .header-content {
   display: flex;
   align-items: center;
   gap: 2rem;
 }
+
 </style>
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
-    authDomain: "cuide-me-f57f8.firebaseapp.com",
-    projectId: "cuide-me-f57f8",
-    storageBucket: "cuide-me-f57f8.appspot.com",
-    messagingSenderId: "846926668384",
-    appId: "1:846926668384:web:c8022e110171969f6b5905"
-  };
-  firebase.initializeApp(firebaseConfig);
-</script>
+<style>
+/* Animação de entrada do dropdown */
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  right: 0;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 1000;
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.dropdown-menu.show {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Animação do botão principal */
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 rgba(0,0,0,0); }
+  50% { box-shadow: 0 0 12px rgba(0, 212, 255, 0.4); }
+}
+.cta-btn.primary {
+  animation: pulseGlow 2.5s infinite;
+}
+
+/* Hover nos cards */
+.card:hover {
+  transform: scale(1.02);
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  cursor: default;
+}
+</style>
+<style>
+@media (max-width: 768px) {
+  .hero img,
+  .card img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+
+  .card {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+
+  .info {
+    text-align: center !important;
+  }
+
+  .cta-btn.primary, .cta-btn.secondary {
+    width: 100% !important;
+    text-align: center !important;
+    display: block !important;
+  }
+
+  .dropdown-menu {
+    width: 100%;
+    left: 0;
+    right: 0;
+  }
+}
+
+/* Atendimento fixo e auto-esmaecimento */
+#atendimento-rapido {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  border-radius: 50px;
+  text-align: center;
+  transition: opacity 0.4s ease;
+  z-index: 9999;
+}
+
+body.ocultar-atendimento #atendimento-rapido {
+  opacity: 0;
+  pointer-events: none;
+}
+</style>
+<style>
+@media (max-width: 768px) {
+  .feature-box,
+  .info-card,
+  .pill-box,
+  .benefit-card,
+  .value-card,
+  .destaque-box,
+  .caixa-valor,
+  .visao-box {
+    width: 100% !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center !important;
+    display: block;
+    box-sizing: border-box;
+  }
+
+  .feature-box * {
+    text-align: center !important;
+  }
+}
+</style>
+<style>
+@media (max-width: 1100px) {
+  .cta-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: stretch;
+    width: 100%;
+  }
+
+  .cta-container .cta-btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+</style>
+<style>
+@media (max-width: 1100px) {
+  .cta-box,
+  .cta-button-group,
+  .cta-group,
+  .hero-buttons,
+  .botao-container,
+  .cta-container {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem;
+    align-items: stretch;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .cta-box .cta-btn,
+  .cta-button-group .cta-btn,
+  .cta-group .cta-btn,
+  .hero-buttons .cta-btn,
+  .botao-container .cta-btn,
+  .cta-container .cta-btn {
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+</style>
+<style>
+@media (max-width: 1100px) {
+  .hero .cta-container,
+  .hero .cta-group,
+  .hero .cta-wrapper,
+  .hero .cta-box,
+  .hero-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    width: 100% !important;
+  }
+
+  .hero .cta-container .cta-btn,
+  .hero .cta-group .cta-btn,
+  .hero .cta-wrapper .cta-btn,
+  .hero .cta-box .cta-btn,
+  .hero-buttons .cta-btn {
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+</style>
+<style>
+@media (max-width: 1024px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero a.cta-btn {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .hero .cta-btn + .cta-btn {
+    margin-left: 0;
+  }
+}
+</style>
+<style>
+@media (max-width: 1024px) {
+  a.cta-btn {
+    display: block !important;
+    width: 100% !important;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  a.cta-btn + a.cta-btn {
+    margin-left: 0 !important;
+  }
+
+  /* Garante que o bloco onde há dois botões se comporte corretamente */
+  a.cta-btn:only-child {
+    margin-bottom: 0;
+  }
+
+  /* Se os botões estiverem em um container comum e não .hero */
+  .cta-btn-container,
+  .hero-content,
+  .hero-buttons,
+  .section-buttons {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 1rem !important;
+    align-items: stretch;
+  }
+}
+</style>
+<style>
+@media (max-width: 1024px) {
+  .hero {
+    max-width: 95vw;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .hero .cta-btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+  }
+
+  .hero img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+</style>
+<style>
+@media (max-width: 1024px) {
+  .hero {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .hero .cta-btn {
+    max-width: 100%;
+    box-sizing: border-box;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+
+  .hero img {
+    margin-top: 2rem;
+    max-width: 100%;
+    height: auto;
+  }
+}
+</style>
+<style>
+@media (max-width: 1024px) {
+  .hero {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2rem;
+  }
+
+  .hero > div {
+    width: 100%;
+    text-align: center;
+  }
+
+  .hero img {
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero .cta-btn {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+}
+</style>
+<style>
+@media (max-width: 1024px) {
+  .hero {
+    position: relative;
+    z-index: 0;
+    flex-direction: column !important;
+  }
+
+  .hero a.cta-btn {
+    position: relative;
+    z-index: 1;
+    max-width: 90vw !important;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .hero img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 2rem auto 0;
+  }
+}
+</style>
+<style>
+#buscar-cuidador {
+  transition: all 0.3s ease;
+}
+
+#buscar-cuidador select {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1;
+}
+</style>
+<style>
+@media (max-width: 1024px) {
+  .hero,
+  .cta-container,
+  .hero-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+
+  .hero .cta-btn {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  #buscar-cuidador {
+    margin-top: 1rem;
+    order: 3;
+  }
+
+  .hero .cta-btn + .cta-btn {
+    margin-top: 0;
+  }
+}
+</style>
 </head>
-<body>
-<div id="splash-screen">
+<body><div id="splash-screen">
 <img alt="Logo Cuide-me" src="logo_cuide_me.png"/>
 </div>
+
 
 <header>
 <style>
@@ -403,6 +838,173 @@
       font-size: 0.85rem;
       text-decoration: none;
     }
+  
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  nav a {
+    display: block;
+  }
+
+  nav a:nth-child(odd)::after {
+    content: "";
+  }
+
+  .card {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  .valores,
+  .passos,
+  .depoimentos {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  section.section {
+    padding: 3rem 1rem;
+  }
+
+  .cta-btn {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+  }
+
+  .cta-btn.primary,
+  .cta-btn.secondary {
+    font-size: 1rem;
+    padding: 1rem;
+  }
+
+  iframe.airtable-embed {
+    height: 1000px !important;
+  }
+
+  .floating-cta {
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    width: auto;
+    max-width: calc(100% - 20px);
+    text-align: center;
+    padding: 0.8rem 1rem;
+  }
+
+  .logo-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .logo-subtitle {
+    font-size: 0.85rem;
+    text-align: left;
+  }
+
+  .section .cta {
+    flex-direction: column;
+    gap: 1rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  nav a {
+    display: block;
+  }
+
+  .card {
+    width: 100% !important;
+    max-width: 100%;
+  }
+
+  .valores,
+  .passos,
+  .depoimentos {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  section.section {
+    padding: 3rem 1rem;
+  }
+
+  .cta-btn-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .cta-btn {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0.5rem 0;
+    box-sizing: border-box;
+  }
+
+  .cta-btn.primary,
+  .cta-btn.secondary {
+    font-size: 1rem;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  iframe.airtable-embed {
+    height: 1000px !important;
+  }
+
+  .floating-cta {
+    right: 10px;
+    left: 10px;
+    bottom: 10px;
+    width: auto;
+    max-width: calc(100% - 20px);
+    text-align: center;
+    padding: 0.8rem 1rem;
+  }
+
+  .logo-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .logo-subtitle {
+    font-size: 0.85rem;
+    text-align: left;
+  }
+}
+
 </style>
 <div class="logo-container">
   <a href="pagina-homepage.html">
@@ -411,11 +1013,13 @@
   <div class="logo-text">
     <span class="logo-subtitle">Conectando quem cuida<br/>e quem precisa de cuidado</span>
   </div>
-  <div class="dashboard-links">
-    <a href="dashboard_cliente.html" class="dashboard-btn" id="dashboardCliente">Dashboard Cliente</a>
-    <a href="dashboard_cuidador.html" class="dashboard-btn" id="dashboardCuidador">Dashboard Cuidador</a>
-  </div>
+    <div class="dashboard-links">
+      <a href="dashboard_cliente.html" class="dashboard-btn">Dashboard Cliente</a>
+      <a href="dashboard_cuidador.html" class="dashboard-btn">Dashboard Cuidador</a>
+    </div>
+
 </div>
+</a></div>
 <nav>
     <a class="cta-button" href="#" onclick="toggleDropdown(event)">Cadastre-se</a>
     <a href="https://cuide-me.vercel.app/cadastro-institucional.html">Quem somos</a>
@@ -583,9 +1187,9 @@ Encontre cuidadores na sua região.</div></div></div></section><!-- seção form
 <path d="M22.675 0h-21.35C.597 0 0 .597 0 1.326v21.348C0 23.403.597 24 1.326 24H12.82v-9.294H9.692V11.11h3.128V8.413c0-3.1 1.893-4.788 4.658-4.788 1.325 0 2.463.099 2.794.143v3.24l-1.918.001c-1.504 0-1.795.716-1.795 1.763v2.312h3.587l-.467 3.596h-3.12V24h6.116c.73 0 1.326-.597 1.326-1.326V1.326C24 .597 23.403 0 22.675 0z"></path>
 </svg>
  Facebook</a>
+
    </button></footer>
-<a aria-label="Fale com a gente pelo WhatsApp" class="floating-cta" href="https://wa.me/5599999999999" target="_blank" title="Fale com a gente pelo WhatsApp">📱 Atendimento rápido</a>
-<script>
+<a aria-label="Fale com a gente pelo WhatsApp" class="floating-cta" href="https://wa.me/5599999999999" target="_blank" title="Fale com a gente pelo WhatsApp">📱 Atendimento rápido</a>><script>
         window.addEventListener('load', () => {
           const splash = document.getElementById('splash-screen');
           splash.classList.add('fade-out');
@@ -593,7 +1197,7 @@ Encontre cuidadores na sua região.</div></div></div></section><!-- seção form
             splash.style.display = 'none';
           }, 600);
         });
-</script>
+        </script>
 <footer id="contato" style="background: #f0fafa; border-top: 1px solid #c6e4ea; padding: 2rem; text-align: center; font-size: 0.95rem;">
 <h3 style="color: #1ba8c2; margin-bottom: 1rem;">Contato</h3>
 <p><strong>E-mail:</strong> contato@cuide-me.app</p>
@@ -602,6 +1206,23 @@ Encontre cuidadores na sua região.</div></div></div></section><!-- seção form
 <p style="margin-top: 1rem;">Quer encontrar o cuidador ideal? <a href="https://cuide-me.vercel.app/cadastro-cliente.html" style="color: #087f8c; font-weight: bold;">Clique aqui</a> e comece agora.</p>
 <p style="margin-top: 1rem; color: #888;">© 2025 Cuide-me. Todos os direitos reservados.</p>
 </footer>
+<script>
+window.addEventListener("scroll", function () {
+  const contato = document.querySelector("#contato");
+  const rodape = document.querySelector("footer");
+  const atendimento = document.getElementById("atendimento-rapido");
+  if (!atendimento) return;
+
+  const limiteContato = contato ? contato.getBoundingClientRect().top : Infinity;
+  const limiteRodape = rodape ? rodape.getBoundingClientRect().top : Infinity;
+
+  if (Math.min(limiteContato, limiteRodape) < window.innerHeight - 80) {
+    document.body.classList.add("ocultar-atendimento");
+  } else {
+    document.body.classList.remove("ocultar-atendimento");
+  }
+});
+</script>
 <!-- Área de busca por especialidade -->
 <div id="buscar-cuidador" style="margin-top: 2rem; display: none;">
 <label for="especialidade-select" style="font-weight: bold; display: block; margin-bottom: 0.5rem;">Qual especialidade você procura?</label>
@@ -726,59 +1347,12 @@ data.records.forEach(record => {
 });
 </script>
 
-<script>
-const AIRTABLE_BASE = "appVxCKjvJAah2r27";
-const AIRTABLE_TOKEN = "patvUA5YbiyPmtjwx.85ae27fe73f8ac0fd8d7983b36fa4f2e0b10abc0eb793bc8b6a62d47110972a7";
-const tabelaClientes = "Clientes";
-const tabelaCuidadores = "Cuidadores";
-const campoEmail = "E-mail"; // igualzinho ao Airtable
-
-const dashboardCliente = document.getElementById('dashboardCliente');
-const dashboardCuidador = document.getElementById('dashboardCuidador');
-if (dashboardCliente) dashboardCliente.classList.add("disabled");
-if (dashboardCuidador) dashboardCuidador.classList.add("disabled");
-
-// Função para buscar usuário por e-mail em uma tabela
-async function buscarPerfilNaTabela(tabela, email) {
-  const url = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${tabela}?filterByFormula=LOWER(%7B${encodeURIComponent(campoEmail)}%7D)%3D'${encodeURIComponent(email.toLowerCase())}'`;
-  const res = await fetch(url, {
-    headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` }
-  });
-  const data = await res.json();
-  return data.records && data.records.length > 0;
-}
-
-// Recupera e-mail do usuário logado
-async function ativarBotoesDashboard() {
-  let email = null;
-
-  // 1. Tenta pelo Firebase (Google)
-  if (window.firebase && firebase.auth().currentUser) {
-    email = firebase.auth().currentUser.email;
-  }
-  // 2. Ou pega do localStorage/sessionStorage (ajuste para como você salva)
-  if (!email && localStorage.getItem("emailLogado")) {
-    email = localStorage.getItem("emailLogado");
-  }
-  if (!email && sessionStorage.getItem("emailLogado")) {
-    email = sessionStorage.getItem("emailLogado");
-  }
-  // Se não encontrou o e-mail, não ativa nada
-  if (!email) return;
-
-  // Consulta nas duas tabelas (paralelo)
-  const [isCliente, isCuidador] = await Promise.all([
-    buscarPerfilNaTabela(tabelaClientes, email),
-    buscarPerfilNaTabela(tabelaCuidadores, email)
-  ]);
-  if (isCliente) dashboardCliente.classList.remove("disabled");
-  if (isCuidador) dashboardCuidador.classList.remove("disabled");
-}
-
-document.addEventListener("DOMContentLoaded", ativarBotoesDashboard);
-</script>
-
 
 </body>
 </html>
-
+<style>
+.card:hover {
+  transform: scale(1.02);
+  transition: transform 0.3s ease;
+}
+</style>
