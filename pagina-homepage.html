@@ -736,14 +736,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
   firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
-      firebase.firestore().collection("usuarios").doc(user.uid).get().then(doc => {
+      firebase.firestore().collection("Clientes").doc(user.uid).get().then(doc => {
         if (!doc.exists) return;
         let perfil = doc.data().perfil;
         if (typeof perfil === "string") perfil = [perfil];
         if (perfil.includes("familia")) {
           dashboardCliente.classList.remove("disabled");
         }
-        if (perfil.includes("cuidador")) {
+        if (perfil.includes("Cuidadores")) {
           dashboardCuidador.classList.remove("disabled");
         }
       });
