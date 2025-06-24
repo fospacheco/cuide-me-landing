@@ -731,7 +731,7 @@ const AIRTABLE_BASE = "appVxCKjvJAah2r27";
 const AIRTABLE_TOKEN = "patvUA5YbiyPmtjwx.85ae27fe73f8ac0fd8d7983b36fa4f2e0b10abc0eb793bc8b6a62d47110972a7";
 const tabelaClientes = "Clientes";
 const tabelaCuidadores = "Cuidadores";
-const campoEmail = "Email"; // Ajuste para o nome exato da coluna de email no Airtable
+const campoEmail = "E-mail"; // igualzinho ao Airtable
 
 const dashboardCliente = document.getElementById('dashboardCliente');
 const dashboardCuidador = document.getElementById('dashboardCuidador');
@@ -740,7 +740,7 @@ if (dashboardCuidador) dashboardCuidador.classList.add("disabled");
 
 // Função para buscar usuário por e-mail em uma tabela
 async function buscarPerfilNaTabela(tabela, email) {
-  const url = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${tabela}?filterByFormula=LOWER(%7B${campoEmail}%7D)%3D'${encodeURIComponent(email.toLowerCase())}'`;
+  const url = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${tabela}?filterByFormula=LOWER(%7B${encodeURIComponent(campoEmail)}%7D)%3D'${encodeURIComponent(email.toLowerCase())}'`;
   const res = await fetch(url, {
     headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` }
   });
@@ -777,6 +777,7 @@ async function ativarBotoesDashboard() {
 
 document.addEventListener("DOMContentLoaded", ativarBotoesDashboard);
 </script>
+
 
 </body>
 </html>
