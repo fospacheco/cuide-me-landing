@@ -3,59 +3,82 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login/Cadastro - Cuide-me</title>
+  <title>Login com Google - Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --primary: #42c2d3;
-      --secondary: #E0F7FA;
-      --dark-text: #245063;
-      --white: #ffffff;
-      --petroleo: #004953;
-    }
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      height: 100%;
+    body {
+      margin: 0; padding: 0;
       font-family: 'Inter', sans-serif;
-      background: none;
-      overflow-x: hidden;
-      color: var(--dark-text);
-    }
-    #background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-    #splash-screen { position: fixed; top:0; left:0; right:0; bottom:0; background: linear-gradient(to bottom, var(--secondary), var(--white)); display: flex; justify-content:center; align-items:center; z-index:9999; }
-    #splash-screen img { max-width:220px; animation: pulse 1.5s infinite ease-in-out; }
-    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-    .container { min-height:100vh; display:flex; }
-    .left { flex:1; padding:3rem; display:flex; flex-direction:column; justify-content:center; align-items:center; background:transparent; color:var(--white); text-align:center; z-index:1; }
-    .left .logo { width:120px; margin-bottom:1.5rem; }
-    .left h2 { font-size:2rem; margin-bottom:1rem; color: var(--petroleo);}
-    .left p { font-size:1.1rem; margin-bottom:2rem; color: var(--petroleo);}
-    .left a { background:var(--white); color:var(--primary); padding:.8rem 2rem; border-radius:50px; font-weight:bold; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer; }
-    .right { flex:1; position:relative; overflow:hidden; background:var(--white); display:none; }
-    .form-overlay { position: fixed; top: 0; left: 100%; width: 50%; height: 100%; background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem; gap: 1rem; transition: left 0.6s ease; z-index: 2; }
-    .form-overlay.active { left: 50%; }
-    .form-centro {
+      background: #f4fbfe;
+      color: #245063;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      width: 100%;
-      max-width: 400px;
+      justify-content: center;
+    }
+    .container {
+      margin-top: 4vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .logo {
+      width: 110px;
+      margin-bottom: 1.6rem;
+    }
+    .google-btn {
+      min-width: 260px;
+      font-size: 1.2rem;
+      background: #fff;
+      color: #333;
+      border: 2px solid #d5dbe0;
+      border-radius: 32px;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 1.1rem;
+      cursor: pointer;
+      box-shadow: 0 2px 18px #0001;
+      margin-bottom: 1.2rem;
+      transition: border .2s;
+    }
+    .google-btn:active,
+    .google-btn:focus {
+      border: 2px solid #42c2d3;
+      outline: 0;
+    }
+    .google-btn img {
+      width: 32px;
+      height: 32px;
+    }
+    .form-centro {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 4px 22px #0001;
+      padding: 2rem 1.5rem 1.2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 300px;
+      max-width: 340px;
       margin: 0 auto;
-      gap: 0.2rem;
-      background: none;
+      gap: 0.8rem;
+      margin-bottom: 1.2rem;
     }
     .form-centro input, .form-centro button {
       width: 100%;
-      max-width: 400px;
-      min-height: 54px;
-      font-size: 1.25rem;
+      max-width: 320px;
+      min-height: 52px;
+      font-size: 1.13rem;
       border-radius: 10px;
       padding: 0 1rem;
       background: #eaf1fa;
       color: #245063;
       border: 2px solid #b3c5cf;
-      margin-bottom: 1.1rem;
+      margin-bottom: 0.9rem;
       transition: border-color .2s;
     }
     .form-centro input:focus {
@@ -63,82 +86,54 @@
       background: #f3fbfd;
       outline: 3px solid #42c2d388;
     }
-    .form-centro .input-group {
-      width: 100%;
-      position: relative;
-      margin-bottom: 1.1rem;
-    }
-    .show-hide-btn {
-      position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer; font-size: 1.3rem; color: #245063;
-      height: 2.4rem; width: 2.4rem; display: flex; align-items: center; justify-content: center;
-    }
-    .perfil-checkboxes, .perfil-checkboxes-google {
-      display: flex;
-      gap: 1.5rem;
-      width: 100%;
-      justify-content: center;
-      margin-bottom: 0.9rem;
-    }
-    .perfil-checkboxes label, .perfil-checkboxes-google label {
-      font-size: 1.12rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    .perfil-checkboxes input[type="checkbox"], .perfil-checkboxes-google input[type="checkbox"] { width: 22px; height: 22px; accent-color: var(--primary);}
-    .cta-btn {
-      background-color: var(--primary);
-      color: var(--white);
-      padding: 1.1rem 2rem;
-      border-radius: 30px;
-      font-weight: bold;
+    .form-centro button.cta-btn {
+      background-color: #42c2d3;
+      color: #fff;
+      font-weight: 700;
+      min-height: 52px;
+      font-size: 1.18rem;
+      margin-bottom: 0.2rem;
       border: none;
       cursor: pointer;
-      font-size: 1.25rem;
-      margin-top: .4rem;
-      min-width: 180px;
-      transition: filter .2s;
+      border-radius: 32px;
+      box-shadow: 0 2px 8px #42c2d311;
     }
-    .cta-btn[disabled] { opacity:0.6; cursor:not-allowed; }
-    .loading-spinner { display: inline-block; width: 22px; height: 22px; border: 3px solid #fff; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; position: absolute; right: 18px; top: 50%; transform: translateY(-50%);}
+    .loading-spinner { display: inline-block; width: 22px; height: 22px; border: 3px solid #fff; border-top: 3px solid #42c2d3; border-radius: 50%; animation: spin 1s linear infinite; position: absolute; right: 18px; top: 50%; transform: translateY(-50%);}
     @keyframes spin { 100% { transform: rotate(360deg); } }
-    .social-text, .toggle-text { text-align: center; width: 100%; }
-    .social-icons { display: flex; gap: 1rem; justify-content: center; margin: .5rem 0;}
-    .social-icons img { width: 54px; height: 54px; cursor: pointer; }
-    .msg-erro { display:none;position:fixed;top:32px;left:50%;transform:translateX(-50%); background:#fff3f3;color:#b00020;padding:1rem 2rem;border-radius:10px; box-shadow:0 2px 12px #0001;z-index:10000;font-weight:600;font-size:1.07rem; border:1.5px solid #ff6868;}
-    .fechar-btn { position:absolute;top:24px;right:32px; background:none; border:none; font-size:2.2rem; color:#245063; cursor:pointer; z-index:10;}
-    .fechar-btn:focus { outline:2px solid #42c2d3; }
-    @media (max-width:768px) {
-      .container { flex-direction:column; }
-      .left, .right { padding:2rem; }
-      .form-overlay { padding:2rem; width:100%; left:100%; }
-      .form-overlay.active { left:0; }
-      .form-centro, .form-centro input, .form-centro button { max-width: 97vw;}
+    .msg-erro {
+      background: #fff3f3;
+      color: #b00020;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.1rem;
+      font-weight: 600;
+      font-size: 1rem;
+      border: 1.5px solid #ff6868;
+      box-shadow: 0 2px 12px #0001;
+      display: none;
+      text-align: center;
+    }
+    @media (max-width:480px) {
+      .form-centro { min-width: 96vw; max-width: 99vw; }
+      .google-btn { min-width: 90vw; }
     }
   </style>
 </head>
 <body>
-  <div id="background"></div>
-  <div id="splash-screen"><img src="logo_cuide_me.png" alt="Carregando Cuide-me"/></div>
-  <div class="container" id="main-content">
-    <div class="left">
-      <img src="logo_cuide_me.png" class="logo" alt="Cuide-me"/>
-      <h2>Bem-vindo de volta!</h2>
-      <p>Para continuar conectado, clique abaixo:</p>
-      <a onclick="mostrarFormulario()" tabindex="0" aria-label="Entrar ou Cadastrar-se">Acessar</a>
-    </div>
-    <div class="right"></div>
+  <div class="container">
+    <img src="logo_cuide_me.png" alt="Logo Cuide-me" class="logo" />
+    <div id="erroMsg" class="msg-erro"></div>
+    <button class="google-btn" onclick="entrarComGoogle()">
+      <img src="https://img.icons8.com/color/48/google-logo.png" alt="Google"/>
+      Entrar com Google
+    </button>
+    <div id="formGoogle"></div>
   </div>
-  <div id="formSlide" class="form-overlay" role="dialog" aria-modal="true"></div>
-  <div id="msgErro" class="msg-erro" role="alert"></div>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
   <script>
+    // Config Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
       authDomain: "cuide-me-f57f8.firebaseapp.com",
@@ -149,185 +144,34 @@
     };
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
-    auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
-    window.addEventListener('load', () => {
-      setTimeout(() => {
-        document.getElementById('splash-screen').style.display = 'none';
-        document.getElementById('main-content').style.display = 'flex';
-        VANTA.CLOUDS({
-          el: "#background",
-          backgroundColor: 0xffffff,
-          skyColor:        0x68b8d7,
-          cloudColor:      0xadc1de,
-          cloudShadowColor:0x183550,
-          sunColor:        0xff9919,
-          sunGlareColor:   0xff6633,
-          sunlightColor:   0xff9933,
-          speed: 1.0,
-          mouseControls: true,
-          touchControls: true,
-          gyroControls: false
-        });
-      }, 1500);
-    });
+    // Airtable config
+    const airtableBaseId = 'appVxCKjvJAah2r27';
+    const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
 
-    function mostrarFormulario() {
-      document.querySelector('.right').style.display = 'flex';
-      renderLogin();
-      setTimeout(()=>{ document.getElementById("formSlide").classList.add("active"); }, 50);
-    }
-    function fecharFormulario() {
-      document.getElementById("formSlide").classList.remove("active");
-      document.querySelector('.right').style.display = 'none';
-      setTimeout(()=>{ document.getElementById("formSlide").innerHTML = ""; }, 500);
+    function showErro(msg) {
+      const erroDiv = document.getElementById('erroMsg');
+      erroDiv.innerText = msg;
+      erroDiv.style.display = 'block';
+      setTimeout(()=>{erroDiv.style.display='none'}, 4000);
     }
 
-    function renderLogin() {
-      document.getElementById("formSlide").innerHTML = `
-        <button class="fechar-btn" id="fecharForm" aria-label="Fechar formulário" onclick="fecharFormulario()" tabindex="0">&times;</button>
-        <form class="form-centro" onsubmit="event.preventDefault(); loginWithEmail();" aria-label="Login">
-          <input id="email" name="email" type="email" placeholder="E-mail" required autocomplete="email" aria-label="E-mail" />
-          <div class="input-group">
-            <input id="password" name="password" type="password" placeholder="Senha" required autocomplete="current-password" class="input-pw" aria-label="Senha" />
-            <button type="button" id="toggleSenha" class="show-hide-btn" aria-label="Mostrar senha">&#128065;</button>
-          </div>
-          <button class="cta-btn" id="btnEntrar" type="submit" aria-label="Entrar">Entrar</button>
-          <span id="spinnerEntrar" style="display:none;margin-left:10px;"></span>
-          <div class="social-text">ou acesse com redes sociais</div>
-          <div class="social-icons">
-            <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" aria-label="Entrar com Google"/>
-          </div>
-          <div class="toggle-text" style="margin-top:1rem;">
-            Ainda não tem conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderCadastro()" tabindex="0">Crie aqui</a>
-          </div>
-          <div style="height:1.2rem;"></div>
-          <div style="font-size:1rem;color:#245063;text-align:center;">
-            Em caso de problemas:
-            <a href="mailto:cuideme.cuidados@gmail.com" style="color:var(--primary);text-decoration:underline;font-weight:600;">
-              Entre em contato
-            </a>
-          </div>
-        </form>
-      `;
+    // Verifica se UID/email já está no Airtable
+    async function checarExistenciaAirtable(uid, email) {
+      const url = `https://api.airtable.com/v0/${airtableBaseId}/Clientes?filterByFormula=OR({UID}='${uid}',LOWER({E-mail})='${email.trim().toLowerCase()}')`;
+      const response = await fetch(url, { headers: { 'Authorization': `Bearer ${airtableApiKey}` } });
+      const data = await response.json();
+      return data.records && data.records.length > 0;
     }
-    function renderCadastro(emailPrePreenchido = "") {
-      document.getElementById("formSlide").innerHTML = `
-        <button class="fechar-btn" id="fecharForm" aria-label="Fechar formulário" onclick="fecharFormulario()" tabindex="0">&times;</button>
-        <form class="form-centro" onsubmit="event.preventDefault(); cadastrarUsuario();" aria-label="Cadastro">
-          <input id="nome" name="nome" type="text" placeholder="Nome completo" required aria-label="Nome completo"/>
-          <input id="cpf" name="cpf" type="text" placeholder="CPF" required maxlength="14" aria-label="CPF"/>
-          <input id="email" name="email" type="email" placeholder="E-mail" required aria-label="E-mail"/>
-          <div class="input-group">
-            <input id="password" name="password" type="password" placeholder="Senha" required class="input-pw" aria-label="Senha"/>
-            <button type="button" id="toggleSenhaCad" class="show-hide-btn" aria-label="Mostrar senha">&#128065;</button>
-          </div>
-          <div class="perfil-checkboxes">
-            <label><input type="checkbox" id="perfil_familia" /> Sou Cliente / Familiar</label>
-            <label><input type="checkbox" id="perfil_cuidador" /> Sou Cuidador</label>
-          </div>
-          <button class="cta-btn" id="btnCadastrar" type="submit" aria-label="Cadastrar">Cadastrar</button>
-          <span id="spinnerCadastrar" style="display:none;margin-left:10px;"></span>
-          <div class="toggle-text">
-            Já tem uma conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderLogin()" tabindex="0">Faça login</a>
-          </div>
-        </form>
-      `;
-    }
+
     function mascaraCPF(cpf) {
-      return cpf.replace(/\D/g, "").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-    }
-    document.addEventListener('input', function(e) {
-      if (e.target.id === "cpf" || e.target.id === "cpf_google") e.target.value = mascaraCPF(e.target.value);
-    });
-    document.addEventListener('click', function(e) {
-      if (e.target && (e.target.id === "toggleSenha" || e.target.id === "toggleSenhaCad")) {
-        const input = e.target.id === "toggleSenhaCad" ? document.querySelector('#formSlide #password') : document.getElementById("password");
-        if (input.type === "password") {
-          input.type = "text";
-          e.target.innerHTML = "&#128584;";
-        } else {
-          input.type = "password";
-          e.target.innerHTML = "&#128065;";
-        }
-      }
-    });
-
-    function showError(mensagem) {
-      const div = document.getElementById('msgErro');
-      div.innerText = mensagem;
-      div.style.display = 'block';
-      setTimeout(() => { div.style.display = 'none'; }, 4500);
+      return cpf.replace(/\D/g, "")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d)/, "$1.$2")
+        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     }
 
-    async function cadastrarUsuario() {
-      const btn = document.getElementById("btnCadastrar");
-      const spinner = document.getElementById("spinnerCadastrar");
-      btn.disabled = true;
-      spinner.innerHTML = '<span class="loading-spinner"></span>';
-      spinner.style.display = "inline";
-      const nome = document.getElementById("nome").value;
-      const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      const isFamilia = document.getElementById("perfil_familia").checked;
-      const isCuidador = document.getElementById("perfil_cuidador").checked;
-      if (!isFamilia && !isCuidador) { showError("Selecione pelo menos um perfil."); btn.disabled = false; spinner.style.display = "none"; return;}
-      if (!validarCPF(cpf)) { showError("Digite um CPF válido."); btn.disabled = false; spinner.style.display = "none"; return;}
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(async (cred) => {
-          let cadastrou = false;
-          if (isFamilia) {
-            const existeFamilia = await checarExistenciaAirtableCompleta(cred.user.uid, email, cpf, "familia");
-            if (!existeFamilia) {
-              await enviarUsuarioParaAirtable({uid: cred.user.uid, email, displayName: nome}, "familia", cpf);
-              cadastrou = true;
-            }
-          }
-          if (isCuidador) {
-            const existeCuidador = await checarExistenciaAirtableCompleta(cred.user.uid, email, cpf, "cuidador");
-            if (!existeCuidador) {
-              await enviarUsuarioParaAirtable({uid: cred.user.uid, email, displayName: nome}, "cuidador", cpf);
-              cadastrou = true;
-            }
-          }
-          if (cadastrou) {
-            window.location.href = "pagina-homepage.html";
-          } else {
-            showError("Usuário já cadastrado com esse CPF, e-mail ou UID.");
-          }
-        })
-        .catch(error => showError("Erro ao cadastrar: " + error.message))
-        .finally(() => { btn.disabled = false; spinner.style.display = "none"; });
-    }
-
-    function loginWithEmail() {
-      const btn = document.getElementById("btnEntrar");
-      const spinner = document.getElementById("spinnerEntrar");
-      btn.disabled = true;
-      spinner.innerHTML = '<span class="loading-spinner"></span>';
-      spinner.style.display = "inline";
-      const email = document.getElementById("email").value;
-      const password = document.getElementById("password").value;
-      document.getElementById("login-error-msg") && (document.getElementById("login-error-msg").innerText = "");
-      auth.signInWithEmailAndPassword(email, password)
-        .then(() => { window.location.href = "pagina-homepage.html"; })
-        .catch(error => {
-          let msg = "";
-          if (error.code === "auth/user-not-found") {
-            msg = "E-mail não cadastrado";
-          } else if (error.code === "auth/wrong-password") {
-            msg = "Senha incorreta";
-          } else if (error.code === "auth/invalid-email") {
-            msg = "E-mail inválido";
-          } else {
-            msg = "Erro: " + error.message;
-          }
-          document.getElementById("login-error-msg") && (document.getElementById("login-error-msg").innerText = msg);
-        })
-        .finally(() => { btn.disabled = false; spinner.style.display = "none"; });
-    }
-
+    // Valida CPF
     function validarCPF(cpf) {
       cpf = cpf.replace(/[^\d]+/g, '');
       if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
@@ -343,136 +187,81 @@
       if (resto !== parseInt(cpf.charAt(10))) return false;
       return true;
     }
-    function extrairProvedor(email) {
-      if (!email) return '';
-      let provedor = email.split('@')[1] || '';
-      provedor = provedor.split('.')[0];
-      return provedor.toLowerCase();
+
+    // 1. Usuário clica no botão Google
+    async function entrarComGoogle() {
+      document.getElementById('erroMsg').style.display = 'none';
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try {
+        const result = await auth.signInWithPopup(provider);
+        const user = result.user;
+        // 2. Se usuário já existe no Firebase: entra direto
+        if (!user) throw new Error("Não foi possível autenticar com Google.");
+        // Consulta no Airtable se já está cadastrado
+        const jaCadastrado = await checarExistenciaAirtable(user.uid, user.email);
+        if (jaCadastrado) {
+          window.location.href = "pagina-homepage.html";
+        } else {
+          // 3. Primeiro acesso: pede nome e CPF
+          renderFormNomeCpfGoogle(user);
+        }
+      } catch (err) {
+        // Se foi erro de "popup closed", ignora
+        if (err.code && err.code === 'auth/popup-closed-by-user') return;
+        // Firebase cria usuário Google mesmo no primeiro login,
+        // por isso, se for erro de cadastro, mostra erro geral.
+        showErro("Falha no login Google. Tente novamente.");
+      }
     }
-    const airtableBaseId = 'appVxCKjvJAah2r27';
-    const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
-    async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
-      let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
-      let filtro = [`{UID}='${uid}'`];
-      if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
-      if (cpf) filtro.push(`{CPF}='${cpf}'`);
-      const formula = `OR(${filtro.join(",")})`;
-      const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
-      const response = await fetch(url, { headers: { 'Authorization': `Bearer ${airtableApiKey}` } });
-      const data = await response.json();
-      return data.records && data.records.length > 0;
+
+    // Formulário Nome/CPF após login Google (primeiro acesso)
+    function renderFormNomeCpfGoogle(userGoogle) {
+      document.getElementById('formGoogle').innerHTML = `
+        <form class="form-centro" id="cadastroGoogleForm" autocomplete="off" onsubmit="return false;">
+          <h3 style="margin:0 0 0.7rem 0;font-weight:700;font-size:1.25rem;">Complete seu cadastro</h3>
+          <input id="nomeGoogle" name="nome" type="text" placeholder="Nome completo" required aria-label="Nome completo"/>
+          <input id="cpfGoogle" name="cpf" type="text" placeholder="CPF" required maxlength="14" aria-label="CPF"/>
+          <button class="cta-btn" id="btnCadastrarGoogle" type="submit" aria-label="Cadastrar">Cadastrar</button>
+        </form>
+      `;
+      document.getElementById("cpfGoogle").addEventListener('input', e => {
+        e.target.value = mascaraCPF(e.target.value);
+      });
+      document.getElementById("cadastroGoogleForm").onsubmit = () => cadastrarGoogleFinal(userGoogle);
     }
-    async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
-      const uid = user.uid;
-      const email = user.email || '';
-      const nome = user.displayName || '';
-      const cpf = cpfParam || '';
-      const fonteCadastro = extrairProvedor(email);
-      let tabela = '';
-      let fields = {};
-      if (perfil === 'cuidador') {
-        tabela = 'Cuidadores';
-        fields = {
-          "Nome Completo": nome,
-          "CPF": cpf,
-          "E-mail": email,
-          "Status": "Disponível",
-          "Fonte de cadastro": fonteCadastro,
-          "UID": uid
-        };
-      } else if (perfil === 'familia') {
-        tabela = 'Clientes';
-        fields = {
-          "Nome Completo": nome,
-          "CPF": cpf,
-          "E-mail": email,
-          "Fonte de cadastro": fonteCadastro,
-          "UID": uid
-        };
-      } else return;
-      await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
+
+    async function cadastrarGoogleFinal(userGoogle) {
+      const btn = document.getElementById("btnCadastrarGoogle");
+      btn.disabled = true;
+      btn.innerHTML = "Enviando <span class='loading-spinner'></span>";
+      const nome = document.getElementById("nomeGoogle").value.trim();
+      const cpf = document.getElementById("cpfGoogle").value.replace(/\D/g, '');
+      if (!nome || nome.length < 3) { showErro("Digite seu nome completo."); btn.disabled=false; btn.innerHTML="Cadastrar"; return;}
+      if (!validarCPF(cpf)) { showErro("Digite um CPF válido."); btn.disabled=false; btn.innerHTML="Cadastrar"; return; }
+      // Cadastra no Airtable
+      const user = userGoogle;
+      await fetch(`https://api.airtable.com/v0/${airtableBaseId}/Clientes`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${airtableApiKey}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify({fields})
+        body: JSON.stringify({fields:{
+          "Nome Completo": nome,
+          "CPF": cpf,
+          "E-mail": user.email,
+          "UID": user.uid,
+          "Fonte de cadastro": "google"
+        }})
       })
       .then(res => res.json())
-      .then(data => { if (data.error) showError('Airtable erro: ' + data.error.message); })
-      .catch(err => { showError('Erro geral: ' + err.message); });
-    }
-    auth.onAuthStateChanged(async user => { if (!user) document.getElementById('main-content').style.display = 'flex'; });
-
-    async function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      try {
-        const result = await auth.signInWithPopup(provider);
-        const user = result.user;
-        const existeFamilia = await checarExistenciaAirtableCompleta(user.uid, user.email, null, "familia");
-        const existeCuidador = await checarExistenciaAirtableCompleta(user.uid, user.email, null, "cuidador");
-        if (existeFamilia || existeCuidador) {
-          window.location.href = "pagina-homepage.html";
-        } else {
-          window.googleUser = user;
-          mostrarPerfilCpfGoogle();
-        }
-      } catch (error) {
-        showError("Erro com Google: " + error.message);
-      }
-    }
-    function mostrarPerfilCpfGoogle() {
-      document.getElementById("formSlide").innerHTML = `
-        <button class="fechar-btn" id="fecharForm" aria-label="Fechar formulário" onclick="fecharFormulario()" tabindex="0">&times;</button>
-        <form class="form-centro" onsubmit="event.preventDefault(); finalizarCadastroGoogle();">
-          <div class="social-text" style="font-size:1.3rem; font-weight:700;">Acesse com a rede social</div>
-          <div class="social-icons" style="margin-bottom:1.2rem;">
-            <img src="https://img.icons8.com/color/96/google-logo.png" class="google-icon-big" alt="Google" title="Google" />
-          </div>
-          <div class="perfil-checkboxes-google">
-            <label><input type="checkbox" id="perfil_familia_google" /> Sou Cliente / Familiar</label>
-            <label><input type="checkbox" id="perfil_cuidador_google" /> Sou Cuidador</label>
-          </div>
-          <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required aria-label="CPF" />
-          <button class="cta-btn" id="btnFinalizarGoogle" type="submit" aria-label="Finalizar Cadastro">Finalizar Cadastro</button>
-          <span id="spinnerFinalizarGoogle" style="display:none;margin-left:10px;"></span>
-          <div style="font-size:1.05rem;color:#245063;text-align:center;margin-top:1.7rem;">
-            Em caso de problemas:
-            <a href="mailto:cuideme.cuidados@gmail.com" style="color:var(--primary);text-decoration:underline;font-weight:700;">
-              Entre em contato
-            </a>
-          </div>
-        </form>
-      `;
-    }
-    async function finalizarCadastroGoogle() {
-      const btn = document.getElementById("btnFinalizarGoogle");
-      const spinner = document.getElementById("spinnerFinalizarGoogle");
-      btn.disabled = true;
-      spinner.innerHTML = '<span class="loading-spinner"></span>';
-      spinner.style.display = "inline";
-      const isFamilia = document.getElementById("perfil_familia_google").checked;
-      const isCuidador = document.getElementById("perfil_cuidador_google").checked;
-      const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
-      if (!isFamilia && !isCuidador) { showError("Escolha pelo menos um perfil."); btn.disabled = false; spinner.style.display = "none"; return;}
-      if (!validarCPF(cpf)) { showError("Digite um CPF válido."); document.getElementById("cpf_google").focus(); btn.disabled = false; spinner.style.display = "none"; return;}
-      const perfis = [];
-      if (isFamilia) perfis.push("familia");
-      if (isCuidador) perfis.push("cuidador");
-      const user = window.googleUser || auth.currentUser;
-      for (let perfil of perfis) {
-        const existe = await checarExistenciaAirtableCompleta(user.uid, user.email, cpf, perfil);
-        if (!existe) {
-          await enviarUsuarioParaAirtable(user, perfil, cpf);
-        }
-      }
-      window.location.href = "pagina-homepage.html";
-      btn.disabled = false; spinner.style.display = "none";
+      .then(data => {
+        if (data.error) showErro('Erro ao salvar: ' + data.error.message);
+        else window.location.href = "pagina-homepage.html";
+      })
+      .catch(err => showErro('Erro geral: ' + err.message))
+      .finally(() => { btn.disabled=false; btn.innerHTML="Cadastrar"; });
     }
   </script>
-  <div style="text-align:center; margin-top:2rem; font-size:0.9rem;">
-    <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right:1rem; color: var(--primary); text-decoration:underline;">Termos de Uso</a>
-    <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration:underline;">Política de Privacidade</a>
-  </div>
 </body>
 </html>
