@@ -726,31 +726,58 @@ data.records.forEach(record => {
 });
 </script>
 
-<!-- Firebase dashboard script -->
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const dashboardCliente = document.getElementById('dashboardCliente');
-  const dashboardCuidador = document.getElementById('dashboardCuidador');
-  if (dashboardCliente) dashboardCliente.classList.add("disabled");
-  if (dashboardCuidador) dashboardCuidador.classList.add("disabled");
+const AIRTABLE_BASE = "appVxCKjvJAah2r27";
+const AIRTABLE_TOKEN = "patvUA5YbiyPmtjwx.85ae27fe73f8ac0fd8d7983b36fa4f2e0b10abc0eb793bc8b6a62d47110972a7";
+const tabelaClientes = "Clientes";
+const tabelaCuidadores = "Cuidadores";
+const campoEmail = "Email"; // Ajuste para o nome exato da coluna de email no Airtable
 
-  firebase.auth().onAuthStateChanged(function(user) {
-    if (user) {
-      firebase.firestore().collection("Clientes").doc(user.uid).get().then(doc => {
-        if (!doc.exists) return;
-        let perfil = doc.data().perfil;
-        if (typeof perfil === "string") perfil = [perfil];
-        if (perfil.includes("familia")) {
-          dashboardCliente.classList.remove("disabled");
-        }
-        if (perfil.includes("Cuidadores")) {
-          dashboardCuidador.classList.remove("disabled");
-        }
-      });
-    }
+const dashboardCliente = document.getElementById('dashboardCliente');
+const dashboardCuidador = document.getElementById('dashboardCuidador');
+if (dashboardCliente) dashboardCliente.classList.add("disabled");
+if (dashboardCuidador) dashboardCuidador.classList.add("disabled");
+
+// Função para buscar usuário por e-mail em uma tabela
+async function buscarPerfilNaTabela(tabela, email) {
+  const url = `https://api.airtable.com/v0/${AIRTABLE_BASE}/${tabela}?filterByFormula=LOWER(%7B${campoEmail}%7D)%3D'${encodeURIComponent(email.toLowerCase())}'`;
+  const res = await fetch(url, {
+    headers: { Authorization: `Bearer ${AIRTABLE_TOKEN}` }
   });
-});
+  const data = await res.json();
+  return data.records && data.records.length > 0;
+}
+
+// Recupera e-mail do usuário logado
+async function ativarBotoesDashboard() {
+  let email = null;
+
+  // 1. Tenta pelo Firebase (Google)
+  if (window.firebase && firebase.auth().currentUser) {
+    email = firebase.auth().currentUser.email;
+  }
+  // 2. Ou pega do localStorage/sessionStorage (ajuste para como você salva)
+  if (!email && localStorage.getItem("emailLogado")) {
+    email = localStorage.getItem("emailLogado");
+  }
+  if (!email && sessionStorage.getItem("emailLogado")) {
+    email = sessionStorage.getItem("emailLogado");
+  }
+  // Se não encontrou o e-mail, não ativa nada
+  if (!email) return;
+
+  // Consulta nas duas tabelas (paralelo)
+  const [isCliente, isCuidador] = await Promise.all([
+    buscarPerfilNaTabela(tabelaClientes, email),
+    buscarPerfilNaTabela(tabelaCuidadores, email)
+  ]);
+  if (isCliente) dashboardCliente.classList.remove("disabled");
+  if (isCuidador) dashboardCuidador.classList.remove("disabled");
+}
+
+document.addEventListener("DOMContentLoaded", ativarBotoesDashboard);
 </script>
+
 </body>
 </html>
 
