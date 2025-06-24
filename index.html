@@ -359,16 +359,16 @@
         .then(async (cred) => {
           let cadastrou = false;
           if (isFamilia) {
-            const existeFamilia = await checarExistenciaAirtableCompleta(cred.user.uid, email, cpf, "familia");
+            const existeFamilia = await checarExistenciaNoBackend(cred.user.uid, email, cpf, "familia");
             if (!existeFamilia) {
-              await enviarUsuarioParaAirtable({uid: cred.user.uid, email, displayName: nome}, "familia", cpf);
+              await enviarUsuarioParaBackend({uid: cred.user.uid, email, displayName: nome}, "familia", cpf);
               cadastrou = true;
             }
           }
           if (isCuidador) {
-            const existeCuidador = await checarExistenciaAirtableCompleta(cred.user.uid, email, cpf, "cuidador");
+            const existeCuidador = await checarExistenciaNoBackend(cred.user.uid, email, cpf, "cuidador");
             if (!existeCuidador) {
-              await enviarUsuarioParaAirtable({uid: cred.user.uid, email, displayName: nome}, "cuidador", cpf);
+              await enviarUsuarioParaBackend({uid: cred.user.uid, email, displayName: nome}, "cuidador", cpf);
               cadastrou = true;
             }
           }
@@ -412,14 +412,12 @@
         const result = await auth.signInWithPopup(provider);
         const user = result.user;
         // Checa se o usuário já existe como 'familia' ou 'cuidador'
-        const existeFamilia = await checarExistenciaAirtableCompleta(user.uid, user.email, null, "familia");
-        const existeCuidador = await checarExistenciaAirtableCompleta(user.uid, user.email, null, "cuidador");
-        
+        const existeFamilia = await checarExistenciaNoBackend(user.uid, user.email, null, "familia");
+        const existeCuidador = await checarExistenciaNoBackend(user.uid, user.email, null, "cuidador");
+
         if (existeFamilia || existeCuidador) {
-          // Usuário já tem cadastro, pode acessar home
           window.location.href = "pagina-homepage.html";
         } else {
-          // Salva user globalmente para uso no cadastro Google
           window.googleUser = user;
           mostrarPerfilCpfGoogle();
         }
@@ -463,7 +461,7 @@
         document.getElementById("cpf_google").focus();
         return;
       }
-      
+
       const perfis = [];
       if (isFamilia) perfis.push("familia");
       if (isCuidador) perfis.push("cuidador");
@@ -471,98 +469,76 @@
       // Recupera usuário do Google salvo globalmente OU pega o atual do Firebase
       const user = window.googleUser || auth.currentUser;
       for (let perfil of perfis) {
-        const existe = await checarExistenciaAirtableCompleta(user.uid, user.email, cpf, perfil);
+        const existe = await checarExistenciaNoBackend(user.uid, user.email, cpf, perfil);
         if (!existe) {
-          await enviarUsuarioParaAirtable(user, perfil, cpf);
+          await enviarUsuarioParaBackend(user, perfil, cpf);
         }
       }
       window.location.href = "pagina-homepage.html";
     }
 
     // =========================
-    // Airtable helpers
+    // FUNÇÕES PARA API BACKEND
     // =========================
-    const airtableBaseId = 'appVxCKjvJAah2r27';
-    const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
-
-    async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
-      let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
-      let filtro = [`{UID}='${uid}'`];
+    async function checarExistenciaNoBackend(uid, email, cpf, perfil) {
+      const table = perfil === "cuidador" ? "Cuidadores" : "Clientes";
+      let filtro = [];
+      if (uid) filtro.push(`{UID}='${uid}'`);
       if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
       if (cpf) filtro.push(`{CPF}='${cpf}'`);
+      if (filtro.length === 0) return false;
       const formula = `OR(${filtro.join(",")})`;
-      const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
-      const response = await fetch(url, {
-        headers: { 'Authorization': `Bearer ${airtableApiKey}` }
+
+      const response = await fetch('/api/auth/linkedin/airtable', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          table,
+          action: 'get',
+          filter: formula
+        })
       });
       const data = await response.json();
       return data.records && data.records.length > 0;
     }
 
-    async function checarExistenciaAirtablePorEmail(email, perfil) {
-      let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
-      const emailFormatado = email.trim().toLowerCase();
-      const formula = `LOWER({E-mail})='${emailFormatado}'`;
-      const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
-      const response = await fetch(url, {
-        headers: { 'Authorization': `Bearer ${airtableApiKey}` }
-      });
-      const data = await response.json();
-      return data.records && data.records.length > 0;
-    }
-
-    async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
-      const uid = user.uid;
+    async function enviarUsuarioParaBackend(user, perfil, cpfParam) {
+      const table = perfil === "cuidador" ? "Cuidadores" : "Clientes";
       const email = user.email || '';
       const nome = user.displayName || '';
       const cpf = cpfParam || '';
+      const uid = user.uid;
       const fonteCadastro = extrairProvedor(email);
 
-      let tabela = '';
-      let fields = {};
+      let fields = perfil === "cuidador" ? {
+        "Nome Completo": nome,
+        "CPF": cpf,
+        "E-mail": email,
+        "Status": "Disponível",
+        "Fonte de cadastro": fonteCadastro,
+        "UID": uid
+      } : {
+        "Nome Completo": nome,
+        "CPF": cpf,
+        "E-mail": email,
+        "Fonte de cadastro": fonteCadastro,
+        "UID": uid
+      };
 
-      if (perfil === 'cuidador') {
-        tabela = 'Cuidadores';
-        fields = {
-          "Nome Completo": nome,
-          "CPF": cpf,
-          "E-mail": email,
-          "Status": "Disponível",
-          "Fonte de cadastro": fonteCadastro,
-          "UID": uid
-        };
-      } else if (perfil === 'familia') {
-        tabela = 'Clientes';
-        fields = {
-          "Nome Completo": nome,
-          "CPF": cpf,
-          "E-mail": email,
-          "Fonte de cadastro": fonteCadastro,
-          "UID": uid
-        };
-      } else {
-        return;
-      }
-
-      await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
+      const response = await fetch('/api/auth/linkedin/airtable', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${airtableApiKey}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({fields})
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.error) {
-          showError('Airtable erro: ' + data.error.message);
-          console.error('Airtable error:', data.error);
-        }
-      })
-      .catch(err => {
-        showError('Erro geral: ' + err.message);
-        console.error('Erro geral:', err);
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          table,
+          action: 'post',
+          data: fields
+        })
       });
+      const data = await response.json();
+      if (data.error) {
+        showError('Airtable erro: ' + data.error);
+        console.error('Airtable error:', data.error);
+      }
     }
 
     auth.onAuthStateChanged(async user => {
