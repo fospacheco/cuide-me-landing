@@ -22,146 +22,73 @@
       overflow-x: hidden;
       color: var(--dark-text);
     }
-    #background {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      z-index: -1;
-    }
-    #splash-screen {
-      position: fixed; top:0; left:0; right:0; bottom:0;
-      background: linear-gradient(to bottom, var(--secondary), var(--white));
-      display: flex; justify-content:center; align-items:center;
-      z-index:9999;
-    }
-    #splash-screen img {
-      max-width:220px;
-      animation: pulse 1.5s infinite ease-in-out;
-    }
+    #background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
+    #splash-screen { position: fixed; top:0; left:0; right:0; bottom:0; background: linear-gradient(to bottom, var(--secondary), var(--white)); display: flex; justify-content:center; align-items:center; z-index:9999; }
+    #splash-screen img { max-width:220px; animation: pulse 1.5s infinite ease-in-out; }
     @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.05); } }
     .container { min-height:100vh; display:flex; }
-    .left {
-      flex:1;
-      padding:3rem;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      background:transparent;
-      color:var(--white);
-      text-align:center;
-      z-index:1;
-    }
+    .left { flex:1; padding:3rem; display:flex; flex-direction:column; justify-content:center; align-items:center; background:transparent; color:var(--white); text-align:center; z-index:1; }
     .left .logo { width:120px; margin-bottom:1.5rem; }
     .left h2 { font-size:2rem; margin-bottom:1rem; color: var(--petroleo);}
     .left p { font-size:1.1rem; margin-bottom:2rem; color: var(--petroleo);}
-    .left a {
-      background:var(--white);
-      color:var(--primary);
-      padding:.8rem 2rem;
-      border-radius:50px;
-      font-weight:bold;
-      text-decoration:none;
-      box-shadow:0 4px 10px rgba(0,0,0,0.1);
-      cursor:pointer;
-    }
-    .right {
-      flex:1;
-      position:relative;
-      overflow:hidden;
-      background:var(--white);
-      display:none;
-    }
-    .form-overlay {
-      position: fixed;
-      top: 0;
-      left: 100%;
-      width: 50%;
-      height: 100%;
-      background: var(--white);
+    .left a { background:var(--white); color:var(--primary); padding:.8rem 2rem; border-radius:50px; font-weight:bold; text-decoration:none; box-shadow:0 4px 10px rgba(0,0,0,0.1); cursor:pointer; }
+    .right { flex:1; position:relative; overflow:hidden; background:var(--white); display:none; }
+    .form-overlay { position: fixed; top: 0; left: 100%; width: 50%; height: 100%; background: var(--white); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem; gap: 1rem; transition: left 0.6s ease; z-index: 2; }
+    .form-overlay.active { left: 50%; }
+    .form-centro {
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 3rem;
-      gap: 1rem;
-      transition: left 0.6s ease;
-      z-index: 2;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+      gap: 0.5rem;
+      background: none;
     }
-    .form-overlay.active { left: 50%; }
-    .cta-btn {
-      background-color: var(--primary);
-      color: var(--white);
-      padding: .9rem 2rem;
-      border-radius: 50px;
-      font-weight: bold;
-      border: none;
-      cursor: pointer;
-      font-size: 1.2rem;
-      margin-top: .5rem;
-      position: relative;
-      min-width: 140px;
+    .form-centro label {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 0.1rem;
+      font-weight: 600;
+      font-size: 1rem;
     }
-    .cta-btn[disabled] { opacity:0.6; cursor:not-allowed; }
-    .loading-spinner {
-      display: inline-block;
-      width: 22px; height: 22px;
-      border: 3px solid #fff;
-      border-top: 3px solid var(--primary);
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      position: absolute;
-      right: 18px; top: 50%; transform: translateY(-50%);
+    .form-centro input, .form-centro button, .form-centro .toggle-text {
+      width: 100%;
     }
-    @keyframes spin { 100% { transform: rotate(360deg); } }
-    .social-text { font-weight: 500; font-size: 1rem; margin-top: 1rem;}
-    .social-icons {
+    .form-centro .input-group { width: 100%; position: relative; }
+    .perfil-checkboxes, .perfil-checkboxes-google {
       display: flex;
-      gap: 1rem;
+      gap: 1.5rem;
+      width: 100%;
       justify-content: center;
-      margin: .5rem 0;
+      margin-bottom: 0.8rem;
     }
+    .perfil-checkboxes label, .perfil-checkboxes-google label {
+      font-size: 1.05rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .perfil-checkboxes input[type="checkbox"], .perfil-checkboxes-google input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--primary);}
+    .cta-btn { background-color: var(--primary); color: var(--white); padding: .9rem 2rem; border-radius: 50px; font-weight: bold; border: none; cursor: pointer; font-size: 1.2rem; margin-top: .5rem; position: relative; min-width: 140px; }
+    .cta-btn[disabled] { opacity:0.6; cursor:not-allowed; }
+    .loading-spinner { display: inline-block; width: 22px; height: 22px; border: 3px solid #fff; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; position: absolute; right: 18px; top: 50%; transform: translateY(-50%);}
+    @keyframes spin { 100% { transform: rotate(360deg); } }
+    .social-text, .toggle-text { text-align: center; width: 100%; }
+    .social-icons { display: flex; gap: 1rem; justify-content: center; margin: .5rem 0;}
     .social-icons img { width: 48px; height: 48px; cursor: pointer; }
-    input, select {
-      width: 320px; max-width: 90vw;
-      font-size: 1.18rem; padding: .7rem 1rem;
-      border: 1.5px solid #b3c5cf; border-radius: 5px;
-      background: #eaf1fa; color: #245063;
-      margin-bottom: 1.1rem; outline: none;
-      transition: border-color .2s;
-    }
-    input:focus { border-color: #42c2d3; background: #f3fbfd; }
     .input-pw { padding-right: 40px !important;}
-    .show-hide-btn {
-      position: absolute;
-      right: 14px; top: 50%; transform: translateY(-50%);
-      background: none; border: none; cursor: pointer;
-      font-size: 1.2rem; color: #245063;
-    }
-    label { text-align:left; width:320px; max-width: 90vw; margin-bottom:0.25rem; font-weight:600; font-size:1rem;}
-    .perfil-checkboxes-google { display: flex; gap: 2rem; justify-content: center; margin-bottom: 1.4rem;}
-    .perfil-checkboxes-google label { font-size: 1.2rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;}
-    .perfil-checkboxes-google input[type="checkbox"] { width: 26px; height: 26px; accent-color: var(--primary);}
-    #cpf_google { width: 320px!important; font-size:1.18rem!important; padding:.7rem 1rem!important; border-radius:5px!important; border:1.5px solid #b3c5cf!important; background:#eaf1fa!important; color:#245063!important; margin-bottom:1.1rem!important; text-align:center!important; letter-spacing:2px!important;}
-    .google-icon-big { width:54px!important; height:54px!important; border-radius:12px; border:2px solid #42c2d3; background:#fff; box-shadow:0 1px 10px #c0f6fa44;}
-    .fechar-btn {
-      position:absolute;top:24px;right:32px; background:none; border:none; font-size:2.2rem;
-      color:#245063; cursor:pointer; z-index:10;
-    }
+    .show-hide-btn { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 1.2rem; color: #245063;}
+    .fechar-btn { position:absolute;top:24px;right:32px; background:none; border:none; font-size:2.2rem; color:#245063; cursor:pointer; z-index:10;}
     .fechar-btn:focus { outline:2px solid #42c2d3; }
-    .msg-erro {
-      display:none;position:fixed;top:32px;left:50%;transform:translateX(-50%);
-      background:#fff3f3;color:#b00020;padding:1rem 2rem;border-radius:10px;
-      box-shadow:0 2px 12px #0001;z-index:10000;font-weight:600;font-size:1.07rem;
-      border:1.5px solid #ff6868; /* Contraste reforçado */
-    }
+    .msg-erro { display:none;position:fixed;top:32px;left:50%;transform:translateX(-50%); background:#fff3f3;color:#b00020;padding:1rem 2rem;border-radius:10px; box-shadow:0 2px 12px #0001;z-index:10000;font-weight:600;font-size:1.07rem; border:1.5px solid #ff6868;}
     @media (max-width:768px) {
       .container { flex-direction:column; }
       .left, .right { padding:2rem; }
       .form-overlay { padding:2rem; width:100%; left:100%; }
       .form-overlay.active { left:0; }
-      input { width:98vw!important; min-width:180px!important; font-size:1rem!important;}
-      .google-icon-big { width:44px!important; height:44px!important;}
+      .form-centro, .form-centro input, .form-centro button { max-width: 98vw;}
       label { width:98vw!important; }
     }
   </style>
@@ -178,15 +105,15 @@
     </div>
     <div class="right"></div>
   </div>
-  <!-- Modal/Form Overlay acessível -->
   <div id="formSlide" class="form-overlay" role="dialog" aria-modal="true"></div>
   <div id="msgErro" class="msg-erro" role="alert"></div>
-  <!-- Firebase + Three.js + Vanta.js -->
+
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
   <script>
+    // Firebase e Vanta.js (igual ao seu)
     const firebaseConfig = {
       apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
       authDomain: "cuide-me-f57f8.firebaseapp.com",
@@ -230,120 +157,95 @@
       document.querySelector('.right').style.display = 'none';
       setTimeout(()=>{ document.getElementById("formSlide").innerHTML = ""; }, 500);
     }
+
     function renderLogin() {
       document.getElementById("formSlide").innerHTML = `
         <button class="fechar-btn" id="fecharForm" aria-label="Fechar formulário" onclick="fecharFormulario()" tabindex="0">&times;</button>
-        <form onsubmit="event.preventDefault(); loginWithEmail();">
+        <form class="form-centro" onsubmit="event.preventDefault(); loginWithEmail();">
           <label for="email">E-mail</label>
           <input id="email" name="email" type="email" placeholder="E-mail" required autocomplete="email" aria-required="true"/>
-          
           <label for="password">Senha</label>
-          <div style="position:relative;">
+          <div class="input-group">
             <input id="password" name="password" type="password" placeholder="Senha" required autocomplete="current-password" class="input-pw" aria-required="true"/>
             <button type="button" id="toggleSenha" class="show-hide-btn" aria-label="Mostrar senha" tabindex="-1">&#128065;</button>
           </div>
-          <div id="login-error-msg" style="color:#b00020;font-weight:600;margin-bottom:10px;"></div>
+          <div id="login-error-msg" style="color:#b00020;font-weight:600;margin-bottom:6px;width:100%;text-align:center;"></div>
           <button class="cta-btn" id="btnEntrar" type="submit" aria-label="Entrar">Entrar</button>
           <span id="spinnerEntrar" style="display:none;margin-left:10px;"></span>
+          <div class="social-text">ou acesse com redes sociais</div>
+          <div class="social-icons">
+            <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" aria-label="Entrar com Google"/>
+          </div>
+          <div class="toggle-text" style="margin-top:1rem;">
+            Ainda não tem conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderCadastro()" tabindex="0">Crie aqui</a>
+          </div>
+          <div style="height:1.2rem;"></div>
+          <div style="font-size:1rem;color:#245063;text-align:center;">
+            Em caso de problemas:
+            <a href="mailto:cuideme.cuidados@gmail.com" style="color:var(--primary);text-decoration:underline;font-weight:600;">
+              Entre em contato
+            </a>
+          </div>
         </form>
-        <div class="social-text">ou acesse com redes sociais</div>
-        <div class="social-icons">
-          <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" aria-label="Entrar com Google"/>
-        </div>
-        <div class="toggle-text" style="margin-top:1rem;">
-          Ainda não tem conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderCadastro()" tabindex="0">Crie aqui</a>
-        </div>
-        <div style="height:2.5rem;"></div>
-        <div style="font-size:1rem;color:#245063;text-align:center;">
-          Em caso de problemas:
-          <a href="mailto:cuideme.cuidados@gmail.com" style="color:var(--primary);text-decoration:underline;font-weight:600;">
-            Entre em contato
-          </a>
-        </div>
       `;
     }
     function renderCadastro(emailPrePreenchido = "") {
       document.getElementById("formSlide").innerHTML = `
         <button class="fechar-btn" id="fecharForm" aria-label="Fechar formulário" onclick="fecharFormulario()" tabindex="0">&times;</button>
-        <form onsubmit="event.preventDefault(); cadastrarUsuario();">
+        <form class="form-centro" onsubmit="event.preventDefault(); cadastrarUsuario();">
           <label for="nome">Nome completo</label>
-          <input id="nome" name="nome" type="text" placeholder="Nome completo" required aria-required="true"/>
+          <input id="nome" name="nome" type="text" placeholder="Nome completo" required />
           <label for="cpf">CPF</label>
-          <input id="cpf" name="cpf" type="text" placeholder="CPF" required maxlength="14" aria-required="true"/>
+          <input id="cpf" name="cpf" type="text" placeholder="CPF" required maxlength="14" />
           <label for="email">E-mail</label>
-          <input id="email" name="email" type="email" placeholder="E-mail" required value="${emailPrePreenchido}" aria-required="true"/>
+          <input id="email" name="email" type="email" placeholder="E-mail" required value="${emailPrePreenchido}" />
           <label for="password">Senha</label>
-          <div style="position:relative;">
-            <input id="password" name="password" type="password" placeholder="Senha" required class="input-pw" aria-required="true"/>
-            <button type="button" id="toggleSenhaCad" class="show-hide-btn" aria-label="Mostrar senha" tabindex="-1">&#128065;</button>
+          <div class="input-group">
+            <input id="password" name="password" type="password" placeholder="Senha" required class="input-pw" style="width:100%;" />
+            <button type="button" id="toggleSenhaCad" class="show-hide-btn" aria-label="Mostrar senha">&#128065;</button>
           </div>
-          <div style="margin-bottom: 1rem;">
-            <label style="margin-right:1rem;"><input type="checkbox" id="perfil_familia" /> Sou Cliente / Familiar</label>
+          <div class="perfil-checkboxes">
+            <label><input type="checkbox" id="perfil_familia" /> Sou Cliente / Familiar</label>
             <label><input type="checkbox" id="perfil_cuidador" /> Sou Cuidador</label>
           </div>
           <button class="cta-btn" id="btnCadastrar" type="submit" aria-label="Cadastrar">Cadastrar</button>
           <span id="spinnerCadastrar" style="display:none;margin-left:10px;"></span>
+          <div class="toggle-text">
+            Já tem uma conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderLogin()" tabindex="0">Faça login</a>
+          </div>
         </form>
-        <div class="toggle-text">
-          Já tem uma conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderLogin()" tabindex="0">Faça login</a>
-        </div>
       `;
     }
+    // Máscara de CPF
     function mascaraCPF(cpf) {
-      return cpf
-        .replace(/\D/g, "")
-        .replace(/(\d{3})(\d)/, "$1.$2")
-        .replace(/(\d{3})(\d)/, "$1.$2")
-        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+      return cpf.replace(/\D/g, "").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     }
     document.addEventListener('input', function(e) {
-      if (e.target.id === "cpf" || e.target.id === "cpf_google") {
-        e.target.value = mascaraCPF(e.target.value);
-      }
+      if (e.target.id === "cpf" || e.target.id === "cpf_google") e.target.value = mascaraCPF(e.target.value);
     });
-    // Mostrar/ocultar senha login/cadastro
+    // Mostrar/ocultar senha
     document.addEventListener('click', function(e) {
       if (e.target && (e.target.id === "toggleSenha" || e.target.id === "toggleSenhaCad")) {
-        const isCadastro = e.target.id === "toggleSenhaCad";
-        const input = document.getElementById(isCadastro ? "password" : "password");
+        const input = e.target.id === "toggleSenhaCad" ? document.querySelector('#formSlide #password') : document.getElementById("password");
         if (input.type === "password") {
           input.type = "text";
-          e.target.innerHTML = "&#128584;"; // Ícone diferente para "ocultar"
+          e.target.innerHTML = "&#128584;";
         } else {
           input.type = "password";
-          e.target.innerHTML = "&#128065;"; // Ícone para "mostrar"
+          e.target.innerHTML = "&#128065;";
         }
       }
     });
 
-    function extrairProvedor(email) {
-      if (!email) return '';
-      let provedor = email.split('@')[1] || '';
-      provedor = provedor.split('.')[0];
-      return provedor.toLowerCase();
-    }
-    function validarCPF(cpf) {
-      cpf = cpf.replace(/[^\d]+/g, '');
-      if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-      let soma = 0;
-      for (let i = 0; i < 9; i++) soma += parseInt(cpf.charAt(i)) * (10 - i);
-      let resto = (soma * 10) % 11;
-      if (resto === 10 || resto === 11) resto = 0;
-      if (resto !== parseInt(cpf.charAt(9))) return false;
-      soma = 0;
-      for (let i = 0; i < 10; i++) soma += parseInt(cpf.charAt(i)) * (11 - i);
-      resto = (soma * 10) % 11;
-      if (resto === 10 || resto === 11) resto = 0;
-      if (resto !== parseInt(cpf.charAt(10))) return false;
-      return true;
-    }
+    // Mensagem de erro
     function showError(mensagem) {
       const div = document.getElementById('msgErro');
       div.innerText = mensagem;
       div.style.display = 'block';
       setTimeout(() => { div.style.display = 'none'; }, 4500);
     }
-    // ---- Botões com loading indicator ----
+
+    // Botões com loading
     async function cadastrarUsuario() {
       const btn = document.getElementById("btnCadastrar");
       const spinner = document.getElementById("spinnerCadastrar");
@@ -384,6 +286,7 @@
         .catch(error => showError("Erro ao cadastrar: " + error.message))
         .finally(() => { btn.disabled = false; spinner.style.display = "none"; });
     }
+
     function loginWithEmail() {
       const btn = document.getElementById("btnEntrar");
       const spinner = document.getElementById("spinnerEntrar");
@@ -410,72 +313,29 @@
         })
         .finally(() => { btn.disabled = false; spinner.style.display = "none"; });
     }
-    // --- GOOGLE login/cadastro ---
-    async function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      try {
-        const result = await auth.signInWithPopup(provider);
-        const user = result.user;
-        const existeFamilia = await checarExistenciaAirtableCompleta(user.uid, user.email, null, "familia");
-        const existeCuidador = await checarExistenciaAirtableCompleta(user.uid, user.email, null, "cuidador");
-        if (existeFamilia || existeCuidador) {
-          window.location.href = "pagina-homepage.html";
-        } else {
-          window.googleUser = user;
-          mostrarPerfilCpfGoogle();
-        }
-      } catch (error) {
-        showError("Erro com Google: " + error.message);
-      }
+
+    // Funções auxiliares de CPF, airtable, etc.
+    function validarCPF(cpf) {
+      cpf = cpf.replace(/[^\d]+/g, '');
+      if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+      let soma = 0;
+      for (let i = 0; i < 9; i++) soma += parseInt(cpf.charAt(i)) * (10 - i);
+      let resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      if (resto !== parseInt(cpf.charAt(9))) return false;
+      soma = 0;
+      for (let i = 0; i < 10; i++) soma += parseInt(cpf.charAt(i)) * (11 - i);
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      if (resto !== parseInt(cpf.charAt(10))) return false;
+      return true;
     }
-    function mostrarPerfilCpfGoogle() {
-      document.getElementById("formSlide").innerHTML = `
-        <button class="fechar-btn" id="fecharForm" aria-label="Fechar formulário" onclick="fecharFormulario()" tabindex="0">&times;</button>
-        <div class="social-text" style="font-size:1.3rem; font-weight:700;">Acesse com a rede social</div>
-        <div class="social-icons" style="margin-bottom:1.2rem;">
-          <img src="https://img.icons8.com/color/96/google-logo.png" class="google-icon-big" alt="Google" title="Google" />
-        </div>
-        <div class="perfil-checkboxes-google">
-          <label><input type="checkbox" id="perfil_familia_google" /> Sou Cliente / Familiar</label>
-          <label><input type="checkbox" id="perfil_cuidador_google" /> Sou Cuidador</label>
-        </div>
-        <label for="cpf_google">CPF</label>
-        <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required aria-required="true" />
-        <button class="cta-btn" id="btnFinalizarGoogle" onclick="finalizarCadastroGoogle()" aria-label="Finalizar Cadastro">Finalizar Cadastro</button>
-        <span id="spinnerFinalizarGoogle" style="display:none;margin-left:10px;"></span>
-        <div style="font-size:1.05rem;color:#245063;text-align:center;margin-top:1.7rem;">
-          Em caso de problemas:
-          <a href="mailto:cuideme.cuidados@gmail.com" style="color:var(--primary);text-decoration:underline;font-weight:700;">
-            Entre em contato
-          </a>
-        </div>
-      `;
+    function extrairProvedor(email) {
+      if (!email) return '';
+      let provedor = email.split('@')[1] || '';
+      provedor = provedor.split('.')[0];
+      return provedor.toLowerCase();
     }
-    async function finalizarCadastroGoogle() {
-      const btn = document.getElementById("btnFinalizarGoogle");
-      const spinner = document.getElementById("spinnerFinalizarGoogle");
-      btn.disabled = true;
-      spinner.innerHTML = '<span class="loading-spinner"></span>';
-      spinner.style.display = "inline";
-      const isFamilia = document.getElementById("perfil_familia_google").checked;
-      const isCuidador = document.getElementById("perfil_cuidador_google").checked;
-      const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
-      if (!isFamilia && !isCuidador) { showError("Escolha pelo menos um perfil."); btn.disabled = false; spinner.style.display = "none"; return;}
-      if (!validarCPF(cpf)) { showError("Digite um CPF válido."); document.getElementById("cpf_google").focus(); btn.disabled = false; spinner.style.display = "none"; return;}
-      const perfis = [];
-      if (isFamilia) perfis.push("familia");
-      if (isCuidador) perfis.push("cuidador");
-      const user = window.googleUser || auth.currentUser;
-      for (let perfil of perfis) {
-        const existe = await checarExistenciaAirtableCompleta(user.uid, user.email, cpf, perfil);
-        if (!existe) {
-          await enviarUsuarioParaAirtable(user, perfil, cpf);
-        }
-      }
-      window.location.href = "pagina-homepage.html";
-      btn.disabled = false; spinner.style.display = "none";
-    }
-    // ======= Airtable helpers =======
     const airtableBaseId = 'appVxCKjvJAah2r27';
     const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
     async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
@@ -530,6 +390,74 @@
       .catch(err => { showError('Erro geral: ' + err.message); });
     }
     auth.onAuthStateChanged(async user => { if (!user) document.getElementById('main-content').style.display = 'flex'; });
+
+    // Google login/cadastro (igual seu script)
+    async function loginWithGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try {
+        const result = await auth.signInWithPopup(provider);
+        const user = result.user;
+        const existeFamilia = await checarExistenciaAirtableCompleta(user.uid, user.email, null, "familia");
+        const existeCuidador = await checarExistenciaAirtableCompleta(user.uid, user.email, null, "cuidador");
+        if (existeFamilia || existeCuidador) {
+          window.location.href = "pagina-homepage.html";
+        } else {
+          window.googleUser = user;
+          mostrarPerfilCpfGoogle();
+        }
+      } catch (error) {
+        showError("Erro com Google: " + error.message);
+      }
+    }
+    function mostrarPerfilCpfGoogle() {
+      document.getElementById("formSlide").innerHTML = `
+        <button class="fechar-btn" id="fecharForm" aria-label="Fechar formulário" onclick="fecharFormulario()" tabindex="0">&times;</button>
+        <form class="form-centro" onsubmit="event.preventDefault(); finalizarCadastroGoogle();">
+          <div class="social-text" style="font-size:1.3rem; font-weight:700;">Acesse com a rede social</div>
+          <div class="social-icons" style="margin-bottom:1.2rem;">
+            <img src="https://img.icons8.com/color/96/google-logo.png" class="google-icon-big" alt="Google" title="Google" />
+          </div>
+          <div class="perfil-checkboxes-google">
+            <label><input type="checkbox" id="perfil_familia_google" /> Sou Cliente / Familiar</label>
+            <label><input type="checkbox" id="perfil_cuidador_google" /> Sou Cuidador</label>
+          </div>
+          <label for="cpf_google">CPF</label>
+          <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required aria-required="true" />
+          <button class="cta-btn" id="btnFinalizarGoogle" type="submit" aria-label="Finalizar Cadastro">Finalizar Cadastro</button>
+          <span id="spinnerFinalizarGoogle" style="display:none;margin-left:10px;"></span>
+          <div style="font-size:1.05rem;color:#245063;text-align:center;margin-top:1.7rem;">
+            Em caso de problemas:
+            <a href="mailto:cuideme.cuidados@gmail.com" style="color:var(--primary);text-decoration:underline;font-weight:700;">
+              Entre em contato
+            </a>
+          </div>
+        </form>
+      `;
+    }
+    async function finalizarCadastroGoogle() {
+      const btn = document.getElementById("btnFinalizarGoogle");
+      const spinner = document.getElementById("spinnerFinalizarGoogle");
+      btn.disabled = true;
+      spinner.innerHTML = '<span class="loading-spinner"></span>';
+      spinner.style.display = "inline";
+      const isFamilia = document.getElementById("perfil_familia_google").checked;
+      const isCuidador = document.getElementById("perfil_cuidador_google").checked;
+      const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
+      if (!isFamilia && !isCuidador) { showError("Escolha pelo menos um perfil."); btn.disabled = false; spinner.style.display = "none"; return;}
+      if (!validarCPF(cpf)) { showError("Digite um CPF válido."); document.getElementById("cpf_google").focus(); btn.disabled = false; spinner.style.display = "none"; return;}
+      const perfis = [];
+      if (isFamilia) perfis.push("familia");
+      if (isCuidador) perfis.push("cuidador");
+      const user = window.googleUser || auth.currentUser;
+      for (let perfil of perfis) {
+        const existe = await checarExistenciaAirtableCompleta(user.uid, user.email, cpf, perfil);
+        if (!existe) {
+          await enviarUsuarioParaAirtable(user, perfil, cpf);
+        }
+      }
+      window.location.href = "pagina-homepage.html";
+      btn.disabled = false; spinner.style.display = "none";
+    }
   </script>
   <div style="text-align:center; margin-top:2rem; font-size:0.9rem;">
     <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right:1rem; color: var(--primary); text-decoration:underline;">Termos de Uso</a>
