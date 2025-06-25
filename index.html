@@ -157,20 +157,10 @@
       background: #f3fbfd;
     }
     .perfil-checkboxes-google {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      justify-content: center;
-      align-items: center;
-      margin-bottom: 1.4rem;
+      display: flex; gap: 2rem; justify-content: center; margin-bottom: 1.4rem;
     }
     .perfil-checkboxes-google label {
-      font-size: 1.18rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      white-space: nowrap;
+      font-size: 1.35rem; cursor: pointer; display: flex; align-items: center; gap: 0.5rem;
     }
     .perfil-checkboxes-google input[type="checkbox"] {
       width: 32px; height: 32px; accent-color: var(--primary); cursor: pointer;
@@ -185,34 +175,6 @@
       width:70px!important; height:70px!important; border-radius:12px; border:2px solid #42c2d3;
       background:#fff; box-shadow:0 1px 10px #c0f6fa44; pointer-events:none; opacity:1;
     }
-    .senha-wrapper {
-      position: relative;
-      width: 320px;
-      max-width: 90vw;
-    }
-    .senha-toggle-btn {
-      position: absolute;
-      top: 50%;
-      right: 16px;
-      transform: translateY(-50%);
-      background: none;
-      border: none;
-      color: #42c2d3;
-      font-size: 1.18rem;
-      cursor: pointer;
-      z-index: 3;
-    }
-    @media (max-width: 480px) {
-      .form-overlay { padding:1rem; }
-      .perfil-checkboxes-google {
-        flex-direction: column;
-        gap: 1rem;
-      }
-      .perfil-checkboxes-google label {
-        font-size: 1.05rem !important;
-      }
-      .senha-wrapper { width: 98vw !important; min-width: 180px !important;}
-    }
     @media (max-width:768px) {
       .container { flex-direction:column; }
       .left, .right { padding:2rem; }
@@ -222,7 +184,6 @@
       .google-icon-big { width:54px!important; height:54px!important; }
       .perfil-checkboxes-google label { font-size:1.12rem!important; }
       .perfil-checkboxes-google input[type="checkbox"] { width:26px!important; height:26px!important; }
-      .senha-wrapper { width: 98vw !important; min-width: 180px !important;}
     }
   </style>
 </head>
@@ -256,15 +217,6 @@
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
 
   <script>
-    // PONTO F - organização: agrupar em um único objeto global
-    const CuideMeApp = {};
-
-    // Splash ajustado para só sumir quando Firebase está pronto (PONTO D)
-    function hideSplash() {
-      document.getElementById('splash-screen').style.display = 'none';
-      document.getElementById('main-content').style.display = 'flex';
-    }
-
     const firebaseConfig = {
       apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
       authDomain: "cuide-me-f57f8.firebaseapp.com",
@@ -278,66 +230,45 @@
     auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
     window.addEventListener('load', () => {
-      VANTA.CLOUDS({
-        el: "#background",
-        backgroundColor: 0xffffff,
-        skyColor:        0x68b8d7,
-        cloudColor:      0xadc1de,
-        cloudShadowColor:0x183550,
-        sunColor:        0xff9919,
-        sunGlareColor:   0xff6633,
-        sunlightColor:   0xff9933,
-        speed: 1.0,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false
-      });
-    });
-
-    // Mostra formulário quando autenticação não está feita
-    auth.onAuthStateChanged(async user => {
-      if (!user) {
-        hideSplash();
+      setTimeout(() => {
+        document.getElementById('splash-screen').style.display = 'none';
         document.getElementById('main-content').style.display = 'flex';
-      }
+
+        VANTA.CLOUDS({
+          el: "#background",
+          backgroundColor: 0xffffff,
+          skyColor:        0x68b8d7,
+          cloudColor:      0xadc1de,
+          cloudShadowColor:0x183550,
+          sunColor:        0xff9919,
+          sunGlareColor:   0xff6633,
+          sunlightColor:   0xff9933,
+          speed: 1.0,
+          mouseControls: true,
+          touchControls: true,
+          gyroControls: false
+        });
+      }, 1500);
     });
 
     function mostrarFormulario() {
       document.querySelector('.right').style.display = 'flex';
       document.getElementById("formSlide").classList.add("active");
-      CuideMeApp.renderLogin();
+      renderLogin();
     }
 
-    // PONTO H - senha visível/oculta
-    CuideMeApp.toggleSenha = function(idInput, btn) {
-      const input = document.getElementById(idInput);
-      if (input.type === "password") {
-        input.type = "text";
-        btn.innerText = "🙈";
-      } else {
-        input.type = "password";
-        btn.innerText = "👁️";
-      }
-    }
-
-    // PONTO B - acessibilidade labels
-    CuideMeApp.renderLogin = function() {
+    function renderLogin() {
       document.getElementById("formSlide").innerHTML = `
-        <label for="email" style="display:none">E-mail</label>
         <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
-        <div class="senha-wrapper">
-          <label for="password" style="display:none">Senha</label>
-          <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
-          <button class="senha-toggle-btn" tabindex="0" onclick="CuideMeApp.toggleSenha('password', this)" aria-label="Mostrar/ocultar senha">👁️</button>
-        </div>
+        <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
         <div id="login-error-msg" style="color:#b00020;font-weight:600;margin-bottom:10px;"></div>
-        <button class="cta-btn" onclick="CuideMeApp.loginWithEmail()">Entrar</button>
+        <button class="cta-btn" onclick="loginWithEmail()">Entrar</button>
         <div class="social-text">ou acesse com redes sociais</div>
         <div class="social-icons">
-          <img src="https://img.icons8.com/color/48/google-logo.png" onclick="CuideMeApp.loginWithGoogle()" alt="Google"/>
+          <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google"/>
         </div>
         <div class="toggle-text" style="margin-top:1rem;">
-          Ainda não tem conta? <a style="color:var(--primary);cursor:pointer;" onclick="CuideMeApp.renderCadastro()">Crie aqui</a>
+          Ainda não tem conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderCadastro()">Crie aqui</a>
         </div>
         <div style="height:2.5rem;"></div>
         <div style="font-size:1rem;color:#245063;text-align:center;">
@@ -349,22 +280,16 @@
       `;
     }
 
-    CuideMeApp.renderCadastro = function(emailPrePreenchido = "") {
+    function renderCadastro(emailPrePreenchido = "") {
       document.getElementById("formSlide").innerHTML = `
-        <label for="email" style="display:none">E-mail</label>
         <input id="email" type="email" placeholder="E-mail" required value="${emailPrePreenchido}" />
-        <div class="senha-wrapper">
-          <label for="password" style="display:none">Senha</label>
-          <input id="password" type="password" placeholder="Senha" required />
-          <button class="senha-toggle-btn" tabindex="0" onclick="CuideMeApp.toggleSenha('password', this)" aria-label="Mostrar/ocultar senha">👁️</button>
-        </div>
-        <button class="cta-btn" onclick="CuideMeApp.cadastrarUsuario()">Cadastrar</button>
+        <input id="password" type="password" placeholder="Senha" required />
+        <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
         <div class="toggle-text">
-          Já tem uma conta? <a style="color:var(--primary);cursor:pointer;" onclick="CuideMeApp.renderLogin()">Faça login</a>
+          Já tem uma conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderLogin()">Faça login</a>
         </div>`;
     }
 
-    // PONTO G - inputmode numeric para CPF
     function mascaraCPF(cpf) {
       return cpf
         .replace(/\D/g, "")
@@ -408,8 +333,8 @@
       setTimeout(() => { div.style.display = 'none'; }, 4500);
     }
 
-    // GOOGLE LOGIN
-    CuideMeApp.loginWithGoogle = async function() {
+    // --- GOOGLE LOGIN FLUXO AJUSTADO ---
+    async function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       try {
         const result = await auth.signInWithPopup(provider);
@@ -418,7 +343,7 @@
         if (user.metadata.creationTime === user.metadata.lastSignInTime) {
           // Primeira vez: pede CPF e perfil
           window.googleUser = user;
-          CuideMeApp.mostrarPerfilCpfGoogle();
+          mostrarPerfilCpfGoogle();
         } else {
           window.location.href = "pagina-homepage.html";
         }
@@ -427,20 +352,18 @@
       }
     }
 
-    // PONTO B - acessibilidade em checkboxes
-    CuideMeApp.mostrarPerfilCpfGoogle = function() {
+    function mostrarPerfilCpfGoogle() {
       document.getElementById("formSlide").innerHTML = `
         <div class="social-text" style="font-size:1.3rem; font-weight:700;">Acesse com a rede social</div>
         <div class="social-icons" style="margin-bottom:1.2rem;">
           <img src="https://img.icons8.com/color/96/google-logo.png" class="google-icon-big" alt="Google" title="Google" />
         </div>
         <div class="perfil-checkboxes-google">
-          <label for="perfil_familia_google"><input type="checkbox" id="perfil_familia_google" /> Sou Cliente / Familiar</label>
-          <label for="perfil_cuidador_google"><input type="checkbox" id="perfil_cuidador_google" /> Sou Cuidador</label>
+          <label><input type="checkbox" id="perfil_familia_google" /> Sou Cliente / Familiar</label>
+          <label><input type="checkbox" id="perfil_cuidador_google" /> Sou Cuidador</label>
         </div>
-        <label for="cpf_google" style="display:none">CPF</label>
-        <input id="cpf_google" type="text" inputmode="numeric" placeholder="Digite seu CPF" maxlength="14" required />
-        <button class="cta-btn" onclick="CuideMeApp.finalizarCadastroGoogle()">Finalizar Cadastro</button>
+        <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required />
+        <button class="cta-btn" onclick="finalizarCadastroGoogle()">Finalizar Cadastro</button>
         <div style="font-size:1.05rem;color:#245063;text-align:center;margin-top:1.7rem;">
           Em caso de problemas:
           <a href="mailto:cuideme.cuidados@gmail.com" style="color:var(--primary);text-decoration:underline;font-weight:700;">
@@ -450,7 +373,7 @@
       `;
     }
 
-    CuideMeApp.finalizarCadastroGoogle = async function() {
+    async function finalizarCadastroGoogle() {
       const isFamilia = document.getElementById("perfil_familia_google").checked;
       const isCuidador = document.getElementById("perfil_cuidador_google").checked;
       const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
@@ -477,7 +400,8 @@
       window.location.href = "pagina-homepage.html";
     }
 
-    CuideMeApp.loginWithEmail = function() {
+    // --- EMAIL/SENHA FLUXO AJUSTADO ---
+    function loginWithEmail() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
       document.getElementById("login-error-msg").innerText = "";
@@ -501,7 +425,7 @@
         });
     }
 
-    CuideMeApp.cadastrarUsuario = async function() {
+    async function cadastrarUsuario() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
 
@@ -572,6 +496,9 @@
       });
     }
 
+    auth.onAuthStateChanged(async user => {
+      if (!user) document.getElementById('main-content').style.display = 'flex';
+    });
   </script>
 
   <div style="text-align:center; margin-top:2rem; font-size:0.9rem;">
