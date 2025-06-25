@@ -282,14 +282,8 @@
 
     function renderCadastro(emailPrePreenchido = "") {
       document.getElementById("formSlide").innerHTML = `
-        <input id="nome" type="text" placeholder="Nome completo" required />
-        <input id="cpf" type="text" placeholder="CPF" required maxlength="14" />
         <input id="email" type="email" placeholder="E-mail" required value="${emailPrePreenchido}" />
         <input id="password" type="password" placeholder="Senha" required />
-        <div style="margin-bottom: 1rem;">
-          <label style="margin-right:1rem;"><input type="checkbox" id="perfil_familia" /> Sou Cliente / Familiar</label>
-          <label><input type="checkbox" id="perfil_cuidador" /> Sou Cuidador</label>
-        </div>
         <button class="cta-btn" onclick="cadastrarUsuario()">Cadastrar</button>
         <div class="toggle-text">
           Já tem uma conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderLogin()">Faça login</a>
@@ -339,20 +333,18 @@
       setTimeout(() => { div.style.display = 'none'; }, 4500);
     }
 
-    // --- NOVO FLUXO GOOGLE ---
+    // --- GOOGLE LOGIN FLUXO AJUSTADO ---
     async function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       try {
         const result = await auth.signInWithPopup(provider);
         const user = result.user;
 
-        // Checa se é a primeira autenticação
         if (user.metadata.creationTime === user.metadata.lastSignInTime) {
-          // PRIMEIRO LOGIN: pede CPF e perfil, cadastra no Airtable e vai para home
+          // Primeira vez: pede CPF e perfil
           window.googleUser = user;
           mostrarPerfilCpfGoogle();
         } else {
-          // Já logou antes: vai direto para home
           window.location.href = "pagina-homepage.html";
         }
       } catch (error) {
@@ -408,7 +400,7 @@
       window.location.href = "pagina-homepage.html";
     }
 
-    // --- EMAIL/SENHA: ENTRA DIRETO ---
+    // --- EMAIL/SENHA FLUXO AJUSTADO ---
     function loginWithEmail() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
@@ -433,7 +425,6 @@
         });
     }
 
-    // Cadastro com e-mail/senha: entra direto
     async function cadastrarUsuario() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
@@ -447,7 +438,7 @@
         });
     }
 
-    // Airtable helpers para cadastro Google (mantém igual)
+    // --- AIRTABLE: Apenas usado para cadastro Google (primeiro login)
     const airtableBaseId = 'appVxCKjvJAah2r27';
     const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
 
