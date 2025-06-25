@@ -11,7 +11,7 @@
       --secondary: #E0F7FA;
       --dark-text: #245063;
       --white: #ffffff;
-      --petroleo: #004953; /* novo: azul petróleo escuro */
+      --petroleo: #004953;
       --font-base: 'Inter', sans-serif;
     }
     * { box-sizing: border-box; }
@@ -295,6 +295,7 @@
           Já tem uma conta? <a style="color:var(--primary);cursor:pointer;" onclick="renderLogin()">Faça login</a>
         </div>`;
     }
+
     function mascaraCPF(cpf) {
       return cpf
         .replace(/\D/g, "")
@@ -338,18 +339,76 @@
       setTimeout(() => { div.style.display = 'none'; }, 4500);
     }
 
-    // *** NOVO LOGIN GOOGLE: só autentica e vai pra home ***
+    // --- NOVO FLUXO GOOGLE ---
     async function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
       try {
         const result = await auth.signInWithPopup(provider);
-        window.location.href = "pagina-homepage.html";
+        const user = result.user;
+
+        // Checa se é a primeira autenticação
+        if (user.metadata.creationTime === user.metadata.lastSignInTime) {
+          // PRIMEIRO LOGIN: pede CPF e perfil, cadastra no Airtable e vai para home
+          window.googleUser = user;
+          mostrarPerfilCpfGoogle();
+        } else {
+          // Já logou antes: vai direto para home
+          window.location.href = "pagina-homepage.html";
+        }
       } catch (error) {
         showError("Erro com Google: " + error.message);
       }
     }
 
-    // *** LOGIN COM EMAIL E SENHA: REGRA ORIGINAL ***
+    function mostrarPerfilCpfGoogle() {
+      document.getElementById("formSlide").innerHTML = `
+        <div class="social-text" style="font-size:1.3rem; font-weight:700;">Acesse com a rede social</div>
+        <div class="social-icons" style="margin-bottom:1.2rem;">
+          <img src="https://img.icons8.com/color/96/google-logo.png" class="google-icon-big" alt="Google" title="Google" />
+        </div>
+        <div class="perfil-checkboxes-google">
+          <label><input type="checkbox" id="perfil_familia_google" /> Sou Cliente / Familiar</label>
+          <label><input type="checkbox" id="perfil_cuidador_google" /> Sou Cuidador</label>
+        </div>
+        <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required />
+        <button class="cta-btn" onclick="finalizarCadastroGoogle()">Finalizar Cadastro</button>
+        <div style="font-size:1.05rem;color:#245063;text-align:center;margin-top:1.7rem;">
+          Em caso de problemas:
+          <a href="mailto:cuideme.cuidados@gmail.com" style="color:var(--primary);text-decoration:underline;font-weight:700;">
+            Entre em contato
+          </a>
+        </div>
+      `;
+    }
+
+    async function finalizarCadastroGoogle() {
+      const isFamilia = document.getElementById("perfil_familia_google").checked;
+      const isCuidador = document.getElementById("perfil_cuidador_google").checked;
+      const cpf = document.getElementById("cpf_google").value.replace(/\D/g, '');
+
+      if (!isFamilia && !isCuidador) {
+        showError("Escolha pelo menos um perfil.");
+        return;
+      }
+      if (!validarCPF(cpf)) {
+        showError("Digite um CPF válido.");
+        document.getElementById("cpf_google").focus();
+        return;
+      }
+      
+      const perfis = [];
+      if (isFamilia) perfis.push("familia");
+      if (isCuidador) perfis.push("cuidador");
+
+      // Recupera usuário do Google salvo globalmente OU pega o atual do Firebase
+      const user = window.googleUser || auth.currentUser;
+      for (let perfil of perfis) {
+        await enviarUsuarioParaAirtable(user, perfil, cpf);
+      }
+      window.location.href = "pagina-homepage.html";
+    }
+
+    // --- EMAIL/SENHA: ENTRA DIRETO ---
     function loginWithEmail() {
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
@@ -374,67 +433,23 @@
         });
     }
 
-    // *** CADASTRO EMAIL E SENHA: REGRA ORIGINAL ***
+    // Cadastro com e-mail/senha: entra direto
     async function cadastrarUsuario() {
-      const nome = document.getElementById("nome").value;
-      const cpf = document.getElementById("cpf").value.replace(/\D/g, '');
       const email = document.getElementById("email").value;
       const password = document.getElementById("password").value;
-      const isFamilia = document.getElementById("perfil_familia").checked;
-      const isCuidador = document.getElementById("perfil_cuidador").checked;
-
-      if (!isFamilia && !isCuidador) {
-        showError("Selecione pelo menos um perfil.");
-        return;
-      }
-      if (!validarCPF(cpf)) {
-        showError("Digite um CPF válido.");
-        return;
-      }
 
       auth.createUserWithEmailAndPassword(email, password)
-        .then(async (cred) => {
-          let cadastrou = false;
-          if (isFamilia) {
-            const existeFamilia = await checarExistenciaAirtableCompleta(cred.user.uid, email, cpf, "familia");
-            if (!existeFamilia) {
-              await enviarUsuarioParaAirtable({uid: cred.user.uid, email, displayName: nome}, "familia", cpf);
-              cadastrou = true;
-            }
-          }
-          if (isCuidador) {
-            const existeCuidador = await checarExistenciaAirtableCompleta(cred.user.uid, email, cpf, "cuidador");
-            if (!existeCuidador) {
-              await enviarUsuarioParaAirtable({uid: cred.user.uid, email, displayName: nome}, "cuidador", cpf);
-              cadastrou = true;
-            }
-          }
-          if (cadastrou) {
-            window.location.href = "pagina-homepage.html";
-          } else {
-            showError("Usuário já cadastrado com esse CPF, e-mail ou UID.");
-          }
+        .then(() => {
+          window.location.href = "pagina-homepage.html";
         })
-        .catch(error => showError("Erro ao cadastrar: " + error.message));
+        .catch(error => {
+          showError("Erro ao cadastrar: " + error.message);
+        });
     }
 
-    // Funções do Airtable: mantidas para cadastro manual
+    // Airtable helpers para cadastro Google (mantém igual)
     const airtableBaseId = 'appVxCKjvJAah2r27';
     const airtableApiKey = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
-
-    async function checarExistenciaAirtableCompleta(uid, email, cpf, perfil) {
-      let tabela = perfil === "cuidador" ? "Cuidadores" : "Clientes";
-      let filtro = [`{UID}='${uid}'`];
-      if (email) filtro.push(`LOWER({E-mail})='${email.trim().toLowerCase()}'`);
-      if (cpf) filtro.push(`{CPF}='${cpf}'`);
-      const formula = `OR(${filtro.join(",")})`;
-      const url = `https://api.airtable.com/v0/${airtableBaseId}/${tabela}?filterByFormula=${encodeURIComponent(formula)}`;
-      const response = await fetch(url, {
-        headers: { 'Authorization': `Bearer ${airtableApiKey}` }
-      });
-      const data = await response.json();
-      return data.records && data.records.length > 0;
-    }
 
     async function enviarUsuarioParaAirtable(user, perfil, cpfParam) {
       const uid = user.uid;
