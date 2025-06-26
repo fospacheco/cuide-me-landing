@@ -189,7 +189,7 @@
     .loading .spinner { display: inline-block; }
     .loading .btn-text { visibility: hidden; }
     button:disabled { cursor: not-allowed; opacity: 0.7; }
-    /* Erro de senhas */
+    /* Erros */
     #senha-error, #login-error-msg {
       color: #b00020;
       font-weight: 600;
@@ -207,6 +207,7 @@
       font-weight: 600;
       font-size: 1.07rem;
       z-index: 10000;
+      display: none;
     }
   </style>
 </head>
@@ -228,8 +229,7 @@
   </div>
 
   <div id="formSlide" class="form-overlay"></div>
-
-  <div id="msgErro" role="alert" aria-live="assertive" style="display:none;"></div>
+  <div id="msgErro" role="alert" aria-live="assertive"></div>
 
   <!-- Firebase + Three.js + Vanta.js -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -266,9 +266,8 @@
         gyroControls: false
       });
       setTimeout(() => {
-        const splash = document.getElementById('splash-screen');
-        splash.style.display = 'none';
-        splash.setAttribute('aria-hidden', 'true');
+        document.getElementById('splash-screen').style.display = 'none';
+        document.getElementById('splash-screen').setAttribute('aria-hidden', 'true');
         document.getElementById('main-content').style.display = 'flex';
       }, 800);
     });
@@ -310,8 +309,8 @@
     function checkSenhaMatch() {
       const senha = document.getElementById('password').value;
       const confirm = document.getElementById('confirm-password').value;
-      const erro = document.getElementById('senha-error');
-      erro.style.display = senha && confirm && senha !== confirm ? 'block' : 'none';
+      document.getElementById('senha-error').style.display =
+        (senha && confirm && senha !== confirm) ? 'block' : 'none';
     }
 
     function renderCadastro(emailPrePreenchido = "") {
@@ -349,6 +348,36 @@
         e.target.value = mascaraCPF(e.target.value);
       }
     });
+
+    function extrairProvedor(email) {
+      if (!email) return '';
+      let provedor = email.split('@')[1] || '';
+      provedor = provedor.split('.')[0];
+      return provedor.toLowerCase();
+    }
+
+    // <— Declaramos validarCPF aqui, antes de usá-la em finalizarCadastroGoogle
+    function validarCPF(cpf) {
+      cpf = cpf.replace(/[^\d]+/g, '');
+      if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
+      let soma = 0;
+      for (let i = 0; i < 9; i++) soma += parseInt(cpf.charAt(i)) * (10 - i);
+      let resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      if (resto !== parseInt(cpf.charAt(9))) return false;
+      soma = 0;
+      for (let i = 0; i < 10; i++) soma += parseInt(cpf.charAt(i)) * (11 - i);
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      return resto === parseInt(cpf.charAt(10));
+    }
+
+    function showError(mensagem) {
+      const div = document.getElementById('msgErro');
+      div.innerText = mensagem;
+      div.style.display = 'block';
+      setTimeout(() => { div.style.display = 'none'; }, 4500);
+    }
 
     // --- GOOGLE LOGIN FLUXO AJUSTADO COM isNewUser ---
     async function loginWithGoogle() {
@@ -403,6 +432,7 @@
         btn.disabled = false;
         return;
       }
+      // validarCPF já está definida antes desta chamada
       if (!validarCPF(cpf)) {
         showError("Digite um CPF válido.");
         document.getElementById("cpf_google").focus();
@@ -505,8 +535,6 @@
           "Fonte de cadastro": fonteCadastro,
           "UID": uid
         };
-      } else {
-        return;
       }
       await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`, {
         method: 'POST',
@@ -535,10 +563,12 @@
   </script>
 
   <div style="text-align:center; margin-top:2rem; font-size:0.9rem;">
-    <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right:1rem; color: var(--primary); text-decoration:underline;">
+    <a href="termos_de_uso_cuide_me.html" target="_blank"
+       style="margin-right:1rem; color: var(--primary); text-decoration:underline;">
       Termos de Uso
     </a>
-    <a href="politica_privacidade.html" target="_blank" style="color: var(--primary); text-decoration:underline;">
+    <a href="politica_privacidade.html" target="_blank"
+       style="color: var(--primary); text-decoration:underline;">
       Política de Privacidade
     </a>
   </div>
