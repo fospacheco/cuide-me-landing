@@ -22,17 +22,17 @@
       color: var(--dark-text);
     }
     #background {
-      position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%; z-index: -1;
+      position: fixed; top:0; left:0;
+      width:100%; height:100%; z-index:-1;
     }
     #splash-screen {
-      position: fixed; inset: 0;
+      position: fixed; inset:0;
       background: linear-gradient(to bottom, var(--secondary), var(--white));
-      display: flex; justify-content: center; align-items: center;
-      z-index: 9999;
+      display:flex; justify-content:center; align-items:center;
+      z-index:9999;
     }
     #splash-screen img {
-      max-width: 220px;
+      max-width:220px;
       animation: pulse 1.5s infinite ease-in-out;
     }
     @keyframes pulse {
@@ -40,9 +40,7 @@
       50%     { transform: scale(1.05); }
     }
     .container {
-      display: none;
-      min-height: 100vh;
-      display: flex;
+      display: none; min-height:100vh; display:flex;
     }
     .left {
       flex:1; padding:3rem;
@@ -76,8 +74,7 @@
       display:flex; flex-direction:column;
       align-items:center; justify-content:center;
       padding:3rem; gap:1rem;
-      transition:left .6s ease;
-      z-index:2;
+      transition:left .6s ease; z-index:2;
     }
     .form-overlay.active { left:50%; }
     .cta-btn {
@@ -90,120 +87,93 @@
       cursor: pointer;
       font-size: 1.2rem;
       margin-top: .5rem;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
+      display: inline-flex; align-items: center; justify-content: center;
     }
     .social-text {
-      font-weight: 500;
-      font-size: 1rem;
-      margin-top: 1rem;
-      text-align: center;
+      font-weight: 500; font-size: 1rem;
+      margin-top: 1rem; text-align: center;
     }
     .social-icons {
-      display: flex;
-      gap: 1rem;
-      justify-content: center;
-      margin: .5rem 0;
+      display: flex; gap: 1rem;
+      justify-content: center; margin: .5rem 0;
     }
     .social-icons img {
-      width: 48px; height: 48px;
-      cursor: pointer;
+      width: 48px; height: 48px; cursor: pointer;
     }
     input, select {
       width: 320px; max-width: 90vw;
-      font-size: 1.18rem;
-      padding: .7rem 1rem;
-      border: 1.5px solid #b3c5cf;
-      border-radius: 5px;
-      background: #eaf1fa;
-      color: #245063;
-      margin-bottom: 1.1rem;
-      outline: none;
+      font-size: 1.18rem; padding: .7rem 1rem;
+      border: 1.5px solid #b3c5cf; border-radius: 5px;
+      background: #eaf1fa; color: #245063;
+      margin-bottom: 1.1rem; outline: none;
       transition: border-color .2s;
     }
     input:focus {
-      border-color: #42c2d3;
-      background: #f3fbfd;
+      border-color: #42c2d3; background: #f3fbfd;
     }
     @media (max-width:768px) {
       .container { flex-direction: column; }
       .left, .right { padding: 2rem; }
       .form-overlay {
-        padding: 2rem; width: 100%; left: 100%;
+        padding: 2rem; width:100%; left:100%;
       }
-      .form-overlay.active { left: 0; }
+      .form-overlay.active { left:0; }
       input {
-        width: 98vw !important;
-        min-width: 180px !important;
-        font-size: 1rem !important;
+        width: 98vw!important; min-width:180px!important;
+        font-size:1rem!important;
       }
     }
-
     /* A11y: foco visível */
     :focus { outline: 3px solid var(--primary); outline-offset: 2px; }
     button:focus, a:focus { outline: 3px solid var(--primary); outline-offset: 2px; }
-
-    /* Spinner UX */
+    /* Spinner */
     .spinner {
-      display: none;
-      width: 1.2em; height: 1.2em;
-      border: 2px solid rgba(255,255,255,0.6);
+      display:none; width:1.2em; height:1.2em;
+      border:2px solid rgba(255,255,255,0.6);
       border-top-color: var(--white);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-      margin-left: .5rem;
+      border-radius:50%; animation: spin .8s linear infinite;
+      margin-left:.5rem;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading .spinner { display: inline-block; }
-    .loading .btn-text  { visibility: hidden; }
-    button:disabled { cursor: not-allowed; opacity: 0.7; }
-
+    @keyframes spin { to{transform:rotate(360deg);} }
+    .loading .spinner { display:inline-block; }
+    .loading .btn-text { visibility:hidden; }
+    button:disabled { cursor:not-allowed; opacity:.7; }
     /* Erros */
     #senha-error, #login-error-msg {
-      color: #b00020; font-weight:600; font-size:.9rem;
+      color:#b00020; font-weight:600; font-size:.9rem;
     }
     #msgErro {
-      background: #fdecea;
-      color: #a50e0e;
-      position: fixed; top:32px; left:50%;
-      transform: translateX(-50%);
-      padding:1rem 2rem;
-      border-radius:10px;
-      box-shadow: 0 2px 12px #0001;
+      background:#fdecea; color:#a50e0e;
+      position:fixed; top:32px; left:50%;
+      transform:translateX(-50%);
+      padding:1rem 2rem; border-radius:10px;
+      box-shadow:0 2px 12px #0001;
       font-weight:600; font-size:1.07rem;
-      z-index:10000;
-      display: none;
+      z-index:10000; display:none;
     }
-
-    /* Ajuste perfil Google: empilha e centraliza */
+    /* Perfil Google: caixas acessíveis e centralizadas */
     .perfil-checkboxes-google {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.4rem;
+      display:flex; flex-direction:column;
+      align-items:center; justify-content:center;
+      gap:1rem; margin:1.5rem 0;
     }
     .perfil-checkboxes-google label {
-      font-size: 1.2rem;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      display:flex; align-items:center;
+      gap:0.5rem; font-size:1.25rem;
+      cursor:pointer;
     }
-
-    /* Link sutil de retorno ao login */
+    .perfil-checkboxes-google input[type="checkbox"] {
+      width:24px; height:24px;
+      accent-color:var(--primary); cursor:pointer;
+    }
+    /* Link sutil */
     .login-subtle {
-      font-size: 0.9rem;
-      color: var(--dark-text);
-      margin-top: 1.5rem;
-      text-align: center;
+      font-size:.9rem; color:var(--dark-text);
+      margin-top:1.5rem; text-align:center;
     }
     .login-subtle a {
-      color: var(--primary);
-      text-decoration: underline;
-      font-weight: 600;
-      cursor: pointer;
+      color:var(--primary); text-decoration:underline;
+      font-weight:600; cursor:pointer;
     }
   </style>
 </head>
@@ -227,7 +197,6 @@
   <div id="formSlide" class="form-overlay"></div>
   <div id="msgErro" role="alert" aria-live="assertive"></div>
 
-  <!-- Firebase + Three.js + Vanta.js -->
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
@@ -248,34 +217,34 @@
 
     window.addEventListener('load', () => {
       VANTA.CLOUDS({
-        el: "#background",
-        backgroundColor: 0xffffff,
-        skyColor:        0x68b8d7,
-        cloudColor:      0xadc1de,
+        el:"#background",
+        backgroundColor:0xffffff,
+        skyColor:0x68b8d7,
+        cloudColor:0xadc1de,
         cloudShadowColor:0x183550,
-        sunColor:        0xff9919,
-        sunGlareColor:   0xff6633,
-        sunlightColor:   0xff9933,
-        speed: 1.0,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false
+        sunColor:0xff9919,
+        sunGlareColor:0xff6633,
+        sunlightColor:0xff9933,
+        speed:1.0,
+        mouseControls:true,
+        touchControls:true,
+        gyroControls:false
       });
-      setTimeout(() => {
-        document.getElementById('splash-screen').style.display = 'none';
+      setTimeout(()=>{
+        document.getElementById('splash-screen').style.display='none';
         document.getElementById('splash-screen').setAttribute('aria-hidden','true');
-        document.getElementById('main-content').style.display = 'flex';
-      }, 800);
+        document.getElementById('main-content').style.display='flex';
+      },800);
     });
 
-    function mostrarFormulario() {
-      document.querySelector('.right').style.display = 'flex';
-      document.getElementById("formSlide").classList.add("active");
+    function mostrarFormulario(){
+      document.querySelector('.right').style.display='flex';
+      document.getElementById('formSlide').classList.add('active');
       renderLogin();
     }
 
-    function renderLogin() {
-      document.getElementById("formSlide").innerHTML = `
+    function renderLogin(){
+      document.getElementById('formSlide').innerHTML=`
         <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
         <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
         <div id="login-error-msg" style="margin-bottom:10px;"></div>
@@ -302,29 +271,26 @@
       `;
     }
 
-    function checkSenhaMatch() {
-      const s = document.getElementById('password').value;
-      const c = document.getElementById('confirm-password').value;
-      document.getElementById('senha-error').style.display =
-        (s && c && s !== c) ? 'block' : 'none';
+    function checkSenhaMatch(){
+      const s=document.getElementById('password').value;
+      const c=document.getElementById('confirm-password').value;
+      document.getElementById('senha-error').style.display=(s&&c&&s!==c)?'block':'none';
     }
 
-    function renderCadastro(prefillEmail = "") {
-      document.getElementById("formSlide").innerHTML = `
-        <input id="nome-completo" type="text" placeholder="Nome Completo" required />
-        <input id="cpf" type="text" placeholder="CPF" required maxlength="14" />
-        <input id="email" type="email" placeholder="E-mail" required value="${prefillEmail}" />
-        <input id="password" type="password" placeholder="Senha" required oninput="checkSenhaMatch()" />
-        <input id="confirm-password" type="password" placeholder="Confirmar senha" required oninput="checkSenhaMatch()" />
+    function renderCadastro(prefill=""){
+      document.getElementById('formSlide').innerHTML=`
+        <input id="nome-completo" type="text" placeholder="Nome Completo" required/>
+        <input id="cpf" type="text" placeholder="CPF" required maxlength="14"/>
+        <input id="email" type="email" placeholder="E-mail" required value="${prefill}"/>
+        <input id="password" type="password" placeholder="Senha" required oninput="checkSenhaMatch()"/>
+        <input id="confirm-password" type="password" placeholder="Confirmar senha" required oninput="checkSenhaMatch()"/>
         <div id="senha-error" style="display:none;margin-top:-0.5rem;margin-bottom:1rem;">
           Senhas estão diferentes, por favor ajuste!
         </div>
         <button class="cta-btn" id="cadastro-btn" onclick="cadastrarUsuario()">
           <span class="btn-text">Cadastrar</span><span class="spinner" aria-hidden="true"></span>
         </button>
-        <button type="button" class="cta-btn" onclick="renderLogin()">
-          Voltar
-        </button>
+        <button type="button" class="cta-btn" onclick="renderLogin()">Voltar</button>
         <div class="toggle-text" style="margin-top:1rem;">
           Já tem uma conta?
           <a style="color:var(--primary);cursor:pointer;" onclick="renderLogin()">Faça login</a>
@@ -332,94 +298,85 @@
       `;
     }
 
-    function mascaraCPF(cpf) {
-      return cpf
-        .replace(/\D/g, "")
-        .replace(/(\d{3})(\d)/, "$1.$2")
-        .replace(/(\d{3})(\d)/, "$1.$2")
-        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+    function mascaraCPF(c){
+      return c.replace(/\D/g,'')
+        .replace(/(\d{3})(\d)/,'$1.$2')
+        .replace(/(\d{3})(\d)/,'$1.$2')
+        .replace(/(\d{3})(\d{1,2})$/,'$1-$2');
     }
-    document.addEventListener('input', e => {
-      if (e.target.id === "cpf" || e.target.id === "cpf_google") {
-        e.target.value = mascaraCPF(e.target.value);
+    document.addEventListener('input',e=>{
+      if(e.target.id==='cpf'||e.target.id==='cpf_google'){
+        e.target.value=mascaraCPF(e.target.value);
       }
     });
 
-    function extrairProvedor(email) {
-      if (!email) return '';
-      let prov = email.split('@')[1]||'';
-      return prov.split('.')[0].toLowerCase();
+    function extrairProvedor(e){
+      if(!e) return '';
+      let p=e.split('@')[1]||'';
+      return p.split('.')[0].toLowerCase();
+    }
+    function validarCPF(c){
+      c=c.replace(/[^\d]+/g,'');
+      if(c.length!==11||/^(\d)\1{10}$/.test(c))return false;
+      let s=0,r;
+      for(let i=0;i<9;i++)s+=+c.charAt(i)*(10-i);
+      r=(s*10)%11; if(r>=10)r=0;
+      if(r!==+c.charAt(9))return false;
+      s=0;
+      for(let i=0;i<10;i++)s+=+c.charAt(i)*(11-i);
+      r=(s*10)%11; if(r>=10)r=0;
+      return r===+c.charAt(10);
     }
 
-    function validarCPF(cpf) {
-      cpf = cpf.replace(/[^\d]+/g,'');
-      if (cpf.length!==11||/^(\d)\1{10}$/.test(cpf)) return false;
-      let soma=0,resto;
-      for(let i=0;i<9;i++) soma+=+cpf.charAt(i)*(10-i);
-      resto=(soma*10)%11; if(resto>=10)resto=0;
-      if(resto!==+cpf.charAt(9))return false;
-      soma=0;
-      for(let i=0;i<10;i++) soma+=+cpf.charAt(i)*(11-i);
-      resto=(soma*10)%11; if(resto>=10)resto=0;
-      return resto===+cpf.charAt(10);
-    }
-
-    function showError(msg) {
+    function showError(m){
       const d=document.getElementById('msgErro');
-      d.innerText=msg; d.style.display='block';
+      d.innerText=m; d.style.display='block';
       setTimeout(()=>d.style.display='none',4500);
     }
 
-    // Helper Airtable para ver se já existe registro
-    async function existeRegistroAirtable(uid) {
-      const h = {
-        'Authorization':`Bearer ${airtableApiKey}`,
-        'Content-Type':'application/json'
-      };
-      let resp = await fetch(
-        `https://api.airtable.com/v0/${airtableBaseId}/Cuidadores?filterByFormula=`+
-        encodeURIComponent(`{UID}='${uid}'`),{headers:h}
-      );
-      let j=await resp.json();
-      if(j.records?.length) return true;
-      resp = await fetch(
-        `https://api.airtable.com/v0/${airtableBaseId}/Clientes?filterByFormula=`+
-        encodeURIComponent(`{UID}='${uid}'`),{headers:h}
-      );
-      j=await resp.json();
-      return !!j.records?.length;
+    const airtableBaseId='appVxCKjvJAah2r27';
+    const airtableApiKey='patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
+
+    async function existeRegistroAirtable(uid){
+      const h={'Authorization':`Bearer ${airtableApiKey}`,'Content-Type':'application/json'};
+      let r=await fetch(`https://api.airtable.com/v0/${airtableBaseId}/Cuidadores?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`,{headers:h});
+      let j=await r.json(); if(j.records?.length) return true;
+      r=await fetch(`https://api.airtable.com/v0/${airtableBaseId}/Clientes?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`,{headers:h});
+      j=await r.json(); return !!j.records?.length;
     }
 
-    // Login Google com checagem Airtable
-    async function loginWithGoogle() {
-      const provider=new firebase.auth.GoogleAuthProvider();
-      try {
-        const result=await auth.signInWithPopup(provider);
-        const user=result.user;
-        const jaTem=await existeRegistroAirtable(user.uid);
-        if(!jaTem){
-          window.googleUser=user;
-          mostrarPerfilCpfGoogle();
+    async function loginWithGoogle(){
+      const p=new firebase.auth.GoogleAuthProvider();
+      try{
+        const res=await auth.signInWithPopup(p);
+        const u=res.user;
+        const tem=await existeRegistroAirtable(u.uid);
+        if(!tem){
+          window.googleUser=u; mostrarPerfilCpfGoogle();
         } else {
           window.location.href="pagina-homepage.html";
         }
-      } catch(e){
-        showError("Erro com Google: "+e.message);
-      }
+      }catch(e){ showError("Erro com Google: "+e.message); }
     }
 
     function mostrarPerfilCpfGoogle(){
-      document.getElementById("formSlide").innerHTML=`
+      document.getElementById('formSlide').innerHTML=`
         <div class="social-text" style="font-size:1.3rem;font-weight:700;">
           Acesse com a rede social
         </div>
         <div class="social-icons" style="margin:1rem 0;">
           <img src="https://img.icons8.com/color/96/google-logo.png"
-               class="google-icon-big" alt="Google" title="Google"/>
+               class="google-icon-big" alt="Google"/>
         </div>
         <div class="perfil-checkboxes-google">
-          <label><input type="checkbox" id="perfil_cliente_google"/> Sou Cliente</label>
-          <label><input type="checkbox" id="perfil_cuidador_google"/> Sou Cuidador</label>
+          <label for="perfil_cliente_google">
+            <input type="checkbox" id="perfil_cliente_google"/>
+            Sou Cliente
+          </label>
+          <label for="perfil_cuidador_google">
+            <input type="checkbox" id="perfil_cuidador_google"/>
+            Sou Cuidador
+          </label>
         </div>
         <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required/>
         <button class="cta-btn" id="finalizar-btn" onclick="finalizarCadastroGoogle()">
@@ -435,123 +392,81 @@
     async function finalizarCadastroGoogle(){
       const btn=document.getElementById('finalizar-btn');
       btn.classList.add('loading'); btn.disabled=true;
-      const isCli=document.getElementById("perfil_cliente_google").checked;
-      const isCui=document.getElementById("perfil_cuidador_google").checked;
-      const cpf=document.getElementById("cpf_google").value.replace(/\D/g,'');
+      const isCli=document.getElementById('perfil_cliente_google').checked;
+      const isCui=document.getElementById('perfil_cuidador_google').checked;
+      const cpf=document.getElementById('cpf_google').value.replace(/\D/g,'');
       if(!isCli&&!isCui){
-        showError("Escolha pelo menos um perfil.");
-        btn.classList.remove('loading'); btn.disabled=false;
-        return;
+        showError("Escolha um perfil."); btn.classList.remove('loading'); btn.disabled=false; return;
       }
       if(!validarCPF(cpf)){
-        showError("Digite um CPF válido.");
-        document.getElementById("cpf_google").focus();
-        btn.classList.remove('loading'); btn.disabled=false;
-        return;
+        showError("CPF inválido."); document.getElementById('cpf_google').focus();
+        btn.classList.remove('loading'); btn.disabled=false; return;
       }
-      const perfis=[];
-      if(isCli) perfis.push("familia");
-      if(isCui) perfis.push("cuidador");
-      const user=window.googleUser||auth.currentUser;
-      for(const p of perfis){
-        await enviarUsuarioParaAirtable(user,p,cpf);
-      }
+      const perfis=[]; if(isCli) perfis.push('familia'); if(isCui) perfis.push('cuidador');
+      const u=window.googleUser||auth.currentUser;
+      for(const p of perfis) await enviarUsuarioParaAirtable(u,p,cpf);
       window.location.href="pagina-homepage.html";
     }
 
     async function loginWithEmail(){
       const btn=document.getElementById('login-btn');
       btn.classList.add('loading'); btn.disabled=true;
-      const email=document.getElementById("email").value;
-      const password=document.getElementById("password").value;
-      document.getElementById("login-error-msg").innerText="";
-      try{
-        await auth.signInWithEmailAndPassword(email,password);
+      const e=document.getElementById('email').value;
+      const p=document.getElementById('password').value;
+      document.getElementById('login-error-msg').innerText='';
+      try{ await auth.signInWithEmailAndPassword(e,p);
         window.location.href="pagina-homepage.html";
-      }catch(e){
-        let msg="";
-        if(e.code==="auth/user-not-found") msg="E-mail não cadastrado";
-        else if(e.code==="auth/wrong-password") msg="Senha incorreta";
-        else if(e.code==="auth/invalid-email") msg="E-mail inválido";
-        else msg="Erro: "+e.message;
-        document.getElementById("login-error-msg").innerText=msg;
-      }finally{
-        btn.classList.remove('loading'); btn.disabled=false;
-      }
+      }catch(er){
+        let m='Erro: '+er.message;
+        if(er.code==='auth/user-not-found') m='E-mail não cadastrado';
+        else if(er.code==='auth/wrong-password') m='Senha incorreta';
+        else if(er.code==='auth/invalid-email') m='E-mail inválido';
+        document.getElementById('login-error-msg').innerText=m;
+      }finally{ btn.classList.remove('loading'); btn.disabled=false; }
     }
 
     async function cadastrarUsuario(){
       const btn=document.getElementById('cadastro-btn');
       btn.classList.add('loading'); btn.disabled=true;
-      const nome=document.getElementById("nome-completo").value;
-      const cpf=document.getElementById("cpf").value.replace(/\D/g,'');
-      const email=document.getElementById("email").value;
-      const password=document.getElementById("password").value;
-      if(!validarCPF(cpf)){
-        showError("Digite um CPF válido.");
-        btn.classList.remove('loading'); btn.disabled=false;
-        return;
+      const n=document.getElementById('nome-completo').value;
+      const c=document.getElementById('cpf').value.replace(/\D/g,'');
+      const e=document.getElementById('email').value;
+      const p=document.getElementById('password').value;
+      if(!validarCPF(c)){
+        showError('CPF inválido.'); btn.classList.remove('loading'); btn.disabled=false; return;
       }
       try{
-        const uc=await auth.createUserWithEmailAndPassword(email,password);
-        await enviarUsuarioParaAirtable(uc.user,'familia',cpf,nome);
+        const uc=await auth.createUserWithEmailAndPassword(e,p);
+        await enviarUsuarioParaAirtable(uc.user,'familia',c,n);
         window.location.href="pagina-homepage.html";
-      }catch(e){
-        showError("Erro ao cadastrar: "+e.message);
-      }finally{
-        btn.classList.remove('loading'); btn.disabled=false;
-      }
+      }catch(er){ showError('Erro ao cadastrar: '+er.message); }
+      finally{ btn.classList.remove('loading'); btn.disabled=false; }
     }
 
-    const airtableBaseId='appVxCKjvJAah2r27';
-    const airtableApiKey='patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
-
     async function enviarUsuarioParaAirtable(user,perfil,cpfParam,nomeParam=''){
-      const uid=user.uid;
-      const email=user.email||'';
-      const nome=nomeParam||user.displayName||'';
-      const cpf=cpfParam||'';
+      const uid=user.uid; const email=user.email||'';
+      const nome= nomeParam||user.displayName||'';
       const fonte=extrairProvedor(email);
       let tabela='',fields={};
       if(perfil==='cuidador'){
-        tabela='Cuidadores';
-        fields={
-          "Nome Completo":nome,
-          "CPF":cpf,
-          "E-mail":email,
-          "Status":"Disponível",
-          "Fonte de cadastro":fonte,
-          "UID":uid
+        tabela='Cuidadores'; fields={
+          "Nome Completo":nome,"CPF":cpfParam,"E-mail":email,
+          "Status":"Disponível","Fonte de cadastro":fonte,"UID":uid
         };
-      }else{
-        tabela='Clientes';
-        fields={
-          "Nome Completo":nome,
-          "CPF":cpf,
-          "E-mail":email,
-          "Fonte de cadastro":fonte,
-          "UID":uid
+      } else {
+        tabela='Clientes'; fields={
+          "Nome Completo":nome,"CPF":cpfParam,"E-mail":email,
+          "Fonte de cadastro":fonte,"UID":uid
         };
       }
       await fetch(`https://api.airtable.com/v0/${airtableBaseId}/${tabela}`,{
         method:'POST',
-        headers:{
-          'Authorization':`Bearer ${airtableApiKey}`,
-          'Content-Type':'application/json'
-        },
+        headers:{'Authorization':`Bearer ${airtableApiKey}`,'Content-Type':'application/json'},
         body:JSON.stringify({fields})
       })
-      .then(r=>r.json())
-      .then(j=>{
-        if(j.error){
-          showError('Airtable erro: '+j.error.message);
-          console.error('Airtable error:',j.error);
-        }
-      })
-      .catch(e=>{
-        showError('Erro geral: '+e.message);
-        console.error('Erro geral:',e);
-      });
+      .then(r=>r.json()).then(j=>{
+        if(j.error){ showError('Airtable erro: '+j.error.message); console.error(j.error); }
+      }).catch(e=>{ showError('Erro geral: '+e.message); console.error(e); });
     }
 
     auth.onAuthStateChanged(u=>{
@@ -560,12 +475,10 @@
   </script>
 
   <div style="text-align:center; margin-top:2rem; font-size:.9rem;">
-    <a href="termos_de_uso_cuide_me.html" target="_blank"
-       style="margin-right:1rem; color:var(--primary); text-decoration:underline;">
+    <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right:1rem; color:var(--primary); text-decoration:underline;">
       Termos de Uso
     </a>
-    <a href="politica_privacidade.html" target="_blank"
-       style="color:var(--primary); text-decoration:underline;">
+    <a href="politica_privacidade.html" target="_blank" style="color:var(--primary); text-decoration:underline;">
       Política de Privacidade
     </a>
   </div>
