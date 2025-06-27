@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Login/Cadastro - Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <style>
     :root {
       --primary: #42c2d3;
@@ -14,8 +13,6 @@
       --white: #ffffff;
       --petroleo: #004953;
       --font-base: 'Inter', sans-serif;
-      --error: #ff4d4f;
-      --success: #52c41a;
     }
     * { box-sizing: border-box; margin:0; padding:0; }
     html, body {
@@ -28,357 +25,126 @@
     a { text-decoration:none; cursor:pointer; }
 
     /* Fundo animado e splash */
-    #background { 
-      position:fixed; 
-      top:0; 
-      left:0; 
-      width:100%; 
-      height:100%; 
-      z-index:-1; 
-      background: linear-gradient(135deg, #e0f7fa, #b2ebf2, #80deea, #4dd0e1);
-    }
+    #background { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; }
     #splash-screen {
-      position:fixed; 
-      inset:0;
-      background:linear-gradient(to bottom, var(--secondary), var(--white));
-      display:flex; 
-      align-items:center; 
-      justify-content:center;
+      position:fixed; inset:0;
+      background:linear-gradient(to bottom,var(--secondary),var(--white));
+      display:flex; align-items:center; justify-content:center;
       z-index:9999;
-      transition: opacity 0.5s ease;
     }
     #splash-screen img {
       max-width:220px;
-      animation: pulse 1.2s infinite ease-in-out;
+      animation:pulse 0.8.s infinite ease-in-out;
     }
-    @keyframes pulse {
-      0%,100% { transform:scale(1); }
-      50% { transform:scale(1.05); }
-    }
-    @keyframes fadeIn {
-      from { opacity:0; transform:translateY(20px); }
-      to { opacity:1; transform:translateY(0); }
-    }
+    @keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
 
     /* Layout principal */
-    .container { 
-      min-height:100vh; 
-      display:flex; 
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      position: relative;
-      z-index: 10;
+    .container { display:none; min-height:100vh; display:flex; }
+    .left {
+      flex:1; padding:3rem;
+      display:flex; flex-direction:column; justify-content:center; align-items:center;
+      background:transparent; color:var(--white); text-align:center; z-index:1;
     }
-    .logo-container {
-      text-align: center;
-      margin-bottom: 2rem;
-      animation: fadeIn 0.8s ease-out;
-    }
-    .logo-container img {
-      max-width: 280px;
-      margin-bottom: 1.5rem;
-    }
-    .app-title {
-      font-size: 2.8rem;
-      font-weight: 700;
-      color: var(--petroleo);
-      margin-bottom: 0.5rem;
-      background: linear-gradient(90deg, #004953, #42c2d3);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .app-subtitle {
-      font-size: 1.2rem;
-      color: var(--dark-text);
-      margin-bottom: 2rem;
-      max-width: 500px;
-      line-height: 1.6;
+    .left .logo { width:240px; margin-bottom:1.5rem; }
+    .left h2 { font-size:2rem; margin-bottom:1rem; color:var(--petroleo); }
+    .left p  { font-size:1.1rem; margin-bottom:2rem; color:var(--petroleo); }
+    .left a  {
+      background:var(--white); color:var(--primary);
+      padding:.8rem 2rem; border-radius:50px;
+      font-weight:bold; box-shadow:0 4px 10px rgba(0,0,0,0.1);
     }
 
-    /* Painel de formulário */
-    .form-container {
-      background: rgba(255, 255, 255, 0.92);
-      border-radius: 20px;
-      box-shadow: 0 15px 50px rgba(0, 73, 83, 0.2);
-      padding: 40px 30px;
-      width: 100%;
-      max-width: 480px;
-      position: relative;
-      overflow: hidden;
-      animation: fadeIn 0.8s ease-out 0.2s;
-      animation-fill-mode: both;
+    /* Painel direito */
+    .right { flex:1; position:relative; overflow:hidden; background:var(--white); display:none; }
+    .form-overlay {
+      position:fixed; top:0; left:100%;
+      width:50%; height:100%; background:var(--white);
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      padding:3rem; gap:1rem; transition:left .6s ease; z-index:2;
     }
-    .form-header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .form-title {
-      font-size: 2rem;
-      color: var(--petroleo);
-      margin-bottom: 5px;
-    }
-    .form-subtitle {
-      color: #666;
-      font-size: 1rem;
-    }
-    .form-toggle {
-      text-align: center;
-      margin-top: 20px;
-      font-size: 0.95rem;
-      color: #555;
-    }
-    .form-toggle a {
-      color: var(--primary);
-      font-weight: 600;
-      cursor: pointer;
-    }
+    .form-overlay.active { left:50%; }
 
     /* Campos de input */
-    .input-group {
-      margin-bottom: 20px;
-      position: relative;
-    }
-    .input-group label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: 600;
-      color: var(--dark-text);
-      font-size: 0.95rem;
-    }
     input {
-      width: 100%;
-      font-size: 1rem;
-      padding: 14px 16px;
-      border: 2px solid #dde7f0;
-      border-radius: 12px;
-      background: #f7fbfd;
-      color: var(--dark-text);
-      outline: none;
-      transition: all 0.3s ease;
+      width:320px; max-width:90vw;
+      font-size:1.18rem; padding:.7rem 1rem;
+      border:1.5px solid #b3c5cf; border-radius:5px;
+      background:#eaf1fa; color:#245063; margin-bottom:1.1rem;
+      outline:none; transition:border-color .2s;
     }
-    input:focus {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(66, 194, 211, 0.2);
-      background: #fff;
-    }
-    input::placeholder {
-      color: #a0b6c5;
-    }
+    input:focus { border-color:#42c2d3; background:#f3fbfd; }
 
     /* Botões CTA */
     .cta-btn {
-      background: var(--primary);
-      color: var(--white);
-      padding: 16px;
-      border-radius: 12px;
-      font-weight: 700;
-      border: none;
-      cursor: pointer;
-      font-size: 1.1rem;
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-      margin-top: 10px;
-      box-shadow: 0 4px 15px rgba(66, 194, 211, 0.3);
-    }
-    .cta-btn:hover {
-      background: #3ab0c0;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(66, 194, 211, 0.4);
-    }
-    .cta-btn:active {
-      transform: translateY(0);
+      background:var(--primary); color:var(--white);
+      padding:.9rem 2rem; border-radius:50px;
+      font-weight:bold; border:none; cursor:pointer;
+      font-size:1.2rem; display:inline-flex;
+      align-items:center; justify-content:center;
+      min-width:200px;
     }
     .cta-btn .spinner {
-      display: none;
-      width: 1.2em;
-      height: 1.2em;
-      border: 2px solid rgba(255,255,255,0.6);
-      border-top-color: var(--white);
-      border-radius: 50%;
-      animation: spin .8s linear infinite;
-      margin-left: .5rem;
+      display:none; width:1.2em; height:1.2em;
+      border:2px solid rgba(255,255,255,0.6);
+      border-top-color:var(--white); border-radius:50%;
+      animation:spin .8s linear infinite; margin-left:.5rem;
     }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loading .spinner { display: inline-block; }
-    .loading .btn-text { visibility: hidden; }
-    button:disabled { cursor: not-allowed; opacity: .7; }
+    @keyframes spin { to{transform:rotate(360deg);} }
+    .loading .spinner { display:inline-block; }
+    .loading .btn-text { visibility:hidden; }
+    button:disabled { cursor:not-allowed; opacity:.7; }
 
-    /* Botões sociais */
-    .social-login {
-      display: flex;
-      justify-content: center;
-      gap: 15px;
-      margin: 25px 0;
+    /* Texto social e ícones */
+    .social-text {
+      font-weight:500; font-size:1rem;
+      text-align:center; margin-top:1rem;
     }
-    .social-btn {
-      width: 55px;
-      height: 55px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: #fff;
-      border: 1px solid #e0e6eb;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    .social-icons {
+      display:flex; gap:1rem; justify-content:center; margin:.5rem 0;
     }
-    .social-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
-    }
-    .social-btn.google {
-      background: #4285F4;
-      color: white;
-      border: none;
-    }
-    .social-btn i {
-      font-size: 1.4rem;
-    }
-    .divider {
-      display: flex;
-      align-items: center;
-      margin: 25px 0;
-      color: #8a9ba8;
-      font-size: 0.9rem;
-    }
-    .divider::before,
-    .divider::after {
-      content: '';
-      flex: 1;
-      border-bottom: 1px solid #e0e6eb;
-    }
-    .divider::before {
-      margin-right: 15px;
-    }
-    .divider::after {
-      margin-left: 15px;
-    }
+    .social-icons img { width:48px; height:48px; }
 
     /* Mensagens de erro */
-    .error-msg {
-      color: var(--error);
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-top: 5px;
-      display: block;
-      min-height: 20px;
+    #login-error-msg, #senha-error {
+      color:#b00020; font-weight:600; font-size:.9rem; margin-bottom:.5rem;
     }
     #msgErro {
-      background: #fff0f0;
-      color: var(--error);
-      position: fixed;
-      top: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 15px 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-      font-weight: 600;
-      font-size: 1rem;
-      z-index: 10000;
-      display: none;
-      animation: slideDown 0.3s ease-out;
-      border: 1px solid #ffccc7;
-    }
-    @keyframes slideDown {
-      from { top: -50px; opacity: 0; }
-      to { top: 30px; opacity: 1; }
-    }
-    .success-msg {
-      color: var(--success);
-      font-weight: 600;
-      font-size: 0.9rem;
-      margin-top: 5px;
-      display: block;
-      min-height: 20px;
+      background:#fdecea; color:#a50e0e;
+      position:fixed; top:32px; left:50%; transform:translateX(-50%);
+      padding:1rem 2rem; border-radius:10px;
+      box-shadow:0 2px 12px #0001;
+      font-weight:600; font-size:1.07rem; z-index:10000; display:none;
     }
 
-    /* Perfil options */
+    /* Toggle-crie-aqui menor */
+    .toggle-text { text-align:center; margin-top:1rem; }
+    .toggle-text .cta-btn {
+      min-width:auto; padding:.4rem 1rem; font-size:1rem; border-radius:25px;
+    }
+
+    /* Seleção de perfil */
     .perfil-options {
-      display: flex;
-      gap: 15px;
-      margin: 20px 0;
-      flex-wrap: wrap;
-      justify-content: center;
+      display:flex; gap:1rem; margin:1rem auto; width:max-content;
     }
-    .perfil-option {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 120px;
-      padding: 15px 10px;
-      border: 2px solid var(--primary);
-      border-radius: 15px;
-      background: var(--white);
-      color: var(--dark-text);
-      font-size: 0.95rem;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      cursor: pointer;
-      text-align: center;
+    .perfil-options input[type="checkbox"] { display:none; }
+    .perfil-options label {
+      display:flex; align-items:center; justify-content:center;
+      width:140px; padding:.8rem;
+      border:2px solid var(--primary); border-radius:8px;
+      background:var(--white); color:var(--dark-text);
+      font-size:1.1rem; font-weight:600;
+      transition:background .2s,color .2s; cursor:pointer;
     }
-    .perfil-option i {
-      font-size: 2rem;
-      margin-bottom: 10px;
-      color: var(--primary);
-      transition: all 0.3s ease;
-    }
-    .perfil-option:hover {
-      border-color: #3ab0c0;
-      background: #f0fcff;
-    }
-    .perfil-option.selected {
-      background: var(--primary);
-      color: var(--white);
-      border-color: var(--primary);
-      box-shadow: 0 5px 15px rgba(66, 194, 211, 0.3);
-    }
-    .perfil-option.selected i {
-      color: var(--white);
+    .perfil-options input:checked + label {
+      background:var(--primary); color:var(--white);
     }
 
-    /* Responsividade */
-    @media (max-width: 768px) {
-      .form-container {
-        padding: 30px 20px;
-      }
-      .app-title {
-        font-size: 2.2rem;
-      }
-      .form-title {
-        font-size: 1.7rem;
-      }
-      .perfil-options {
-        gap: 10px;
-      }
-      .perfil-option {
-        width: 100px;
-        padding: 12px 8px;
-        font-size: 0.85rem;
-      }
-    }
-    @media (max-width: 480px) {
-      .container {
-        padding: 15px;
-      }
-      .form-container {
-        padding: 25px 15px;
-      }
-      .perfil-options {
-        flex-direction: column;
-        align-items: center;
-      }
-      .perfil-option {
-        width: 100%;
-        max-width: 200px;
-      }
+    @media(max-width:768px) {
+      .container { flex-direction:column; }
+      .left, .right { padding:2rem; }
+      .form-overlay { padding:2rem; width:100%; left:100%; }
+      .form-overlay.active { left:0; }
+      input { width:98vw!important; min-width:180px!important; font-size:1rem!important; }
     }
   </style>
 </head>
@@ -386,24 +152,20 @@
 
   <div id="background"></div>
   <div id="splash-screen" aria-hidden="false">
-    <div style="text-align: center;">
-      <img src="https://i.imgur.com/xFgD5bG.png" alt="Carregando Cuide-me" style="max-width: 180px;"/>
-      <div style="margin-top: 20px; font-size: 1.5rem; font-weight: 700; color: #004953;">Cuide-me</div>
-    </div>
+    <img src="logo_cuide_me.png" alt="Carregando Cuide-me"/>
   </div>
 
-  <div class="container" id="main-content" style="display: none;">
-    <div class="logo-container">
-      <img src="https://i.imgur.com/xFgD5bG.png" alt="Cuide-me"/>
-      <h1 class="app-title">Cuide-me</h1>
-      <p class="app-subtitle">Conectando cuidadores e famílias para proporcionar o melhor cuidado aos idosos</p>
+  <div class="container" id="main-content">
+    <div class="left">
+      <img src="logo_cuide_me.png" class="logo" alt="Cuide-me"/>
+      <h2>Seja Bem-vindo!</h2>
+      <p>Para acessar, clique abaixo:</p>
+      <a onclick="mostrarFormulario()">Acessar</a>
     </div>
-
-    <div class="form-container" id="form-container">
-      <!-- Formulário será inserido aqui via JavaScript -->
-    </div>
+    <div class="right"></div>
   </div>
 
+  <div id="formSlide" class="form-overlay"></div>
   <div id="msgErro" role="alert" aria-live="assertive"></div>
 
   <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
@@ -424,33 +186,37 @@
     const auth = firebase.auth();
     auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
 
-    // Elementos globais
-    let currentForm = 'login';
-    let selectedPerfil = null;
-    let googleUser = null;
-
-    // Inicialização
+    // animação de fundo e splash
     window.addEventListener('load', () => {
-      // Simular animação de fundo
-      setTimeout(() => {
-        document.getElementById('splash-screen').style.opacity = '0';
-        setTimeout(() => {
-          document.getElementById('splash-screen').style.display = 'none';
-          document.getElementById('main-content').style.display = 'flex';
-          renderLoginForm();
-        }, 500);
-      }, 1500);
+      VANTA.CLOUDS({
+        el: "#background",
+        backgroundColor: 0xffffff,
+        skyColor:        0x68b8d7,
+        cloudColor:      0xadc1de,
+        cloudShadowColor:0x183550,
+        sunColor:        0xff9919,
+        sunGlareColor:   0xff6633,
+        sunlightColor:   0xff9933,
+        speed: 1.0,
+        mouseControls: true,
+        touchControls: true,
+        gyroControls: false
+      });
+      setTimeout(()=>{
+        document.getElementById('splash-screen').style.display='none';
+        document.getElementById('main-content').style.display='flex';
+      },800);
     });
 
-    // Exibir mensagem de erro
+    // exibe erro
     function showError(msg) {
       const el = document.getElementById('msgErro');
       el.innerText = msg;
       el.style.display = 'block';
-      setTimeout(() => el.style.display = 'none', 4500);
+      setTimeout(()=> el.style.display='none',4500);
     }
 
-    // Máscara de CPF
+    // máscara de CPF
     function mascaraCPF(value) {
       return value
         .replace(/\D/g, "")
@@ -458,442 +224,243 @@
         .replace(/(\d{3})(\d)/, "$1.$2")
         .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     }
+    document.addEventListener('input', function(e) {
+      if (e.target.id === 'cpf' || e.target.id === 'cpf_google') {
+        e.target.value = mascaraCPF(e.target.value);
+      }
+    });
 
-    // Validação de CPF
+    // validação de CPF
     function validarCPF(cpf) {
       cpf = cpf.replace(/\D/g, '');
       if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-      
       let sum = 0;
-      for (let i = 0; i < 9; i++) 
-        sum += parseInt(cpf.charAt(i)) * (10 - i);
+      for (let i = 0; i < 9; i++) sum += parseInt(cpf.charAt(i)) * (10 - i);
       let remainder = (sum * 10) % 11;
       if (remainder === 10 || remainder === 11) remainder = 0;
       if (remainder !== parseInt(cpf.charAt(9))) return false;
-      
       sum = 0;
-      for (let i = 0; i < 10; i++) 
-        sum += parseInt(cpf.charAt(i)) * (11 - i);
+      for (let i = 0; i < 10; i++) sum += parseInt(cpf.charAt(i)) * (11 - i);
       remainder = (sum * 10) % 11;
       if (remainder === 10 || remainder === 11) remainder = 0;
       if (remainder !== parseInt(cpf.charAt(10))) return false;
-      
       return true;
     }
 
-    // Verifica se já existe no Airtable
+    // verifica se já existe no Airtable
     async function existeRegistroAirtable(uid) {
-      // Em produção, substituir por chamada real à API do Airtable
-      return new Promise(resolve => {
-        // Simulação: 80% de chance de já ter registro
-        setTimeout(() => resolve(Math.random() > 0.2), 800);
-      });
+      const base = 'appVxCKjvJAah2r27';
+      const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
+      const h     = { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' };
+      let res = await fetch(`https://api.airtable.com/v0/${base}/Cuidadores?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
+      let j   = await res.json();
+      if (j.records?.length) return true;
+      res    = await fetch(`https://api.airtable.com/v0/${base}/Clientes?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
+      j      = await res.json();
+      return !!j.records?.length;
     }
 
-    // Renderizar formulário de login
-    function renderLoginForm() {
-      const formContainer = document.getElementById('form-container');
-      formContainer.innerHTML = `
-        <div class="form-header">
-          <h2 class="form-title">Bem-vindo de volta</h2>
-          <p class="form-subtitle">Faça login para continuar</p>
-        </div>
-        
-        <div class="input-group">
-          <label for="email">E-mail</label>
-          <input id="email" type="email" placeholder="seu@email.com" required autocomplete="email"/>
-        </div>
-        
-        <div class="input-group">
-          <label for="password">Senha</label>
-          <input id="password" type="password" placeholder="••••••••" required autocomplete="current-password"/>
-          <span id="login-error-msg" class="error-msg"></span>
-        </div>
-        
+    // exibe formulário inicial
+    function mostrarFormulario() {
+      document.querySelector('.right').style.display='flex';
+      document.getElementById('formSlide').classList.add('active');
+      renderLogin();
+    }
+
+    // tela de login
+    function renderLogin() {
+      document.getElementById('formSlide').innerHTML = `
+        <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
+        <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
+        <div id="login-error-msg"></div>
         <button class="cta-btn" id="login-btn" onclick="loginWithEmail()">
           <span class="btn-text">Entrar</span><span class="spinner"></span>
         </button>
-        
-        <div class="divider">ou</div>
-        
-        <div class="social-login">
-          <div class="social-btn google" onclick="loginWithGoogle()">
-            <i class="fab fa-google"></i>
-          </div>
+        <div class="social-text">ou acesse com redes sociais</div>
+        <div class="social-icons">
+          <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google"/>
         </div>
-        
-        <div class="form-toggle">
-          Não tem uma conta? <a onclick="renderCadastroForm()">Cadastre-se</a>
+        <div class="toggle-text">
+          Ainda não tem conta?
+          <button class="cta-btn" onclick="renderCadastro()">
+            <span class="btn-text">Crie aqui</span><span class="spinner"></span>
+          </button>
         </div>
       `;
-      currentForm = 'login';
     }
 
-    // Renderizar formulário de cadastro
-    function renderCadastroForm() {
-      const formContainer = document.getElementById('form-container');
-      formContainer.innerHTML = `
-        <div class="form-header">
-          <h2 class="form-title">Criar conta</h2>
-          <p class="form-subtitle">Preencha os dados para se cadastrar</p>
+    // tela de cadastro por e-mail
+    function renderCadastro(prefill = "") {
+      document.getElementById('formSlide').innerHTML = `
+        <div class="social-text">Escolha seu Perfil</div>
+        <div class="perfil-options">
+          <input type="checkbox" id="perfil_cliente_email" name="perfil_email" value="familia"/>
+          <label for="perfil_cliente_email">Cliente</label>
+          <input type="checkbox" id="perfil_cuidador_email" name="perfil_email" value="cuidador"/>
+          <label for="perfil_cuidador_email">Cuidador</label>
         </div>
-        
-        <div class="input-group">
-          <label>Selecione seu perfil</label>
-          <div class="perfil-options">
-            <div class="perfil-option" onclick="selectPerfil(this, 'cliente')">
-              <i class="fas fa-user-friends"></i>
-              <span>Cliente</span>
-            </div>
-            <div class="perfil-option" onclick="selectPerfil(this, 'cuidador')">
-              <i class="fas fa-hands-helping"></i>
-              <span>Cuidador</span>
-            </div>
-          </div>
-          <span id="perfil-error" class="error-msg"></span>
-        </div>
-        
-        <div class="input-group">
-          <label for="nome-completo">Nome Completo</label>
-          <input id="nome-completo" type="text" placeholder="Seu nome completo" required/>
-        </div>
-        
-        <div class="input-group">
-          <label for="cpf">CPF</label>
-          <input id="cpf" type="text" placeholder="000.000.000-00" maxlength="14" required
-                 oninput="this.value = mascaraCPF(this.value)"/>
-          <span id="cpf-error" class="error-msg"></span>
-        </div>
-        
-        <div class="input-group">
-          <label for="cadastro-email">E-mail</label>
-          <input id="cadastro-email" type="email" placeholder="seu@email.com" required autocomplete="email"/>
-        </div>
-        
-        <div class="input-group">
-          <label for="cadastro-password">Senha</label>
-          <input id="cadastro-password" type="password" placeholder="••••••••" required oninput="checkSenhaMatch()"/>
-        </div>
-        
-        <div class="input-group">
-          <label for="confirm-password">Confirmar senha</label>
-          <input id="confirm-password" type="password" placeholder="••••••••" required oninput="checkSenhaMatch()"/>
-          <span id="senha-error" class="error-msg"></span>
-        </div>
-        
+        <input id="nome-completo" type="text" placeholder="Nome Completo" required/>
+        <input id="cpf" type="text" placeholder="CPF" maxlength="14" required/>
+        <input id="email" type="email" placeholder="E-mail" required value="${prefill}" autocomplete="email"/>
+        <input id="password" type="password" placeholder="Senha" required oninput="checkSenhaMatch()"/>
+        <input id="confirm-password" type="password" placeholder="Confirmar senha" required oninput="checkSenhaMatch()"/>
+        <div id="senha-error"></div>
         <button class="cta-btn" id="cadastro-btn" onclick="cadastrarUsuario()">
           <span class="btn-text">Cadastrar</span><span class="spinner"></span>
         </button>
-        
-        <div class="form-toggle">
-          Já tem uma conta? <a onclick="renderLoginForm()">Faça login</a>
-        </div>
+        <button class="cta-btn" onclick="renderLogin()">
+          <span class="btn-text">Voltar</span><span class="spinner"></span>
+        </button>
       `;
-      currentForm = 'cadastro';
-      selectedPerfil = null;
     }
 
-    // Selecionar perfil
-    function selectPerfil(element, perfil) {
-      // Remover seleção de todos
-      document.querySelectorAll('.perfil-option').forEach(el => {
-        el.classList.remove('selected');
-      });
-      
-      // Adicionar seleção ao clicado
-      element.classList.add('selected');
-      selectedPerfil = perfil;
-      document.getElementById('perfil-error').textContent = '';
-    }
-
-    // Verificar correspondência de senhas
+    // valida senhas iguais no cadastro
     function checkSenhaMatch() {
-      const s = document.getElementById('cadastro-password')?.value || '';
-      const c = document.getElementById('confirm-password')?.value || '';
-      const errorEl = document.getElementById('senha-error');
-      
-      if (s && c && s !== c) {
-        errorEl.textContent = 'As senhas não coincidem!';
-      } else {
-        errorEl.textContent = '';
-      }
+      const s = document.getElementById('password').value;
+      const c = document.getElementById('confirm-password').value;
+      document.getElementById('senha-error').innerText =
+        (s && c && s !== c) ? 'Senhas estão diferentes, por favor ajuste!' : '';
     }
 
-    // Login com e-mail/senha
+    // login com e-mail/senha
     function loginWithEmail() {
       const btn = document.getElementById('login-btn');
-      btn.classList.add('loading');
-      btn.disabled = true;
-      
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const errorMsg = document.getElementById('login-error-msg');
-      
-      errorMsg.textContent = '';
-      
-      // Validação básica
-      if (!email || !password) {
-        errorMsg.textContent = 'Por favor, preencha todos os campos.';
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        return;
-      }
-      
-      // Simulação de login
-      setTimeout(() => {
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        showSuccessLogin();
-      }, 1500);
-      
-      // Em produção, usar:
-      /*
-      auth.signInWithEmailAndPassword(email, password)
+      btn.classList.add('loading'); btn.disabled = true;
+      const e = document.getElementById('email').value;
+      const p = document.getElementById('password').value;
+      document.getElementById('login-error-msg').innerText = '';
+      auth.signInWithEmailAndPassword(e, p)
         .then(() => window.location.href = 'pagina-homepage.html')
         .catch(err => {
-          let msg = '';
-          if (err.code === 'auth/user-not-found') msg = 'E-mail não cadastrado';
-          else if (err.code === 'auth/wrong-password') msg = 'Senha incorreta';
-          else if (err.code === 'auth/invalid-email') msg = 'E-mail inválido';
-          else msg = 'Erro: ' + err.message;
-          errorMsg.textContent = msg;
+          let m = '';
+          if (err.code === 'auth/user-not-found') m = 'E-mail não cadastrado';
+          else if (err.code === 'auth/wrong-password') m = 'Senha incorreta';
+          else if (err.code === 'auth/invalid-email') m = 'E-mail inválido';
+          else m = 'Erro: ' + err.message;
+          document.getElementById('login-error-msg').innerText = m;
         })
-        .finally(() => {
-          btn.classList.remove('loading');
-          btn.disabled = false;
-        });
-      */
+        .finally(() => { btn.classList.remove('loading'); btn.disabled = false; });
     }
 
-    // Login com Google
+    // login com Google
     function loginWithGoogle() {
-      // Simulação de login com Google
-      document.getElementById('form-container').innerHTML = `
-        <div style="text-align: center; padding: 30px;">
-          <div class="spinner" style="width: 50px; height: 50px; margin: 0 auto 20px; border-width: 3px;"></div>
-          <h2 class="form-title">Autenticando com Google</h2>
-          <p class="form-subtitle">Por favor, aguarde...</p>
-        </div>
-      `;
-      
-      setTimeout(() => {
-        // Simular que encontrou o usuário no Firebase
-        const foundInFirebase = Math.random() > 0.3;
-        
-        if (foundInFirebase) {
-          // Redireciona para home
-          showSuccessLogin();
-        } else {
-          // Mostrar formulário de CPF/perfil
-          renderPerfilCpfForm();
-        }
-      }, 2000);
+      const provider = new firebase.auth.GoogleAuthProvider();
+      auth.signInWithPopup(provider)
+        .then(async res => {
+          const u = res.user;
+          const has = await existeRegistroAirtable(u.uid);
+          if (!has) mostrarPerfilCpfGoogle();
+          else window.location.href = 'pagina-homepage.html';
+        })
+        .catch(e => showError('Erro com Google: ' + e.message));
     }
 
-    // Mostrar formulário de perfil/CPF para Google
-    function renderPerfilCpfForm() {
-      const formContainer = document.getElementById('form-container');
-      formContainer.innerHTML = `
-        <div class="form-header">
-          <h2 class="form-title">Finalize seu cadastro</h2>
-          <p class="form-subtitle">Precisamos de mais algumas informações</p>
+    // primeiro login Google: escolha de perfil + CPF
+    function mostrarPerfilCpfGoogle() {
+      document.getElementById('formSlide').innerHTML = `
+        <div class="social-text">Acesse com a rede social</div>
+        <div class="social-icons">
+          <img src="https://img.icons8.com/color/96/google-logo.png" alt="Google"/>
         </div>
-        
-        <div class="social-login">
-          <div class="social-btn google">
-            <i class="fab fa-google"></i>
-          </div>
+        <div class="social-text" style="margin-top:0.5rem;">Escolha seu Perfil!</div>
+        <div class="perfil-options">
+          <input type="checkbox" id="perfil_cliente_google" name="perfil_google" value="familia"/>
+          <label for="perfil_cliente_google">Cliente</label>
+          <input type="checkbox" id="perfil_cuidador_google" name="perfil_google" value="cuidador"/>
+          <label for="perfil_cuidador_google">Cuidador</label>
         </div>
-        
-        <div class="input-group">
-          <label>Selecione seu perfil</label>
-          <div class="perfil-options">
-            <div class="perfil-option" onclick="selectPerfil(this, 'cliente')">
-              <i class="fas fa-user-friends"></i>
-              <span>Cliente</span>
-            </div>
-            <div class="perfil-option" onclick="selectPerfil(this, 'cuidador')">
-              <i class="fas fa-hands-helping"></i>
-              <span>Cuidador</span>
-            </div>
-          </div>
-          <span id="perfil-google-error" class="error-msg"></span>
-        </div>
-        
-        <div class="input-group">
-          <label for="cpf_google">CPF</label>
-          <input id="cpf_google" type="text" placeholder="000.000.000-00" maxlength="14" required
-                 oninput="this.value = mascaraCPF(this.value)"/>
-          <span id="cpf-google-error" class="error-msg"></span>
-        </div>
-        
+        <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required/>
         <button class="cta-btn" id="finalizar-btn" onclick="finalizarCadastroGoogle()">
           <span class="btn-text">Finalizar Cadastro</span><span class="spinner"></span>
         </button>
-        
-        <div class="form-toggle">
-          <a onclick="renderLoginForm()"><i class="fas fa-arrow-left"></i> Voltar para login</a>
+        <div class="toggle-text">
+          Para login com e-mail existente:
+          <button class="cta-btn" onclick="renderLogin()">
+            <span class="btn-text">Clique aqui!</span><span class="spinner"></span>
+          </button>
         </div>
       `;
-      currentForm = 'google-cadastro';
-      selectedPerfil = null;
     }
 
-    // Finalizar cadastro Google
+    // finalizar cadastro Google
     function finalizarCadastroGoogle() {
       const btn = document.getElementById('finalizar-btn');
-      btn.classList.add('loading');
-      btn.disabled = true;
-      
-      const cpf = document.getElementById('cpf_google')?.value || '';
-      const perfilError = document.getElementById('perfil-google-error');
-      const cpfError = document.getElementById('cpf-google-error');
-      
-      // Reset errors
-      perfilError.textContent = '';
-      cpfError.textContent = '';
-      
-      // Validar perfil
-      if (!selectedPerfil) {
-        perfilError.textContent = 'Selecione um perfil';
-        btn.classList.remove('loading');
-        btn.disabled = false;
+      btn.classList.add('loading'); btn.disabled = true;
+      const checks = Array.from(document.querySelectorAll('input[name="perfil_google"]:checked')).map(i => i.value);
+      if (!checks.length) {
+        showError('Selecione ao menos um perfil.');
+        btn.classList.remove('loading'); btn.disabled = false;
         return;
       }
-      
-      // Validar CPF
-      if (!cpf) {
-        cpfError.textContent = 'CPF é obrigatório';
-        btn.classList.remove('loading');
-        btn.disabled = false;
+      const cpfVal = document.getElementById('cpf_google').value.replace(/\D/g, '');
+      if (!validarCPF(cpfVal)) {
+        showError('Digite um CPF válido.');
+        btn.classList.remove('loading'); btn.disabled = false;
         return;
       }
-      
-      if (!validarCPF(cpf)) {
-        cpfError.textContent = 'Digite um CPF válido';
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        return;
-      }
-      
-      // Simular cadastro no Airtable
-      setTimeout(() => {
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        showSuccessLogin();
-      }, 1500);
+      const user = firebase.auth().currentUser;
+      Promise.all(checks.map(p => enviarUsuarioParaAirtable(user, p, cpfVal)))
+        .then(() => window.location.href = 'pagina-homepage.html')
+        .catch(e => showError('Erro: ' + e.message));
     }
 
-    // Cadastrar usuário (novo)
-    function cadastrarUsuario() {
+    // cadastro por e-mail (novo usuário)
+    async function cadastrarUsuario() {
       const btn = document.getElementById('cadastro-btn');
-      btn.classList.add('loading');
-      btn.disabled = true;
-      
-      const nome = document.getElementById('nome-completo')?.value || '';
-      const cpf = document.getElementById('cpf')?.value || '';
-      const email = document.getElementById('cadastro-email')?.value || '';
-      const password = document.getElementById('cadastro-password')?.value || '';
-      const confirmPassword = document.getElementById('confirm-password')?.value || '';
-      
-      const perfilError = document.getElementById('perfil-error');
-      const cpfError = document.getElementById('cpf-error');
-      const senhaError = document.getElementById('senha-error');
-      
-      // Reset errors
-      perfilError.textContent = '';
-      cpfError.textContent = '';
-      senhaError.textContent = '';
-      
-      // Validações
-      if (!selectedPerfil) {
-        perfilError.textContent = 'Selecione um perfil';
-        btn.classList.remove('loading');
-        btn.disabled = false;
+      btn.classList.add('loading'); btn.disabled = true;
+      const perfis = Array.from(document.querySelectorAll('input[name="perfil_email"]:checked')).map(i => i.value);
+      if (!perfis.length) {
+        showError('Selecione ao menos um perfil.');
+        btn.classList.remove('loading'); btn.disabled = false;
         return;
       }
-      
-      if (!nome) {
-        showError('Nome completo é obrigatório');
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        return;
-      }
-      
-      if (!cpf) {
-        cpfError.textContent = 'CPF é obrigatório';
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        return;
-      }
-      
+      const nome = document.getElementById('nome-completo').value;
+      const cpf  = document.getElementById('cpf').value.replace(/\D/g, '');
+      const email = document.getElementById('email').value;
+      const pwd   = document.getElementById('password').value;
       if (!validarCPF(cpf)) {
-        cpfError.textContent = 'Digite um CPF válido';
-        btn.classList.remove('loading');
-        btn.disabled = false;
+        showError('Digite um CPF válido.');
+        btn.classList.remove('loading'); btn.disabled = false;
         return;
       }
-      
-      if (!email) {
-        showError('E-mail é obrigatório');
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        return;
-      }
-      
-      if (password.length < 6) {
-        senhaError.textContent = 'A senha deve ter pelo menos 6 caracteres';
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        return;
-      }
-      
-      if (password !== confirmPassword) {
-        senhaError.textContent = 'As senhas não coincidem';
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        return;
-      }
-      
-      // Simulação de cadastro
-      setTimeout(() => {
-        btn.classList.remove('loading');
-        btn.disabled = false;
-        showSuccessLogin();
-      }, 1500);
-    }
-
-    // Mostrar sucesso no login
-    function showSuccessLogin() {
-      document.getElementById('form-container').innerHTML = `
-        <div style="text-align: center; padding: 40px 20px;">
-          <div style="font-size: 5rem; color: #52c41a; margin-bottom: 20px;">
-            <i class="fas fa-check-circle"></i>
-          </div>
-          <h2 class="form-title">Login realizado!</h2>
-          <p class="form-subtitle">Redirecionando para sua conta...</p>
-        </div>
-      `;
-      
-      // Simular redirecionamento
-      setTimeout(() => {
-        window.location.href = 'pagina-homepage.html';
-      }, 2000);
-    }
-
-    // Observador de estado de autenticação
-    auth.onAuthStateChanged(async user => {
-      if (user) {
-        const hasRecord = await existeRegistroAirtable(user.uid);
-        
-        if (!hasRecord) {
-          // Primeiro acesso - mostrar tela de CPF e perfil
-          renderPerfilCpfForm();
-        } else {
-          // Usuário já cadastrado - redirecionar
-          window.location.href = 'pagina-homepage.html';
+      try {
+        const uc = await auth.createUserWithEmailAndPassword(email, pwd);
+        for (let p of perfis) {
+          await enviarUsuarioParaAirtable(uc.user, p, cpf, nome);
         }
+        window.location.href = 'pagina-homepage.html';
+      } catch (err) {
+        showError('Erro ao cadastrar: ' + err.message);
+      } finally {
+        btn.classList.remove('loading'); btn.disabled = false;
       }
+    }
+
+    // envia registro ao Airtable
+    async function enviarUsuarioParaAirtable(user, perfil, cpfParam, nomeParam = '') {
+      const base = 'appVxCKjvJAah2r27';
+      const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
+      const tabela = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
+      const fields = {
+        "Nome Completo": nomeParam || user.displayName || '',
+        "CPF": cpfParam || '',
+        "E-mail": user.email || '',
+        "Fonte de cadastro": user.email.split('@')[1].split('.')[0],
+        "UID": user.uid
+      };
+      if (perfil === 'cuidador') fields["Status"] = "Disponível";
+      const res = await fetch(`https://api.airtable.com/v0/${base}/${tabela}`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ fields })
+      });
+      const j = await res.json();
+      if (j.error) throw new Error(j.error.message);
+    }
+
+    // mantém main-content visível se não logado
+    auth.onAuthStateChanged(u => {
+      if (!u) document.getElementById('main-content').style.display = 'flex';
     });
   </script>
 </body>
