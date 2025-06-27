@@ -13,6 +13,8 @@
       --white: #ffffff;
       --petroleo: #004953;
       --font-base: 'Inter', sans-serif;
+      --error: #b00020;
+      --success: #4caf50;
     }
     * { box-sizing: border-box; margin:0; padding:0; }
     html, body {
@@ -31,15 +33,16 @@
       background:linear-gradient(to bottom,var(--secondary),var(--white));
       display:flex; align-items:center; justify-content:center;
       z-index:9999;
+      transition: opacity 0.5s ease;
     }
     #splash-screen img {
       max-width:220px;
-      animation:pulse 0.8.s infinite ease-in-out;
+      animation:pulse 1.5s infinite ease-in-out;
     }
     @keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
 
     /* Layout principal */
-    .container { display:none; min-height:100vh; display:flex; }
+    .container { min-height:100vh; display:flex; }
     .left {
       flex:1; padding:3rem;
       display:flex; flex-direction:column; justify-content:center; align-items:center;
@@ -52,6 +55,11 @@
       background:var(--white); color:var(--primary);
       padding:.8rem 2rem; border-radius:50px;
       font-weight:bold; box-shadow:0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .left a:hover, .left a:focus {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
     }
 
     /* Painel direito */
@@ -60,19 +68,43 @@
       position:fixed; top:0; left:100%;
       width:50%; height:100%; background:var(--white);
       display:flex; flex-direction:column; align-items:center; justify-content:center;
-      padding:3rem; gap:1rem; transition:left .6s ease; z-index:2;
+      padding:3rem; gap:1rem; transition:left .6s cubic-bezier(0.23, 1, 0.32, 1); z-index:2;
     }
     .form-overlay.active { left:50%; }
 
-    /* Campos de input */
+    /* Campos de input e labels */
+    .input-group {
+      width: 320px;
+      max-width: 90vw;
+      margin-bottom: 1.1rem;
+    }
+    .input-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--dark-text);
+      text-align: left;
+    }
     input {
-      width:320px; max-width:90vw;
+      width: 100%;
       font-size:1.18rem; padding:.7rem 1rem;
       border:1.5px solid #b3c5cf; border-radius:5px;
-      background:#eaf1fa; color:#245063; margin-bottom:1.1rem;
+      background:#eaf1fa; color:#245063;
       outline:none; transition:border-color .2s;
     }
-    input:focus { border-color:#42c2d3; background:#f3fbfd; }
+    input:focus, input:focus-visible {
+      border-color: var(--primary);
+      background: #f3fbfd;
+      outline: 2px solid rgba(66, 194, 211, 0.3);
+      outline-offset: 2px;
+    }
+    input:invalid:not(:placeholder-shown) {
+      border-color: var(--error);
+    }
+    input:valid:not(:placeholder-shown) {
+      border-color: var(--success);
+    }
 
     /* Botões CTA */
     .cta-btn {
@@ -82,6 +114,16 @@
       font-size:1.2rem; display:inline-flex;
       align-items:center; justify-content:center;
       min-width:200px;
+      transition: background 0.2s, transform 0.2s;
+    }
+    .cta-btn:hover, .cta-btn:focus {
+      background: #38a9b9;
+      transform: translateY(-2px);
+      outline: none;
+    }
+    .cta-btn:focus-visible {
+      outline: 2px solid rgba(0, 0, 0, 0.5);
+      outline-offset: 2px;
     }
     .cta-btn .spinner {
       display:none; width:1.2em; height:1.2em;
@@ -92,7 +134,11 @@
     @keyframes spin { to{transform:rotate(360deg);} }
     .loading .spinner { display:inline-block; }
     .loading .btn-text { visibility:hidden; }
-    button:disabled { cursor:not-allowed; opacity:.7; }
+    button:disabled { 
+      cursor:not-allowed; 
+      opacity:.7;
+      transform: none !important;
+    }
 
     /* Texto social e ícones */
     .social-text {
@@ -102,18 +148,32 @@
     .social-icons {
       display:flex; gap:1rem; justify-content:center; margin:.5rem 0;
     }
-    .social-icons img { width:48px; height:48px; }
+    .social-icons img { 
+      width:48px; height:48px; 
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .social-icons img:hover {
+      transform: scale(1.1);
+    }
 
     /* Mensagens de erro */
     #login-error-msg, #senha-error {
-      color:#b00020; font-weight:600; font-size:.9rem; margin-bottom:.5rem;
+      color: var(--error); font-weight:600; font-size:.9rem; margin-bottom:.5rem;
+      min-height: 1.5rem;
     }
     #msgErro {
       background:#fdecea; color:#a50e0e;
       position:fixed; top:32px; left:50%; transform:translateX(-50%);
       padding:1rem 2rem; border-radius:10px;
       box-shadow:0 2px 12px #0001;
-      font-weight:600; font-size:1.07rem; z-index:10000; display:none;
+      font-weight:600; font-size:1.07rem; z-index:10000; 
+      display:none;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; top: 0; }
+      to { opacity: 1; top: 32px; }
     }
 
     /* Toggle-crie-aqui menor */
@@ -133,10 +193,18 @@
       border:2px solid var(--primary); border-radius:8px;
       background:var(--white); color:var(--dark-text);
       font-size:1.1rem; font-weight:600;
-      transition:background .2s,color .2s; cursor:pointer;
+      transition:background .2s,color .2s, transform .2s; cursor:pointer;
+    }
+    .perfil-options label:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
     .perfil-options input:checked + label {
       background:var(--primary); color:var(--white);
+    }
+    .perfil-options input:focus-visible + label {
+      outline: 2px solid rgba(0, 0, 0, 0.5);
+      outline-offset: 2px;
     }
 
     @media(max-width:768px) {
@@ -145,6 +213,19 @@
       .form-overlay { padding:2rem; width:100%; left:100%; }
       .form-overlay.active { left:0; }
       input { width:98vw!important; min-width:180px!important; font-size:1rem!important; }
+    }
+    @media(max-width:480px) {
+      .perfil-options {
+        flex-direction: column;
+        width: 100%;
+      }
+      .perfil-options label {
+        width: 100%;
+        padding: 0.7rem;
+        font-size: 1rem;
+      }
+      .left h2 { font-size: 1.7rem; }
+      .left p { font-size: 1rem; }
     }
   </style>
 </head>
@@ -155,12 +236,12 @@
     <img src="logo_cuide_me.png" alt="Carregando Cuide-me"/>
   </div>
 
-  <div class="container" id="main-content">
+  <div class="container" id="main-content" style="display: none;">
     <div class="left">
       <img src="logo_cuide_me.png" class="logo" alt="Cuide-me"/>
       <h2>Seja Bem-vindo!</h2>
       <p>Para acessar, clique abaixo:</p>
-      <a onclick="mostrarFormulario()">Acessar</a>
+      <a onclick="mostrarFormulario()" tabindex="0">Acessar</a>
     </div>
     <div class="right"></div>
   </div>
@@ -173,6 +254,13 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
   <script>
+    // Constantes globais
+    const ERROR_TIMEOUT = 4500;
+    const AIRTABLE_CONFIG = {
+      BASE: 'appVxCKjvJAah2r27',
+      KEY: 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2'
+    };
+    
     // Firebase config
     const firebaseConfig = {
       apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
@@ -182,6 +270,7 @@
       messagingSenderId: "846926668384",
       appId: "1:846926668384:web:c8022e110171969f6b5905"
     };
+    
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
@@ -202,10 +291,14 @@
         touchControls: true,
         gyroControls: false
       });
-      setTimeout(()=>{
-        document.getElementById('splash-screen').style.display='none';
-        document.getElementById('main-content').style.display='flex';
-      },800);
+      
+      setTimeout(() => {
+        document.getElementById('splash-screen').style.opacity = '0';
+        setTimeout(() => {
+          document.getElementById('splash-screen').style.display = 'none';
+          document.getElementById('main-content').style.display = 'flex';
+        }, 500);
+      }, 800);
     });
 
     // exibe erro
@@ -213,7 +306,10 @@
       const el = document.getElementById('msgErro');
       el.innerText = msg;
       el.style.display = 'block';
-      setTimeout(()=> el.style.display='none',4500);
+      setTimeout(() => {
+        el.style.display = 'none';
+        el.style.opacity = '0';
+      }, ERROR_TIMEOUT);
     }
 
     // máscara de CPF
@@ -224,13 +320,36 @@
         .replace(/(\d{3})(\d)/, "$1.$2")
         .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
     }
+
+    // Validação de CPF em tempo real
+    function validarCPFOnTheFly(input) {
+      const value = input.value.replace(/\D/g, '');
+      const isValid = validarCPF(value);
+      
+      if (value.length === 11) {
+        if (isValid) {
+          input.style.borderColor = "var(--success)";
+        } else {
+          input.style.borderColor = "var(--error)";
+        }
+      } else {
+        input.style.borderColor = "#b3c5cf";
+      }
+    }
+
+    // Adiciona eventos de validação em tempo real para CPF
     document.addEventListener('input', function(e) {
       if (e.target.id === 'cpf' || e.target.id === 'cpf_google') {
         e.target.value = mascaraCPF(e.target.value);
+        validarCPFOnTheFly(e.target);
       }
     });
 
-    // validação de CPF
+    /**
+     * Valida CPF usando algoritmo oficial
+     * @param {string} cpf - CPF formatado
+     * @returns {boolean} - True se válido
+     */
     function validarCPF(cpf) {
       cpf = cpf.replace(/\D/g, '');
       if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
@@ -249,15 +368,24 @@
 
     // verifica se já existe no Airtable
     async function existeRegistroAirtable(uid) {
-      const base = 'appVxCKjvJAah2r27';
-      const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
-      const h     = { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' };
-      let res = await fetch(`https://api.airtable.com/v0/${base}/Cuidadores?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
-      let j   = await res.json();
-      if (j.records?.length) return true;
-      res    = await fetch(`https://api.airtable.com/v0/${base}/Clientes?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
-      j      = await res.json();
-      return !!j.records?.length;
+      const { BASE, KEY } = AIRTABLE_CONFIG;
+      const headers = { 
+        'Authorization': `Bearer ${KEY}`, 
+        'Content-Type': 'application/json' 
+      };
+      
+      try {
+        let res = await fetch(`https://api.airtable.com/v0/${BASE}/Cuidadores?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers });
+        let j = await res.json();
+        if (j.records?.length) return true;
+        
+        res = await fetch(`https://api.airtable.com/v0/${BASE}/Clientes?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers });
+        j = await res.json();
+        return !!j.records?.length;
+      } catch (error) {
+        console.error('Erro ao verificar Airtable:', error);
+        return false;
+      }
     }
 
     // exibe formulário inicial
@@ -270,15 +398,21 @@
     // tela de login
     function renderLogin() {
       document.getElementById('formSlide').innerHTML = `
-        <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
-        <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
+        <div class="input-group">
+          <label for="email" class="input-label">E-mail</label>
+          <input id="email" type="email" placeholder="exemplo@email.com" required autocomplete="email"/>
+        </div>
+        <div class="input-group">
+          <label for="password" class="input-label">Senha</label>
+          <input id="password" type="password" placeholder="••••••••" required autocomplete="current-password"/>
+        </div>
         <div id="login-error-msg"></div>
         <button class="cta-btn" id="login-btn" onclick="loginWithEmail()">
           <span class="btn-text">Entrar</span><span class="spinner"></span>
         </button>
         <div class="social-text">ou acesse com redes sociais</div>
         <div class="social-icons">
-          <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google"/>
+          <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" tabindex="0"/>
         </div>
         <div class="toggle-text">
           Ainda não tem conta?
@@ -291,6 +425,9 @@
 
     // tela de cadastro por e-mail
     function renderCadastro(prefill = "") {
+      // Sanitizar valor de prefill
+      const sanitizedPrefill = prefill.replace(/"/g, '&quot;');
+      
       document.getElementById('formSlide').innerHTML = `
         <div class="social-text">Escolha seu Perfil</div>
         <div class="perfil-options">
@@ -299,11 +436,26 @@
           <input type="checkbox" id="perfil_cuidador_email" name="perfil_email" value="cuidador"/>
           <label for="perfil_cuidador_email">Cuidador</label>
         </div>
-        <input id="nome-completo" type="text" placeholder="Nome Completo" required/>
-        <input id="cpf" type="text" placeholder="CPF" maxlength="14" required/>
-        <input id="email" type="email" placeholder="E-mail" required value="${prefill}" autocomplete="email"/>
-        <input id="password" type="password" placeholder="Senha" required oninput="checkSenhaMatch()"/>
-        <input id="confirm-password" type="password" placeholder="Confirmar senha" required oninput="checkSenhaMatch()"/>
+        <div class="input-group">
+          <label for="nome-completo" class="input-label">Nome Completo</label>
+          <input id="nome-completo" type="text" placeholder="Seu nome completo" required/>
+        </div>
+        <div class="input-group">
+          <label for="cpf" class="input-label">CPF</label>
+          <input id="cpf" type="text" placeholder="000.000.000-00" maxlength="14" required/>
+        </div>
+        <div class="input-group">
+          <label for="email" class="input-label">E-mail</label>
+          <input id="email" type="email" placeholder="exemplo@email.com" required value="${sanitizedPrefill}" autocomplete="email"/>
+        </div>
+        <div class="input-group">
+          <label for="password" class="input-label">Senha</label>
+          <input id="password" type="password" placeholder="••••••••" required oninput="checkSenhaMatch()"/>
+        </div>
+        <div class="input-group">
+          <label for="confirm-password" class="input-label">Confirmar senha</label>
+          <input id="confirm-password" type="password" placeholder="••••••••" required oninput="checkSenhaMatch()"/>
+        </div>
         <div id="senha-error"></div>
         <button class="cta-btn" id="cadastro-btn" onclick="cadastrarUsuario()">
           <span class="btn-text">Cadastrar</span><span class="spinner"></span>
@@ -318,17 +470,31 @@
     function checkSenhaMatch() {
       const s = document.getElementById('password').value;
       const c = document.getElementById('confirm-password').value;
-      document.getElementById('senha-error').innerText =
-        (s && c && s !== c) ? 'Senhas estão diferentes, por favor ajuste!' : '';
+      const errorEl = document.getElementById('senha-error');
+      
+      if (s && c && s !== c) {
+        errorEl.innerText = 'Senhas estão diferentes, por favor ajuste!';
+        document.getElementById('password').style.borderColor = "var(--error)";
+        document.getElementById('confirm-password').style.borderColor = "var(--error)";
+      } else {
+        errorEl.innerText = '';
+        if (s.length > 0) document.getElementById('password').style.borderColor = "var(--success)";
+        if (c.length > 0) document.getElementById('confirm-password').style.borderColor = "var(--success)";
+      }
     }
 
     // login com e-mail/senha
     function loginWithEmail() {
       const btn = document.getElementById('login-btn');
-      btn.classList.add('loading'); btn.disabled = true;
+      btn.classList.add('loading'); 
+      btn.disabled = true;
+      
       const e = document.getElementById('email').value;
       const p = document.getElementById('password').value;
-      document.getElementById('login-error-msg').innerText = '';
+      const errorMsg = document.getElementById('login-error-msg');
+      
+      errorMsg.innerText = '';
+      
       auth.signInWithEmailAndPassword(e, p)
         .then(() => window.location.href = 'pagina-homepage.html')
         .catch(err => {
@@ -336,15 +502,22 @@
           if (err.code === 'auth/user-not-found') m = 'E-mail não cadastrado';
           else if (err.code === 'auth/wrong-password') m = 'Senha incorreta';
           else if (err.code === 'auth/invalid-email') m = 'E-mail inválido';
+          else if (err.code === 'auth/too-many-requests') m = 'Acesso temporariamente bloqueado. Tente mais tarde.';
           else m = 'Erro: ' + err.message;
-          document.getElementById('login-error-msg').innerText = m;
+          
+          errorMsg.innerText = m;
         })
-        .finally(() => { btn.classList.remove('loading'); btn.disabled = false; });
+        .finally(() => { 
+          btn.classList.remove('loading'); 
+          btn.disabled = false; 
+        });
     }
 
     // login com Google
     function loginWithGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
+      
+      // Primeiro tenta com popup
       auth.signInWithPopup(provider)
         .then(async res => {
           const u = res.user;
@@ -352,7 +525,14 @@
           if (!has) mostrarPerfilCpfGoogle();
           else window.location.href = 'pagina-homepage.html';
         })
-        .catch(e => showError('Erro com Google: ' + e.message));
+        .catch(e => {
+          // Se popup falhar, tenta com redirect
+          if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user') {
+            auth.signInWithRedirect(provider);
+          } else {
+            showError('Erro com Google: ' + e.message);
+          }
+        });
     }
 
     // primeiro login Google: escolha de perfil + CPF
@@ -369,7 +549,10 @@
           <input type="checkbox" id="perfil_cuidador_google" name="perfil_google" value="cuidador"/>
           <label for="perfil_cuidador_google">Cuidador</label>
         </div>
-        <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required/>
+        <div class="input-group">
+          <label for="cpf_google" class="input-label">CPF</label>
+          <input id="cpf_google" type="text" placeholder="000.000.000-00" maxlength="14" required/>
+        </div>
         <button class="cta-btn" id="finalizar-btn" onclick="finalizarCadastroGoogle()">
           <span class="btn-text">Finalizar Cadastro</span><span class="spinner"></span>
         </button>
@@ -385,44 +568,75 @@
     // finalizar cadastro Google
     function finalizarCadastroGoogle() {
       const btn = document.getElementById('finalizar-btn');
-      btn.classList.add('loading'); btn.disabled = true;
+      btn.classList.add('loading'); 
+      btn.disabled = true;
+      
       const checks = Array.from(document.querySelectorAll('input[name="perfil_google"]:checked')).map(i => i.value);
       if (!checks.length) {
         showError('Selecione ao menos um perfil.');
-        btn.classList.remove('loading'); btn.disabled = false;
+        btn.classList.remove('loading'); 
+        btn.disabled = false;
         return;
       }
-      const cpfVal = document.getElementById('cpf_google').value.replace(/\D/g, '');
+      
+      const cpfInput = document.getElementById('cpf_google');
+      const cpfVal = cpfInput.value.replace(/\D/g, '');
+      
       if (!validarCPF(cpfVal)) {
         showError('Digite um CPF válido.');
-        btn.classList.remove('loading'); btn.disabled = false;
+        cpfInput.style.borderColor = "var(--error)";
+        btn.classList.remove('loading'); 
+        btn.disabled = false;
         return;
       }
+      
       const user = firebase.auth().currentUser;
       Promise.all(checks.map(p => enviarUsuarioParaAirtable(user, p, cpfVal)))
         .then(() => window.location.href = 'pagina-homepage.html')
-        .catch(e => showError('Erro: ' + e.message));
+        .catch(e => showError('Erro: ' + e.message))
+        .finally(() => {
+          btn.classList.remove('loading'); 
+          btn.disabled = false;
+        });
     }
 
     // cadastro por e-mail (novo usuário)
     async function cadastrarUsuario() {
       const btn = document.getElementById('cadastro-btn');
-      btn.classList.add('loading'); btn.disabled = true;
+      btn.classList.add('loading'); 
+      btn.disabled = true;
+      
       const perfis = Array.from(document.querySelectorAll('input[name="perfil_email"]:checked')).map(i => i.value);
       if (!perfis.length) {
         showError('Selecione ao menos um perfil.');
-        btn.classList.remove('loading'); btn.disabled = false;
+        btn.classList.remove('loading'); 
+        btn.disabled = false;
         return;
       }
+      
       const nome = document.getElementById('nome-completo').value;
-      const cpf  = document.getElementById('cpf').value.replace(/\D/g, '');
+      const cpfInput = document.getElementById('cpf');
+      const cpf = cpfInput.value.replace(/\D/g, '');
       const email = document.getElementById('email').value;
-      const pwd   = document.getElementById('password').value;
+      const pwd = document.getElementById('password').value;
+      const confirmPwd = document.getElementById('confirm-password').value;
+      
+      // Validação de senha
+      if (pwd !== confirmPwd) {
+        showError('As senhas não coincidem.');
+        btn.classList.remove('loading'); 
+        btn.disabled = false;
+        return;
+      }
+      
       if (!validarCPF(cpf)) {
         showError('Digite um CPF válido.');
-        btn.classList.remove('loading'); btn.disabled = false;
+        cpfInput.style.borderColor = "var(--error)";
+        btn.classList.remove('loading'); 
+        btn.disabled = false;
         return;
       }
+      
       try {
         const uc = await auth.createUserWithEmailAndPassword(email, pwd);
         for (let p of perfis) {
@@ -432,15 +646,16 @@
       } catch (err) {
         showError('Erro ao cadastrar: ' + err.message);
       } finally {
-        btn.classList.remove('loading'); btn.disabled = false;
+        btn.classList.remove('loading'); 
+        btn.disabled = false;
       }
     }
 
     // envia registro ao Airtable
     async function enviarUsuarioParaAirtable(user, perfil, cpfParam, nomeParam = '') {
-      const base = 'appVxCKjvJAah2r27';
-      const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
+      const { BASE, KEY } = AIRTABLE_CONFIG;
       const tabela = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
+      
       const fields = {
         "Nome Completo": nomeParam || user.displayName || '',
         "CPF": cpfParam || '',
@@ -448,14 +663,25 @@
         "Fonte de cadastro": user.email.split('@')[1].split('.')[0],
         "UID": user.uid
       };
+      
       if (perfil === 'cuidador') fields["Status"] = "Disponível";
-      const res = await fetch(`https://api.airtable.com/v0/${base}/${tabela}`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ fields })
-      });
-      const j = await res.json();
-      if (j.error) throw new Error(j.error.message);
+      
+      try {
+        const res = await fetch(`https://api.airtable.com/v0/${BASE}/${tabela}`, {
+          method: 'POST',
+          headers: { 
+            'Authorization': `Bearer ${KEY}`, 
+            'Content-Type': 'application/json' 
+          },
+          body: JSON.stringify({ fields })
+        });
+        
+        const j = await res.json();
+        if (j.error) throw new Error(j.error.message);
+      } catch (error) {
+        console.error('Erro ao enviar para Airtable:', error);
+        throw error;
+      }
     }
 
     // mantém main-content visível se não logado
