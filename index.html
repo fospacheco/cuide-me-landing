@@ -191,12 +191,12 @@
       VANTA.CLOUDS({
         el: "#background",
         backgroundColor: 0xffffff,
-        skyColor:         0x68b8d7,
-        cloudColor:       0xadc1de,
-        cloudShadowColor: 0x183550,
-        sunColor:         0xff9919,
-        sunGlareColor:    0xff6633,
-        sunlightColor:    0xff9933,
+        skyColor:        0x68b8d7,
+        cloudColor:      0xadc1de,
+        cloudShadowColor:0x183550,
+        sunColor:        0xff9919,
+        sunGlareColor:   0xff6633,
+        sunlightColor:   0xff9933,
         speed: 1.0,
         mouseControls: true,
         touchControls: true,
@@ -248,42 +248,17 @@
     }
 
     // verifica se já existe no Airtable
-    async function existeRegistroAirtable(uid, email) {
+    async function existeRegistroAirtable(uid) {
       const base = 'appVxCKjvJAah2r27';
       const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
-      const headers = { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' };
-
-      // Verifica na tabela Cuidadores
-      let resCuidadores = await fetch(`https://api.airtable.com/v0/${base}/Cuidadores?filterByFormula=${encodeURIComponent(`AND({UID}='${uid}', {E-mail}='${email}')`)}`, { headers: headers });
-      let jsonCuidadores = await resCuidadores.json();
-      if (jsonCuidadores.records?.length > 0) {
-        return true;
-      }
-
-      // Verifica na tabela Clientes
-      let resClientes = await fetch(`https://api.airtable.com/v0/${base}/Clientes?filterByFormula=${encodeURIComponent(`AND({UID}='${uid}', {E-mail}='${email}')`)}`, { headers: headers });
-      let jsonClientes = await resClientes.json();
-      return !!jsonClientes.records?.length;
+      const h     = { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' };
+      let res = await fetch(`https://api.airtable.com/v0/${base}/Cuidadores?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
+      let j   = await res.json();
+      if (j.records?.length) return true;
+      res    = await fetch(`https://api.airtable.com/v0/${base}/Clientes?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
+      j      = await res.json();
+      return !!j.records?.length;
     }
-
-    // Função centralizada para verificar Airtable e encaminhar
-    async function verificarAirtableEEncaminhar(user) {
-        const uid = user.uid;
-        const email = user.email;
-
-        if (uid && email) {
-            const existeNoAirtable = await existeRegistroAirtable(uid, email);
-            if (existeNoAirtable) {
-                window.location.href = 'pagina-homepage.html';
-            } else {
-                mostrarPerfilCpfGoogle(user); // Reutilizamos a tela de perfil/CPF para qualquer novo usuário
-            }
-        } else {
-            // Se por algum motivo não tiver UID ou e-mail, direciona para o cadastro completo
-            renderCadastro(email);
-        }
-    }
-
 
     // exibe formulário inicial
     function mostrarFormulario() {
@@ -355,9 +330,7 @@
       const p = document.getElementById('password').value;
       document.getElementById('login-error-msg').innerText = '';
       auth.signInWithEmailAndPassword(e, p)
-        .then(async (userCredential) => {
-            await verificarAirtableEEncaminhar(userCredential.user);
-        })
+        .then(() => window.location.href = 'pagina-homepage.html')
         .catch(err => {
           let m = '';
           if (err.code === 'auth/user-not-found') m = 'E-mail não cadastrado';
@@ -374,45 +347,43 @@
       const provider = new firebase.auth.GoogleAuthProvider();
       auth.signInWithPopup(provider)
         .then(async res => {
-          const user = res.user;
-          await verificarAirtableEEncaminhar(user);
+          const u = res.user;
+          const has = await existeRegistroAirtable(u.uid);
+          if (!has) mostrarPerfilCpfGoogle();
+          else window.location.href = 'pagina-homepage.html';
         })
         .catch(e => showError('Erro com Google: ' + e.message));
     }
 
     // primeiro login Google: escolha de perfil + CPF
-    // Agora aceita um objeto de usuário para pré-preenchimento, se necessário
-    function mostrarPerfilCpfGoogle(user = null) {
-        // Preenche o nome caso seja de um login social
-        const userName = user && user.displayName ? user.displayName : '';
-        document.getElementById('formSlide').innerHTML = `
-            <div class="social-text">Acesse com a rede social</div>
-            <div class="social-icons">
-                <img src="https://img.icons8.com/color/96/google-logo.png" alt="Google"/>
-            </div>
-            <div class="social-text" style="margin-top:0.5rem;">Escolha seu Perfil!</div>
-            <div class="perfil-options">
-                <input type="checkbox" id="perfil_cliente_google" name="perfil_google" value="familia"/>
-                <label for="perfil_cliente_google">Cliente</label>
-                <input type="checkbox" id="perfil_cuidador_google" name="perfil_google" value="cuidador"/>
-                <label for="perfil_cuidador_google">Cuidador</label>
-            </div>
-            <input id="nome_completo_google" type="text" placeholder="Nome Completo" value="${userName}" required/>
-            <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required/>
-            <button class="cta-btn" id="finalizar-btn" onclick="finalizarCadastroGoogle()">
-                <span class="btn-text">Finalizar Cadastro</span><span class="spinner"></span>
-            </button>
-            <div class="toggle-text">
-                Para login com e-mail existente:
-                <button class="cta-btn" onclick="renderLogin()">
-                    <span class="btn-text">Clique aqui!</span><span class="spinner"></span>
-                </button>
-            </div>
-        `;
+    function mostrarPerfilCpfGoogle() {
+      document.getElementById('formSlide').innerHTML = `
+        <div class="social-text">Acesse com a rede social</div>
+        <div class="social-icons">
+          <img src="https://img.icons8.com/color/96/google-logo.png" alt="Google"/>
+        </div>
+        <div class="social-text" style="margin-top:0.5rem;">Escolha seu Perfil!</div>
+        <div class="perfil-options">
+          <input type="checkbox" id="perfil_cliente_google" name="perfil_google" value="familia"/>
+          <label for="perfil_cliente_google">Cliente</label>
+          <input type="checkbox" id="perfil_cuidador_google" name="perfil_google" value="cuidador"/>
+          <label for="perfil_cuidador_google">Cuidador</label>
+        </div>
+        <input id="cpf_google" type="text" placeholder="Digite seu CPF" maxlength="14" required/>
+        <button class="cta-btn" id="finalizar-btn" onclick="finalizarCadastroGoogle()">
+          <span class="btn-text">Finalizar Cadastro</span><span class="spinner"></span>
+        </button>
+        <div class="toggle-text">
+          Para login com e-mail existente:
+          <button class="cta-btn" onclick="renderLogin()">
+            <span class="btn-text">Clique aqui!</span><span class="spinner"></span>
+          </button>
+        </div>
+      `;
     }
 
-    // finalizar cadastro Google (agora também usado para novos cadastros via e-mail se faltar info)
-    async function finalizarCadastroGoogle() {
+    // finalizar cadastro Google
+    function finalizarCadastroGoogle() {
       const btn = document.getElementById('finalizar-btn');
       btn.classList.add('loading'); btn.disabled = true;
       const checks = Array.from(document.querySelectorAll('input[name="perfil_google"]:checked')).map(i => i.value);
@@ -421,7 +392,6 @@
         btn.classList.remove('loading'); btn.disabled = false;
         return;
       }
-      const nomeVal = document.getElementById('nome_completo_google').value;
       const cpfVal = document.getElementById('cpf_google').value.replace(/\D/g, '');
       if (!validarCPF(cpfVal)) {
         showError('Digite um CPF válido.');
@@ -429,16 +399,9 @@
         return;
       }
       const user = firebase.auth().currentUser;
-      try {
-          for (let p of checks) {
-              await enviarUsuarioParaAirtable(user, p, cpfVal, nomeVal);
-          }
-          window.location.href = 'pagina-homepage.html';
-      } catch (e) {
-          showError('Erro ao finalizar cadastro: ' + e.message);
-      } finally {
-          btn.classList.remove('loading'); btn.disabled = false;
-      }
+      Promise.all(checks.map(p => enviarUsuarioParaAirtable(user, p, cpfVal)))
+        .then(() => window.location.href = 'pagina-homepage.html')
+        .catch(e => showError('Erro: ' + e.message));
     }
 
     // cadastro por e-mail (novo usuário)
@@ -455,14 +418,6 @@
       const cpf  = document.getElementById('cpf').value.replace(/\D/g, '');
       const email = document.getElementById('email').value;
       const pwd   = document.getElementById('password').value;
-      const confirmPwd = document.getElementById('confirm-password').value;
-
-      if (pwd !== confirmPwd) {
-        showError('As senhas não coincidem.');
-        btn.classList.remove('loading'); btn.disabled = false;
-        return;
-      }
-
       if (!validarCPF(cpf)) {
         showError('Digite um CPF válido.');
         btn.classList.remove('loading'); btn.disabled = false;
@@ -490,7 +445,7 @@
         "Nome Completo": nomeParam || user.displayName || '',
         "CPF": cpfParam || '',
         "E-mail": user.email || '',
-        "Fonte de cadastro": user.providerData.length > 0 ? user.providerData[0].providerId : 'email/password',
+        "Fonte de cadastro": user.email.split('@')[1].split('.')[0],
         "UID": user.uid
       };
       if (perfil === 'cuidador') fields["Status"] = "Disponível";
