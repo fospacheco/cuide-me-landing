@@ -175,7 +175,7 @@
   <script>
     // Firebase config
     const firebaseConfig = {
-      apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
+      apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo", // ATENÇÃO: Chave exposta, idealmente deve ser gerenciada em um backend.
       authDomain: "cuide-me-f57f8.firebaseapp.com",
       projectId: "cuide-me-f57f8",
       storageBucket: "cuide-me-f57f8.appspot.com",
@@ -191,12 +191,12 @@
       VANTA.CLOUDS({
         el: "#background",
         backgroundColor: 0xffffff,
-        skyColor:        0x68b8d7,
-        cloudColor:      0xadc1de,
-        cloudShadowColor:0x183550,
-        sunColor:        0xff9919,
-        sunGlareColor:   0xff6633,
-        sunlightColor:   0xff9933,
+        skyColor:         0x68b8d7,
+        cloudColor:       0xadc1de,
+        cloudShadowColor: 0x183550,
+        sunColor:         0xff9919,
+        sunGlareColor:    0xff6633,
+        sunlightColor:    0xff9933,
         speed: 1.0,
         mouseControls: true,
         touchControls: true,
@@ -230,7 +230,7 @@
       }
     });
 
-    // validação de CPF
+    // validação de CPF (completa e única)
     function validarCPF(cpf) {
       cpf = cpf.replace(/\D/g, '');
       if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
@@ -250,13 +250,14 @@
     // verifica se já existe no Airtable
     async function existeRegistroAirtable(uid) {
       const base = 'appVxCKjvJAah2r27';
-      const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
+      const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2'; // ATENÇÃO: Chave exposta, idealmente deve ser gerenciada em um backend.
       const h     = { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' };
       let res = await fetch(`https://api.airtable.com/v0/${base}/Cuidadores?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
       let j   = await res.json();
       if (j.records?.length) return true;
-      res    = await fetch(`https://api.airtable.com/v0/${base}/Clientes?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
-      j      = await res.json();
+
+      res     = await fetch(`https://api.airtable.com/v0/${base}/Clientes?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
+      j       = await res.json();
       return !!j.records?.length;
     }
 
@@ -328,7 +329,7 @@
       btn.classList.add('loading'); btn.disabled = true;
       const e = document.getElementById('email').value;
       const p = document.getElementById('password').value;
-      document.getElementById('login-error-msg').innerText = '';
+      document.getElementById('login-error-msg').innerText = ''; // Limpa mensagem de erro anterior
       auth.signInWithEmailAndPassword(e, p)
         .then(() => window.location.href = 'pagina-homepage.html')
         .catch(err => {
@@ -337,7 +338,7 @@
           else if (err.code === 'auth/wrong-password') m = 'Senha incorreta';
           else if (err.code === 'auth/invalid-email') m = 'E-mail inválido';
           else m = 'Erro: ' + err.message;
-          document.getElementById('login-error-msg').innerText = m;
+          showError(m); // Usa a função showError para consistência
         })
         .finally(() => { btn.classList.remove('loading'); btn.disabled = false; });
     }
@@ -352,7 +353,7 @@
           if (!has) mostrarPerfilCpfGoogle();
           else window.location.href = 'pagina-homepage.html';
         })
-        .catch(e => showError('Erro com Google: ' + e.message));
+        .catch(e => showError('Erro com Google: ' + e.message)); // Usa showError
     }
 
     // primeiro login Google: escolha de perfil + CPF
@@ -380,6 +381,10 @@
           </button>
         </div>
       `;
+      // Adiciona listener para a máscara de CPF no novo input
+      document.getElementById('cpf_google').addEventListener('input', function(e) {
+        e.target.value = mascaraCPF(e.target.value);
+      });
     }
 
     // finalizar cadastro Google
@@ -388,20 +393,21 @@
       btn.classList.add('loading'); btn.disabled = true;
       const checks = Array.from(document.querySelectorAll('input[name="perfil_google"]:checked')).map(i => i.value);
       if (!checks.length) {
-        showError('Selecione ao menos um perfil.');
+        showError('Selecione ao menos um perfil.'); // Usa showError
         btn.classList.remove('loading'); btn.disabled = false;
         return;
       }
       const cpfVal = document.getElementById('cpf_google').value.replace(/\D/g, '');
       if (!validarCPF(cpfVal)) {
-        showError('Digite um CPF válido.');
+        showError('Digite um CPF válido.'); // Usa showError
         btn.classList.remove('loading'); btn.disabled = false;
         return;
       }
       const user = firebase.auth().currentUser;
       Promise.all(checks.map(p => enviarUsuarioParaAirtable(user, p, cpfVal)))
         .then(() => window.location.href = 'pagina-homepage.html')
-        .catch(e => showError('Erro: ' + e.message));
+        .catch(e => showError('Erro ao cadastrar: ' + e.message)); // Usa showError
+        .finally(() => { btn.classList.remove('loading'); btn.disabled = false; });
     }
 
     // cadastro por e-mail (novo usuário)
@@ -410,7 +416,7 @@
       btn.classList.add('loading'); btn.disabled = true;
       const perfis = Array.from(document.querySelectorAll('input[name="perfil_email"]:checked')).map(i => i.value);
       if (!perfis.length) {
-        showError('Selecione ao menos um perfil.');
+        showError('Selecione ao menos um perfil.'); // Usa showError
         btn.classList.remove('loading'); btn.disabled = false;
         return;
       }
@@ -418,8 +424,16 @@
       const cpf  = document.getElementById('cpf').value.replace(/\D/g, '');
       const email = document.getElementById('email').value;
       const pwd   = document.getElementById('password').value;
+      const confirmPwd = document.getElementById('confirm-password').value;
+
+      if (pwd !== confirmPwd) {
+        showError('As senhas não coincidem.'); // Adiciona verificação de senhas antes da criação
+        btn.classList.remove('loading'); btn.disabled = false;
+        return;
+      }
+
       if (!validarCPF(cpf)) {
-        showError('Digite um CPF válido.');
+        showError('Digite um CPF válido.'); // Usa showError
         btn.classList.remove('loading'); btn.disabled = false;
         return;
       }
@@ -430,7 +444,7 @@
         }
         window.location.href = 'pagina-homepage.html';
       } catch (err) {
-        showError('Erro ao cadastrar: ' + err.message);
+        showError('Erro ao cadastrar: ' + err.message); // Usa showError
       } finally {
         btn.classList.remove('loading'); btn.disabled = false;
       }
@@ -439,13 +453,13 @@
     // envia registro ao Airtable
     async function enviarUsuarioParaAirtable(user, perfil, cpfParam, nomeParam = '') {
       const base = 'appVxCKjvJAah2r27';
-      const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
+      const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2'; // ATENÇÃO: Chave exposta, idealmente deve ser gerenciada em um backend.
       const tabela = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
       const fields = {
         "Nome Completo": nomeParam || user.displayName || '',
         "CPF": cpfParam || '',
         "E-mail": user.email || '',
-        "Fonte de cadastro": user.email.split('@')[1].split('.')[0],
+        "Fonte de cadastro": user.email ? user.email.split('@')[1].split('.')[0] : 'desconhecido', // Evita erro se user.email for null
         "UID": user.uid
       };
       if (perfil === 'cuidador') fields["Status"] = "Disponível";
@@ -461,6 +475,11 @@
     // mantém main-content visível se não logado
     auth.onAuthStateChanged(u => {
       if (!u) document.getElementById('main-content').style.display = 'flex';
+      // Se o usuário estiver logado e na página de login, redireciona.
+      // Isso evita que um usuário logado volte para a tela de login.
+      else if (window.location.pathname.endsWith('index.html') || window.location.pathname.endsWith('/')) {
+        window.location.href = 'pagina-homepage.html';
+      }
     });
   </script>
 </body>
