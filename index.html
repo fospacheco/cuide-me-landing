@@ -251,11 +251,11 @@
     async function existeRegistroAirtable(uid) {
       const base = 'appVxCKjvJAah2r27';
       const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
-      const h     = { 'Authorization': Bearer ${key}, 'Content-Type': 'application/json' };
-      let res = await fetch(https://api.airtable.com/v0/${base}/Cuidadores?filterByFormula=${encodeURIComponent({UID}='${uid}')}, { headers: h });
+      const h     = { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' };
+      let res = await fetch(`https://api.airtable.com/v0/${base}/Cuidadores?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
       let j   = await res.json();
       if (j.records?.length) return true;
-      res    = await fetch(https://api.airtable.com/v0/${base}/Clientes?filterByFormula=${encodeURIComponent({UID}='${uid}')}, { headers: h });
+      res    = await fetch(`https://api.airtable.com/v0/${base}/Clientes?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
       j      = await res.json();
       return !!j.records?.length;
     }
@@ -269,7 +269,7 @@
 
     // tela de login
     function renderLogin() {
-      document.getElementById('formSlide').innerHTML = 
+      document.getElementById('formSlide').innerHTML = `
         <input id="email" type="email" placeholder="E-mail" required autocomplete="email"/>
         <input id="password" type="password" placeholder="Senha" required autocomplete="current-password"/>
         <div id="login-error-msg"></div>
@@ -286,12 +286,12 @@
             <span class="btn-text">Crie aqui</span><span class="spinner"></span>
           </button>
         </div>
-      ;
+      `;
     }
 
     // tela de cadastro por e-mail
     function renderCadastro(prefill = "") {
-      document.getElementById('formSlide').innerHTML = 
+      document.getElementById('formSlide').innerHTML = `
         <div class="social-text">Escolha seu Perfil</div>
         <div class="perfil-options">
           <input type="checkbox" id="perfil_cliente_email" name="perfil_email" value="familia"/>
@@ -311,7 +311,7 @@
         <button class="cta-btn" onclick="renderLogin()">
           <span class="btn-text">Voltar</span><span class="spinner"></span>
         </button>
-      ;
+      `;
     }
 
     // valida senhas iguais no cadastro
@@ -357,7 +357,7 @@
 
     // primeiro login Google: escolha de perfil + CPF
     function mostrarPerfilCpfGoogle() {
-      document.getElementById('formSlide').innerHTML = 
+      document.getElementById('formSlide').innerHTML = `
         <div class="social-text">Acesse com a rede social</div>
         <div class="social-icons">
           <img src="https://img.icons8.com/color/96/google-logo.png" alt="Google"/>
@@ -379,7 +379,7 @@
             <span class="btn-text">Clique aqui!</span><span class="spinner"></span>
           </button>
         </div>
-      ;
+      `;
     }
 
     // finalizar cadastro Google
@@ -449,9 +449,9 @@
         "UID": user.uid
       };
       if (perfil === 'cuidador') fields["Status"] = "Disponível";
-      const res = await fetch(https://api.airtable.com/v0/${base}/${tabela}, {
+      const res = await fetch(`https://api.airtable.com/v0/${base}/${tabela}`, {
         method: 'POST',
-        headers: { 'Authorization': Bearer ${key}, 'Content-Type': 'application/json' },
+        headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ fields })
       });
       const j = await res.json();
