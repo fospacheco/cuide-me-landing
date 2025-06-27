@@ -271,10 +271,6 @@
         const uid = user.uid;
         const email = user.email;
 
-        // Se o usuário tem um e-mail verificado (com Google, por exemplo), verificamos o Airtable
-        // Se o e-mail não estiver verificado, o FirebaseAuth lida com a verificação de e-mail/senha.
-        // A lógica de "pedir informações adicionais" é só para o primeiro login,
-        // então não precisamos verificar `emailVerified` aqui.
         if (uid && email) {
             const existeNoAirtable = await existeRegistroAirtable(uid, email);
             if (existeNoAirtable) {
@@ -510,8 +506,6 @@
     // mantém main-content visível se não logado
     auth.onAuthStateChanged(u => {
       if (!u) document.getElementById('main-content').style.display = 'flex';
-      // Removido o redirecionamento automático aqui para deixar a função verificarAirtableEEncaminhar
-      // gerenciar o fluxo após o login inicial.
     });
   </script>
 </body>
