@@ -576,62 +576,47 @@
     }
   }
   
-   // Carregar dados do cliente
   async function loadClientData(clientId) {
-    // 1. Puxa do Airtable os campos que você precisa
-    const records = await fetchAirtableData(
-      'Clientes',        // nome da sua tabela no Airtable
-      'Grid view',       // view que contenha todos os campos
-      [
-        'Name',
-        'FullName',
-        'Since',
-        'Phone',
-        'Email',
-        'Address',
-        'EmergencyName',
-        'EmergencyPhone',
-        'EmergencyRelation',
-        'UID'              // opcional, se você gravou o UID do seu usuário aqui
-      ]
-    );
+  // 1) Busca todos os registros da tabela "Clientes"
+  const records = await fetchAirtableData(
+    'Clientes',        // nome da tabela no Airtable
+    'Grid view',       // nome da view que contém os dados
+    [
+      'Name',
+      'FullName',
+      'Since',
+      'Phone',
+      'Email',
+      'Address',
+      'EmergencyName',
+      'EmergencyPhone',
+      'EmergencyRelation',
+      'UID'            // só se você gravou o UID do usuário aqui
+    ]
+  );
 
-    // 2. Encontra o registro correto (por record.id ou pelo campo UID)
-    const record = records.find(r =>
-      r.id === clientId || r.fields.UID === clientId
-    );
-    if (!record) {
-      console.warn('Cliente não encontrado no Airtable:', clientId);
-      return;
-    }
+  // 2) Encontra o registro que bate com o clientId (pode ser record.id ou campos.UID)
+  const record = records.find(r =>
+    r.id === clientId || r.fields.UID === clientId
+  );
+  if (!record) {
+    console.warn('Cliente não encontrado no Airtable:', clientId);
+    return;
+  }
 
-    // 3. Atualiza a UI com os campos reais
-    const f = record.fields;
-    clientName.textContent        = f.Name               || '';
-    clientFullname.textContent    = f.FullName           || '';
-    clientSince.textContent       = f.Since              || '';
-    clientPhone.textContent       = f.Phone              || '';
-    clientEmail.textContent       = f.Email              || '';
-    clientAddress.textContent     = f.Address            || '';
-    emergencyName.textContent     = f.EmergencyName      || '';
-    emergencyPhone.textContent    = f.EmergencyPhone     || '';
-    emergencyRelation.textContent = f.EmergencyRelation  || '';
-  }
-  }
-  
-  // Carregar especialidades
-  async function loadSpecialties() {
-    const records = await fetchAirtableData('tblwcTla83jlEprw8', 'viwepuDfDPGc8GjPt', ['Name', 'Descrição']);
-    
-    specialtyFilter.innerHTML = '<option value="">Todas especialidades</option>';
-    
-    records.forEach(record => {
-      const option = document.createElement('option');
-      option.value = record.fields['Name'] || '';
-      option.textContent = record.fields['Name'] || '';
-      specialtyFilter.appendChild(option);
-    });
-  }
+  // 3) Preenche a tela com os dados reais
+  const f = record.fields;
+  clientName.textContent        = f.Name               || '';
+  clientFullname.textContent    = f.FullName           || '';
+  clientSince.textContent       = f.Since              || '';
+  clientPhone.textContent       = f.Phone              || '';
+  clientEmail.textContent       = f.Email              || '';
+  clientAddress.textContent     = f.Address            || '';
+  emergencyName.textContent     = f.EmergencyName      || '';
+  emergencyPhone.textContent    = f.EmergencyPhone     || '';
+  emergencyRelation.textContent = f.EmergencyRelation  || '';
+}
+
   
   // Carregar regiões
   async function loadRegions() {
