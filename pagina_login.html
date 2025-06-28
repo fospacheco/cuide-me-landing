@@ -28,7 +28,7 @@
       color:var(--dark-text);
     }
     a { text-decoration:none; cursor:pointer; }
-    .sr-only { /* screen-reader only */ position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0; }
+    .sr-only { position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0; }
     #background { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; }
     #splash-screen { position:fixed; inset:0; background:linear-gradient(to bottom,var(--secondary),var(--white)); display:flex; align-items:center; justify-content:center; z-index:9999; }
     #splash-screen img { max-width:220px; animation:pulse 1.5s infinite ease-in-out; }
@@ -87,9 +87,7 @@
     .social-text { font-weight:500; font-size:1rem; text-align:center; margin-top:1rem; }
     .social-icons { display:flex; gap:1rem; justify-content:center; margin:.5rem 0; }
     .social-icons img { width:48px; height:48px; }
-    #login-error-msg, #senha-error {
-      color:var(--error); font-weight:600; font-size:.9rem; margin-bottom:.5rem;
-    }
+    #login-error-msg, #senha-error { color:var(--error); font-weight:600; font-size:.9rem; margin-bottom:.5rem; }
     #msgErro {
       background:#fdecea; color:#a50e0e;
       position:fixed; top:32px; left:50%; transform:translateX(-50%);
@@ -219,12 +217,12 @@
       if(cpf.length!==11||/^(\d)\1{10}$/.test(cpf)) return false;
       let sum=0,rest;
       for(let i=1;i<=9;i++) sum+=parseInt(cpf.substring(i-1,i))*(11-i);
-      rest=(sum*10)%11; if(rest==10||rest==11) rest=0;
-      if(rest!=parseInt(cpf.substring(9,10))) return false;
+      rest=(sum*10)%11; if(rest===10||rest===11) rest=0;
+      if(rest!==parseInt(cpf.substring(9,10))) return false;
       sum=0;
       for(let i=1;i<=10;i++) sum+=parseInt(cpf.substring(i-1,i))*(12-i);
-      rest=(sum*10)%11; if(rest==10||rest==11) rest=0;
-      if(rest!=parseInt(cpf.substring(10,11))) return false;
+      rest=(sum*10)%11; if(rest===10||rest===11) rest=0;
+      if(rest!==parseInt(cpf.substring(10,11))) return false;
       return true;
     }
     function validarSenha(s) {
@@ -286,10 +284,10 @@
         </button>
       `;
       document.getElementById('password').addEventListener('input',function(){
-        const strengthEl = document.getElementById('senha-strength');
-        const str = validarSenha(this.value)?'forte':'fraca';
-        strengthEl.innerHTML = `Força da senha: <strong style="color:${str==='forte'?'green':'#e67c73'}">${str.toUpperCase()}</strong>`;
-        strengthEl.innerHTML += `<br><small style="font-size:0.8rem;">(Mínimo 8 caracteres, letras maiúsculas/minúsculas, números e símbolos)</small>`;
+        const strengthEl=document.getElementById('senha-strength');
+        const str=validarSenha(this.value)?'forte':'fraca';
+        strengthEl.innerHTML=`Força da senha: <strong style="color:${str==='forte'?'green':'#e67c73'}">${str.toUpperCase()}</strong>`;
+        strengthEl.innerHTML+=`<br><small style="font-size:0.8rem;">(8+ chars, maiúsculas/minúsculas, números, símbolos)</small>`;
       });
     }
 
@@ -300,7 +298,7 @@
       document.getElementById('senha-error').innerText=(s&&c&&s!==c)?'Senhas diferentes, ajuste!':'';
     }
 
-    // Login
+    // === LOGIN ===
     function loginWithEmail(){
       document.body.classList.add('waiting');
       const btn=document.getElementById('login-btn');
@@ -332,7 +330,7 @@
         });
     }
 
-    // Cadastro
+    // === CADASTRO ===
     async function cadastrarUsuario(){
       document.body.classList.add('waiting');
       const btn=document.getElementById('cadastro-btn');
@@ -351,41 +349,39 @@
       if(!validarSenha(pwd)){ showError('Senha fraca'); btn.classList.remove('loading'); btn.disabled=false; document.body.classList.remove('waiting'); return; }
 
       try {
-        const uc = await auth.createUserWithEmailAndPassword(email,pwd);
+        const uc=await auth.createUserWithEmailAndPassword(email,pwd);
         localStorage.setItem('clientUid', uc.user.uid);
 
-        // Envia ao Airtable
-        const baseId  = 'appVxCKjvJAah2r27';
-        const apiKey  = 'patmFPPQtaRfGjO4M.0465c4e6487e5ef7dd4185af57072c803ac49f7d4b94cd7bf45eb65e48a368fd';
-        const table   = perfil==='cuidador'?'Cuidadores':'Clientes';
-        const cpfEnc  = btoa('chave_secreta'+cpf+'chave_secreta');
-        const fields  = {
-          "Nome Completo": nome || uc.user.displayName || '',
-          "CPF": cpfEnc,
+        // Envia ao Airtable (CPF SEM ENCRIPTAÇÃO)
+        const baseId='appVxCKjvJAah2r27';
+        const apiKey='patmFPPQtaRfGjO4M.0465c4e6487e5ef7dd4185af57072c803ac49f7d4b94cd7bf45eb65e48a368fd';
+        const table=perfil==='cuidador'?'Cuidadores':'Clientes';
+        const fields={
+          "Nome Completo": nome||uc.user.displayName||'',
+          "CPF": cpf,                        // <— USA CPF RAW AQUI
           "E-mail": uc.user.email,
           "Fonte de cadastro": uc.user.email.split('@')[1].split('.')[0],
           "UID": uc.user.uid
         };
         if(perfil==='cuidador') fields.Status='Disponível';
 
-        const res = await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(table)}`,{
+        const res=await fetch(`https://api.airtable.com/v0/${baseId}/${encodeURIComponent(table)}`,{
           method:'POST',
           headers:{
             'Authorization':`Bearer ${apiKey}`,
             'Content-Type':'application/json'
           },
-          body: JSON.stringify({ fields })
+          body:JSON.stringify({ fields })
         });
-        const j = await res.json();
+        const j=await res.json();
         if(j.error) throw new Error(j.error.message);
 
-        // Após salvar no Airtable, redireciona
+        // Redireciona após salvar
         window.location.href='espaco_cliente.html';
-
       } catch(err){
         if(err.code==='auth/email-already-in-use'){
           showError('E-mail já cadastrado. Redirecionando...');
-          setTimeout(()=> window.location.href='espaco_cliente.html',2000);
+          setTimeout(()=>window.location.href='espaco_cliente.html',2000);
         } else {
           showError('Erro ao cadastrar: '+err.message);
         }
@@ -394,7 +390,7 @@
       }
     }
 
-    auth.onAuthStateChanged(u => {
+    auth.onAuthStateChanged(u=>{
       if(!u) document.getElementById('main-content').style.display='flex';
     });
   </script>
