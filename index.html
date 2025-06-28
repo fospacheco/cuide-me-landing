@@ -1237,8 +1237,8 @@
     <header>
         <div class="header-container">
             <a href="#" class="logo-container">
-		<img src="logo_cuide_me.png" style="height: 72px; width: auto;">
-                    <div class="logo-text">
+		<img src="logo_cuide_me.png" style="height: 80px; width: auto;">
+                <div class="logo-text">
                     <div class="logo-subtitle">Cuidar com verdade. Conectar com responsabilidade.</div>
                 </div>
             </a>
@@ -1248,7 +1248,9 @@
                 <a href="#depoimentos">Depoimentos</a>
                 <a href="#valores">Virtudes</a>
                 <a href="#sobre">Sobre</a>
-                
+                <a href="https://cuide-me.vercel.app/pagina_login.html" class="btn nav-btn">
+                    <i class="fas fa-sign-in-alt"></i> Acessar Plataforma
+                </a>
             </nav>
             
             <button class="mobile-menu-btn">
@@ -1274,7 +1276,7 @@
         <a href="#sobre">
             <i class="fas fa-info-circle"></i> Sobre
         </a>
-        <a href="https://cuide-me.vercel.app" class="btn nav-btn">
+        <a href="https://cuide-me.vercel.app/pagina_login.html" class="btn nav-btn">
             <i class="fas fa-sign-in-alt"></i> Acessar Plataforma
         </a>
     </div>
@@ -1287,7 +1289,7 @@
                 <p>Conectamos você a cuidadores verificados, com todo o suporte necessário para garantir o melhor cuidado para sua família. Nossa plataforma oferece tranquilidade e confiança para quem precisa de cuidados especiais.</p>
                 
                 <div class="hero-buttons">
-                    <a href="https://cuide-me.vercel.app" class="btn btn-primary">
+                    <a href="https://cuide-me.vercel.app/pagina_login.html" class="btn btn-primary">
                         <i class="fas fa-sign-in-alt"></i> Acesse a nossa Plataforma
                     </a>
                     <button class="btn btn-disabled">
@@ -1301,7 +1303,7 @@
             </div>
             
             <div class="hero-image fade-in delay-1">
-                <img src="cuidadora_idosa_sorrindo.png">
+                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cuidadora e idosa sorrindo">
             </div>
         </div>
     </section>
@@ -1465,7 +1467,7 @@
                     <p>A Cuide-me nasceu em 2025 como uma iniciativa inovadora e humana, com o propósito de transformar a forma como o cuidado domiciliar é oferecido no Brasil. Somos uma empresa jovem, com uma visão clara: tornar o cuidado acessível, confiável e acolhedor para todas as famílias.</p>
                     <p>Nosso compromisso é conectar quem precisa de cuidado a profissionais qualificados e empáticos, valorizando relações de confiança e respeito. Através de tecnologia inteligente e processos transparentes, buscamos facilitar essa conexão de forma simples, segura e eficiente.</p>
                     <div style="margin-top: 1.8rem;">
-                        <a href="https://cuide-me.vercel.app" class="btn btn-primary">
+                        <a href="https://cuide-me.vercel.app/pagina_login.html" class="btn btn-primary">
                             <i class="fas fa-sign-in-alt"></i> Conheça a plataforma
                         </a>
                     </div>
@@ -1484,7 +1486,7 @@
             <p class="fade-in">Junte-se a milhares de famílias que já encontraram cuidado de qualidade e segurança para seus entes queridos</p>
             
             <div class="cta-buttons fade-in">
-                <a href="https://cuide-me.vercel.app" class="btn" style="background: white; color: var(--primary-color);">
+                <a href="https://cuide-me.vercel.app/pagina_login.html" class="btn" style="background: white; color: var(--primary-color);">
                     <i class="fas fa-sign-in-alt"></i> Fazer Login
                 </a>
                 <a href="#como-funciona" class="btn btn-secondary">
@@ -1651,9 +1653,11 @@
                 <div class="footer-col">
                     <h3>Legal</h3>
                     <div class="footer-links">
+                        <!-- Alteração aqui: Link para Termos de Uso -->
                         <a href="https://cuide-me.vercel.app/termos_de_uso_cuide_me.html" target="_blank">
                             <i class="fas fa-file-alt"></i> Termos de Uso
                         </a>
+                        <!-- Alteração aqui: Link para Política de Privacidade -->
                         <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank">
                             <i class="fas fa-shield-alt"></i> Política de Privacidade
                         </a>
@@ -1667,7 +1671,9 @@
             <div class="copyright">
                 <p>© 2025 Cuide-me. Todos os direitos reservados. CNPJ: xx.xxx.xxx/0001-xx</p>
                 <div class="legal-links">
+                    <!-- Alteração aqui: Link para Termos de Uso -->
                     <a href="https://cuide-me.vercel.app/termos_de_uso_cuide_me.html" target="_blank">Termos de uso</a>
+                    <!-- Alteração aqui: Link para Política de Privacidade -->
                     <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank">Política de Privacidade</a>
                     <a href="#">Cookies</a>
                 </div>
@@ -1716,17 +1722,6 @@
         // Observar elementos com a classe 'fade-in'
         document.querySelectorAll('.fade-in').forEach(el => {
             observer.observe(el);
-        });
-        
-        // Botão de login redireciona para a aplicação
-        document.querySelectorAll('.btn-primary, .nav-btn').forEach(button => {
-            button.addEventListener('click', function(e) {
-                if (this.classList.contains('btn-disabled')) {
-                    e.preventDefault();
-                    return;
-                }
-                window.location.href = 'https://cuide-me.vercel.app';
-            });
         });
         
         // Smooth scrolling para links de âncora
