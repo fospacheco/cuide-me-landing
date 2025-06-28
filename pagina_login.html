@@ -155,7 +155,6 @@
     .perfil-options {
       display:flex; gap:1rem; margin:1rem auto; width:max-content;
     }
-    /* MELHORIA: Alternância de perfis - mudamos para radio */
     .perfil-options input[type="radio"] { display:none; }
     .perfil-options label {
       display:flex; align-items:center; justify-content:center;
@@ -246,7 +245,6 @@
     // exibe erro
     function showError(msg) {
       const el = document.getElementById('msgErro');
-      // MELHORIA: Tratamento de erros - adiciona span com aria-live
       el.innerHTML = `<span aria-live="polite">${msg}</span>`;
       el.style.display = 'block';
       setTimeout(()=> el.style.display='none',4500);
@@ -283,24 +281,10 @@
       return true;
     }
 
-    // MELHORIA: Validação de senha forte com caracteres especiais
+    // validação de senha forte
     function validarSenha(senha) {
-      // Mínimo 8 caracteres, pelo menos uma letra maiúscula, uma minúscula, um número e um caractere especial
       const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
       return regex.test(senha);
-    }
-
-    // verifica se já existe no Airtable
-    async function existeRegistroAirtable(uid) {
-      const base = 'appVxCKjvJAah2r27';
-      const key  = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
-      const h     = { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' };
-      let res = await fetch(`https://api.airtable.com/v0/${base}/Cuidadores?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
-      let j   = await res.json();
-      if (j.records?.length) return true;
-      res    = await fetch(`https://api.airtable.com/v0/${base}/Clientes?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers: h });
-      j      = await res.json();
-      return !!j.records?.length;
     }
 
     // exibe formulário inicial
@@ -364,8 +348,6 @@
           <span class="btn-text">Voltar</span><span class="spinner"></span>
         </button>
       `;
-      
-      // MELHORIA: Feedback em tempo real da força da senha
       document.getElementById('password').addEventListener('input', function() {
         const strengthEl = document.getElementById('senha-strength');
         const strength = validarSenha(this.value) ? 'forte' : 'fraca';
@@ -374,12 +356,10 @@
       });
     }
 
-    // MELHORIA: Função para tecla Enter
     function handleEnterKey(event, callback) {
       if (event.key === 'Enter') callback();
     }
 
-    // valida senhas iguais no cadastro
     function checkSenhaMatch() {
       const s = document.getElementById('password').value;
       const c = document.getElementById('confirm-password').value;
@@ -389,7 +369,6 @@
 
     // login com e-mail/senha
     function loginWithEmail() {
-      // MELHORIA: Feedback de carregamento
       document.body.classList.add('waiting');
       const btn = document.getElementById('login-btn');
       btn.classList.add('loading'); btn.disabled = true;
@@ -397,7 +376,6 @@
       const p = document.getElementById('password').value;
       document.getElementById('login-error-msg').innerText = '';
 
-      // MELHORIA: Validação de e-mail
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(e)) {
         document.getElementById('login-error-msg').innerText = 'Formato de e-mail inválido';
@@ -407,22 +385,17 @@
       }
 
       auth.signInWithEmailAndPassword(e, p)
-        .then(() => {
-          // AJUSTE: Redirecionar para espaço do cliente quando o usuário já existe
+        .then(userCredential => {
+          // **ADDED**: armazena o UID antes de redirecionar
+          localStorage.setItem('clientUid', userCredential.user.uid);
           window.location.href = 'https://cuide-me.vercel.app/espaco_cliente.html';
         })
         .catch(err => {
           let m = '';
-          if (err.code === 'auth/user-not-found') {
-            // AJUSTE: Se usuário não existe, exibir mensagem apropriada
-            m = 'E-mail não cadastrado';
-          } else if (err.code === 'auth/wrong-password') {
-            m = 'Senha incorreta';
-          } else if (err.code === 'auth/invalid-email') {
-            m = 'E-mail inválido';
-          } else {
-            m = 'Erro: ' + err.message;
-          }
+          if (err.code === 'auth/user-not-found')      m = 'E-mail não cadastrado';
+          else if (err.code === 'auth/wrong-password') m = 'Senha incorreta';
+          else if (err.code === 'auth/invalid-email') m = 'E-mail inválido';
+          else m = 'Erro: ' + err.message;
           document.getElementById('login-error-msg').innerText = m;
         })
         .finally(() => { 
@@ -434,7 +407,6 @@
 
     // cadastro por e-mail (novo usuário)
     async function cadastrarUsuario() {
-      // MELHORIA: Feedback de carregamento
       document.body.classList.add('waiting');
       const btn = document.getElementById('cadastro-btn');
       btn.classList.add('loading'); btn.disabled = true;
@@ -451,7 +423,6 @@
       const pwd   = document.getElementById('password').value;
       const confirmPwd = document.getElementById('confirm-password').value;
 
-      // MELHORIA: Validação de e-mail
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         showError('Formato de e-mail inválido');
@@ -459,22 +430,18 @@
         document.body.classList.remove('waiting');
         return;
       }
-
       if (!validarCPF(cpf)) {
         showError('Digite um CPF válido.');
         btn.classList.remove('loading'); btn.disabled = false;
         document.body.classList.remove('waiting');
         return;
       }
-
       if (pwd !== confirmPwd) {
         showError('As senhas não coincidem.');
         btn.classList.remove('loading'); btn.disabled = false;
         document.body.classList.remove('waiting');
         return;
       }
-
-      // MELHORIA: Validação de senha forte com caracteres especiais
       if (!validarSenha(pwd)) {
         showError('A senha deve ter no mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas, números e caracteres especiais.');
         btn.classList.remove('loading'); btn.disabled = false;
@@ -484,14 +451,14 @@
 
       try {
         const uc = await auth.createUserWithEmailAndPassword(email, pwd);
-        // MELHORIA: Segurança - criptografa CPF antes de enviar
+        // **ADDED**: armazena o UID antes de enviar ao Airtable
+        localStorage.setItem('clientUid', uc.user.uid);
+
         const cpfCriptografado = btoa('chave_secreta' + cpf + 'chave_secreta');
         await enviarUsuarioParaAirtable(uc.user, perfil, cpfCriptografado, nome);
-        
-        // AJUSTE: Redirecionar para espaço do cliente após cadastro
+
         window.location.href = 'https://cuide-me.vercel.app/espaco_cliente.html';
       } catch (err) {
-        // AJUSTE: Se o usuário já existe, redirecionar para o espaço do cliente
         if (err.code === 'auth/email-already-in-use') {
           showError('Este e-mail já está cadastrado. Redirecionando para o espaço do cliente...');
           setTimeout(() => {
