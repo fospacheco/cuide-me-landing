@@ -576,34 +576,47 @@
     }
   }
   
-  // Carregar dados do cliente
+   // Carregar dados do cliente
   async function loadClientData(clientId) {
-    // Simulação - na prática buscaria da tabela de Clientes
-    currentClient = {
-      id: clientId,
-      name: "Maria",
-      fullName: "Maria da Silva",
-      since: "2023",
-      phone: "(11) 98765-4321",
-      email: "maria.silva@exemplo.com",
-      address: "Rua das Flores, 123 - São Paulo/SP",
-      emergencyContact: "João da Silva (filho) - (11) 91234-5678",
-      emergencyName: "João da Silva",
-      emergencyPhone: "(11) 91234-5678",
-      emergencyRelation: "Filho"
-    };
-    
-    // Atualizar UI
-    clientName.textContent = currentClient.name;
-    clientFullname.textContent = currentClient.fullName;
-    clientSince.textContent = currentClient.since;
-    clientPhone.textContent = currentClient.phone;
-    clientEmail.textContent = currentClient.email;
-    clientAddress.textContent = currentClient.address;
-    emergencyContact.textContent = currentClient.emergencyContact;
-    emergencyName.textContent = currentClient.emergencyName;
-    emergencyPhone.textContent = currentClient.emergencyPhone;
-    emergencyRelation.textContent = currentClient.emergencyRelation;
+    // 1. Puxa do Airtable os campos que você precisa
+    const records = await fetchAirtableData(
+      'Clientes',        // nome da sua tabela no Airtable
+      'Grid view',       // view que contenha todos os campos
+      [
+        'Name',
+        'FullName',
+        'Since',
+        'Phone',
+        'Email',
+        'Address',
+        'EmergencyName',
+        'EmergencyPhone',
+        'EmergencyRelation',
+        'UID'              // opcional, se você gravou o UID do seu usuário aqui
+      ]
+    );
+
+    // 2. Encontra o registro correto (por record.id ou pelo campo UID)
+    const record = records.find(r =>
+      r.id === clientId || r.fields.UID === clientId
+    );
+    if (!record) {
+      console.warn('Cliente não encontrado no Airtable:', clientId);
+      return;
+    }
+
+    // 3. Atualiza a UI com os campos reais
+    const f = record.fields;
+    clientName.textContent        = f.Name               || '';
+    clientFullname.textContent    = f.FullName           || '';
+    clientSince.textContent       = f.Since              || '';
+    clientPhone.textContent       = f.Phone              || '';
+    clientEmail.textContent       = f.Email              || '';
+    clientAddress.textContent     = f.Address            || '';
+    emergencyName.textContent     = f.EmergencyName      || '';
+    emergencyPhone.textContent    = f.EmergencyPhone     || '';
+    emergencyRelation.textContent = f.EmergencyRelation  || '';
+  }
   }
   
   // Carregar especialidades
