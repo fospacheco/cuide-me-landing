@@ -1,693 +1,1770 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login/Cadastro - Cuide-me</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --primary: #42c2d3;
-      --secondary: #E0F7FA;
-      --dark-text: #245063;
-      --white: #ffffff;
-      --petroleo: #004953;
-      --font-base: 'Inter', sans-serif;
-      --error: #b00020;
-      --success: #4caf50;
-    }
-    * { box-sizing: border-box; margin:0; padding:0; }
-    html, body {
-      height:100%;
-      font-family:var(--font-base);
-      background:none;
-      overflow-x:hidden;
-      color:var(--dark-text);
-    }
-    a { text-decoration:none; cursor:pointer; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuide-me | Conectando quem cuida e quem precisa de cuidado</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1ba8c2;
+            --primary-light: #44c7e1;
+            --primary-dark: #1592a8;
+            --secondary-color: #ff6b6b;
+            --accent-color: #ffc145;
+            --light-bg: #f2fbfd;
+            --white: #ffffff;
+            --dark-text: #245063;
+            --medium-text: #2d3e49;
+            --border-radius: 14px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --light-blue: #1ba8c2;
+            --gradient-bg: linear-gradient(135deg, #1ba8c2 0%, #1592a8 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, var(--light-bg), var(--white));
+            color: var(--dark-text);
+            font-size: 15px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            color: var(--dark-text);
+            font-weight: 700;
+            line-height: 1.3;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        h1 { font-size: 2.4rem; margin-bottom: 1.2rem; }
+        h2 { font-size: 1.9rem; margin-bottom: 1.5rem; text-align: center; }
+        h3 { font-size: 1.3rem; margin-bottom: 0.8rem; }
+        
+        p {
+            margin-bottom: 1rem;
+            color: var(--medium-text);
+            font-size: 0.95rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .section {
+            padding: 4rem 0;
+            position: relative;
+        }
+        
+        /* Botões */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 45px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            text-align: center;
+            border: none;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+        }
+        
+        .btn:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        
+        .btn-accent {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+        
+        .btn-disabled {
+            background-color: #cccccc;
+            color: #777777;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--white);
+            padding: 0.6rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.07);
+            border-bottom: none;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .logo-container:hover {
+            transform: scale(1.02);
+        }
+        
+        .logo-icon {
+            height: 50px;
+            width: 50px;
+            background: var(--gradient-bg);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+        
+        .logo-subtitle {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.4rem 0;
+        }
+        
+        nav a:hover {
+            color: var(--primary-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: var(--transition);
+            border-radius: 1px;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-btn {
+            background: var(--gradient-bg);
+            color: var(--white);
+            padding: 0.7rem 1.5rem;
+            border-radius: 45px;
+            font-size: 0.95rem;
+            box-shadow: 0 3px 12px rgba(27, 168, 194, 0.25);
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(27, 168, 194, 0.35);
+        }
+        
+        /* Hero */
+        .hero {
+            padding: 3.5rem 0 4.5rem;
+            background: linear-gradient(135deg, #e6f7ff 0%, #f2fbfd 100%);
+            overflow: hidden;
+            position: relative;
+            border-bottom-left-radius: 70px;
+            border-bottom-right-radius: 70px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -10%;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(27,168,194,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+        }
+        
+        .hero-container {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            flex: 1;
+            padding-right: 0.5rem;
+        }
+        
+        .hero-image {
+            flex: 1;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+            max-width: 480px;
+            transform: perspective(1100px) rotateY(-5deg);
+            border: 4px solid white;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .hero-image:hover {
+            transform: perspective(1100px) rotateY(0deg);
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+        
+        .hero-image:hover img {
+            transform: scale(1.04);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 1.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .hero-highlight {
+            color: var(--primary-color);
+            font-weight: 800;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Trust Badges */
+        .trust-badges {
+            background: #f8fdff;
+            padding: 1.5rem 0;
+            border-top: 1px solid #e6f7ff;
+            border-bottom: 1px solid #e6f7ff;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .badges-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2.2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border-radius: 45px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .badge:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+        }
+        
+        /* Processo */
+        .process-steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 230px;
+            max-width: 250px;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border-top: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+        
+        .step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-bg);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 12px rgba(27, 168, 194, 0.25);
+        }
+        
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.9rem;
+        }
+        
+        .step p {
+            font-size: 0.92rem;
+        }
+        
+        /* Depoimentos */
+        .testimonial-section {
+            background: linear-gradient(135deg, #f8fdff 0%, #e6f7ff 100%);
+            border-radius: 70px;
+            overflow: hidden;
+        }
+        
+        .testimonial-cards {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .testimonial {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            max-width: 340px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(27, 168, 194, 0.1);
+        }
+        
+        .testimonial::before {
+            content: """;
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            font-size: 6.5rem;
+            color: rgba(27, 168, 194, 0.05);
+            font-family: Georgia, serif;
+            line-height: 1;
+            z-index: 0;
+        }
+        
+        .testimonial:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .rating {
+            color: var(--accent-color);
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial p {
+            font-style: italic;
+            font-size: 0.92rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.6;
+        }
+        
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(27, 168, 194, 0.25);
+        }
+        
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .author-name {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .author-role {
+            font-size: 0.85rem;
+            color: #777;
+        }
+        
+        /* Valores */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .value-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border-bottom: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .value-icon {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .value-card:hover .value-icon {
+            transform: scale(1.08);
+            color: var(--primary-dark);
+        }
+        
+        /* Sobre */
+        .company-section {
+            display: flex;
+            align-items: center;
+            gap: 3.5rem;
+            margin-top: 2.5rem;
+        }
+        
+        .company-content {
+            flex: 1;
+        }
+        
+        .company-image {
+            flex: 1;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+            transform: perspective(1100px) rotateY(5deg);
+            transition: var(--transition);
+        }
+        
+        .company-image:hover {
+            transform: perspective(1100px) rotateY(0deg);
+        }
+        
+        .company-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+        
+        .company-image:hover img {
+            transform: scale(1.04);
+        }
+        
+        /* CTA */
+        .cta-section {
+            padding: 4rem 1.5rem;
+            max-width: 950px;
+            margin: 3.5rem auto;
+            background: var(--gradient-bg);
+            color: white;
+            text-align: center;
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(27, 168, 194, 0.25);
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            bottom: -60px;
+            left: -60px;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 1.2rem;
+            font-size: 2.2rem;
+        }
+        
+        .cta-section p {
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 650px;
+            margin: 0 auto 2rem;
+            font-size: 1.05rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Nova seção FAQ e Você Sabia? */
+        .faq-know-section {
+            background: linear-gradient(135deg, #f8fdff 0%, #e6f7ff 100%);
+            padding: 4rem 0;
+            border-radius: 40px;
+        }
+        
+        .faq-know-container {
+            display: flex;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .faq-column, .know-column {
+            flex: 1;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .faq-column:hover, .know-column:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .faq-column h2, .know-column h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.8rem;
+            font-size: 1.8rem;
+            text-align: left;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 0.8rem;
+            display: inline-block;
+        }
+        
+        .faq-item {
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid #eef9fb;
+            padding-bottom: 1.5rem;
+        }
+        
+        .faq-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--dark-text);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .faq-question i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .faq-answer {
+            color: var(--medium-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding-left: 2rem;
+        }
+        
+        .know-fact {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            margin-bottom: 1.8rem;
+            padding: 1.2rem;
+            background: #f2fbfd;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+        
+        .know-fact:hover {
+            background: #e6f7ff;
+            transform: translateX(5px);
+        }
+        
+        .fact-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        
+        .fact-content h3 {
+            color: var(--primary-dark);
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .fact-content p {
+            margin: 0;
+            font-size: 0.92rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 4rem 0 2rem;
+            border-top-left-radius: 70px;
+            border-top-right-radius: 70px;
+            margin-top: 4rem;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .footer-col h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.7rem;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 1.5px;
+        }
+        
+        .footer-col p {
+            color: rgba(255, 255, 255, 0.85);
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 6px;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.2rem;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+        
+        .social-icon:hover {
+            background: var(--accent-color);
+            transform: translateY(-4px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2.5rem;
+            margin-top: 2.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.92rem;
+        }
+        
+        .legal-links {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-top: 0.9rem;
+        }
+        
+        .legal-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.85rem;
+        }
+        
+        .legal-links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        /* Floating CTA */
+        .floating-cta {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #25D366;
+            color: white;
+            padding: 0.9rem 1.7rem;
+            border-radius: 45px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.25);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+        
+        .floating-cta:hover {
+            background: #128C7E;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(37, 211, 102, 0.35);
+        }
+        
+        /* Construction Notice */
+        .construction-notice {
+            background: #fff8e1;
+            border-left: 4px solid var(--accent-color);
+            padding: 0.8rem;
+            border-radius: 10px;
+            margin-top: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            max-width: 320px;
+        }
+        
+        .construction-notice i {
+            color: var(--accent-color);
+            font-size: 1.3rem;
+        }
+        
+        .construction-notice p {
+            margin: 0;
+            font-size: 0.88rem;
+            color: #856404;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.7s ease-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .hero-container {
+                flex-direction: column;
+                gap: 2.5rem;
+            }
+            
+            .hero-content {
+                text-align: center;
+                padding-right: 0;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .hero-image {
+                max-width: 550px;
+                margin: 0 auto;
+            }
+            
+            .company-section {
+                flex-direction: column;
+            }
+            
+            .badges-container {
+                gap: 1.3rem;
+            }
 
-    /* Fundo animado e splash */
-    #background { position:fixed; top:0; left:0; width:100%; height:100%; z-index:-1; }
-    #splash-screen {
-      position:fixed; inset:0;
-      background:linear-gradient(to bottom,var(--secondary),var(--white));
-      display:flex; align-items:center; justify-content:center;
-      z-index:9999;
-      transition: opacity 0.5s ease;
-    }
-    #splash-screen img {
-      max-width:220px;
-      animation:pulse 1.5s infinite ease-in-out;
-    }
-    @keyframes pulse {0%,100%{transform:scale(1);}50%{transform:scale(1.05);}}
-
-    /* Layout principal */
-    .container { min-height:100vh; display:flex; }
-    .left {
-      flex:1; padding:3rem;
-      display:flex; flex-direction:column; justify-content:center; align-items:center;
-      background:transparent; color:var(--white); text-align:center; z-index:1;
-    }
-    .left .logo { width:240px; margin-bottom:1.5rem; }
-    .left h2 { font-size:2rem; margin-bottom:1rem; color:var(--petroleo); }
-    .left p  { font-size:1.1rem; margin-bottom:2rem; color:var(--petroleo); }
-    .left a  {
-      background:var(--white); color:var(--primary);
-      padding:.8rem 2rem; border-radius:50px;
-      font-weight:bold; box-shadow:0 4px 10px rgba(0,0,0,0.1);
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .left a:hover, .left a:focus {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-    }
-
-    /* Painel direito */
-    .right { flex:1; position:relative; overflow:hidden; background:var(--white); display:none; }
-    .form-overlay {
-      position:fixed; top:0; left:100%;
-      width:50%; height:100%; background:var(--white);
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      padding:3rem; gap:1rem; transition:left .6s cubic-bezier(0.23, 1, 0.32, 1); z-index:2;
-    }
-    .form-overlay.active { left:50%; }
-
-    /* Campos de input e labels */
-    .input-group {
-      width: 320px;
-      max-width: 90vw;
-      margin-bottom: 1.1rem;
-    }
-    .input-label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--dark-text);
-      text-align: left;
-    }
-    input {
-      width: 100%;
-      font-size:1.18rem; padding:.7rem 1rem;
-      border:1.5px solid #b3c5cf; border-radius:5px;
-      background:#eaf1fa; color:#245063;
-      outline:none; transition:border-color .2s;
-    }
-    input:focus, input:focus-visible {
-      border-color: var(--primary);
-      background: #f3fbfd;
-      outline: 2px solid rgba(66, 194, 211, 0.3);
-      outline-offset: 2px;
-    }
-    input:invalid:not(:placeholder-shown) {
-      border-color: var(--error);
-    }
-    input:valid:not(:placeholder-shown) {
-      border-color: var(--success);
-    }
-
-    /* Botões CTA */
-    .cta-btn {
-      background:var(--primary); color:var(--white);
-      padding:.9rem 2rem; border-radius:50px;
-      font-weight:bold; border:none; cursor:pointer;
-      font-size:1.2rem; display:inline-flex;
-      align-items:center; justify-content:center;
-      min-width:200px;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .cta-btn:hover, .cta-btn:focus {
-      background: #38a9b9;
-      transform: translateY(-2px);
-      outline: none;
-    }
-    .cta-btn:focus-visible {
-      outline: 2px solid rgba(0, 0, 0, 0.5);
-      outline-offset: 2px;
-    }
-    .cta-btn .spinner {
-      display:none; width:1.2em; height:1.2em;
-      border:2px solid rgba(255,255,255,0.6);
-      border-top-color:var(--white); border-radius:50%;
-      animation:spin .8s linear infinite; margin-left:.5rem;
-    }
-    @keyframes spin { to{transform:rotate(360deg);} }
-    .loading .spinner { display:inline-block; }
-    .loading .btn-text { visibility:hidden; }
-    button:disabled { 
-      cursor:not-allowed; 
-      opacity:.7;
-      transform: none !important;
-    }
-
-    /* Texto social e ícones */
-    .social-text {
-      font-weight:500; font-size:1rem;
-      text-align:center; margin-top:1rem;
-    }
-    .social-icons {
-      display:flex; gap:1rem; justify-content:center; margin:.5rem 0;
-    }
-    .social-icons img { 
-      width:48px; height:48px; 
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .social-icons img:hover {
-      transform: scale(1.1);
-    }
-
-    /* Mensagens de erro */
-    #login-error-msg, #senha-error {
-      color: var(--error); font-weight:600; font-size:.9rem; margin-bottom:.5rem;
-      min-height: 1.5rem;
-    }
-    #msgErro {
-      background:#fdecea; color:#a50e0e;
-      position:fixed; top:32px; left:50%; transform:translateX(-50%);
-      padding:1rem 2rem; border-radius:10px;
-      box-shadow:0 2px 12px #0001;
-      font-weight:600; font-size:1.07rem; z-index:10000; 
-      display:none;
-      animation: fadeIn 0.3s ease;
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; top: 0; }
-      to { opacity: 1; top: 32px; }
-    }
-
-    /* Toggle-crie-aqui menor */
-    .toggle-text { text-align:center; margin-top:1rem; }
-    .toggle-text .cta-btn {
-      min-width:auto; padding:.4rem 1rem; font-size:1rem; border-radius:25px;
-    }
-
-    /* Seleção de perfil */
-    .perfil-options {
-      display:flex; gap:1rem; margin:1rem auto; width:max-content;
-    }
-    .perfil-options input[type="checkbox"] { display:none; }
-    .perfil-options label {
-      display:flex; align-items:center; justify-content:center;
-      width:140px; padding:.8rem;
-      border:2px solid var(--primary); border-radius:8px;
-      background:var(--white); color:var(--dark-text);
-      font-size:1.1rem; font-weight:600;
-      transition:background .2s,color .2s, transform .2s; cursor:pointer;
-    }
-    .perfil-options label:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    }
-    .perfil-options input:checked + label {
-      background:var(--primary); color:var(--white);
-    }
-    .perfil-options input:focus-visible + label {
-      outline: 2px solid rgba(0, 0, 0, 0.5);
-      outline-offset: 2px;
-    }
-
-    @media(max-width:768px) {
-      .container { flex-direction:column; }
-      .left, .right { padding:2rem; }
-      .form-overlay { padding:2rem; width:100%; left:100%; }
-      .form-overlay.active { left:0; }
-      input { width:98vw!important; min-width:180px!important; font-size:1rem!important; }
-    }
-    @media(max-width:480px) {
-      .perfil-options {
-        flex-direction: column;
-        width: 100%;
-      }
-      .perfil-options label {
-        width: 100%;
-        padding: 0.7rem;
-        font-size: 1rem;
-      }
-      .left h2 { font-size: 1.7rem; }
-      .left p { font-size: 1rem; }
-    }
-  </style>
+            .faq-know-container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+        
+        /* Menu Hamburguer Responsivo */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: var(--transition);
+            padding: 10px;
+            border-radius: 50%;
+            z-index: 2001;
+        }
+        
+        .mobile-menu-btn:hover {
+            background-color: rgba(27, 168, 194, 0.1);
+            transform: rotate(90deg);
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0.8rem;
+            }
+            
+            nav.desktop-nav {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .section {
+                padding: 3rem 0;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2.2rem;
+            }
+            
+            .floating-cta {
+                bottom: 18px;
+                right: 18px;
+                font-size: 0.9rem;
+                padding: 0.8rem 1.4rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .faq-column, .know-column {
+                padding: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .step, .testimonial, .value-card {
+                min-width: 100%;
+                max-width: 100%;
+            }
+            
+            .badge {
+                min-width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .hero-image {
+                transform: none;
+            }
+            
+            .cta-section {
+                border-radius: 35px;
+            }
+            
+            footer {
+                border-top-left-radius: 45px;
+                border-top-right-radius: 45px;
+            }
+        }
+        
+        /* Menu Mobile */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8fdff 0%, #e6f7ff 100%);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transform: translateY(-100%);
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 20px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+        
+        .mobile-menu a {
+            font-size: 1.6rem;
+            margin: 1.5rem 0;
+            color: var(--dark-text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+            padding: 12px 30px;
+            border-radius: 50px;
+            width: 100%;
+            max-width: 300px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        .mobile-menu a:hover {
+            color: var(--primary-color);
+            background: white;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .mobile-menu a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-bg);
+            opacity: 0;
+            transition: var(--transition);
+            z-index: -1;
+        }
+        
+        .mobile-menu a:hover::before {
+            opacity: 0.1;
+        }
+        
+        .mobile-menu a i {
+            transition: var(--transition);
+        }
+        
+        .mobile-menu a:hover i {
+            transform: scale(1.2);
+            color: var(--primary-color);
+        }
+        
+        .close-menu {
+            position: absolute;
+            top: 1.8rem;
+            right: 1.8rem;
+            font-size: 2.2rem;
+            background: none;
+            border: none;
+            color: var(--primary-color);
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+        
+        .close-menu:hover {
+            background: rgba(27, 168, 194, 0.1);
+            transform: rotate(90deg);
+        }
+        
+        .mobile-menu .btn.nav-btn {
+            background: var(--gradient-bg);
+            color: white;
+            margin-top: 20px;
+            font-size: 1.4rem;
+            padding: 15px 30px;
+            box-shadow: 0 5px 20px rgba(27, 168, 194, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        .mobile-menu .btn.nav-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(27, 168, 194, 0.4);
+        }
+        
+        /* Decorative Elements */
+        .decor-circle {
+            position: absolute;
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 250px;
+            height: 250px;
+            background: rgba(27, 168, 194, 0.05);
+            top: 12%;
+            left: 6%;
+        }
+        
+        .circle-2 {
+            width: 170px;
+            height: 170px;
+            background: rgba(255, 107, 107, 0.05);
+            bottom: 22%;
+            right: 11%;
+        }
+        
+        .circle-3 {
+            width: 130px;
+            height: 130px;
+            background: rgba(255, 193, 69, 0.05);
+            top: 42%;
+            right: 21%;
+        }
+    </style>
 </head>
 <body>
-
-  <div id="background"></div>
-  <div id="splash-screen" aria-hidden="false">
-    <img src="logo_cuide_me.png" alt="Carregando Cuide-me"/>
-  </div>
-
-  <div class="container" id="main-content" style="display: none;">
-    <div class="left">
-      <img src="logo_cuide_me.png" class="logo" alt="Cuide-me"/>
-      <h2>Seja Bem-vindo!</h2>
-      <p>Para acessar, clique abaixo:</p>
-      <a onclick="mostrarFormulario()" tabindex="0">Acessar</a>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo-container">
+		<img src="logo_cuide_me.png" style="height: 72px; width: auto;">
+                    <div class="logo-text">
+                    <div class="logo-subtitle">Cuidar com verdade. Conectar com responsabilidade.</div>
+                </div>
+            </a>
+            
+            <nav class="desktop-nav">
+                <a href="#como-funciona">Como funciona</a>
+                <a href="#depoimentos">Depoimentos</a>
+                <a href="#valores">Virtudes</a>
+                <a href="#sobre">Sobre</a>
+                
+            </nav>
+            
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <button class="close-menu">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="#como-funciona">
+            <i class="fas fa-cogs"></i> Como funciona
+        </a>
+        <a href="#depoimentos">
+            <i class="fas fa-comments"></i> Depoimentos
+        </a>
+        <a href="#valores">
+            <i class="fas fa-star"></i> Virtudes
+        </a>
+        <a href="#sobre">
+            <i class="fas fa-info-circle"></i> Sobre
+        </a>
+        <a href="https://cuide-me.vercel.app" class="btn nav-btn">
+            <i class="fas fa-sign-in-alt"></i> Acessar Plataforma
+        </a>
     </div>
-    <div class="right"></div>
-  </div>
 
-  <div id="formSlide" class="form-overlay"></div>
-  <div id="msgErro" role="alert" aria-live="assertive"></div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-container">
+            <div class="hero-content fade-in">
+                <h1>Cuide de quem você ama com <span class="hero-highlight">segurança e empatia</span></h1>
+                <p>Conectamos você a cuidadores verificados, com todo o suporte necessário para garantir o melhor cuidado para sua família. Nossa plataforma oferece tranquilidade e confiança para quem precisa de cuidados especiais.</p>
+                
+                <div class="hero-buttons">
+                    <a href="https://cuide-me.vercel.app" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Acesse a nossa Plataforma
+                    </a>
+                    <button class="btn btn-disabled">
+                        <i class="fab fa-google-play"></i> Baixar App
+                    </button>
+                </div>
+                <div class="construction-notice fade-in delay-1">
+                    <i class="fas fa-tools"></i>
+                    <p>App em construção - Em breve para Android e iOS!</p>
+                </div>
+            </div>
+            
+            <div class="hero-image fade-in delay-1">
+                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cuidadora e idosa sorrindo">
+            </div>
+        </div>
+    </section>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
-  <script>
-    // Constantes globais
-    const ERROR_TIMEOUT = 4500;
-    const AIRTABLE_CONFIG = {
-      BASE: 'appVxCKjvJAah2r27',
-      KEY: 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2'
-    };
-    
-    // Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
-      authDomain: "cuide-me-f57f8.firebaseapp.com",
-      projectId: "cuide-me-f57f8",
-      storageBucket: "cuide-me-f57f8.appspot.com",
-      messagingSenderId: "846926668384",
-      appId: "1:846926668384:web:c8022e110171969f6b5905"
-    };
-    
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    auth.setPersistence(firebase.auth.Auth.Persistence.SESSION);
+    <!-- Trust Badges -->
+    <section class="trust-badges">
+        <div class="container badges-container">
+            <div class="badge fade-in">
+                <i class="fas fa-shield-alt"></i> Verificação rigorosa
+            </div>
+            <div class="badge fade-in delay-1">
+                <i class="fas fa-star"></i> 4.9/5 avaliações
+            </div>
+            <div class="badge fade-in delay-2">
+                <i class="fas fa-users"></i> +500 famílias atendidas
+            </div>
+            <div class="badge fade-in delay-3">
+                <i class="fas fa-heart"></i> Atendimento humanizado
+            </div>
+        </div>
+    </section>
 
-    // animação de fundo e splash
-    window.addEventListener('load', () => {
-      VANTA.CLOUDS({
-        el: "#background",
-        backgroundColor: 0xffffff,
-        skyColor:        0x68b8d7,
-        cloudColor:      0xadc1de,
-        cloudShadowColor:0x183550,
-        sunColor:        0xff9919,
-        sunGlareColor:   0xff6633,
-        sunlightColor:   0xff9933,
-        speed: 1.0,
-        mouseControls: true,
-        touchControls: true,
-        gyroControls: false
-      });
-      
-      setTimeout(() => {
-        document.getElementById('splash-screen').style.opacity = '0';
-        setTimeout(() => {
-          document.getElementById('splash-screen').style.display = 'none';
-          document.getElementById('main-content').style.display = 'flex';
-        }, 500);
-      }, 800);
-    });
+    <!-- Processo -->
+    <section class="section" id="como-funciona">
+        <div class="container">
+            <h2 class="fade-in">Como funciona em 4 passos</h2>
+            
+            <div class="process-steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Cadastro simples</h3>
+                    <p>Conte-nos suas necessidades em 2 minutos através do nosso formulário online</p>
+                </div>
+                
+                <div class="step fade-in delay-1">
+                    <div class="step-number">2</div>
+                    <h3>Combinação perfeita</h3>
+                    <p>Nossa equipe seleciona os cuidadores mais adequados ao seu perfil</p>
+                </div>
+                
+                <div class="step fade-in delay-2">
+                    <div class="step-number">3</div>
+                    <h3>Conheça seu cuidador</h3>
+                    <p>Agende uma videochamada sem compromisso para conhecer o profissional</p>
+                </div>
+                
+                <div class="step fade-in delay-3">
+                    <div class="step-number">4</div>
+                    <h3>Cuidado contínuo</h3>
+                    <p>Acompanhamento durante todo o processo para garantir a melhor experiência</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // exibe erro
-    function showError(msg) {
-      const el = document.getElementById('msgErro');
-      el.innerText = msg;
-      el.style.display = 'block';
-      setTimeout(() => {
-        el.style.display = 'none';
-        el.style.opacity = '0';
-      }, ERROR_TIMEOUT);
-    }
+    <!-- Depoimentos -->
+    <section class="section testimonial-section" id="depoimentos">
+        <div class="container">
+            <h2 class="fade-in">O que dizem nossos clientes</h2>
+            
+            <div class="testimonial-cards">
+                <div class="testimonial fade-in">
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p>"A Ana trouxe paz para nossa família. Profissional e humana como poucas! O cuidado com meu pai foi excepcional e pudemos confiar plenamente."</p>
+                    <div class="author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">Maria Silva</div>
+                            <div class="author-role">Cuidou do pai</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial fade-in delay-1">
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p>"Encontrei uma cuidadora atenciosa e com empatia real. A plataforma facilitou todo o processo e o suporte foi essencial para resolver dúvidas."</p>
+                    <div class="author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">Carlos Mendes</div>
+                            <div class="author-role">Filho da Dona Zuleide</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial fade-in delay-2">
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p>"Finalmente encontrei um cuidador confiável. Minha mãe está feliz e bem cuidada. A verificação de documentos me deu a segurança que precisava."</p>
+                    <div class="author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">Juliana Torres</div>
+                            <div class="author-role">Filha da Dona Marta</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // máscara de CPF
-    function mascaraCPF(value) {
-      return value
-        .replace(/\D/g, "")
-        .replace(/(\d{3})(\d)/, "$1.$2")
-        .replace(/(\d{3})(\d)/, "$1.$2")
-        .replace(/(\d{3})(\d{1,2})$/, "$1-$2");
-    }
+    <!-- Valores -->
+    <section class="section" id="valores">
+        <div class="container">
+            <h2 class="fade-in">Nossos valores</h2>
+            
+            <div class="values-grid">
+                <div class="value-card fade-in">
+                    <div class="value-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Empatia</h3>
+                    <p>Presença e escuta ativa em cada interação, entendendo as necessidades emocionais e físicas de cada pessoa</p>
+                </div>
+                
+                <div class="value-card fade-in delay-1">
+                    <div class="value-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Segurança</h3>
+                    <p>Verificação rigorosa de documentos, histórico profissional e referências de todos os cuidadores</p>
+                </div>
+                
+                <div class="value-card fade-in delay-2">
+                    <div class="value-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Confiança</h3>
+                    <p>Transparência e respeito nas relações, construindo laços duradouros entre famílias e cuidadores</p>
+                </div>
+                
+                <div class="value-card fade-in delay-3">
+                    <div class="value-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Excelência</h3>
+                    <p>Seleção criteriosa e acompanhamento contínuo para garantir o mais alto padrão de cuidado</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // Validação de CPF em tempo real
-    function validarCPFOnTheFly(input) {
-      const value = input.value.replace(/\D/g, '');
-      const isValid = validarCPF(value);
-      
-      if (value.length === 11) {
-        if (isValid) {
-          input.style.borderColor = "var(--success)";
-        } else {
-          input.style.borderColor = "var(--error)";
-        }
-      } else {
-        input.style.borderColor = "#b3c5cf";
-      }
-    }
+    <!-- Sobre -->
+    <section class="section" id="sobre">
+        <div class="container">
+            <h2 class="fade-in">Sobre o Cuide-me</h2>
+            <div class="company-section fade-in">
+                <div class="company-content">
+                    <h3>Nossa missão</h3>
+                    <p>A Cuide-me nasceu em 2025 como uma iniciativa inovadora e humana, com o propósito de transformar a forma como o cuidado domiciliar é oferecido no Brasil. Somos uma empresa jovem, com uma visão clara: tornar o cuidado acessível, confiável e acolhedor para todas as famílias.</p>
+                    <p>Nosso compromisso é conectar quem precisa de cuidado a profissionais qualificados e empáticos, valorizando relações de confiança e respeito. Através de tecnologia inteligente e processos transparentes, buscamos facilitar essa conexão de forma simples, segura e eficiente.</p>
+                    <div style="margin-top: 1.8rem;">
+                        <a href="https://cuide-me.vercel.app" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Conheça a plataforma
+                        </a>
+                    </div>
+                </div>
+                <div class="company-image fade-in delay-1">
+                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Equipe Cuide-me">
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // Adiciona eventos de validação em tempo real para CPF
-    document.addEventListener('input', function(e) {
-      if (e.target.id === 'cpf' || e.target.id === 'cpf_google') {
-        e.target.value = mascaraCPF(e.target.value);
-        validarCPFOnTheFly(e.target);
-      }
-    });
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container cta-content">
+            <h2 class="fade-in">Pronto para encontrar o cuidador ideal?</h2>
+            <p class="fade-in">Junte-se a milhares de famílias que já encontraram cuidado de qualidade e segurança para seus entes queridos</p>
+            
+            <div class="cta-buttons fade-in">
+                <a href="https://cuide-me.vercel.app" class="btn" style="background: white; color: var(--primary-color);">
+                    <i class="fas fa-sign-in-alt"></i> Fazer Login
+                </a>
+                <a href="#como-funciona" class="btn btn-secondary">
+                    <i class="fas fa-info-circle"></i> Saiba Mais
+                </a>
+            </div>
+        </div>
+    </section>
 
-    /**
-     * Valida CPF usando algoritmo oficial
-     * @param {string} cpf - CPF formatado
-     * @returns {boolean} - True se válido
-     */
-    function validarCPF(cpf) {
-      cpf = cpf.replace(/\D/g, '');
-      if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) return false;
-      let sum = 0;
-      for (let i = 0; i < 9; i++) sum += parseInt(cpf.charAt(i)) * (10 - i);
-      let remainder = (sum * 10) % 11;
-      if (remainder === 10 || remainder === 11) remainder = 0;
-      if (remainder !== parseInt(cpf.charAt(9))) return false;
-      sum = 0;
-      for (let i = 0; i < 10; i++) sum += parseInt(cpf.charAt(i)) * (11 - i);
-      remainder = (sum * 10) % 11;
-      if (remainder === 10 || remainder === 11) remainder = 0;
-      if (remainder !== parseInt(cpf.charAt(10))) return false;
-      return true;
-    }
+    <!-- Nova seção FAQ e Você Sabia? -->
+    <section class="section faq-know-section">
+        <div class="container">
+            <div class="faq-know-container">
+                <!-- Coluna FAQ -->
+                <div class="faq-column fade-in">
+                    <h2>Perguntas Frequentes</h2>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-question-circle"></i>
+                            Como é feita a seleção dos cuidadores?
+                        </div>
+                        <div class="faq-answer">
+                            Nossos cuidadores passam por um rigoroso processo de seleção que inclui verificação de documentos, 
+                            histórico profissional, referências e entrevista com nossa equipe. 
+                            Apenas profissionais com experiência comprovada e perfil adequado são aprovados.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-question-circle"></i>
+                            Posso conhecer o cuidador antes de contratar?
+                        </div>
+                        <div class="faq-answer">
+                            Sim! Nossa plataforma permite que você agende uma videochamada gratuita com os cuidadores 
+                            pré-selecionados para conhecer o profissional e tirar todas as dúvidas antes de tomar sua decisão.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-question-circle"></i>
+                            Como funciona o pagamento?
+                        </div>
+                        <div class="faq-answer">
+                            O pagamento é feito de forma segura através de nossa plataforma. Você define o valor combinado 
+                            com o cuidador e faz o pagamento via cartão de crédito, PIX ou boleto bancário. 
+                            O valor só é repassado ao cuidador após a confirmação do serviço prestado.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-question-circle"></i>
+                            E se eu precisar de suporte durante o cuidado?
+                        </div>
+                        <div class="faq-answer">
+                            Nossa equipe de suporte está disponível 24/7 para qualquer necessidade. 
+                            Você pode entrar em contato via chat, telefone ou WhatsApp a qualquer momento 
+                            para resolver questões relacionadas ao cuidado prestado.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Coluna Você Sabia? -->
+                <div class="know-column fade-in delay-1">
+                    <h2>Você Sabia?</h2>
+                    
+                    <div class="know-fact">
+                        <div class="fact-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="fact-content">
+                            <h3>Cuidado humano melhora a saúde</h3>
+                            <p>Estudos mostram que pacientes que recebem cuidado humanizado apresentam melhora de até 30% nos indicadores de saúde e bem-estar.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="know-fact">
+                        <div class="fact-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="fact-content">
+                            <h3>Companhia reduz declínio cognitivo</h3>
+                            <p>Idosos que recebem atenção regular têm 40% menos probabilidade de desenvolver declínio cognitivo acelerado.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="know-fact">
+                        <div class="fact-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="fact-content">
+                            <h3>Cuidado domiciliar é preferido</h3>
+                            <p>87% dos idosos preferem receber cuidados em casa, onde se sentem mais confortáveis e seguros.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="know-fact">
+                        <div class="fact-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="fact-content">
+                            <h3>Profissionais capacitados fazem diferença</h3>
+                            <p>Cuidadores treinados podem identificar precocemente 65% dos problemas de saúde, prevenindo complicações.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="know-fact">
+                        <div class="fact-icon">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div class="fact-content">
+                            <h3>Qualidade de vida impacta longevidade</h3>
+                            <p>Pessoas que recebem cuidado adequado vivem em média 5 anos a mais com qualidade de vida preservada.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // verifica se já existe no Airtable
-    async function existeRegistroAirtable(uid) {
-      const { BASE, KEY } = AIRTABLE_CONFIG;
-      const headers = { 
-        'Authorization': `Bearer ${KEY}`, 
-        'Content-Type': 'application/json' 
-      };
-      
-      try {
-        let res = await fetch(`https://api.airtable.com/v0/${BASE}/Cuidadores?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers });
-        let j = await res.json();
-        if (j.records?.length) return true;
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Cuide-me</h3>
+                    <p>Conectando quem cuida e quem precisa de cuidado com segurança e empatia.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Links</h3>
+                    <div class="footer-links">
+                        <a href="#como-funciona"><i class="fas fa-chevron-right"></i> Como funciona</a>
+                        <a href="#depoimentos"><i class="fas fa-chevron-right"></i> Depoimentos</a>
+                        <a href="#valores"><i class="fas fa-chevron-right"></i> Nossos valores</a>
+                        <a href="#sobre"><i class="fas fa-chevron-right"></i> Sobre nós</a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contato</h3>
+                    <div class="footer-links">
+                        <a href="mailto:contato@cuide-me.app">
+                            <i class="fas fa-envelope"></i> contato@cuide-me.app
+                        </a>
+                        <a href="tel:+5511912345678">
+                            <i class="fas fa-phone"></i> (11) 91234-5678
+                        </a>
+                        <a href="#">
+                            <i class="fas fa-map-marker-alt"></i> Rua Exemplo, 123 - São Paulo/SP
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <div class="footer-links">
+                        <a href="https://cuide-me.vercel.app/termos_de_uso_cuide_me.html" target="_blank">
+                            <i class="fas fa-file-alt"></i> Termos de Uso
+                        </a>
+                        <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank">
+                            <i class="fas fa-shield-alt"></i> Política de Privacidade
+                        </a>
+                        <a href="#">
+                            <i class="fas fa-cookie-bite"></i> Política de Cookies
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2025 Cuide-me. Todos os direitos reservados. CNPJ: xx.xxx.xxx/0001-xx</p>
+                <div class="legal-links">
+                    <a href="https://cuide-me.vercel.app/termos_de_uso_cuide_me.html" target="_blank">Termos de uso</a>
+                    <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank">Política de Privacidade</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating CTA -->
+    <a aria-label="WhatsApp" class="floating-cta" href="https://wa.me/5511912345678">
+        <i class="fab fa-whatsapp"></i> Atendimento via WhatsApp
+    </a>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const closeMenuBtn = document.querySelector('.close-menu');
+        const mobileMenu = document.querySelector('.mobile-menu');
         
-        res = await fetch(`https://api.airtable.com/v0/${BASE}/Clientes?filterByFormula=${encodeURIComponent(`{UID}='${uid}'`)}`, { headers });
-        j = await res.json();
-        return !!j.records?.length;
-      } catch (error) {
-        console.error('Erro ao verificar Airtable:', error);
-        return false;
-      }
-    }
-
-    // exibe formulário inicial
-    function mostrarFormulario() {
-      document.querySelector('.right').style.display='flex';
-      document.getElementById('formSlide').classList.add('active');
-      renderLogin();
-    }
-
-    // tela de login
-    function renderLogin() {
-      document.getElementById('formSlide').innerHTML = `
-        <div class="input-group">
-          <label for="email" class="input-label">E-mail</label>
-          <input id="email" type="email" placeholder="exemplo@email.com" required autocomplete="email"/>
-        </div>
-        <div class="input-group">
-          <label for="password" class="input-label">Senha</label>
-          <input id="password" type="password" placeholder="••••••••" required autocomplete="current-password"/>
-        </div>
-        <div id="login-error-msg"></div>
-        <button class="cta-btn" id="login-btn" onclick="loginWithEmail()">
-          <span class="btn-text">Entrar</span><span class="spinner"></span>
-        </button>
-        <div class="social-text">ou acesse com redes sociais</div>
-        <div class="social-icons">
-          <img src="https://img.icons8.com/color/48/google-logo.png" onclick="loginWithGoogle()" alt="Google" tabindex="0"/>
-        </div>
-        <div class="toggle-text">
-          Ainda não tem conta?
-          <button class="cta-btn" onclick="renderCadastro()">
-            <span class="btn-text">Crie aqui</span><span class="spinner"></span>
-          </button>
-        </div>
-      `;
-    }
-
-    // tela de cadastro por e-mail
-    function renderCadastro(prefill = "") {
-      // Sanitizar valor de prefill
-      const sanitizedPrefill = prefill.replace(/"/g, '&quot;');
-      
-      document.getElementById('formSlide').innerHTML = `
-        <div class="social-text">Escolha seu Perfil</div>
-        <div class="perfil-options">
-          <input type="checkbox" id="perfil_cliente_email" name="perfil_email" value="familia"/>
-          <label for="perfil_cliente_email">Cliente</label>
-          <input type="checkbox" id="perfil_cuidador_email" name="perfil_email" value="cuidador"/>
-          <label for="perfil_cuidador_email">Cuidador</label>
-        </div>
-        <div class="input-group">
-          <label for="nome-completo" class="input-label">Nome Completo</label>
-          <input id="nome-completo" type="text" placeholder="Seu nome completo" required/>
-        </div>
-        <div class="input-group">
-          <label for="cpf" class="input-label">CPF</label>
-          <input id="cpf" type="text" placeholder="000.000.000-00" maxlength="14" required/>
-        </div>
-        <div class="input-group">
-          <label for="email" class="input-label">E-mail</label>
-          <input id="email" type="email" placeholder="exemplo@email.com" required value="${sanitizedPrefill}" autocomplete="email"/>
-        </div>
-        <div class="input-group">
-          <label for="password" class="input-label">Senha</label>
-          <input id="password" type="password" placeholder="••••••••" required oninput="checkSenhaMatch()"/>
-        </div>
-        <div class="input-group">
-          <label for="confirm-password" class="input-label">Confirmar senha</label>
-          <input id="confirm-password" type="password" placeholder="••••••••" required oninput="checkSenhaMatch()"/>
-        </div>
-        <div id="senha-error"></div>
-        <button class="cta-btn" id="cadastro-btn" onclick="cadastrarUsuario()">
-          <span class="btn-text">Cadastrar</span><span class="spinner"></span>
-        </button>
-        <button class="cta-btn" onclick="renderLogin()">
-          <span class="btn-text">Voltar</span><span class="spinner"></span>
-        </button>
-      `;
-    }
-
-    // valida senhas iguais no cadastro
-    function checkSenhaMatch() {
-      const s = document.getElementById('password').value;
-      const c = document.getElementById('confirm-password').value;
-      const errorEl = document.getElementById('senha-error');
-      
-      if (s && c && s !== c) {
-        errorEl.innerText = 'Senhas estão diferentes, por favor ajuste!';
-        document.getElementById('password').style.borderColor = "var(--error)";
-        document.getElementById('confirm-password').style.borderColor = "var(--error)";
-      } else {
-        errorEl.innerText = '';
-        if (s.length > 0) document.getElementById('password').style.borderColor = "var(--success)";
-        if (c.length > 0) document.getElementById('confirm-password').style.borderColor = "var(--success)";
-      }
-    }
-
-    // login com e-mail/senha
-    function loginWithEmail() {
-      const btn = document.getElementById('login-btn');
-      btn.classList.add('loading'); 
-      btn.disabled = true;
-      
-      const e = document.getElementById('email').value;
-      const p = document.getElementById('password').value;
-      const errorMsg = document.getElementById('login-error-msg');
-      
-      errorMsg.innerText = '';
-      
-      auth.signInWithEmailAndPassword(e, p)
-        .then(() => window.location.href = 'pagina-homepage.html')
-        .catch(err => {
-          let m = '';
-          if (err.code === 'auth/user-not-found') m = 'E-mail não cadastrado';
-          else if (err.code === 'auth/wrong-password') m = 'Senha incorreta';
-          else if (err.code === 'auth/invalid-email') m = 'E-mail inválido';
-          else if (err.code === 'auth/too-many-requests') m = 'Acesso temporariamente bloqueado. Tente mais tarde.';
-          else m = 'Erro: ' + err.message;
-          
-          errorMsg.innerText = m;
-        })
-        .finally(() => { 
-          btn.classList.remove('loading'); 
-          btn.disabled = false; 
-        });
-    }
-
-    // login com Google
-    function loginWithGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      
-      // Primeiro tenta com popup
-      auth.signInWithPopup(provider)
-        .then(async res => {
-          const u = res.user;
-          const has = await existeRegistroAirtable(u.uid);
-          if (!has) mostrarPerfilCpfGoogle();
-          else window.location.href = 'pagina-homepage.html';
-        })
-        .catch(e => {
-          // Se popup falhar, tenta com redirect
-          if (e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user') {
-            auth.signInWithRedirect(provider);
-          } else {
-            showError('Erro com Google: ' + e.message);
-          }
-        });
-    }
-
-    // primeiro login Google: escolha de perfil + CPF
-    function mostrarPerfilCpfGoogle() {
-      document.getElementById('formSlide').innerHTML = `
-        <div class="social-text">Acesse com a rede social</div>
-        <div class="social-icons">
-          <img src="https://img.icons8.com/color/96/google-logo.png" alt="Google"/>
-        </div>
-        <div class="social-text" style="margin-top:0.5rem;">Escolha seu Perfil!</div>
-        <div class="perfil-options">
-          <input type="checkbox" id="perfil_cliente_google" name="perfil_google" value="familia"/>
-          <label for="perfil_cliente_google">Cliente</label>
-          <input type="checkbox" id="perfil_cuidador_google" name="perfil_google" value="cuidador"/>
-          <label for="perfil_cuidador_google">Cuidador</label>
-        </div>
-        <div class="input-group">
-          <label for="cpf_google" class="input-label">CPF</label>
-          <input id="cpf_google" type="text" placeholder="000.000.000-00" maxlength="14" required/>
-        </div>
-        <button class="cta-btn" id="finalizar-btn" onclick="finalizarCadastroGoogle()">
-          <span class="btn-text">Finalizar Cadastro</span><span class="spinner"></span>
-        </button>
-        <div class="toggle-text">
-          Para login com e-mail existente:
-          <button class="cta-btn" onclick="renderLogin()">
-            <span class="btn-text">Clique aqui!</span><span class="spinner"></span>
-          </button>
-        </div>
-      `;
-    }
-
-    // finalizar cadastro Google
-    function finalizarCadastroGoogle() {
-      const btn = document.getElementById('finalizar-btn');
-      btn.classList.add('loading'); 
-      btn.disabled = true;
-      
-      const checks = Array.from(document.querySelectorAll('input[name="perfil_google"]:checked')).map(i => i.value);
-      if (!checks.length) {
-        showError('Selecione ao menos um perfil.');
-        btn.classList.remove('loading'); 
-        btn.disabled = false;
-        return;
-      }
-      
-      const cpfInput = document.getElementById('cpf_google');
-      const cpfVal = cpfInput.value.replace(/\D/g, '');
-      
-      if (!validarCPF(cpfVal)) {
-        showError('Digite um CPF válido.');
-        cpfInput.style.borderColor = "var(--error)";
-        btn.classList.remove('loading'); 
-        btn.disabled = false;
-        return;
-      }
-      
-      const user = firebase.auth().currentUser;
-      Promise.all(checks.map(p => enviarUsuarioParaAirtable(user, p, cpfVal)))
-        .then(() => window.location.href = 'pagina-homepage.html')
-        .catch(e => showError('Erro: ' + e.message))
-        .finally(() => {
-          btn.classList.remove('loading'); 
-          btn.disabled = false;
-        });
-    }
-
-    // cadastro por e-mail (novo usuário)
-    async function cadastrarUsuario() {
-      const btn = document.getElementById('cadastro-btn');
-      btn.classList.add('loading'); 
-      btn.disabled = true;
-      
-      const perfis = Array.from(document.querySelectorAll('input[name="perfil_email"]:checked')).map(i => i.value);
-      if (!perfis.length) {
-        showError('Selecione ao menos um perfil.');
-        btn.classList.remove('loading'); 
-        btn.disabled = false;
-        return;
-      }
-      
-      const nome = document.getElementById('nome-completo').value;
-      const cpfInput = document.getElementById('cpf');
-      const cpf = cpfInput.value.replace(/\D/g, '');
-      const email = document.getElementById('email').value;
-      const pwd = document.getElementById('password').value;
-      const confirmPwd = document.getElementById('confirm-password').value;
-      
-      // Validação de senha
-      if (pwd !== confirmPwd) {
-        showError('As senhas não coincidem.');
-        btn.classList.remove('loading'); 
-        btn.disabled = false;
-        return;
-      }
-      
-      if (!validarCPF(cpf)) {
-        showError('Digite um CPF válido.');
-        cpfInput.style.borderColor = "var(--error)";
-        btn.classList.remove('loading'); 
-        btn.disabled = false;
-        return;
-      }
-      
-      try {
-        const uc = await auth.createUserWithEmailAndPassword(email, pwd);
-        for (let p of perfis) {
-          await enviarUsuarioParaAirtable(uc.user, p, cpf, nome);
-        }
-        window.location.href = 'pagina-homepage.html';
-      } catch (err) {
-        showError('Erro ao cadastrar: ' + err.message);
-      } finally {
-        btn.classList.remove('loading'); 
-        btn.disabled = false;
-      }
-    }
-
-    // envia registro ao Airtable
-    async function enviarUsuarioParaAirtable(user, perfil, cpfParam, nomeParam = '') {
-      const { BASE, KEY } = AIRTABLE_CONFIG;
-      const tabela = perfil === 'cuidador' ? 'Cuidadores' : 'Clientes';
-      
-      const fields = {
-        "Nome Completo": nomeParam || user.displayName || '',
-        "CPF": cpfParam || '',
-        "E-mail": user.email || '',
-        "Fonte de cadastro": user.email.split('@')[1].split('.')[0],
-        "UID": user.uid
-      };
-      
-      if (perfil === 'cuidador') fields["Status"] = "Disponível";
-      
-      try {
-        const res = await fetch(`https://api.airtable.com/v0/${BASE}/${tabela}`, {
-          method: 'POST',
-          headers: { 
-            'Authorization': `Bearer ${KEY}`, 
-            'Content-Type': 'application/json' 
-          },
-          body: JSON.stringify({ fields })
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
         });
         
-        const j = await res.json();
-        if (j.error) throw new Error(j.error.message);
-      } catch (error) {
-        console.error('Erro ao enviar para Airtable:', error);
-        throw error;
-      }
-    }
-
-    // mantém main-content visível se não logado
-    auth.onAuthStateChanged(u => {
-      if (!u) document.getElementById('main-content').style.display = 'flex';
-    });
-  </script>
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        // Fechar menu ao clicar em um link
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        });
+        
+        // Observador para animações ao rolar
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        // Observar elementos com a classe 'fade-in'
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Botão de login redireciona para a aplicação
+        document.querySelectorAll('.btn-primary, .nav-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.classList.contains('btn-disabled')) {
+                    e.preventDefault();
+                    return;
+                }
+                window.location.href = 'https://cuide-me.vercel.app';
+            });
+        });
+        
+        // Smooth scrolling para links de âncora
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Criar elementos decorativos
+        function createDecorElements() {
+            const body = document.querySelector('body');
+            
+            const circle1 = document.createElement('div');
+            circle1.className = 'decor-circle circle-1';
+            body.appendChild(circle1);
+            
+            const circle2 = document.createElement('div');
+            circle2.className = 'decor-circle circle-2';
+            body.appendChild(circle2);
+            
+            const circle3 = document.createElement('div');
+            circle3.className = 'decor-circle circle-3';
+            body.appendChild(circle3);
+        }
+        
+        // Inicializar elementos decorativos
+        createDecorElements();
+    </script>
 </body>
 </html>
