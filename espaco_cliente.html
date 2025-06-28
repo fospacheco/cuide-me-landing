@@ -1,276 +1,240 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cuide-me - Espaço do Cliente</title>
-  <meta name="description" content="Área exclusiva para clientes da Cuide-me. Encontre cuidadores por especialidade e gerencie seus agendamentos."/>
-  <meta name="keywords" content="cuidador, espaço do cliente, perfil, agendamentos, Cuide-me"/>
-  <meta name="author" content="Cuide-me"/>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuide-me – Conectando quem cuida e quem precisa de cuidado</title>
+  <meta name="description" content="Encontre cuidadores verificados com segurança e empatia.">
+  <meta property="og:title" content="Cuide-me – Conectando quem cuida e quem precisa de cuidado">
+  <meta property="og:description" content="Encontre cuidadores verificados com segurança e empatia.">
+  <meta property="og:image" content="https://seusite.com/og-image.png">
+  <meta name="robots" content="index, follow">
   <style>
-    /* ================= SEU CSS ORIGINAL COM AJUSTES ================= */
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      color: #245063;
-      font-size: 1.08rem;
+    :root {
+      --primary: #1ba8c2;
+      --secondary: #44c7e1;
+      --text: #245063;
+      --background: #f9feff;
+      --white: #ffffff;
+      --gray-light: #e8f7fa;
+    }
+    * {
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
-    h1, h2, h3, h4 {
-      color: #1ba8c2;
-      font-weight: bold;
-      margin: 0;
+    html {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      scroll-behavior: smooth;
     }
-    .container {
-      max-width: 1200px;
-      margin: auto;
-      padding: 2rem;
+    body {
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.6;
+    }
+    a {
+      color: var(--primary);
+      text-decoration: none;
     }
     header {
-      background: #fff;
-      border-bottom: 4px solid #1ba8c2;
+      background-color: var(--white);
+      border-bottom: 4px solid var(--primary);
       padding: 1rem 2rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
     }
-    .logo-icon {
-      width: 72px;
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .logo img {
+      width: 60px;
       height: auto;
     }
-    .logo-subtitle {
-      margin-left: 1rem;
-      font-style: italic;
-      color: #333;
+    nav {
+      display: flex;
+      gap: 1.5rem;
     }
-    nav a {
-      margin-left: 1rem;
-      text-decoration: none;
-      color: #000;
-      font-weight: 600;
-      padding: .5rem;
+    main {
+      padding: 2rem;
     }
-    .logout-btn {
-      background: #1ba8c2;
-      color: #fff;
-      padding: .5rem 1rem;
-      border-radius: 12px;
-    }
-
-    #profile-section h1 {
-      font-size: 2rem;
+    .hero {
       text-align: center;
+      padding: 4rem 1rem;
+      background-color: var(--background);
+    }
+    .hero h1 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.125rem;
       margin-bottom: 2rem;
     }
-    .profile-section {
+    .btn {
+      display: inline-block;
+      padding: 0.75rem 1.5rem;
+      border-radius: 50px;
+      font-weight: 600;
+      transition: transform 0.3s ease;
+    }
+    .btn-primary {
+      background-color: var(--secondary);
+      color: var(--white);
+    }
+    .btn-primary:hover {
+      transform: scale(1.05);
+    }
+    section {
+      padding: 3rem 0;
+    }
+    .wrapper {
+      max-width: 1000px;
+      margin: auto;
+      padding: 0 1rem;
+    }
+    .steps, .testimonials {
       display: flex;
-      gap: 2rem;
       flex-wrap: wrap;
+      gap: 1.5rem;
       justify-content: center;
     }
-    .profile-card {
-      background: #fff;
-      border-radius: 1.5rem;
-      padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,.08);
-      width: 360px;
+    .step, .testimonial {
+      background: var(--background);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      flex: 1 1 300px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     }
-    .profile-header {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-      margin-bottom: 1rem;
+    .step h3, .testimonial h3 {
+      margin-bottom: 0.5rem;
+      color: var(--primary);
     }
-    .profile-pic {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: #e2ebe9;
+    h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: var(--primary);
     }
-    .profile-header h2 {
-      font-size: 1.5rem;
+    dl {
+      max-width: 800px;
+      margin: auto;
+      background: var(--background);
+      border-radius: 1rem;
+      padding: 1.5rem;
     }
-    .profile-since {
-      font-size: .9rem;
-      color: #245063;
-      text-align: left;
-      margin-top: .5rem;
-      margin-left: calc(80px + 1.5rem);
-    }
-    .profile-details {
-      margin-top: 1.5rem;
-    }
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      padding: .5rem 0;
-      border-bottom: 1px solid #e2ebe9;
-    }
-    .detail-label {
+    dt {
       font-weight: bold;
-      color: #1ba8c2;
+      margin-top: 1rem;
+      cursor: pointer;
     }
-
-    /* Busca de cuidadores */
-    .search-box {
-      background: #fff;
-      border-radius: 1.5rem;
-      padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,.08);
-      margin-top: 3rem;
-    }
-    .filter-row {
-      display: flex;
-      gap: 1rem;
-      flex-wrap: wrap;
+    dd {
+      margin-left: 1rem;
       margin-bottom: 1rem;
     }
-    select {
-      padding: .8rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
+    footer {
+      background: var(--gray-light);
+      text-align: center;
+      padding: 2rem 1rem;
+      font-size: 0.9rem;
     }
-    .caregiver-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    @media (max-width:768px) {
-      .profile-section { flex-direction: column; }
-      .filter-row { flex-direction: column; }
-      select { width: 100%; }
-    }
-    .fade-in-up {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp .6s ease forwards;
-    }
-    @keyframes fadeInUp {
-      to { opacity: 1; transform: translateY(0); }
+    @media (min-width: 600px) {
+      .steps .step, .testimonials .testimonial {
+        flex: 1 1 200px;
+      }
     }
   </style>
 </head>
 <body>
   <header>
-    <div style="display:flex;align-items:center;">
-      <img src="logo_cuide_me.png" alt="Logo Cuide-me" class="logo-icon">
-      <span class="logo-subtitle">Conectando quem cuida e quem precisa de cuidado</span>
+    <div class="logo">
+      <a href="#"><img src="logo_cuide_me.png" alt="Logo Cuide-me"></a>
+      <span>Cuide-me</span>
     </div>
     <nav>
-      <a href="https://cuide-me.vercel.app/dashboard_cliente.html" id="profile-link">Meu Perfil</a>
-      <a href="#" id="search-link">Buscar Cuidadores</a>
-      <a href="#" class="logout-btn" id="logout-btn">Sair</a>
+      <a href="#">Home</a>
+      <a href="#about">Quem somos</a>
+      <a href="#faq">FAQ</a>
+      <a href="#contact">Contato</a>
     </nav>
   </header>
-
-  <main class="container">
-    <!-- Perfil -->
-    <section id="profile-section">
-      <h1>Bem-vindo, <span id="client-name"></span>!</h1>
-      <div class="profile-section">
-        <div class="profile-card fade-in-up">
-          <div class="profile-header">
-            <img id="client-photo" alt="Foto do cliente" class="profile-pic">
-            <h2 id="client-fullname"></h2>
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">Conectando quem cuida e quem precisa de cuidado</h1>
+      <p>Encontre cuidadores verificados com segurança e empatia.</p>
+      <a href="#contact" class="btn btn-primary">Comece agora</a>
+    </section>
+    <section aria-labelledby="how-title">
+      <div class="wrapper">
+        <h2 id="how-title">Como funciona</h2>
+        <div class="steps">
+          <div class="step">
+            <h3>1. Seleção rigorosa</h3>
+            <p>Verificamos documentos e referências de cada cuidador.</p>
           </div>
-          <div class="profile-since">Cliente desde <span id="client-since"></span></div>
-          <div class="profile-details">
-            <div class="detail-row"><div class="detail-label">Bairro:</div><div id="client-bairro" class="detail-value"></div></div>
-            <div class="detail-row"><div class="detail-label">Região:</div><div id="client-regiao" class="detail-value"></div></div>
-            <div class="detail-row"><div class="detail-label">Necessidades:</div><div id="client-necessidades" class="detail-value"></div></div>
-            <div class="detail-row"><div class="detail-label">Telefone:</div><div id="client-phone" class="detail-value"></div></div>
-            <div class="detail-row"><div class="detail-label">E-mail:</div><div id="client-email" class="detail-value"></div></div>
+          <div class="step">
+            <h3>2. Escolha flexível</h3>
+            <p>Você compara perfis e decide quem atende melhor.</p>
           </div>
-        </div>
-        <div class="profile-card fade-in-up">
-          <h3>Informações de Emergência</h3>
-          <div class="profile-details">
-            <div class="detail-row"><div class="detail-label">Nome:</div><div id="emergency-name" class="detail-value"></div></div>
-            <div class="detail-row"><div class="detail-label">Telefone:</div><div id="emergency-phone" class="detail-value"></div></div>
-            <div class="detail-row"><div class="detail-label">Parentesco:</div><div id="emergency-relation" class="detail-value"></div></div>
+          <div class="step">
+            <h3>3. Suporte contínuo</h3>
+            <p>Estamos disponíveis para ajudar em toda a jornada.</p>
           </div>
-          <a href="editar-perfil.html" class="btn btn-primary" style="margin-top:1.5rem;">Editar Perfil</a>
         </div>
       </div>
     </section>
-
-    <!-- Busca de cuidadores -->
-    <section id="search-section" style="display:none;">
-      <div class="search-box">
-        <h2>Encontrar Cuidador por Especialidade</h2>
-        <div class="filter-row">
-          <div>
-            <label for="specialty-filter">Especialidade:</label>
-            <select id="specialty-filter"><option value="">Todas especialidades</option></select>
+    <section aria-labelledby="testi-title">
+      <div class="wrapper">
+        <h2 id="testi-title">Depoimentos reais</h2>
+        <div class="testimonials">
+          <div class="testimonial">
+            <h3>Sr. Feliciano</h3>
+            <p>"A cuidadora trouxe paz, carinho e confiança."</p>
           </div>
-          <div>
-            <label for="region-filter">Região:</label>
-            <select id="region-filter"><option value="">Todas regiões</option></select>
+          <div class="testimonial">
+            <h3>Dona Maria</h3>
+            <p>"Encontrei alguém atenciosa, pontual e empática."</p>
           </div>
-          <div>
-            <label for="availability-filter">Disponibilidade:</label>
-            <select id="availability-filter">
-              <option value="">Qualquer horário</option>
-              <option value="Manhã">Manhã</option>
-              <option value="Tarde">Tarde</option>
-              <option value="Noite">Noite</option>
-            </select>
+          <div class="testimonial">
+            <h3>Leonardo</h3>
+            <p>"Segurança total do início ao fim do serviço."</p>
           </div>
         </div>
-        <button id="search-btn" class="btn btn-primary">Buscar Cuidadores</button>
       </div>
-      <div id="caregiver-results">
-        <div class="caregiver-grid" id="caregiver-grid"></div>
+    </section>
+    <section id="about" aria-labelledby="about-title">
+      <div class="wrapper">
+        <h2 id="about-title">Sobre o Cuide-me</h2>
+        <p>Cuidar de alguém é um ato de amor. Oferecemos profissionais experientes e processo transparente para sua tranquilidade.</p>
+        <p>Nossa missão é conectar famílias a cuidadores com empatia e segurança, garantindo suporte contínuo e qualidade de vida.</p>
+      </div>
+    </section>
+    <section id="faq" aria-labelledby="faq-title">
+      <div class="wrapper">
+        <h2 id="faq-title">Perguntas Frequentes</h2>
+        <dl>
+          <dt>Como selecionam os cuidadores?</dt>
+          <dd>Verificamos documentos, histórico e referências antes da aprovação.</dd>
+          <dt>Posso testar antes de contratar?</dt>
+          <dd>Sim, oferecemos videochamada introdutória gratuita.</dd>
+          <dt>Como funciona o pagamento?</dt>
+          <dd>Pagamento via cartão, PIX ou boleto após confirmação do serviço.</dd>
+          <dt>Preciso de suporte durante o serviço?</dt>
+          <dd>Sim, nosso atendimento 24/7 está disponível por chat ou WhatsApp.</dd>
+        </dl>
       </div>
     </section>
   </main>
-
-  <!-- Modais e Footer (mantém seu código original) -->
-
-  <script>
-    const AIRTABLE_API_KEY  = 'patmFPPQtaRfGjO4M.0465c4e6487e5ef7dd4185af57072c803ac49f7d4b94cd7bf45eb65e48a368fd';
-    const AIRTABLE_BASE_ID  = 'appVxCKjvJAah2r27';
-    const TABLE_CLIENTES_ID = 'tblHcYbnGF4qjLC6K';
-    const VIEW_CLIENTES     = 'Grid view';
-
-    async function fetchAirtableRecords(tableId, viewName) {
-      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${tableId}?view=${encodeURIComponent(viewName)}`;
-      try {
-        const res = await fetch(url, {
-          headers: { 'Authorization': `Bearer ${AIRTABLE_API_KEY}` }
-        });
-        if (!res.ok) return [];
-        const j = await res.json();
-        return j.records || [];
-      } catch {
-        return [];
-      }
-    }
-
-    async function loadClientData() {
-      const uid = localStorage.getItem('clientUid');
-      if (!uid) return;
-      const recs = await fetchAirtableRecords(TABLE_CLIENTES_ID, VIEW_CLIENTES);
-      const rec = recs.find(r => r.fields.UID === uid);
-      if (!rec) return;
-      const f = rec.fields;
-      document.getElementById('client-name').textContent        = (f['Nome Completo']||'').split(' ')[0];
-      document.getElementById('client-fullname').textContent    = f['Nome Completo']||'';
-      document.getElementById('client-since').textContent       = new Date(rec.createdTime).getFullYear();
-      document.getElementById('client-bairro').textContent      = f.Bairro || '';
-      document.getElementById('client-regiao').textContent      = f['Região (from Bairro)'] || '';
-      document.getElementById('client-necessidades').textContent = (f.Necessidades || []).join(', ');
-      document.getElementById('client-phone').textContent       = f['Telefone/WhatsApp'] || '';
-      document.getElementById('client-email').textContent       = f['E-mail'] || '';
-    }
-
-    document.addEventListener('DOMContentLoaded', async () => {
-      await loadClientData();
-      // chamar aqui loadSpecialties(), loadRegions(), setupEventListeners()…
-    });
-  </script>
+  <footer id="contact">
+    <p><strong>E-mail:</strong> contato@cuide-me.app</p>
+    <p><strong>WhatsApp:</strong> (11) 91234-5678</p>
+    <p><strong>Endereço:</strong> Rua Exemplo, 123 - São Paulo/SP</p>
+    <p style="margin-top:1rem;">© 2025 Cuide-me. Todos os direitos reservados.</p>
+  </footer>
 </body>
 </html>
