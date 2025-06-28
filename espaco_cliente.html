@@ -9,7 +9,7 @@
   <meta name="author" content="Cuide-me"/>
 
   <style>
-    /* Estilos base mantidos */
+    /* ================= SEU CSS ORIGINAL ================= */
     body {
       font-family: 'Inter', sans-serif;
       background: linear-gradient(to bottom, #f2fbfd, #ffffff);
@@ -47,7 +47,7 @@
       color: #44c7e1;
       border: 2px solid #44c7e1;
     }
-    .section {
+    section {
       padding: 5rem 1rem;
       text-align: center;
     }
@@ -66,7 +66,6 @@
       font-size: 0.9rem;
     }
     
-    /* Header styles atualizados */
     header {
       background-color: white;
       border-bottom: 4px solid #1ba8c2;
@@ -111,7 +110,6 @@
       font-weight: 600;
     }
     
-    /* Seção de perfil */
     .profile-section {
       display: flex;
       flex-wrap: wrap;
@@ -152,7 +150,6 @@
       min-width: 120px;
     }
     
-    /* Seção de busca */
     .search-section {
       margin-top: 2rem;
     }
@@ -177,7 +174,6 @@
       background: white;
     }
     
-    /* Cards de cuidadores */
     .caregiver-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -250,7 +246,6 @@
       font-size: 0.8rem;
     }
     
-    /* Modal */
     .modal {
       display: none;
       position: fixed;
@@ -281,7 +276,6 @@
       font-weight: bold;
     }
     
-    /* Responsividade */
     @media (max-width: 768px) {
       .profile-section {
         flex-direction: column;
@@ -297,7 +291,6 @@
       }
     }
     
-    /* Animações */
     .fade-in-up {
       opacity: 0;
       transform: translateY(20px);
@@ -306,9 +299,9 @@
     @keyframes fadeInUp {
       to { opacity: 1; transform: translateY(0); }
     }
+    /* =============== FIM CSS ORIGINAL =============== */
   </style>
 </head>
-
 <body>
   <!-- Header -->
   <header>
@@ -361,7 +354,6 @@
           </div>
         </div>
         
-        <!-- Informações de Emergência -->
         <div class="profile-card">
           <h3>Informações de Emergência</h3>
           <div class="profile-details">
@@ -378,13 +370,13 @@
               <div class="detail-value" id="emergency-relation"></div>
             </div>
           </div>
-          <a href="editar-perfil.html" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-block;">Editar Perfil</a>
+          <a href="editar-perfil.html" class="btn btn-primary" style="margin-top:1.5rem;">Editar Perfil</a>
         </div>
       </div>
     </section>
-    
+
     <!-- Seção de Busca por Especialidade -->
-    <section id="search-section" style="display: none;">
+    <section id="search-section" style="display:none;">
       <div class="search-box">
         <h2>Encontrar Cuidador por Especialidade</h2>
         
@@ -431,7 +423,7 @@
       <span class="modal-close">&times;</span>
       <h3>Confirmar Contratação</h3>
       <p id="hire-modal-text"></p>
-      <div class="caregiver-actions" style="justify-content: flex-end; margin-top: 2rem;">
+      <div class="caregiver-actions" style="justify-content:flex-end;margin-top:2rem;">
         <button id="confirm-hire-btn" class="btn btn-primary">Confirmar</button>
         <button class="btn btn-secondary modal-close">Cancelar</button>
       </div>
@@ -444,7 +436,7 @@
       <span class="modal-close">&times;</span>
       <h3>Agendar Entrevista</h3>
       <p>Você será redirecionado para o calendário do cuidador para selecionar um horário disponível.</p>
-      <div class="caregiver-actions" style="justify-content: flex-end; margin-top: 2rem;">
+      <div class="caregiver-actions" style="justify-content:flex-end;margin-top:2rem;">
         <button id="confirm-interview-btn" class="btn btn-primary">Continuar</button>
         <button class="btn btn-secondary modal-close">Cancelar</button>
       </div>
@@ -457,284 +449,89 @@
     <p><strong>E-mail:</strong> contato@cuide-me.app</p>
     <p><strong>WhatsApp:</strong> (11) 91234-5678</p>
     <p><strong>Endereço:</strong> Rua Exemplo, 123 - São Paulo/SP</p>
-    <p style="margin-top: 1rem; color: #888;">© 2025 Cuide-me. Todos os direitos reservados.</p>
+    <p style="margin-top:1rem;color:#888;">© 2025 Cuide-me. Todos os direitos reservados.</p>
   </footer>
 
   <!-- Botão flutuante de atendimento -->
   <a aria-label="Fale com a gente pelo WhatsApp" class="floating-cta" href="https://wa.me/5599999999999" target="_blank" title="Fale com a gente pelo WhatsApp">📱 Atendimento rápido</a>
 
   <script>
-    // Configuração Airtable
+    // === CONFIGURAÇÃO AIRTABLE ===
     const AIRTABLE_API_KEY  = 'patmFPPQtaRfGjO4M.0465c4e6487e5ef7dd4185af57072c803ac49f7d4b94cd7bf45eb65e48a368fd';
     const AIRTABLE_BASE_ID  = 'appVxCKjvJAah2r27';
-    const TABLE_CLIENTES_ID = 'tblwcTla83jlEprw8'; // ID da sua tabela "Clientes"
+    const TABLE_CLIENTES_ID = 'tblHcYbnGF4qjLC6K';  // seu ID de tabela
 
-    // Elementos do DOM
-    const profileSection     = document.getElementById('profile-section');
-    const searchSection      = document.getElementById('search-section');
-    const profileLink        = document.getElementById('profile-link');
-    const searchLink         = document.getElementById('search-link');
-    const clientName         = document.getElementById('client-name');
-    const clientFullname     = document.getElementById('client-fullname');
-    const clientSince        = document.getElementById('client-since');
-    const clientPhone        = document.getElementById('client-phone');
-    const clientEmail        = document.getElementById('client-email');
-    const clientAddress      = document.getElementById('client-address');
-    const emergencyContact   = document.getElementById('emergency-contact');
-    const emergencyName      = document.getElementById('emergency-name');
-    const emergencyPhone     = document.getElementById('emergency-phone');
-    const emergencyRelation  = document.getElementById('emergency-relation');
-    const specialtyFilter    = document.getElementById('specialty-filter');
-    const regionFilter       = document.getElementById('region-filter');
-    const availabilityFilter = document.getElementById('availability-filter');
-    const searchBtn          = document.getElementById('search-btn');
-    const caregiverGrid      = document.getElementById('caregiver-grid');
-    const hireModal          = document.getElementById('hire-modal');
-    const interviewModal     = document.getElementById('interview-modal');
-    const hireModalText      = document.getElementById('hire-modal-text');
-    const confirmHireBtn     = document.getElementById('confirm-hire-btn');
-    const confirmInterviewBtn= document.getElementById('confirm-interview-btn');
-
-    let caregivers = [];
-    let selectedCaregiver = null;
-
-    // Carrega tudo ao iniciar
-    document.addEventListener('DOMContentLoaded', async () => {
-      await loadClientData();
-      await loadSpecialties();
-      await loadRegions();
-      setupEventListeners();
-    });
-
-    // Busca um único cliente pelo UID via filterByFormula
+    // Busca 1 registro pelo UID
     async function fetchClienteByUID(uid) {
+      console.log('→ fetchClienteByUID. UID:', uid);
       const formula = encodeURIComponent(`{UID}="${uid}"`);
       const fields = [
-        'UID',
-        'Nome Completo',
-        'Telefone',
-        'E-mail',
-        'Endereço',
-        'Contato Emergência',
-        'Nome Emergência',
-        'Telefone Emergência',
-        'Parentesco Emergência'
-      ].map(f => `fields[]=${encodeURIComponent(f)}`).join('&');
-      const url = 
+        'UID','Nome Completo','Telefone','E-mail','Endereço',
+        'Contato Emergência','Nome Emergência',
+        'Telefone Emergência','Parentesco Emergência'
+      ].map(f=>`fields[]=${encodeURIComponent(f)}`).join('&');
+      const url =
         `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${TABLE_CLIENTES_ID}` +
         `?filterByFormula=${formula}&${fields}`;
       const res = await fetch(url, {
         headers: { 'Authorization': `Bearer ${AIRTABLE_API_KEY}` }
       });
-      if (!res.ok) throw new Error(`Airtable HTTP ${res.status}`);
-      const json = await res.json();
-      return json.records[0] || null;
+      const j = await res.json();
+      console.log('→ Airtable response:', j);
+      return (j.records && j.records[0]) || null;
     }
 
-    // Carrega e preenche dados do cliente na UI
+    // Elementos do DOM
+    const clientName        = document.getElementById('client-name');
+    const clientFullname    = document.getElementById('client-fullname');
+    const clientSince       = document.getElementById('client-since');
+    const clientPhone       = document.getElementById('client-phone');
+    const clientEmail       = document.getElementById('client-email');
+    const clientAddress     = document.getElementById('client-address');
+    const emergencyContact  = document.getElementById('emergency-contact');
+    const emergencyName     = document.getElementById('emergency-name');
+    const emergencyPhone    = document.getElementById('emergency-phone');
+    const emergencyRelation = document.getElementById('emergency-relation');
+
+    // Lê o UID do localStorage
+    function getClientUid() {
+      return localStorage.getItem('clientUid');
+    }
+
+    // Carrega dados e preenche a UI
     async function loadClientData() {
-      const uid = localStorage.getItem('clientUid');
+      const uid = getClientUid();
       if (!uid) {
-        console.error('Nenhum clientUid no localStorage');
+        console.error('Nenhum clientUid encontrado');
         return;
       }
-      try {
-        const record = await fetchClienteByUID(uid);
-        if (!record) {
-          console.warn('Cliente não encontrado para UID:', uid);
-          return;
-        }
-        const f = record.fields;
-        clientName.textContent        = (f['Nome Completo']||'').split(' ')[0];
-        clientFullname.textContent    = f['Nome Completo']||'';
-        clientSince.textContent       = new Date(record.createdTime).getFullYear();
-        clientPhone.textContent       = f['Telefone']||'';
-        clientEmail.textContent       = f['E-mail']||'';
-        clientAddress.textContent     = f['Endereço']||'';
-        emergencyContact.textContent  = f['Contato Emergência']||'';
-        emergencyName.textContent     = f['Nome Emergência']||'';
-        emergencyPhone.textContent    = f['Telefone Emergência']||'';
-        emergencyRelation.textContent = f['Parentesco Emergência']||'';
-      } catch(err) {
-        console.error('Erro ao buscar cliente:', err);
-      }
-    }
-
-    // Busca genérica do Airtable
-    async function fetchAirtableData(table, view='Grid view', fields=[]) {
-      let url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}?view=${encodeURIComponent(view)}`;
-      if (fields.length) url += '&' + fields.map(f=>`fields[]=${encodeURIComponent(f)}`).join('&');
-      const res = await fetch(url, {
-        headers:{ 'Authorization':`Bearer ${AIRTABLE_API_KEY}` }
-      });
-      if(!res.ok) throw new Error(`Airtable HTTP ${res.status}`);
-      const json = await res.json();
-      return json.records;
-    }
-
-    // Popula dropdown de Especialidades
-    async function loadSpecialties() {
-      const recs = await fetchAirtableData('tblwcTla83jlEprw8','viwepuDfDPGc8GjPt',['Name','Descrição']);
-      specialtyFilter.innerHTML = '<option value="">Todas especialidades</option>';
-      recs.forEach(r=>{
-        const o = document.createElement('option');
-        o.value = o.textContent = r.fields['Name']||'';
-        specialtyFilter.appendChild(o);
-      });
-    }
-
-    // Popula dropdown de Regiões
-    async function loadRegions() {
-      const recs = await fetchAirtableData('tblmZwtzoXTs47xju','viwS2HpetYx9lsThx',['Name']);
-      regionFilter.innerHTML = '<option value="">Todas regiões</option>';
-      recs.forEach(r=>{
-        const o = document.createElement('option');
-        o.value = o.textContent = r.fields['Name']||'';
-        regionFilter.appendChild(o);
-      });
-    }
-
-    // Configura todos os event listeners
-    function setupEventListeners() {
-      profileLink.addEventListener('click', e=>{
-        e.preventDefault();
-        profileSection.style.display = 'block';
-        searchSection.style.display  = 'none';
-      });
-      searchLink.addEventListener('click', e=>{
-        e.preventDefault();
-        profileSection.style.display = 'none';
-        searchSection.style.display  = 'block';
-      });
-      searchBtn.addEventListener('click', searchCaregivers);
-      document.querySelectorAll('.modal-close').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          hireModal.style.display      = 'none';
-          interviewModal.style.display = 'none';
-        });
-      });
-      window.addEventListener('click', e=>{
-        if(e.target===hireModal)      hireModal.style.display      = 'none';
-        if(e.target===interviewModal) interviewModal.style.display = 'none';
-      });
-      confirmInterviewBtn.addEventListener('click', ()=>{
-        alert(`Você será redirecionado para o calendário de ${selectedCaregiver.name} para agendar a entrevista.`);
-        interviewModal.style.display = 'none';
-      });
-      confirmHireBtn.addEventListener('click', ()=>{
-        alert(`Contratação de ${selectedCaregiver.name} confirmada! Um e-mail foi enviado com os detalhes.`);
-        hireModal.style.display = 'none';
-      });
-    }
-
-    // Busca cuidadores (código original)
-    async function searchCaregivers() {
-      const specialty   = specialtyFilter.value;
-      const region      = regionFilter.value;
-      const availability= availabilityFilter.value;
-      caregiverGrid.innerHTML = '<p>Buscando cuidadores...</p>';
-
-      try {
-        // Simulação de dados
-        caregivers = [
-          {
-            id: 'rec1',
-            name: 'Ana Paula',
-            photo: 'cuidadora1.jpg',
-            rating: 5,
-            specialties: ['Cuidados gerais','Acompanhamento'],
-            availability: 'Manhã, Tarde',
-            region: 'Zona Sul',
-            linkedin: 'https://linkedin.com/in/ana-paula',
-            resume:   'https://example.com/resume-ana.pdf'
-          },
-          {
-            id: 'rec2',
-            name: 'Carlos',
-            photo: 'fisioterapeuta.jpg',
-            rating: 4,
-            specialties: ['Fisioterapia','Reabilitação'],
-            availability: 'Tarde, Noite',
-            region: 'Zona Oeste',
-            linkedin: 'https://linkedin.com/in/carlos',
-            resume:   'https://example.com/resume-carlos.pdf'
-          }
-        ];
-
-        let filtered = caregivers;
-        if(specialty)    filtered = filtered.filter(c=>c.specialties.some(s=>s.includes(specialty)));
-        if(region)       filtered = filtered.filter(c=>c.region.includes(region));
-        if(availability) filtered = filtered.filter(c=>c.availability.includes(availability));
-
-        displayCaregivers(filtered);
-      } catch(err) {
-        console.error('Erro ao buscar cuidadores:', err);
-        caregiverGrid.innerHTML = '<p>Ocorreu um erro ao buscar cuidadores. Por favor, tente novamente.</p>';
-      }
-    }
-
-    // Renderiza os cards de cuidadores
-    function displayCaregivers(list) {
-      caregiverGrid.innerHTML = '';
-      if(list.length === 0) {
-        caregiverGrid.innerHTML = '<p>Nenhum cuidador encontrado com os filtros selecionados.</p>';
+      const record = await fetchClienteByUID(uid);
+      if (!record) {
+        console.warn('Nenhum registro retornado para UID', uid);
         return;
       }
-      list.forEach(c => {
-        const card = document.createElement('div');
-        card.className = 'caregiver-card fade-in-up';
-        const stars = '★'.repeat(c.rating) + '☆'.repeat(5-c.rating);
-        const tags  = c.specialties.map(s=>`<span class="specialty-tag">${s}</span>`).join('');
-        card.innerHTML = `
-          <div class="caregiver-header">
-            <img src="${c.photo}" alt="${c.name}" class="caregiver-pic">
-            <div>
-              <h3 class="caregiver-name">${c.name}</h3>
-              <div class="rating">${stars}</div>
-            </div>
-          </div>
-          <div class="specialties">${tags}</div>
-          <p><strong>Disponibilidade:</strong> ${c.availability}</p>
-          <p><strong>Região:</strong> ${c.region}</p>
-          <div class="caregiver-actions">
-            <button class="btn btn-secondary btn-small view-profile" data-id="${c.id}">Ver Perfil</button>
-            <button class="btn btn-primary btn-small schedule-interview" data-id="${c.id}">Agendar Entrevista</button>
-            <button class="btn btn-primary btn-small hire-caregiver" data-id="${c.id}">Fechar Contratação</button>
-          </div>
-        `;
-        caregiverGrid.appendChild(card);
-      });
-
-      document.querySelectorAll('.view-profile').forEach(btn=>{
-        btn.addEventListener('click', e=>{
-          const id = e.target.getAttribute('data-id');
-          viewCaregiverProfile(id);
-        });
-      });
-      document.querySelectorAll('.schedule-interview').forEach(btn=>{
-        btn.addEventListener('click', e=>{
-          selectedCaregiver = caregivers.find(c=>c.id===e.target.dataset.id);
-          interviewModal.style.display = 'flex';
-        });
-      });
-      document.querySelectorAll('.hire-caregiver').forEach(btn=>{
-        btn.addEventListener('click', e=>{
-          selectedCaregiver = caregivers.find(c=>c.id===e.target.dataset.id);
-          hireModalText.innerHTML = `
-            <p><strong>Atenção:</strong> Você está prestes a contratar ${selectedCaregiver.name} sem agendar entrevista.</p>
-            <p class="warning-text">É altamente recomendado realizar uma entrevista antes da contratação.</p>
-            <p>Deseja continuar mesmo assim?</p>
-          `;
-          hireModal.style.display = 'flex';
-        });
-      });
+      const f = record.fields;
+      clientName.textContent        = (f['Nome Completo']||'').split(' ')[0];
+      clientFullname.textContent    = f['Nome Completo']||'';
+      clientSince.textContent       = new Date(record.createdTime).getFullYear();
+      clientPhone.textContent       = f['Telefone']||'';
+      clientEmail.textContent       = f['E-mail']||'';
+      clientAddress.textContent     = f['Endereço']||'';
+      emergencyContact.textContent  = f['Contato Emergência']||'';
+      emergencyName.textContent     = f['Nome Emergência']||'';
+      emergencyPhone.textContent    = f['Telefone Emergência']||'';
+      emergencyRelation.textContent = f['Parentesco Emergência']||'';
     }
 
-    // Clique em "Ver Perfil"
-    function viewCaregiverProfile(id) {
-      const c = caregivers.find(x=>x.id===id);
-      alert(`Perfil completo de ${c.name}\n\nEspecialidades: ${c.specialties.join(', ')}\n\nLinkedIn: ${c.linkedin}\n\nCurrículo: ${c.resume}`);
-    }
+    // Demais funções originais: loadSpecialties, loadRegions, setupEventListeners, searchCaregivers, displayCaregivers, viewCaregiverProfile
+    // (Copie-as exatamente como estão no seu código atual)
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadClientData();
+      // await loadSpecialties();
+      // await loadRegions();
+      // setupEventListeners();
+    });
   </script>
 </body>
 </html>
