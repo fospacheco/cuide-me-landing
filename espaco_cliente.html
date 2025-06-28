@@ -31,7 +31,7 @@
     .profile-section { display:flex; flex-wrap:wrap; gap:2rem; margin-top:2rem; align-items:flex-start; }
     .profile-card { flex:1; min-width:300px; background:#fff; border-radius:1.5rem; padding:2rem; box-shadow:0 6px 16px rgba(0,0,0,.08); }
     .profile-header { display:flex; align-items:center; gap:1.5rem; margin-bottom:1.5rem; }
-    .profile-pic { width:100px; height:100px; border-radius:50%; object-fit:cover; border:4px solid #d1f3f2; }
+    .profile-pic { width:100px; height:100px; border-radius:50%; object-fit:cover; background:#e2ebe9; }
     .profile-details .detail-row { display:flex; margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid #e2ebe9; }
     .detail-label { font-weight:bold; color:#1ba8c2; min-width:120px; }
 
@@ -72,7 +72,6 @@
 </head>
 
 <body>
-  <!-- Header -->
   <header>
     <div class="logo-container">
       <a href="pagina-homepage.html"><img src="logo_cuide_me.png" alt="Logo Cuide-me" class="logo-icon"></a>
@@ -85,40 +84,39 @@
     </nav>
   </header>
 
-  <!-- Conteúdo principal -->
   <main class="container">
-    <!-- Seção de Perfil -->
+    <!-- Perfil -->
     <section id="profile-section">
       <h1>Bem-vindo, <span id="client-name"></span>!</h1>
       <div class="profile-section">
         <div class="profile-card fade-in-up">
           <div class="profile-header">
-            <img id="client-photo" src="placeholder-profile.jpg" alt="Foto do cliente" class="profile-pic">
+            <img id="client-photo" alt="Foto do cliente" class="profile-pic">
             <div>
               <h2 id="client-fullname"></h2>
               <p>Cliente desde <span id="client-since"></span></p>
             </div>
           </div>
           <div class="profile-details">
-            <div class="detail-row"><div class="detail-label">Telefone:</div><div class="detail-value" id="client-phone"></div></div>
-            <div class="detail-row"><div class="detail-label">E-mail:</div><div class="detail-value" id="client-email"></div></div>
-            <div class="detail-row"><div class="detail-label">Endereço:</div><div class="detail-value" id="client-address"></div></div>
-            <div class="detail-row"><div class="detail-label">Contato Emergência:</div><div class="detail-value" id="emergency-contact"></div></div>
+            <div class="detail-row"><div class="detail-label">Telefone:</div><div id="client-phone" class="detail-value"></div></div>
+            <div class="detail-row"><div class="detail-label">E-mail:</div><div id="client-email" class="detail-value"></div></div>
+            <div class="detail-row"><div class="detail-label">Endereço:</div><div id="client-address" class="detail-value"></div></div>
+            <div class="detail-row"><div class="detail-label">Contato Emergência:</div><div id="emergency-contact" class="detail-value"></div></div>
           </div>
         </div>
         <div class="profile-card fade-in-up">
           <h3>Informações de Emergência</h3>
           <div class="profile-details">
-            <div class="detail-row"><div class="detail-label">Nome:</div><div class="detail-value" id="emergency-name"></div></div>
-            <div class="detail-row"><div class="detail-label">Telefone:</div><div class="detail-value" id="emergency-phone"></div></div>
-            <div class="detail-row"><div class="detail-label">Parentesco:</div><div class="detail-value" id="emergency-relation"></div></div>
+            <div class="detail-row"><div class="detail-label">Nome:</div><div id="emergency-name" class="detail-value"></div></div>
+            <div class="detail-row"><div class="detail-label">Telefone:</div><div id="emergency-phone" class="detail-value"></div></div>
+            <div class="detail-row"><div class="detail-label">Parentesco:</div><div id="emergency-relation" class="detail-value"></div></div>
           </div>
           <a href="editar-perfil.html" class="btn btn-primary" style="margin-top:1.5rem;">Editar Perfil</a>
         </div>
       </div>
     </section>
 
-    <!-- Seção de Busca por Especialidade -->
+    <!-- Busca -->
     <section id="search-section" style="display:none;">
       <div class="search-box">
         <h2>Encontrar Cuidador por Especialidade</h2>
@@ -147,7 +145,7 @@
     </section>
   </main>
 
-  <!-- Modal de Contratação -->
+  <!-- Modais -->
   <div id="hire-modal" class="modal">
     <div class="modal-content">
       <span class="modal-close">&times;</span>
@@ -160,7 +158,6 @@
     </div>
   </div>
 
-  <!-- Modal de Entrevista -->
   <div id="interview-modal" class="modal">
     <div class="modal-content">
       <span class="modal-close">&times;</span>
@@ -173,7 +170,6 @@
     </div>
   </div>
 
-  <!-- Footer -->
   <footer id="contato">
     <h3>Contato</h3>
     <p><strong>E-mail:</strong> contato@cuide-me.app</p>
@@ -181,8 +177,6 @@
     <p><strong>Endereço:</strong> Rua Exemplo, 123 – São Paulo/SP</p>
     <p style="margin-top:1rem;color:#888;">© 2025 Cuide-me. Todos os direitos reservados.</p>
   </footer>
-
-  <!-- Botão flutuante -->
   <a class="floating-cta" href="https://wa.me/5599999999999" target="_blank" aria-label="WhatsApp">📱 Atendimento rápido</a>
 
   <script>
@@ -196,37 +190,34 @@
     const REGION_TABLE_ID   = 'tblmZwtzoXTs47xju';
     const REGION_VIEW_ID    = 'viwS2HpetYx9lsThx';
 
-    // Busca genérica ao Airtable
-    async function fetchAirtable(tableId, viewId, fields=[]) {
-      let url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${tableId}?view=${viewId}`;
-      fields.forEach(f=> url += `&fields[]=${encodeURIComponent(f)}`);
+    // busca registros de uma view sem fields para evitar 422
+    async function fetchAirtableRecords(tableId, viewId) {
+      const url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${tableId}?view=${viewId}`;
       try {
-        const res = await fetch(url, { headers:{ 'Authorization':`Bearer ${AIRTABLE_API_KEY}` } });
-        if(!res.ok) {
-          const err = await res.json().catch(()=>res.status);
-          console.error(`Airtable error ${tableId}/${viewId}`, err);
+        const res = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${AIRTABLE_API_KEY}` }
+        });
+        if (!res.ok) {
+          console.error(`Airtable HTTP ${res.status} – ${tableId}/${viewId}`);
           return [];
         }
-        const j = await res.json();
-        return j.records || [];
-      } catch(e) {
-        console.error(`Airtable network error ${tableId}/${viewId}`, e);
+        const json = await res.json();
+        return json.records || [];
+      } catch (e) {
+        console.error(`Airtable network error – ${tableId}/${viewId}`, e);
         return [];
       }
     }
 
-    // Preenche perfil do cliente
+    // preenche perfil do cliente
     async function loadClientData() {
       const uid = localStorage.getItem('clientUid');
-      if(!uid) return console.error('clientUid não encontrado');
-      const records = await fetchAirtable(
-        TABLE_CLIENTES_ID, VIEW_CLIENTES_ID,
-        ['UID','Nome Completo','Telefone','E-mail','Endereço','Contato Emergência','Nome Emergência','Telefone Emergência','Parentesco Emergência']
-      );
+      if (!uid) return console.error('clientUid não encontrado no localStorage');
+      const records = await fetchAirtableRecords(TABLE_CLIENTES_ID, VIEW_CLIENTES_ID);
       console.log('→ todos clientes:', records);
-      const rec = records.find(r=>r.fields.UID===uid);
-      if(!rec) return console.error('Cliente não encontrado para UID', uid);
-      console.log('→ cliente:', rec);
+      const rec = records.find(r => r.fields.UID === uid);
+      if (!rec) return console.error('Cliente não encontrado para UID', uid);
+      console.log('→ cliente encontrado:', rec);
       const f = rec.fields;
       document.getElementById('client-name').textContent        = (f['Nome Completo']||'').split(' ')[0];
       document.getElementById('client-fullname').textContent    = f['Nome Completo']||'';
@@ -240,62 +231,54 @@
       document.getElementById('emergency-relation').textContent = f['Parentesco Emergência']||'';
     }
 
-    // Preenche dropdowns
+    // carrega dropdowns
     async function loadSpecialties() {
-      const recs = await fetchAirtable(SPECS_TABLE_ID, SPECS_VIEW_ID, ['Name','Descrição']);
-      const sel  = document.getElementById('specialty-filter');
+      const recs = await fetchAirtableRecords(SPECS_TABLE_ID, SPECS_VIEW_ID);
+      const sel = document.getElementById('specialty-filter');
       sel.innerHTML = '<option value="">Todas especialidades</option>';
-      recs.forEach(r=> {
+      recs.forEach(r=>{
         const o = document.createElement('option');
-        o.value = o.textContent = r.fields.Name||'';
+        o.value = o.textContent = r.fields.Name || '';
         sel.appendChild(o);
       });
     }
     async function loadRegions() {
-      const recs = await fetchAirtable(REGION_TABLE_ID, REGION_VIEW_ID, ['Name']);
-      const sel  = document.getElementById('region-filter');
+      const recs = await fetchAirtableRecords(REGION_TABLE_ID, REGION_VIEW_ID);
+      const sel = document.getElementById('region-filter');
       sel.innerHTML = '<option value="">Todas regiões</option>';
-      recs.forEach(r=> {
+      recs.forEach(r=>{
         const o = document.createElement('option');
-        o.value = o.textContent = r.fields.Name||'';
+        o.value = o.textContent = r.fields.Name || '';
         sel.appendChild(o);
       });
     }
 
-    // Navegação e modais
+    // setup navegação e modais
     function setupEventListeners() {
       const prof = document.getElementById('profile-section');
       const sea  = document.getElementById('search-section');
-      document.getElementById('profile-link').addEventListener('click', e=>{
-        e.preventDefault(); prof.style.display='block'; sea.style.display='none';
-      });
-      document.getElementById('search-link').addEventListener('click', e=>{
-        e.preventDefault(); prof.style.display='none'; sea.style.display='block';
-      });
+      document.getElementById('profile-link').addEventListener('click',e=>{ e.preventDefault(); prof.style.display='block'; sea.style.display='none'; });
+      document.getElementById('search-link').addEventListener('click',e=>{ e.preventDefault(); prof.style.display='none'; sea.style.display='block'; });
       document.getElementById('search-btn').addEventListener('click', searchCaregivers);
-      document.querySelectorAll('.modal-close').forEach(btn=>{
-        btn.addEventListener('click', ()=> {
-          document.getElementById('hire-modal').style.display='none';
-          document.getElementById('interview-modal').style.display='none';
-        });
+      document.querySelectorAll('.modal-close').forEach(btn=>btn.addEventListener('click',()=>{ 
+        document.getElementById('hire-modal').style.display='none';
+        document.getElementById('interview-modal').style.display='none';
+      }));
+      window.addEventListener('click', e=>{
+        if(e.target===document.getElementById('hire-modal'))      document.getElementById('hire-modal').style.display='none';
+        if(e.target===document.getElementById('interview-modal')) document.getElementById('interview-modal').style.display='none';
       });
-      window.addEventListener('click', e=> {
-        if(e.target===document.getElementById('hire-modal'))
-          document.getElementById('hire-modal').style.display='none';
-        if(e.target===document.getElementById('interview-modal'))
-          document.getElementById('interview-modal').style.display='none';
-      });
-      document.getElementById('confirm-interview-btn').addEventListener('click', ()=>{
+      document.getElementById('confirm-interview-btn').addEventListener('click',()=>{
         alert(`Você será redirecionado para o calendário de ${selectedCaregiver.name}.`);
         document.getElementById('interview-modal').style.display='none';
       });
-      document.getElementById('confirm-hire-btn').addEventListener('click', ()=>{
+      document.getElementById('confirm-hire-btn').addEventListener('click',()=>{
         alert(`Contratação de ${selectedCaregiver.name} confirmada!`);
         document.getElementById('hire-modal').style.display='none';
       });
     }
 
-    // Busca de cuidadores (seu código original de simulação/fetch)
+    // dados fictícios / sua lógica de fetch real
     let caregivers = [], selectedCaregiver = null;
     async function searchCaregivers() {
       const spec = document.getElementById('specialty-filter').value;
@@ -304,7 +287,7 @@
       const grid = document.getElementById('caregiver-grid');
       grid.innerHTML = '<p>Buscando cuidadores...</p>';
 
-      // **SIMULAÇÃO** – substitua pelo seu fetch real
+      // SIMULAÇÃO – substitua aqui pelo seu fetch real
       caregivers = [
         {id:'rec1',name:'Ana Paula',photo:'cuidadora1.jpg',rating:5,specialties:['Cuidados gerais','Acompanhamento'],availability:'Manhã, Tarde',region:'Zona Sul',linkedin:'#',resume:'#'},
         {id:'rec2',name:'Carlos',photo:'fisioterapeuta.jpg',rating:4,specialties:['Fisioterapia','Reabilitação'],availability:'Tarde, Noite',region:'Zona Oeste',linkedin:'#',resume:'#'}
@@ -361,7 +344,7 @@
       }));
     }
 
-    // Inicia tudo
+    // inicialização
     document.addEventListener('DOMContentLoaded', async ()=>{
       await loadClientData();
       await loadSpecialties();
