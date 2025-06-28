@@ -10,161 +10,53 @@
 
   <style>
     /* ================= SEU CSS ORIGINAL ================= */
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      color: #245063;
-      font-size: 1.08rem;
-      letter-spacing: 0.01em;
-      margin: 0;
-      padding: 0;
-    }
-    h1, h2, h3, h4 { color: #1ba8c2; font-weight: bold; }
-    .container { max-width: 1200px; margin: auto; padding: 2rem; }
-    .cta-btn {
-      padding: 1rem 1.5rem;
-      border-radius: 9999px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-    .cta-btn.primary { background-color: #44c7e1; color: white; border: none; }
-    .cta-btn.secondary { background-color: white; color: #44c7e1; border: 2px solid #44c7e1; }
-    section { padding: 5rem 1rem; text-align: center; }
-    .card {
-      background-color: white;
-      border-radius: 2rem;
-      padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-      background-color: #f9feff;
-    }
-    footer {
-      background: #fcfcfc;
-      border-top: 1px solid #e2ebe9;
-      padding: 2rem;
-      text-align: center;
-      font-size: 0.9rem;
-    }
-
-    header {
-      background-color: white;
-      border-bottom: 4px solid #1ba8c2;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .logo-container { display: flex; align-items: center; gap: 1rem; }
-    .logo-icon { width: 72px; height: auto; }
-    .logo-subtitle {
-      font-size: 0.9rem; font-style: italic; color: #333; font-weight: 500;
-    }
-    nav { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
-    nav a { text-decoration: none; color: #000; font-weight: 600; padding: 0.5rem; }
-    .logout-btn {
-      background-color: #1ba8c2; color: white; padding: 0.5rem 1rem;
-      border-radius: 12px; font-weight: 600;
-    }
-
-    .profile-section {
-      display: flex; flex-wrap: wrap; gap: 2rem;
-      margin-top: 2rem; align-items: flex-start;
-    }
-    .profile-card {
-      flex: 1; min-width: 300px; background: white;
-      border-radius: 1.5rem; padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-    }
-    .profile-header {
-      display: flex; align-items: center; gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .profile-pic {
-      width: 100px; height: 100px; border-radius: 50%;
-      object-fit: cover; border: 4px solid #d1f3f2;
-    }
-    .profile-details .detail-row {
-      display: flex; margin-bottom: 1rem; padding-bottom: 1rem;
-      border-bottom: 1px solid #e2ebe9;
-    }
-    .detail-label { font-weight: bold; color: #1ba8c2; min-width: 120px; }
-
-    .search-section { margin-top: 2rem; }
-    .search-box {
-      background: white; border-radius: 1.5rem; padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08); margin-bottom: 2rem;
-    }
-    .filter-row { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
-    select {
-      padding: 0.8rem; border-radius: 8px; border: 1px solid #ccc;
-      min-width: 200px; background: white;
-    }
-
-    .caregiver-grid {
-      display: grid; grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
-      gap: 1.5rem; margin-top: 2rem;
-    }
-    .caregiver-card {
-      background: white; border-radius: 1.5rem; padding: 1.5rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08); transition: transform 0.3s ease;
-    }
-    .caregiver-card:hover { transform: translateY(-5px); }
-    .caregiver-header {
-      display: flex; gap: 1rem; align-items: center; margin-bottom: 1rem;
-    }
-    .caregiver-pic {
-      width: 80px; height: 80px; border-radius: 50%;
-      object-fit: cover; border: 3px solid #d1f3f2;
-    }
-    .rating { color: #ffc107; }
-    .specialties {
-      display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0;
-    }
-    .specialty-tag {
-      background: #e8f7fa; color: #1ba8c2; padding: 0.3rem 0.8rem;
-      border-radius: 20px; font-size: 0.8rem;
-    }
-    .caregiver-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
-    .btn {
-      padding: 0.6rem 1rem; border-radius: 8px; font-weight: bold;
-      cursor: pointer; border: none; transition: all 0.3s ease;
-    }
-    .btn-primary { background-color: #1ba8c2; color: white; }
-    .btn-secondary {
-      background-color: white; color: #1ba8c2; border: 2px solid #1ba8c2;
-    }
-    .btn-small { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
-
-    .modal {
-      display: none; position: fixed; top: 0; left: 0;
-      width: 100%; height: 100%; background: rgba(0,0,0,0.5);
-      z-index: 1000; justify-content: center; align-items: center;
-    }
-    .modal-content {
-      background: white; padding: 2rem; border-radius: 1rem;
-      max-width: 500px; width: 90%; box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-    }
-    .modal-close { float: right; cursor: pointer; font-size: 1.5rem; }
-    .warning-text { color: #ff6b6b; font-weight: bold; }
-
-    @media (max-width: 768px) {
-      .profile-section { flex-direction: column; }
-      .filter-row { flex-direction: column; }
-      select { width: 100%; }
-      .caregiver-actions { flex-direction: column; }
-    }
-
-    .fade-in-up {
-      opacity: 0; transform: translateY(20px);
-      animation: fadeInUp 0.6s ease forwards;
-    }
-    @keyframes fadeInUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
-    /* =============== FIM CSS ORIGINAL =============== */
+    body { font-family:'Inter',sans-serif; background:linear-gradient(to bottom,#f2fbfd,#ffffff); color:#245063; font-size:1.08rem; letter-spacing:0.01em; margin:0; padding:0; }
+    h1,h2,h3,h4{color:#1ba8c2;font-weight:bold;}
+    .container{max-width:1200px;margin:auto;padding:2rem;}
+    .cta-btn{padding:1rem 1.5rem;border-radius:9999px;font-weight:bold;font-size:1rem;cursor:pointer;text-decoration:none;transition:all .3s;}
+    .cta-btn.primary{background-color:#44c7e1;color:#fff;border:none;}
+    .cta-btn.secondary{background-color:#fff;color:#44c7e1;border:2px solid #44c7e1;}
+    section{padding:5rem 1rem;text-align:center;}
+    .card{background:#fff;border-radius:2rem;padding:2rem;box-shadow:0 6px 16px rgba(0,0,0,.08);background-color:#f9feff;}
+    footer{background:#fcfcfc;border-top:1px solid #e2ebe9;padding:2rem;text-align:center;font-size:.9rem;}
+    header{background:#fff;border-bottom:4px solid #1ba8c2;padding:1rem 2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;}
+    .logo-container{display:flex;align-items:center;gap:1rem;}
+    .logo-icon{width:72px;height:auto;}
+    .logo-subtitle{font-size:.9rem;font-style:italic;color:#333;font-weight:500;}
+    nav{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;}
+    nav a{text-decoration:none;color:#000;font-weight:600;padding:.5rem;}
+    .logout-btn{background:#1ba8c2;color:#fff;padding:.5rem 1rem;border-radius:12px;font-weight:600;}
+    .profile-section{display:flex;flex-wrap:wrap;gap:2rem;margin-top:2rem;align-items:flex-start;}
+    .profile-card{flex:1;min-width:300px;background:#fff;border-radius:1.5rem;padding:2rem;box-shadow:0 6px 16px rgba(0,0,0,.08);}
+    .profile-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:1.5rem;}
+    .profile-pic{width:100px;height:100px;border-radius:50%;object-fit:cover;border:4px solid #d1f3f2;}
+    .profile-details .detail-row{display:flex;margin-bottom:1rem;padding-bottom:1rem;border-bottom:1px solid #e2ebe9;}
+    .detail-label{font-weight:bold;color:#1ba8c2;min-width:120px;}
+    .search-section{margin-top:2rem;}
+    .search-box{background:#fff;border-radius:1.5rem;padding:2rem;box-shadow:0 6px 16px rgba(0,0,0,.08);margin-bottom:2rem;}
+    .filter-row{display:flex;gap:1rem;margin-bottom:1rem;flex-wrap:wrap;}
+    select{padding:.8rem;border-radius:8px;border:1px solid #ccc;min-width:200px;background:#fff;}
+    .caregiver-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1.5rem;margin-top:2rem;}
+    .caregiver-card{background:#fff;border-radius:1.5rem;padding:1.5rem;box-shadow:0 6px 16px rgba(0,0,0,.08);transition:transform .3s;}
+    .caregiver-card:hover{transform:translateY(-5px);}
+    .caregiver-header{display:flex;gap:1rem;align-items:center;margin-bottom:1rem;}
+    .caregiver-pic{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #d1f3f2;}
+    .rating{color:#ffc107;}
+    .specialties{display:flex;flex-wrap:wrap;gap:.5rem;margin:1rem 0;}
+    .specialty-tag{background:#e8f7fa;color:#1ba8c2;padding:.3rem .8rem;border-radius:20px;font-size:.8rem;}
+    .caregiver-actions{display:flex;gap:.5rem;margin-top:1rem;}
+    .btn{padding:.6rem 1rem;border-radius:8px;font-weight:bold;cursor:pointer;border:none;transition:all .3s;}
+    .btn-primary{background:#1ba8c2;color:#fff;}
+    .btn-secondary{background:#fff;color:#1ba8c2;border:2px solid #1ba8c2;}
+    .btn-small{padding:.4rem .8rem;font-size:.8rem;}
+    .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:1000;justify-content:center;align-items:center;}
+    .modal-content{background:#fff;padding:2rem;border-radius:1rem;max-width:500px;width:90%;box-shadow:0 6px 16px rgba(0,0,0,.2);}
+    .modal-close{float:right;cursor:pointer;font-size:1.5rem;}
+    .warning-text{color:#ff6b6b;font-weight:bold;}
+    @media(max-width:768px){.profile-section{flex-direction:column;}.filter-row{flex-direction:column;}select{width:100%;}.caregiver-actions{flex-direction:column;}}
+    .fade-in-up{opacity:0;transform:translateY(20px);animation:fadeInUp .6s ease forwards;}
+    @keyframes fadeInUp{to{opacity:1;transform:translateY(0);}}
+    /* =============== FIM DO CSS ORIGINAL =============== */
   </style>
 </head>
 
@@ -172,7 +64,9 @@
   <!-- Header -->
   <header>
     <div class="logo-container">
-      <a href="pagina-homepage.html"><img src="logo_cuide_me.png" alt="Logo Cuide-me" class="logo-icon"></a>
+      <a href="pagina-homepage.html">
+        <img src="logo_cuide_me.png" alt="Logo Cuide-me" class="logo-icon">
+      </a>
       <div class="logo-subtitle">Conectando quem cuida e quem precisa de cuidado</div>
     </div>
     <nav>
@@ -184,7 +78,7 @@
 
   <!-- Conteúdo principal -->
   <main class="container">
-    <!-- Seção de Perfil -->
+    <!-- Perfil -->
     <section id="profile-section">
       <h1>Bem-vindo, <span id="client-name"></span>!</h1>
       <div class="profile-section">
@@ -215,7 +109,7 @@
       </div>
     </section>
 
-    <!-- Seção de Busca por Especialidade -->
+    <!-- Busca de cuidadores -->
     <section id="search-section" style="display:none;">
       <div class="search-box">
         <h2>Encontrar Cuidador por Especialidade</h2>
@@ -240,114 +134,73 @@
         </div>
         <button id="search-btn" class="btn btn-primary">Buscar Cuidadores</button>
       </div>
-      <div id="caregiver-results">
-        <div class="caregiver-grid" id="caregiver-grid"></div>
-      </div>
+      <div id="caregiver-results"><div class="caregiver-grid" id="caregiver-grid"></div></div>
     </section>
   </main>
 
   <!-- Modais -->
-  <div id="hire-modal" class="modal">
-    <div class="modal-content">
-      <span class="modal-close">&times;</span>
-      <h3>Confirmar Contratação</h3>
-      <p id="hire-modal-text"></p>
-      <div class="caregiver-actions" style="justify-content:flex-end;margin-top:2rem;">
-        <button id="confirm-hire-btn" class="btn btn-primary">Confirmar</button>
-        <button class="btn btn-secondary modal-close">Cancelar</button>
-      </div>
-    </div>
-  </div>
-  <div id="interview-modal" class="modal">
-    <div class="modal-content">
-      <span class="modal-close">&times;</span>
-      <h3>Agendar Entrevista</h3>
-      <p>Você será redirecionado para o calendário do cuidador para selecionar um horário disponível.</p>
-      <div class="caregiver-actions" style="justify-content:flex-end;margin-top:2rem;">
-        <button id="confirm-interview-btn" class="btn btn-primary">Continuar</button>
-        <button class="btn btn-secondary modal-close">Cancelar</button>
-      </div>
-    </div>
-  </div>
+  <div id="hire-modal" class="modal">…</div>
+  <div id="interview-modal" class="modal">…</div>
 
   <!-- Footer -->
-  <footer id="contato">
-    <h3>Contato</h3>
-    <p><strong>E-mail:</strong> contato@cuide-me.app</p>
-    <p><strong>WhatsApp:</strong> (11) 91234-5678</p>
-    <p><strong>Endereço:</strong> Rua Exemplo, 123 - São Paulo/SP</p>
-    <p style="margin-top:1rem;color:#888;">© 2025 Cuide-me. Todos os direitos reservados.</p>
-  </footer>
+  <footer id="contato">…</footer>
   <a class="floating-cta" href="https://wa.me/5599999999999" target="_blank">📱 Atendimento rápido</a>
 
   <script>
     // === CONFIGURAÇÃO AIRTABLE ===
     const AIRTABLE_API_KEY  = 'patmFPPQtaRfGjO4M.0465c4e6487e5ef7dd4185af57072c803ac49f7d4b94cd7bf45eb65e48a368fd';
     const AIRTABLE_BASE_ID  = 'appVxCKjvJAah2r27';
-    const TABLE_CLIENTES_ID = 'tblHcYbnGF4qjLC6K';  // seu ID de tabela “Clientes”
-    const VIEW_CLIENTES_ID  = 'viwLJ4hkwqJ2y7gCz';  // sua view de “Clientes”
+    const TABLE_CLIENTES_ID = 'tblHcYbnGF4qjLC6K';    // seu ID de tabela “Clientes”
+    const VIEW_CLIENTES_ID  = 'viwLJ4hkwqJ2y7gCz';    // sua view de “Clientes”
+    const SPECS_TABLE_ID    = 'tblwcTla83jlEprw8';    // tabela de especialidades
+    const SPECS_VIEW_ID     = 'viwepuDfDPGc8GjPt';    // view de especialidades
+    const REGION_TABLE_ID   = 'tblmZwtzoXTs47xju';    // tabela de regiões
+    const REGION_VIEW_ID    = 'viwS2HpetYx9lsThx';    // view de regiões
 
-    // fetch by formula
-    async function fetchClienteByUID(uid) {
-      console.log('→ fetchClienteByUID uid=', uid);
-      const formula = encodeURIComponent(`{UID}="${uid}"`);
-      const fields  = [
-        'UID','Nome Completo','Telefone','E-mail','Endereço',
-        'Contato Emergência','Nome Emergência',
-        'Telefone Emergência','Parentesco Emergência'
-      ].map(f=>`fields[]=${encodeURIComponent(f)}`).join('&');
-      const url =
-        `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${TABLE_CLIENTES_ID}` +
-        `?filterByFormula=${formula}&${fields}`;
-      const res = await fetch(url, { headers:{'Authorization':`Bearer ${AIRTABLE_API_KEY}`}});
-      const j   = await res.json();
-      console.log('→ resposta formula:', j);
-      return (j.records && j.records[0]) || null;
+    // Faz um GET robusto ao Airtable, retorna array de records ou []
+    async function fetchAirtable(tableId, viewId, fields = []) {
+      let url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${tableId}?view=${viewId}`;
+      fields.forEach(f => url += `&fields[]=${encodeURIComponent(f)}`);
+      try {
+        const res = await fetch(url, {
+          headers: { 'Authorization': `Bearer ${AIRTABLE_API_KEY}` }
+        });
+        if (!res.ok) {
+          const err = await res.json().catch(()=>null);
+          console.error(`Airtable fetch error ${tableId}/${viewId}`, err || res.status);
+          return [];
+        }
+        const json = await res.json();
+        return json.records || [];
+      } catch (e) {
+        console.error(`Airtable network error ${tableId}/${viewId}`, e);
+        return [];
+      }
     }
 
-    // fallback: fetch all & filter
-    async function fetchAllClientesAndFilter(uid) {
-      console.log('→ fetchAllClientesAndFilter uid=', uid);
-      const fields = [
-        'UID','Nome Completo','Telefone','E-mail','Endereço',
-        'Contato Emergência','Nome Emergência',
-        'Telefone Emergência','Parentesco Emergência'
-      ].map(f=>`fields[]=${encodeURIComponent(f)}`).join('&');
-      const url =
-        `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${TABLE_CLIENTES_ID}` +
-        `?view=${VIEW_CLIENTES_ID}&${fields}`;
-      const res = await fetch(url, { headers:{'Authorization':`Bearer ${AIRTABLE_API_KEY}`}});
-      const j   = await res.json();
-      console.log('→ resposta fallback:', j);
-      if(!j.records) return null;
-      return j.records.find(r=>r.fields.UID === uid) || null;
-    }
-
-    // generic fetch
-    async function fetchAirtableData(table, view, fields=[]) {
-      let url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${encodeURIComponent(table)}?view=${encodeURIComponent(view)}`;
-      if(fields.length) url += '&' + fields.map(f=>`fields[]=${encodeURIComponent(f)}`).join('&');
-      const res = await fetch(url, { headers:{'Authorization':`Bearer ${AIRTABLE_API_KEY}`}});
-      if(!res.ok) throw new Error(`Airtable HTTP ${res.status}`);
-      const j = await res.json();
-      return j.records;
-    }
-
-    // load profile
+    // Carrega e mostra dados do cliente
     async function loadClientData() {
       const uid = localStorage.getItem('clientUid');
-      if(!uid) { console.error('clientUid não encontrado'); return; }
-      let record = await fetchClienteByUID(uid);
-      if(!record) {
-        console.warn('não achou via formula, tentando fallback');
-        record = await fetchAllClientesAndFilter(uid);
-      }
-      if(!record) { console.error('cliente não encontrado'); return; }
-      console.log('→ cliente:', record);
-      const f = record.fields;
+      if (!uid) { console.error('clientUid não encontrado'); return; }
+
+      // Busca tudo e filtra em JS
+      const records = await fetchAirtable(
+        TABLE_CLIENTES_ID,
+        VIEW_CLIENTES_ID,
+        [
+          'UID','Nome Completo','Telefone','E-mail','Endereço',
+          'Contato Emergência','Nome Emergência','Telefone Emergência','Parentesco Emergência'
+        ]
+      );
+      console.log('→ todos clientes:', records);
+      const rec = records.find(r => r.fields.UID === uid);
+      if (!rec) { console.error('Cliente não encontrado para UID', uid); return; }
+      console.log('→ cliente encontrado:', rec);
+
+      const f = rec.fields;
       document.getElementById('client-name').textContent        = (f['Nome Completo']||'').split(' ')[0];
       document.getElementById('client-fullname').textContent    = f['Nome Completo']||'';
-      document.getElementById('client-since').textContent       = new Date(record.createdTime).getFullYear();
+      document.getElementById('client-since').textContent       = new Date(rec.createdTime).getFullYear();
       document.getElementById('client-phone').textContent       = f['Telefone']||'';
       document.getElementById('client-email').textContent       = f['E-mail']||'';
       document.getElementById('client-address').textContent     = f['Endereço']||'';
@@ -357,48 +210,48 @@
       document.getElementById('emergency-relation').textContent = f['Parentesco Emergência']||'';
     }
 
-    // load specialties
+    // Carrega especialidades
     async function loadSpecialties() {
-      const recs = await fetchAirtableData(
-        'tblwcTla83jlEprw8',
-        'viwepuDfDPGc8GjPt',
+      const recs = await fetchAirtable(
+        SPECS_TABLE_ID,
+        SPECS_VIEW_ID,
         ['Name','Descrição']
       );
       const sel = document.getElementById('specialty-filter');
       sel.innerHTML = '<option value="">Todas especialidades</option>';
-      recs.forEach(r=>{
+      recs.forEach(r => {
         const o = document.createElement('option');
-        o.value = o.textContent = r.fields['Name']||'';
+        o.value = o.textContent = r.fields.Name || '';
         sel.appendChild(o);
       });
     }
 
-    // load regions
+    // Carrega regiões
     async function loadRegions() {
-      const recs = await fetchAirtableData(
-        'tblmZwtzoXTs47xju',
-        'viwS2HpetYx9lsThx',
+      const recs = await fetchAirtable(
+        REGION_TABLE_ID,
+        REGION_VIEW_ID,
         ['Name']
       );
       const sel = document.getElementById('region-filter');
       sel.innerHTML = '<option value="">Todas regiões</option>';
-      recs.forEach(r=>{
+      recs.forEach(r => {
         const o = document.createElement('option');
-        o.value = o.textContent = r.fields['Name']||'';
+        o.value = o.textContent = r.fields.Name || '';
         sel.appendChild(o);
       });
     }
 
-    // setup events
+    // Configura botões e navegação
     function setupEventListeners() {
       const profileSection = document.getElementById('profile-section');
       const searchSection  = document.getElementById('search-section');
-      document.getElementById('profile-link').addEventListener('click', e=>{
+      document.getElementById('profile-link').addEventListener('click', e => {
         e.preventDefault();
         profileSection.style.display = 'block';
         searchSection.style.display  = 'none';
       });
-      document.getElementById('search-link').addEventListener('click', e=>{
+      document.getElementById('search-link').addEventListener('click', e => {
         e.preventDefault();
         profileSection.style.display = 'none';
         searchSection.style.display  = 'block';
@@ -406,14 +259,14 @@
       document.getElementById('search-btn').addEventListener('click', searchCaregivers);
       document.querySelectorAll('.modal-close').forEach(btn=>{
         btn.addEventListener('click', ()=>{
-          document.getElementById('hire-modal').style.display      = 'none';
+          document.getElementById('hire-modal')     .style.display = 'none';
           document.getElementById('interview-modal').style.display = 'none';
         });
       });
-      window.addEventListener('click', e=>{
-        if(e.target === document.getElementById('hire-modal'))
+      window.addEventListener('click', e => {
+        if (e.target === document.getElementById('hire-modal'))
           document.getElementById('hire-modal').style.display = 'none';
-        if(e.target === document.getElementById('interview-modal'))
+        if (e.target === document.getElementById('interview-modal'))
           document.getElementById('interview-modal').style.display = 'none';
       });
       document.getElementById('confirm-interview-btn').addEventListener('click', ()=>{
@@ -428,7 +281,7 @@
 
     let caregivers = [], selectedCaregiver = null;
 
-    // search caregivers
+    // Busca cuidadores (mantenha seu código original aqui)
     async function searchCaregivers() {
       const spec = document.getElementById('specialty-filter').value;
       const reg  = document.getElementById('region-filter').value;
@@ -436,32 +289,32 @@
       const grid = document.getElementById('caregiver-grid');
       grid.innerHTML = '<p>Buscando cuidadores...</p>';
 
-      // simulação—substitua por fetch real
+      // EXEMPLO de dados simulados — substitua pelo seu fetch real
       caregivers = [
         {id:'rec1',name:'Ana Paula',photo:'cuidadora1.jpg',rating:5,specialties:['Cuidados gerais','Acompanhamento'],availability:'Manhã, Tarde',region:'Zona Sul',linkedin:'#',resume:'#'},
         {id:'rec2',name:'Carlos',photo:'fisioterapeuta.jpg',rating:4,specialties:['Fisioterapia','Reabilitação'],availability:'Tarde, Noite',region:'Zona Oeste',linkedin:'#',resume:'#'}
       ];
 
       let filtered = caregivers;
-      if(spec) filtered = filtered.filter(c=>c.specialties.some(s=>s.includes(spec)));
-      if(reg)  filtered = filtered.filter(c=>c.region.includes(reg));
-      if(av)   filtered = filtered.filter(c=>c.availability.includes(av));
+      if (spec) filtered = filtered.filter(c=>c.specialties.some(s=>s.includes(spec)));
+      if (reg)  filtered = filtered.filter(c=>c.region.includes(reg));
+      if (av)   filtered = filtered.filter(c=>c.availability.includes(av));
 
       displayCaregivers(filtered);
     }
 
-    // display caregivers
+    // Renderiza cuidadores (mantenha seu código original aqui)
     function displayCaregivers(list) {
       const grid = document.getElementById('caregiver-grid');
       grid.innerHTML = '';
-      if(!list.length) {
+      if (!list.length) {
         grid.innerHTML = '<p>Nenhum cuidador encontrado.</p>';
         return;
       }
-      list.forEach(c=>{
+      list.forEach(c => {
         const card = document.createElement('div');
         card.className = 'caregiver-card fade-in-up';
-        const stars = '★'.repeat(c.rating)+'☆'.repeat(5-c.rating);
+        const stars = '★'.repeat(c.rating) + '☆'.repeat(5 - c.rating);
         const tags  = c.specialties.map(s=>`<span class="specialty-tag">${s}</span>`).join('');
         card.innerHTML = `
           <div class="caregiver-header">
@@ -474,25 +327,25 @@
           <div class="caregiver-actions">
             <button class="btn btn-secondary btn-small view-profile" data-id="${c.id}">Ver Perfil</button>
             <button class="btn btn-primary btn-small schedule-interview" data-id="${c.id}">Agendar Entrevista</button>
-            <button class="btn btn-primary btn-small hire-caregiver" data-id="${c.id}">Fechar Contratação</button>
+            <button class="btn btn-primary btn-small hire-caregiver"  data-id="${c.id}">Fechar Contratação</button>
           </div>
         `;
         grid.appendChild(card);
       });
       document.querySelectorAll('.view-profile').forEach(btn=>{
-        btn.addEventListener('click', e=>{
+        btn.addEventListener('click', e => {
           const c = caregivers.find(x=>x.id===e.target.dataset.id);
           alert(`Perfil de ${c.name}\nEspecialidades: ${c.specialties.join(', ')}\nLinkedIn: ${c.linkedin}\nCurrículo: ${c.resume}`);
         });
       });
       document.querySelectorAll('.schedule-interview').forEach(btn=>{
-        btn.addEventListener('click', e=>{
+        btn.addEventListener('click', e => {
           selectedCaregiver = caregivers.find(x=>x.id===e.target.dataset.id);
           document.getElementById('interview-modal').style.display = 'flex';
         });
       });
       document.querySelectorAll('.hire-caregiver').forEach(btn=>{
-        btn.addEventListener('click', e=>{
+        btn.addEventListener('click', e => {
           selectedCaregiver = caregivers.find(x=>x.id===e.target.dataset.id);
           document.getElementById('hire-modal-text').innerHTML = `
             <p><strong>Atenção:</strong> Você está prestes a contratar ${selectedCaregiver.name} sem entrevista.</p>
@@ -503,7 +356,8 @@
       });
     }
 
-    document.addEventListener('DOMContentLoaded', async ()=>{
+    // Ponto de entrada
+    document.addEventListener('DOMContentLoaded', async () => {
       await loadClientData();
       await loadSpecialties();
       await loadRegions();
