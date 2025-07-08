@@ -1,600 +1,1667 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="utf-8"/>
-  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Cuide-me - Espaço do Cliente</title>
-  <meta content="Área exclusiva para clientes da Cuide-me. Encontre cuidadores por especialidade e gerencie seus agendamentos." name="description"/>
-  <meta content="cuidador, espaço do cliente, perfil, agendamentos, Cuide-me" name="keywords"/>
-  <meta content="Cuide-me" name="author"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cuide-me | Conectando quem cuida e quem precisa de cuidado</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1ba8c2;
+            --primary-light: #44c7e1;
+            --primary-dark: #1592a8;
+            --secondary-color: #ff6b6b;
+            --accent-color: #ffc145;
+            --light-bg: #f2fbfd;
+            --white: #ffffff;
+            --dark-text: #245063;
+            --medium-text: #2d3e49;
+            --border-radius: 14px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --light-blue: #1ba8c2;
+            --gradient-bg: linear-gradient(135deg, #1ba8c2 0%, #1592a8 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(to bottom, var(--light-bg), var(--white));
+            color: var(--dark-text);
+            font-size: 15px;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4 {
+            color: var(--dark-text);
+            font-weight: 700;
+            line-height: 1.3;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        h1 { font-size: 2.4rem; margin-bottom: 1.2rem; }
+        h2 { font-size: 1.9rem; margin-bottom: 1.5rem; text-align: center; }
+        h3 { font-size: 1.3rem; margin-bottom: 0.8rem; }
+        
+        p {
+            margin-bottom: 1rem;
+            color: var(--medium-text);
+            font-size: 0.95rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .section {
+            padding: 4rem 0;
+            position: relative;
+        }
+        
+        /* Botões */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.9rem 1.8rem;
+            border-radius: 45px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-decoration: none;
+            transition: var(--transition);
+            text-align: center;
+            border: none;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+            z-index: -1;
+        }
+        
+        .btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.12);
+        }
+        
+        .btn:hover::after {
+            width: 100%;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: var(--white);
+        }
+        
+        .btn-secondary {
+            background-color: var(--white);
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+        
+        .btn-accent {
+            background-color: var(--secondary-color);
+            color: var(--white);
+        }
+        
+        .btn-disabled {
+            background-color: #cccccc;
+            color: #777777;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        /* Header */
+        header {
+            background-color: var(--white);
+            padding: 0.6rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.07);
+            border-bottom: none;
+        }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .logo-container:hover {
+            transform: scale(1.02);
+        }
+        
+        .logo-icon {
+            height: 50px;
+            width: 50px;
+            background: var(--gradient-bg);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+            box-shadow: var(--shadow);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            font-weight: 800;
+            letter-spacing: -0.3px;
+        }
+        
+        .logo-subtitle {
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--dark-text);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 0.4rem 0;
+        }
+        
+        nav a:hover {
+            color: var(--primary-color);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: var(--transition);
+            border-radius: 1px;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        .nav-btn {
+            background: var(--gradient-bg);
+            color: var(--white);
+            padding: 0.7rem 1.5rem;
+            border-radius: 45px;
+            font-size: 0.95rem;
+            box-shadow: 0 3px 12px rgba(27, 168, 194, 0.25);
+        }
+        
+        .nav-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(27, 168, 194, 0.35);
+        }
+        
+        /* Hero */
+        .hero {
+            padding: 3.5rem 0 4.5rem;
+            background: linear-gradient(135deg, #e6f7ff 0%, #f2fbfd 100%);
+            overflow: hidden;
+            position: relative;
+            border-bottom-left-radius: 70px;
+            border-bottom-right-radius: 70px;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -40%;
+            right: -10%;
+            width: 650px;
+            height: 650px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(27,168,194,0.1) 0%, rgba(255,255,255,0) 70%);
+            z-index: 0;
+        }
+        
+        .hero-container {
+            display: flex;
+            align-items: center;
+            gap: 3rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            flex: 1;
+            padding-right: 0.5rem;
+        }
+        
+        .hero-image {
+            flex: 1;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+            max-width: 480px;
+            transform: perspective(1100px) rotateY(-5deg);
+            border: 4px solid white;
+            position: relative;
+            transition: var(--transition);
+        }
+        
+        .hero-image:hover {
+            transform: perspective(1100px) rotateY(0deg);
+        }
+        
+        .hero-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+        
+        .hero-image:hover img {
+            transform: scale(1.04);
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 1.8rem;
+            flex-wrap: wrap;
+        }
+        
+        .hero-highlight {
+            color: var(--primary-color);
+            font-weight: 800;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+        }
+        
+        /* Trust Badges */
+        .trust-badges {
+            background: #f8fdff;
+            padding: 1.5rem 0;
+            border-top: 1px solid #e6f7ff;
+            border-bottom: 1px solid #e6f7ff;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .badges-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2.2rem;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 0.8rem 1.5rem;
+            background: white;
+            border-radius: 45px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+        
+        .badge:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.07);
+        }
+        
+        /* Processo */
+        .process-steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 230px;
+            max-width: 250px;
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border-top: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary-color);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: var(--transition);
+        }
+        
+        .step:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .step:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .step-number {
+            width: 50px;
+            height: 50px;
+            background: var(--gradient-bg);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin: 0 auto 1.5rem;
+            font-size: 1.3rem;
+            box-shadow: 0 4px 12px rgba(27, 168, 194, 0.25);
+        }
+        
+        .step h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.9rem;
+        }
+        
+        .step p {
+            font-size: 0.92rem;
+        }
+        
+        /* Depoimentos */
+        .testimonial-section {
+            background: linear-gradient(135deg, #f8fdff 0%, #e6f7ff 100%);
+            border-radius: 70px;
+            overflow: hidden;
+        }
+        
+        .testimonial-cards {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .testimonial {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            max-width: 340px;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(27, 168, 194, 0.1);
+        }
+        
+        .testimonial::before {
+            content: """;
+            position: absolute;
+            top: 8px;
+            left: 15px;
+            font-size: 6.5rem;
+            color: rgba(27, 168, 194, 0.05);
+            font-family: Georgia, serif;
+            line-height: 1;
+            z-index: 0;
+        }
+        
+        .testimonial:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .rating {
+            color: var(--accent-color);
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial p {
+            font-style: italic;
+            font-size: 0.92rem;
+            position: relative;
+            z-index: 1;
+            line-height: 1.6;
+        }
+        
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(27, 168, 194, 0.25);
+        }
+        
+        .author-info {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .author-name {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+        
+        .author-role {
+            font-size: 0.85rem;
+            color: #777;
+        }
+        
+        /* Valores */
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .value-card {
+            background: var(--white);
+            border-radius: var(--border-radius);
+            padding: 2rem 1.5rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border-bottom: 4px solid var(--primary-color);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .value-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .value-icon {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            transition: var(--transition);
+        }
+        
+        .value-card:hover .value-icon {
+            transform: scale(1.08);
+            color: var(--primary-dark);
+        }
+        
+        /* Sobre */
+        .company-section {
+            display: flex;
+            align-items: center;
+            gap: 3.5rem;
+            margin-top: 2.5rem;
+        }
+        
+        .company-content {
+            flex: 1;
+        }
+        
+        .company-image {
+            flex: 1;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.12);
+            transform: perspective(1100px) rotateY(5deg);
+            transition: var(--transition);
+        }
+        
+        .company-image:hover {
+            transform: perspective(1100px) rotateY(0deg);
+        }
+        
+        .company-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: var(--transition);
+        }
+        
+        .company-image:hover img {
+            transform: scale(1.04);
+        }
+        
+        /* CTA */
+        .cta-section {
+            padding: 4rem 1.5rem;
+            max-width: 950px;
+            margin: 3.5rem auto;
+            background: var(--gradient-bg);
+            color: white;
+            text-align: center;
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(27, 168, 194, 0.25);
+        }
+        
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cta-section::after {
+            content: '';
+            position: absolute;
+            bottom: -60px;
+            left: -60px;
+            width: 260px;
+            height: 260px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .cta-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .cta-section h2 {
+            color: white;
+            margin-bottom: 1.2rem;
+            font-size: 2.2rem;
+        }
+        
+        .cta-section p {
+            color: rgba(255, 255, 255, 0.9);
+            max-width: 650px;
+            margin: 0 auto 2rem;
+            font-size: 1.05rem;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            margin-top: 1.5rem;
+        }
+        
+        /* Nova seção FAQ e Você Sabia? */
+        .faq-know-section {
+            background: linear-gradient(135deg, #f8fdff 0%, #e6f7ff 100%);
+            padding: 4rem 0;
+            border-radius: 40px;
+        }
+        
+        .faq-know-container {
+            display: flex;
+            gap: 3rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .faq-column, .know-column {
+            flex: 1;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .faq-column:hover, .know-column:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .faq-column h2, .know-column h2 {
+            color: var(--primary-color);
+            margin-bottom: 1.8rem;
+            font-size: 1.8rem;
+            text-align: left;
+            border-bottom: 3px solid var(--primary-color);
+            padding-bottom: 0.8rem;
+            display: inline-block;
+        }
+        
+        .faq-item {
+            margin-bottom: 1.8rem;
+            border-bottom: 1px solid #eef9fb;
+            padding-bottom: 1.5rem;
+        }
+        
+        .faq-item:last-child {
+            margin-bottom: 0;
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        
+        .faq-question {
+            font-weight: 600;
+            font-size: 1.1rem;
+            color: var(--dark-text);
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+        
+        .faq-question i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        
+        .faq-answer {
+            color: var(--medium-text);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            padding-left: 2rem;
+        }
+        
+        .know-fact {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.2rem;
+            margin-bottom: 1.8rem;
+            padding: 1.2rem;
+            background: #f2fbfd;
+            border-radius: 12px;
+            transition: var(--transition);
+        }
+        
+        .know-fact:hover {
+            background: #e6f7ff;
+            transform: translateX(5px);
+        }
+        
+        .fact-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        
+        .fact-content h3 {
+            color: var(--primary-dark);
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .fact-content p {
+            margin: 0;
+            font-size: 0.92rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--primary-dark);
+            color: white;
+            padding: 4rem 0 2rem;
+            border-top-left-radius: 70px;
+            border-top-right-radius: 70px;
+            margin-top: 4rem;
+        }
+        
+        .footer-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .footer-col h3 {
+            color: white;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.7rem;
+        }
+        
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--accent-color);
+            border-radius: 1.5px;
+        }
+        
+        .footer-col p {
+            color: rgba(255, 255, 255, 0.85);
+        }
+        
+        .footer-links {
+            display: flex;
+            flex-direction: column;
+            gap: 0.9rem;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 6px;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.2rem;
+        }
+        
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+            font-size: 1.1rem;
+        }
+        
+        .social-icon:hover {
+            background: var(--accent-color);
+            transform: translateY(-4px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 2.5rem;
+            margin-top: 2.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.92rem;
+        }
+        
+        .legal-links {
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            margin-top: 0.9rem;
+        }
+        
+        .legal-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.85rem;
+        }
+        
+        .legal-links a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        /* Floating CTA */
+        .floating-cta {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #25D366;
+            color: white;
+            padding: 0.9rem 1.7rem;
+            border-radius: 45px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 8px 20px rgba(37, 211, 102, 0.25);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            animation: pulse 2s infinite;
+            transition: var(--transition);
+            font-size: 0.95rem;
+        }
+        
+        .floating-cta:hover {
+            background: #128C7E;
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(37, 211, 102, 0.35);
+        }
+        
+        /* Construction Notice */
+        .construction-notice {
+            background: #fff8e1;
+            border-left: 4px solid var(--accent-color);
+            padding: 0.8rem;
+            border-radius: 10px;
+            margin-top: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            max-width: 320px;
+        }
+        
+        .construction-notice i {
+            color: var(--accent-color);
+            font-size: 1.3rem;
+        }
+        
+        .construction-notice p {
+            margin: 0;
+            font-size: 0.88rem;
+            color: #856404;
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.7s ease-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .delay-1 { animation-delay: 0.2s; }
+        .delay-2 { animation-delay: 0.4s; }
+        .delay-3 { animation-delay: 0.6s; }
+        .delay-4 { animation-delay: 0.8s; }
+        
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .hero-container {
+                flex-direction: column;
+                gap: 2.5rem;
+            }
+            
+            .hero-content {
+                text-align: center;
+                padding-right: 0;
+            }
+            
+            .hero-buttons {
+                justify-content: center;
+            }
+            
+            .hero-image {
+                max-width: 550px;
+                margin: 0 auto;
+            }
+            
+            .company-section {
+                flex-direction: column;
+            }
+            
+            .badges-container {
+                gap: 1.3rem;
+            }
 
-  <style>
-    /* Estilos base mantidos */
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      color: #245063;
-      font-size: 1.08rem;
-      letter-spacing: 0.01em;
-      margin: 0;
-      padding: 0;
-    }
-    h1, h2, h3, h4 {
-      color: #1ba8c2;
-      font-weight: bold;
-    }
-    .container { 
-      max-width: 1200px; 
-      margin: auto; 
-      padding: 2rem; 
-    }
-    .cta-btn {
-      padding: 1rem 1.5rem;
-      border-radius: 9999px;
-      font-weight: bold;
-      font-size: 1rem;
-      cursor: pointer;
-      text-decoration: none;
-      transition: all 0.3s ease;
-    }
-    .cta-btn.primary {
-      background-color: #44c7e1;
-      color: white;
-      border: none;
-    }
-    .cta-btn.secondary {
-      background-color: white;
-      color: #44c7e1;
-      border: 2px solid #44c7e1;
-    }
-    .section {
-      padding: 5rem 1rem;
-      text-align: center;
-    }
-    .card {
-      background-color: white;
-      border-radius: 2rem;
-      padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-      background-color: #f9feff;
-    }
-    footer {
-      background: #fcfcfc;
-      border-top: 1px solid #e2ebe9;
-      padding: 2rem;
-      text-align: center;
-      font-size: 0.9rem;
-    }
-    
-    /* Header styles atualizados */
-    header {
-      background-color: white;
-      border-bottom: 4px solid #1ba8c2;
-      padding: 1rem 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .logo-container {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-    .logo-icon {
-      width: 72px;
-      height: auto;
-    }
-    .logo-subtitle {
-      font-size: 0.9rem;
-      font-style: italic;
-      color: #333;
-      font-weight: 500;
-    }
-    nav {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-    nav a {
-      text-decoration: none;
-      color: #000;
-      font-weight: 600;
-      padding: 0.5rem;
-    }
-    .logout-btn {
-      background-color: #1ba8c2;
-      color: white;
-      padding: 0.5rem 1rem;
-      border-radius: 12px;
-      font-weight: 600;
-    }
-    
-    /* Seção de perfil */
-    .profile-section {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 2rem;
-      margin-top: 2rem;
-      align-items: flex-start;
-    }
-    .profile-card {
-      flex: 1;
-      min-width: 300px;
-      background: white;
-      border-radius: 1.5rem;
-      padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-    }
-    .profile-header {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-    .profile-pic {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 4px solid #d1f3f2;
-    }
-    .profile-details .detail-row {
-      display: flex;
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid #e2ebe9;
-    }
-    .detail-label {
-      font-weight: bold;
-      color: #1ba8c2;
-      min-width: 120px;
-    }
-    
-    /* Seção de busca */
-    .search-section {
-      margin-top: 2rem;
-    }
-    .search-box {
-      background: white;
-      border-radius: 1.5rem;
-      padding: 2rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-      margin-bottom: 2rem;
-    }
-    .filter-row {
-      display: flex;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      flex-wrap: wrap;
-    }
-    select {
-      padding: 0.8rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-      min-width: 200px;
-      background: white;
-    }
-    
-    /* Cards de cuidadores */
-    .caregiver-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-    .caregiver-card {
-      background: white;
-      border-radius: 1.5rem;
-      padding: 1.5rem;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.08);
-      transition: transform 0.3s ease;
-    }
-    .caregiver-card:hover {
-      transform: translateY(-5px);
-    }
-    .caregiver-header {
-      display: flex;
-      gap: 1rem;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-    .caregiver-pic {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #d1f3f2;
-    }
-    .rating {
-      color: #ffc107;
-    }
-    .specialties {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      margin: 1rem 0;
-    }
-    .specialty-tag {
-      background: #e8f7fa;
-      color: #1ba8c2;
-      padding: 0.3rem 0.8rem;
-      border-radius: 20px;
-      font-size: 0.8rem;
-    }
-    .caregiver-actions {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-    .btn {
-      padding: 0.6rem 1rem;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-      border: none;
-      transition: all 0.3s ease;
-    }
-    .btn-primary {
-      background-color: #1ba8c2;
-      color: white;
-    }
-    .btn-secondary {
-      background-color: white;
-      color: #1ba8c2;
-      border: 2px solid #1ba8c2;
-    }
-    .btn-small {
-      padding: 0.4rem 0.8rem;
-      font-size: 0.8rem;
-    }
-    
-    /* Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.5);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    .modal-content {
-      background: white;
-      padding: 2rem;
-      border-radius: 1rem;
-      max-width: 500px;
-      width: 90%;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-    }
-    .modal-close {
-      float: right;
-      cursor: pointer;
-      font-size: 1.5rem;
-    }
-    .warning-text {
-      color: #ff6b6b;
-      font-weight: bold;
-    }
-    
-    /* Responsividade */
-    @media (max-width: 768px) {
-      .profile-section {
-        flex-direction: column;
-      }
-      .filter-row {
-        flex-direction: column;
-      }
-      select {
-        width: 100%;
-      }
-      .caregiver-actions {
-        flex-direction: column;
-      }
-    }
-    
-    /* Animações */
-    .fade-in-up {
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 0.6s ease forwards;
-    }
-    @keyframes fadeInUp {
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
+            .faq-know-container {
+                flex-direction: column;
+                gap: 2rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0.8rem;
+            }
+            
+            nav {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+                background: none;
+                border: none;
+                font-size: 1.6rem;
+                color: var(--dark-text);
+                cursor: pointer;
+            }
+            
+            .section {
+                padding: 3rem 0;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                max-width: 300px;
+                margin: 0 auto;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2.2rem;
+            }
+            
+            .floating-cta {
+                bottom: 18px;
+                right: 18px;
+                font-size: 0.9rem;
+                padding: 0.8rem 1.4rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+            
+            .faq-column, .know-column {
+                padding: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .step, .testimonial, .value-card {
+                min-width: 100%;
+                max-width: 100%;
+            }
+            
+            .badge {
+                min-width: 100%;
+                text-align: center;
+                justify-content: center;
+            }
+            
+            .hero-image {
+                transform: none;
+            }
+            
+            .cta-section {
+                border-radius: 35px;
+            }
+            
+            footer {
+                border-top-left-radius: 45px;
+                border-top-right-radius: 45px;
+            }
+        }
+        
+        /* Mobile Menu */
+        .mobile-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transform: translateY(-100%);
+            transition: transform 0.4s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateY(0);
+        }
+        
+        .mobile-menu a {
+            font-size: 1.5rem;
+            margin: 1.2rem 0;
+            color: var(--dark-text);
+            text-decoration: none;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .mobile-menu a:hover {
+            color: var(--primary-color);
+        }
+        
+        .close-menu {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            background: none;
+            border: none;
+            color: var(--dark-text);
+            cursor: pointer;
+        }
+        
+        /* Decorative Elements */
+        .decor-circle {
+            position: absolute;
+            border-radius: 50%;
+            z-index: -1;
+        }
+        
+        .circle-1 {
+            width: 250px;
+            height: 250px;
+            background: rgba(27, 168, 194, 0.05);
+            top: 12%;
+            left: 6%;
+        }
+        
+        .circle-2 {
+            width: 170px;
+            height: 170px;
+            background: rgba(255, 107, 107, 0.05);
+            bottom: 22%;
+            right: 11%;
+        }
+        
+        .circle-3 {
+            width: 130px;
+            height: 130px;
+            background: rgba(255, 193, 69, 0.05);
+            top: 42%;
+            right: 21%;
+        }
+    </style>
 </head>
-
 <body>
-  <!-- Header -->
-  <header>
-    <div class="logo-container">
-      <a href="pagina-homepage.html">
-        <img src="logo_cuide_me.png" alt="Logo Cuide-me" class="logo-icon">
-      </a>
-      <div class="logo-subtitle">Conectando quem cuida e quem precisa de cuidado</div>
-    </div>
-    <nav>
-      <a href="#" id="profile-link">Meu Perfil</a>
-      <a href="#" id="search-link">Buscar Cuidadores</a>
-      <a href="#" class="logout-btn" id="logout-btn">Sair</a>
-    </nav>
-  </header>
-
-  <!-- Conteúdo principal -->
-  <main class="container">
-    <!-- Seção de Perfil -->
-    <section id="profile-section">
-      <h1>Bem-vindo, <span id="client-name"></span>!</h1>
-      
-      <div class="profile-section">
-        <div class="profile-card fade-in-up">
-          <div class="profile-header">
-            <img id="client-photo" src="placeholder-profile.jpg" alt="Foto do cliente" class="profile-pic">
-            <div>
-              <h2 id="client-fullname"></h2>
-              <p>Cliente desde <span id="client-since"></span></p>
-            </div>
-          </div>
-          
-          <div class="profile-details">
-            <div class="detail-row">
-              <div class="detail-label">Telefone:</div>
-              <div class="detail-value" id="client-phone"></div>
-            </div>
-            <div class="detail-row">
-              <div class="detail-label">E-mail:</div>
-              <div class="detail-value" id="client-email"></div>
-            </div>
-            <div class="detail-row">
-              <div class="detail-label">Endereço:</div>
-              <div class="detail-value" id="client-address"></div>
-            </div>
-            <div class="detail-row">
-              <div class="detail-label">Contato Emergência:</div>
-              <div class="detail-value" id="emergency-contact"></div>
-            </div>
-          </div>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <img src="logo_cuide_me.png" style="height: 72px; width: auto;">
+                <div class="logo-text">
+                <div class="logo-subtitle">Conectando quem cuida</div>
+                </div>
+            </a>
+            
+            <nav class="desktop-nav">
+                <a href="#como-funciona">Como funciona</a>
+                <a href="#depoimentos">Depoimentos</a>
+                <a href="#valores">Valores</a>
+                <a href="#sobre">Sobre</a>
+            </nav>
+            
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
-        
-        <!-- Informações de Emergência -->
-        <div class="profile-card">
-          <h3>Informações de Emergência</h3>
-          <div class="profile-details">
-            <div class="detail-row">
-              <div class="detail-label">Nome:</div>
-              <div class="detail-value" id="emergency-name"></div>
-            </div>
-            <div class="detail-row">
-              <div class="detail-label">Telefone:</div>
-              <div class="detail-value" id="emergency-phone"></div>
-            </div>
-            <div class="detail-row">
-              <div class="detail-label">Parentesco:</div>
-              <div class="detail-value" id="emergency-relation"></div>
-            </div>
-          </div>
-          <a href="editar-perfil.html" class="btn btn-primary" style="margin-top: 1.5rem; display: inline-block;">Editar Perfil</a>
-        </div>
-      </div>
-    </section>
+    </header>
     
-    <!-- Seção de Busca por Especialidade -->
-    <section id="search-section" style="display: none;">
-      <div class="search-box">
-        <h2>Encontrar Cuidador por Especialidade</h2>
-        
-        <div class="filter-row">
-          <div>
-            <label for="specialty-filter">Especialidade:</label>
-            <select id="specialty-filter">
-              <option value="">Todas especialidades</option>
-            </select>
-          </div>
-          
-          <div>
-            <label for="region-filter">Região:</label>
-            <select id="region-filter">
-              <option value="">Todas regiões</option>
-            </select>
-          </div>
-          
-          <div>
-            <label for="availability-filter">Disponibilidade:</label>
-            <select id="availability-filter">
-              <option value="">Qualquer horário</option>
-              <option value="Manhã">Manhã</option>
-              <option value="Tarde">Tarde</option>
-              <option value="Noite">Noite</option>
-            </select>
-          </div>
+    <!-- Mobile Menu -->
+    <div class="mobile-menu">
+        <button class="close-menu">
+            <i class="fas fa-times"></i>
+        </button>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#depoimentos">Depoimentos</a>
+        <a href="#valores">Valores</a>
+        <a href="#sobre">Sobre</a>
+        <a href="https://cuide-me.vercel.app" class="btn nav-btn">
+            <i class="fas fa-sign-in-alt"></i> Acessar Plataforma
+        </a>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-container">
+            <div class="hero-content fade-in">
+                <h1>Cuide de quem você ama com <span class="hero-highlight">segurança e empatia</span></h1>
+                <p>Conectamos você a cuidadores verificados, com todo o suporte necessário para garantir o melhor cuidado para sua família. Nossa plataforma oferece tranquilidade e confiança para quem precisa de cuidados especiais.</p>
+                
+                <div class="hero-buttons">
+                    <a href="https://cuide-me.vercel.app" class="btn btn-primary">
+                        <i class="fas fa-sign-in-alt"></i> Acessar nossa Plataforma
+                    </a>
+                    <button class="btn btn-disabled">
+                        <i class="fab fa-google-play"></i> Baixar App
+                    </button>
+                </div>
+                <div class="construction-notice fade-in delay-1">
+                    <i class="fas fa-tools"></i>
+                    <p>App em construção - Em breve para Android e iOS!</p>
+                </div>
+            </div>
+            
+            <div class="hero-image fade-in delay-1">
+                <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Cuidadora e idosa sorrindo">
+            </div>
         </div>
-        
-        <button id="search-btn" class="btn btn-primary">Buscar Cuidadores</button>
-      </div>
-      
-      <div id="caregiver-results">
-        <div class="caregiver-grid" id="caregiver-grid"></div>
-      </div>
     </section>
-  </main>
 
-  <!-- Modais e Footer mantidos iguais -->
-  <div id="hire-modal" class="modal">…</div>
-  <div id="interview-modal" class="modal">…</div>
-  <footer id="contato">…</footer>
-  <a class="floating-cta" href="https://wa.me/5599999999999" target="_blank">📱 Atendimento rápido</a>
+    <!-- Trust Badges -->
+    <section class="trust-badges">
+        <div class="container badges-container">
+            <div class="badge fade-in">
+                <i class="fas fa-shield-alt"></i> Verificação rigorosa
+            </div>
+            <div class="badge fade-in delay-1">
+                <i class="fas fa-star"></i> 4.9/5 avaliações
+            </div>
+            <div class="badge fade-in delay-2">
+                <i class="fas fa-users"></i> +500 famílias atendidas
+            </div>
+            <div class="badge fade-in delay-3">
+                <i class="fas fa-heart"></i> Atendimento humanizado
+            </div>
+        </div>
+    </section>
 
-  <script>
-    // Configuração
-    const AIRTABLE_API_KEY = 'patmFPPQtaRfGjO4M.0465c4e6487e5ef7dd4185af57072c803ac49f7d4b94cd7bf45eb65e48a368fd';
-    const AIRTABLE_BASE_ID = 'appVxCKjvJAah2r27';
+    <!-- Processo -->
+    <section class="section" id="como-funciona">
+        <div class="container">
+            <h2 class="fade-in">Como funciona em 4 passos</h2>
+            
+            <div class="process-steps">
+                <div class="step fade-in">
+                    <div class="step-number">1</div>
+                    <h3>Cadastro simples</h3>
+                    <p>Conte-nos suas necessidades em 2 minutos através do nosso formulário online</p>
+                </div>
+                
+                <div class="step fade-in delay-1">
+                    <div class="step-number">2</div>
+                    <h3>Combinação perfeita</h3>
+                    <p>Nossa equipe seleciona os cuidadores mais adequados ao seu perfil</p>
+                </div>
+                
+                <div class="step fade-in delay-2">
+                    <div class="step-number">3</div>
+                    <h3>Conheça seu cuidador</h3>
+                    <p>Agende uma videochamada sem compromisso para conhecer o profissional</p>
+                </div>
+                
+                <div class="step fade-in delay-3">
+                    <div class="step-number">4</div>
+                    <h3>Cuidado contínuo</h3>
+                    <p>Acompanhamento durante todo o processo para garantir a melhor experiência</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // Helper genérico
-    async function fetchAirtableData(table, view = 'Grid view', fields = []) {
-      let url = `https://api.airtable.com/v0/${AIRTABLE_BASE_ID}/${table}?view=${encodeURIComponent(view)}`;
-      if (fields.length) {
-        url += '&' + fields.map(f => `fields[]=${encodeURIComponent(f)}`).join('&');
-      }
-      const res = await fetch(url, {
-        headers: { 'Authorization': `Bearer ${AIRTABLE_API_KEY}` }
-      });
-      if (!res.ok) throw new Error(`Airtable HTTP ${res.status}`);
-      const data = await res.json();
-      return data.records;
-    }
+    <!-- Depoimentos -->
+    <section class="section testimonial-section" id="depoimentos">
+        <div class="container">
+            <h2 class="fade-in">O que dizem nossos clientes</h2>
+            
+            <div class="testimonial-cards">
+                <div class="testimonial fade-in">
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p>"A Ana trouxe paz para nossa família. Profissional e humana como poucas! O cuidado com meu pai foi excepcional e pudemos confiar plenamente."</p>
+                    <div class="author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">Maria Silva</div>
+                            <div class="author-role">Cuidou do pai</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial fade-in delay-1">
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p>"Encontrei uma cuidadora atenciosa e com empatia real. A plataforma facilitou todo o processo e o suporte foi essencial para resolver dúvidas."</p>
+                    <div class="author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">Carlos Mendes</div>
+                            <div class="author-role">Filho da Dona Zuleide</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial fade-in delay-2">
+                    <div class="rating">
+                        <i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i>
+                    </div>
+                    <p>"Finalmente encontrei um cuidador confiável. Minha mãe está feliz e bem cuidada. A verificação de documentos me deu a segurança que precisava."</p>
+                    <div class="author">
+                        <div class="author-avatar">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="author-info">
+                            <div class="author-name">Juliana Torres</div>
+                            <div class="author-role">Filha da Dona Marta</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // Elementos DOM
-    const profileSection   = document.getElementById('profile-section');
-    const searchSection    = document.getElementById('search-section');
-    const profileLink      = document.getElementById('profile-link');
-    const searchLink       = document.getElementById('search-link');
-    const clientName       = document.getElementById('client-name');
-    const clientFullname   = document.getElementById('client-fullname');
-    const clientSince      = document.getElementById('client-since');
-    const clientPhone      = document.getElementById('client-phone');
-    const clientEmail      = document.getElementById('client-email');
-    const clientAddress    = document.getElementById('client-address');
-    const emergencyContact = document.getElementById('emergency-contact');
-    const emergencyName    = document.getElementById('emergency-name');
-    const emergencyPhone   = document.getElementById('emergency-phone');
-    const emergencyRelation= document.getElementById('emergency-relation');
-    const specialtyFilter  = document.getElementById('specialty-filter');
-    const regionFilter     = document.getElementById('region-filter');
-    const availabilityFilter = document.getElementById('availability-filter');
-    const searchBtn        = document.getElementById('search-btn');
-    const caregiverGrid    = document.getElementById('caregiver-grid');
-    const hireModal        = document.getElementById('hire-modal');
-    const interviewModal   = document.getElementById('interview-modal');
-    const hireModalText    = document.getElementById('hire-modal-text');
-    const confirmHireBtn   = document.getElementById('confirm-hire-btn');
-    const confirmInterviewBtn = document.getElementById('confirm-interview-btn');
+    <!-- Valores -->
+    <section class="section" id="valores">
+        <div class="container">
+            <h2 class="fade-in">Nossos valores</h2>
+            
+            <div class="values-grid">
+                <div class="value-card fade-in">
+                    <div class="value-icon">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <h3>Empatia</h3>
+                    <p>Presença e escuta ativa em cada interação, entendendo as necessidades emocionais e físicas de cada pessoa</p>
+                </div>
+                
+                <div class="value-card fade-in delay-1">
+                    <div class="value-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3>Segurança</h3>
+                    <p>Verificação rigorosa de documentos, histórico profissional e referências de todos os cuidadores</p>
+                </div>
+                
+                <div class="value-card fade-in delay-2">
+                    <div class="value-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h3>Confiança</h3>
+                    <p>Transparência e respeito nas relações, construindo laços duradouros entre famílias e cuidadores</p>
+                </div>
+                
+                <div class="value-card fade-in delay-3">
+                    <div class="value-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <h3>Excelência</h3>
+                    <p>Seleção criteriosa e acompanhamento contínuo para garantir o mais alto padrão de cuidado</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    let currentClient = null;
-    let caregivers     = [];
-    let selectedCaregiver = null;
+    <!-- Sobre -->
+    <section class="section" id="sobre">
+        <div class="container">
+            <h2 class="fade-in">Sobre o Cuide-me</h2>
+            <div class="company-section fade-in">
+                <div class="company-content">
+                    <h3>Nossa missão</h3>
+                    <p>A Cuide-me nasceu em 2025 como uma iniciativa inovadora e humana, com o propósito de transformar a forma como o cuidado domiciliar é oferecido no Brasil. Somos uma empresa jovem, com uma visão clara: tornar o cuidado acessível, confiável e acolhedor para todas as famílias.</p>
+                    <p>Nosso compromisso é conectar quem precisa de cuidado a profissionais qualificados e empáticos, valorizando relações de confiança e respeito. Através de tecnologia inteligente e processos transparentes, buscamos facilitar essa conexão de forma simples, segura e eficiente.</p>
+                    <div style="margin-top: 1.8rem;">
+                        <a href="https://cuide-me.vercel.app" class="btn btn-primary">
+                            <i class="fas fa-sign-in-alt"></i> Conheça a plataforma
+                        </a>
+                    </div>
+                </div>
+                <div class="company-image fade-in delay-1">
+                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Equipe Cuide-me">
+                </div>
+            </div>
+        </div>
+    </section>
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const clientId = getClientIdFromUrl();
-      await loadClientData(clientId);
-      await loadSpecialties();
-      await loadRegions();
-      setupEventListeners();
-    });
+    <!-- CTA -->
+    <section class="cta-section">
+        <div class="container cta-content">
+            <h2 class="fade-in">Pronto para encontrar o cuidador ideal?</h2>
+            <p class="fade-in">Junte-se a milhares de famílias que já encontraram cuidado de qualidade e segurança para seus entes queridos</p>
+            
+            <div class="cta-buttons fade-in">
+                <a href="https://cuide-me.vercel.app" class="btn" style="background: white; color: var(--primary-color);">
+                    <i class="fas fa-sign-in-alt"></i> Fazer Login
+                </a>
+                <a href="#como-funciona" class="btn btn-secondary">
+                    <i class="fas fa-info-circle"></i> Saiba Mais
+                </a>
+            </div>
+        </div>
+    </section>
 
-    function setupEventListeners() {
-      profileLink.addEventListener('click', e => {
-        e.preventDefault();
-        profileSection.style.display = 'block';
-        searchSection.style.display  = 'none';
-      });
-      searchLink.addEventListener('click', e => {
-        e.preventDefault();
-        profileSection.style.display = 'none';
-        searchSection.style.display  = 'block';
-      });
-      searchBtn.addEventListener('click', searchCaregivers);
-      document.querySelectorAll('.modal-close').forEach(btn => {
-        btn.addEventListener('click', () => {
-          hireModal.style.display = 'none';
-          interviewModal.style.display = 'none';
+    <!-- Nova seção FAQ e Você Sabia? -->
+    <section class="section faq-know-section">
+        <div class="container">
+            <div class="faq-know-container">
+                <!-- Coluna FAQ -->
+                <div class="faq-column fade-in">
+                    <h2>Perguntas Frequentes</h2>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-question-circle"></i>
+                            Como é feita a seleção dos cuidadores?
+                        </div>
+                        <div class="faq-answer">
+                            Nossos cuidadores passam por um rigoroso processo de seleção que inclui verificação de documentos, 
+                            histórico profissional, referências e entrevista com nossa equipe. 
+                            Apenas profissionais com experiência comprovada e perfil adequado são aprovados.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-question-circle"></i>
+                            Posso conhecer o cuidador antes de contratar?
+                        </div>
+                        <div class="faq-answer">
+                            Sim! Nossa plataforma permite que você agende uma videochamada gratuita com os cuidadores 
+                            pré-selecionados para conhecer o profissional e tirar todas as dúvidas antes de tomar sua decisão.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-question-circle"></i>
+                            Como funciona o pagamento?
+                        </div>
+                        <div class="faq-answer">
+                            O pagamento é feito de forma segura através de nossa plataforma. Você define o valor combinado 
+                            com o cuidador e faz o pagamento via cartão de crédito, PIX ou boleto bancário. 
+                            O valor só é repassado ao cuidador após a confirmação do serviço prestado.
+                        </div>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            <i class="fas fa-question-circle"></i>
+                            E se eu precisar de suporte durante o cuidado?
+                        </div>
+                        <div class="faq-answer">
+                            Nossa equipe de suporte está disponível 24/7 para qualquer necessidade. 
+                            Você pode entrar em contato via chat, telefone ou WhatsApp a qualquer momento 
+                            para resolver questões relacionadas ao cuidado prestado.
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Coluna Você Sabia? -->
+                <div class="know-column fade-in delay-1">
+                    <h2>Você Sabia?</h2>
+                    
+                    <div class="know-fact">
+                        <div class="fact-icon">
+                            <i class="fas fa-heartbeat"></i>
+                        </div>
+                        <div class="fact-content">
+                            <h3>Cuidado humano melhora a saúde</h3>
+                            <p>Estudos mostram que pacientes que recebem cuidado humanizado apresentam melhora de até 30% nos indicadores de saúde e bem-estar.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="know-fact">
+                        <div class="fact-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <div class="fact-content">
+                            <h3>Companhia reduz declínio cognitivo</h3>
+                            <p>Idosos que recebem atenção regular têm 40% menos probabilidade de desenvolver declínio cognitivo acelerado.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="know-fact">
+                        <div class="fact-icon">
+                            <i class="fas fa-home"></i>
+                        </div>
+                        <div class="fact-content">
+                            <h3>Cuidado domiciliar é preferido</h3>
+                            <p>87% dos idosos preferem receber cuidados em casa, onde se sentem mais confortáveis e seguros.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="know-fact">
+                        <div class="fact-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="fact-content">
+                            <h3>Profissionais capacitados fazem diferença</h3>
+                            <p>Cuidadores treinados podem identificar precocemente 65% dos problemas de saúde, prevenindo complicações.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="know-fact">
+                        <div class="fact-icon">
+                            <i class="fas fa-smile"></i>
+                        </div>
+                        <div class="fact-content">
+                            <h3>Qualidade de vida impacta longevidade</h3>
+                            <p>Pessoas que recebem cuidado adequado vivem em média 5 anos a mais com qualidade de vida preservada.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-container">
+                <div class="footer-col">
+                    <h3>Cuide-me</h3>
+                    <p>Conectando quem cuida e quem precisa de cuidado com segurança e empatia.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Links</h3>
+                    <div class="footer-links">
+                        <a href="#como-funciona"><i class="fas fa-chevron-right"></i> Como funciona</a>
+                        <a href="#depoimentos"><i class="fas fa-chevron-right"></i> Depoimentos</a>
+                        <a href="#valores"><i class="fas fa-chevron-right"></i> Nossos valores</a>
+                        <a href="#sobre"><i class="fas fa-chevron-right"></i> Sobre nós</a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Contato</h3>
+                    <div class="footer-links">
+                        <a href="mailto:contato@cuide-me.app">
+                            <i class="fas fa-envelope"></i> contato@cuide-me.app
+                        </a>
+                        <a href="tel:+5511912345678">
+                            <i class="fas fa-phone"></i> (11) 91234-5678
+                        </a>
+                        <a href="#">
+                            <i class="fas fa-map-marker-alt"></i> Rua Exemplo, 123 - São Paulo/SP
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <div class="footer-links">
+                        <a href="#"><i class="fas fa-file-alt"></i> Termos de Uso</a>
+                        <a href="#"><i class="fas fa-shield-alt"></i> Política de Privacidade</a>
+                        <a href="#"><i class="fas fa-cookie-bite"></i> Política de Cookies</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>© 2025 Cuide-me. Todos os direitos reservados. CNPJ: xx.xxx.xxx/0001-xx</p>
+                <div class="legal-links">
+                    <a href="#">Termos de uso</a>
+                    <a href="#">Política de privacidade</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating CTA -->
+    <a aria-label="WhatsApp" class="floating-cta" href="https://wa.me/5511912345678">
+        <i class="fab fa-whatsapp"></i> Atendimento via WhatsApp
+    </a>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const closeMenuBtn = document.querySelector('.close-menu');
+        const mobileMenu = document.querySelector('.mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.add('active');
+            document.body.style.overflow = 'hidden';
         });
-      });
-      window.addEventListener('click', e => {
-        if (e.target === hireModal) hireModal.style.display = 'none';
-        if (e.target === interviewModal) interviewModal.style.display = 'none';
-      });
-      confirmInterviewBtn.addEventListener('click', () => {
-        alert(`Você será redirecionado para o calendário de ${selectedCaregiver.name}`);
-        interviewModal.style.display = 'none';
-      });
-      confirmHireBtn.addEventListener('click', () => {
-        alert(`Contratação de ${selectedCaregiver.name} confirmada!`);
-        hireModal.style.display = 'none';
-      });
-    }
-
-    // === AQUI: função atualizada para buscar no Airtable ===
-    async function loadClientData(clientId) {
-      // 1) Busca todos os registros da tabela "Clientes"
-      const records = await fetchAirtableData(
-        'Clientes',        // substitua pelo nome (ou ID) da sua tabela de clientes
-        'Grid view',       // ou sua view personalizada
-        [
-          'Name',
-          'FullName',
-          'Since',
-          'Phone',
-          'Email',
-          'Address',
-          'EmergencyName',
-          'EmergencyPhone',
-          'EmergencyRelation',
-          'UID'            // remova se não usar campo UID
-        ]
-      );
-
-      console.log('Airtable → registros:', records);
-      console.log('Client ID:', clientId);
-
-      // 2) Encontra o registro que bate com clientId
-      const record = records.find(r =>
-        r.id === clientId || r.fields.UID === clientId
-      );
-      if (!record) {
-        console.warn('Cliente não encontrado no Airtable:', clientId);
-        return;
-      }
-
-      // 3) Atualiza a UI com os dados reais
-      const f = record.fields;
-      clientName.textContent        = f.Name               || '';
-      clientFullname.textContent    = f.FullName           || '';
-      clientSince.textContent       = f.Since              || '';
-      clientPhone.textContent       = f.Phone              || '';
-      clientEmail.textContent       = f.Email              || '';
-      clientAddress.textContent     = f.Address            || '';
-      emergencyName.textContent     = f.EmergencyName      || '';
-      emergencyPhone.textContent    = f.EmergencyPhone     || '';
-      emergencyRelation.textContent = f.EmergencyRelation  || '';
-    }
-
-    // Carregar especialidades e regiões (mesmo que antes)
-    async function loadSpecialties() {
-      const records = await fetchAirtableData('tblwcTla83jlEprw8', 'viwepuDfDPGc8GjPt', ['Name']);
-      specialtyFilter.innerHTML = '<option value="">Todas especialidades</option>';
-      records.forEach(r => {
-        const o = document.createElement('option');
-        o.value = o.textContent = r.fields.Name || '';
-        specialtyFilter.appendChild(o);
-      });
-    }
-    async function loadRegions() {
-      const records = await fetchAirtableData('tblmZwtzoXTs47xju', 'viwS2HpetYx9lsThx', ['Name']);
-      regionFilter.innerHTML = '<option value="">Todas regiões</option>';
-      records.forEach(r => {
-        const o = document.createElement('option');
-        o.value = o.textContent = r.fields.Name || '';
-        regionFilter.appendChild(o);
-      });
-    }
-
-    // Funções de busca e exibição de cuidadores (mantidas iguais ao seu código original)
-    async function searchCaregivers() { /* … */ }
-    function displayCaregivers(list) { /* … */ }
-    function viewCaregiverProfile(id) { /* … */ }
-    function openInterviewModal(id) { /* … */ }
-    function openHireModal(id) { /* … */ }
-
-    function getClientIdFromUrl() {
-      // aqui você pode extrair da URL, por exemplo:
-      // return new URLSearchParams(window.location.search).get('clientId');
-      return 'recEXEMPLO123456'; 
-    }
-  </script>
+        
+        closeMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+        
+        // Observador para animações ao rolar
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        // Observar elementos com a classe 'fade-in'
+        document.querySelectorAll('.fade-in').forEach(el => {
+            observer.observe(el);
+        });
+        
+        // Botão de login redireciona para a aplicação
+        document.querySelectorAll('.btn-primary, .nav-btn').forEach(button => {
+            button.addEventListener('click', function(e) {
+                if (this.classList.contains('btn-disabled')) {
+                    e.preventDefault();
+                    return;
+                }
+                window.location.href = 'https://cuide-me.vercel.app';
+            });
+        });
+        
+        // Smooth scrolling para links de âncora
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Fechar menu mobile após clicar em um link
+                    if (mobileMenu.classList.contains('active')) {
+                        mobileMenu.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                }
+            });
+        });
+        
+        // Criar elementos decorativos
+        function createDecorElements() {
+            const body = document.querySelector('body');
+            
+            const circle1 = document.createElement('div');
+            circle1.className = 'decor-circle circle-1';
+            body.appendChild(circle1);
+            
+            const circle2 = document.createElement('div');
+            circle2.className = 'decor-circle circle-2';
+            body.appendChild(circle2);
+            
+            const circle3 = document.createElement('div');
+            circle3.className = 'decor-circle circle-3';
+            body.appendChild(circle3);
+        }
+        
+        // Inicializar elementos decorativos
+        createDecorElements();
+    </script>
 </body>
 </html>
