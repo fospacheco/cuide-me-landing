@@ -3,7 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Content Security Policy para endurecer a segurança -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' https://cdn.jsdelivr.net;
+    style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+    font-src 'self' https://fonts.gstatic.com;
+    img-src 'self' data: https:;
+    connect-src 'self' https://sentry.io https://api.seu-backend.com;
+    frame-ancestors 'none';
+  ">
+
     <title>Cuide-me | Conectando quem cuida e quem precisa de cuidado</title>
+  <!-- Meta padrão para SEO -->
+  <meta name="description" content="Conectamos famílias e cuidadores com segurança, empatia e usabilidade para idosos.">
+
+  <!-- Meta Open Graph para redes sociais -->
+  <meta property="og:title" content="Cuide-me | Conectando quem cuida e quem precisa de cuidado">
+  <meta property="og:description" content="Plataforma de cuidadores qualificados, ratings e acompanhamento contínuo.">
+  <meta property="og:image" content="URL-da-imagem-de-capa-da-plataforma.png">
+  <meta property="og:url" content="https://seu-dominio.com/">
+
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
     <style>
@@ -1230,14 +1252,77 @@
             top: 42%;
             right: 21%;
         }
+    
+    /* Estilo para o “Skip to Content” */
+    .skip-link {
+      position: absolute;
+      top: -40px;
+      left: 0;
+      background: var(--primary-color);
+      color: var(--white);
+      padding: 0.5rem 1rem;
+      border-radius: var(--border-radius);
+      z-index: 1000;
+      text-decoration: none;
+      font-family: 'Poppins', sans-serif;
+      transition: top 0.3s;
+    }
+    .skip-link:focus {
+      top: 0;
+    }
+
+    /* Destaque aprimorado para CTA */
+    .btn-primary {
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--border-radius);
+      font-weight: 600;
+      box-shadow: 0 6px 12px rgba(27, 168, 194, 0.3);
+      transition: var(--transition);
+    }
+    .btn-primary:hover,
+    .btn-primary:focus {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(27, 168, 194, 0.4);
+    }
+    .btn-primary:focus {
+      outline: 3px solid var(--accent-color);
+      outline-offset: 2px;
+    }
+
+    
+    /* Estilo básico para o banner de cookies */
+    #cookie-banner a {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+    #cookie-banner .btn-secondary {
+      background: var(--secondary-color);
+      color: var(--white);
+      font-weight: 500;
+      transition: var(--transition);
+    }
+    #cookie-banner .btn-secondary:hover,
+    #cookie-banner .btn-secondary:focus {
+      transform: translateY(-2px);
+    }
+
     </style>
 </head>
 <body>
+    <!-- Link para pular direto ao conteúdo principal -->
+    <a href="#main-content" class="skip-link">Ir ao conteúdo principal</a>
+
+    <!-- Banner de Consentimento de Cookies -->
+    <div id="cookie-banner" class="cookie-banner" style="display:none; position:fixed; bottom:0; left:0; width:100%; background:#fff; box-shadow:0 -2px 8px rgba(0,0,0,0.1); padding:1rem; font-family:'Poppins',sans-serif; z-index:10000; text-align:center;">
+      <span>Usamos cookies para melhorar sua experiência. <a href="/pagina_politica_de_privacidade.html" target="_blank" rel="noopener">Saiba mais</a>.</span>
+      <button id="accept-cookies" class="btn btn-secondary" style="margin-left:1rem; padding:0.5rem 1rem; border:none; border-radius:var(--border-radius); cursor:pointer;">Aceitar</button>
+    </div>
+
     <!-- Header -->
     <header>
         <div class="header-container">
             <a href="#" class="logo-container">
-		<img src="logo_cuide_me.png" style="height: 80px; width: auto;">
+		<img loading="lazy" src="logo_cuide_me.png" style="height: 80px; width: auto;">
                 <div class="logo-text">
                     <div class="logo-subtitle">Cuidar com verdade. Conectar com responsabilidade.</div>
                 </div>
@@ -1255,6 +1340,7 @@
             </button>
         </div>
     </header>
+    <main id="main-content">
     
     <!-- Mobile Menu -->
     <div class="mobile-menu">
@@ -1286,7 +1372,7 @@
                 <p>Conectamos você a cuidadores verificados, com todo o suporte necessário para garantir o melhor cuidado para sua família. Nossa plataforma oferece tranquilidade e confiança para quem precisa de cuidados especiais.</p>
                 
                 <div class="hero-buttons">
-                    <a href="https://cuide-me.vercel.app/pagina_login.html" class="btn btn-primary">
+                    <a href="https://cuide-me.vercel.app/pagina_login.html" class="btn btn-primary" aria-label="Acesse a nossa plataforma Cuide-me">
                         <i class="fas fa-sign-in-alt"></i> Acesse a nossa Plataforma
                     </a>
                     <button class="btn btn-disabled">
@@ -1300,7 +1386,7 @@
             </div>
             
             <div class="hero-image fade-in delay-1">
-                <img src="cuidadora_idosa_sorrindo.png" alt="Cuidadora e idosa sorrindo">
+                <img loading="lazy" src="cuidadora_idosa_sorrindo.png" alt="Cuidadora e idosa sorrindo">
             </div>
         </div>
     </section>
@@ -1464,13 +1550,13 @@
                     <p>A Cuide-me nasceu em 2025 como uma iniciativa inovadora e humana, com o propósito de transformar a forma como o cuidado domiciliar é oferecido no Brasil. Somos uma empresa jovem, com uma visão clara: tornar o cuidado acessível, confiável e acolhedor para todas as famílias.</p>
                     <p>Nosso compromisso é conectar quem precisa de cuidado a profissionais qualificados e empáticos, valorizando relações de confiança e respeito. Através de tecnologia inteligente e processos transparentes, buscamos facilitar essa conexão de forma simples, segura e eficiente.</p>
                     <div style="margin-top: 1.8rem;">
-                        <a href="https://cuide-me.vercel.app/pagina_login.html" class="btn btn-primary">
+                        <a href="https://cuide-me.vercel.app/pagina_login.html" class="btn btn-primary" aria-label="Acesse a nossa plataforma Cuide-me">
                             <i class="fas fa-sign-in-alt"></i> Conheça a plataforma
                         </a>
                     </div>
                 </div>
                 <div class="company-image fade-in delay-1">
-                    <img src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Equipe Cuide-me">
+                    <img loading="lazy" src="https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Equipe Cuide-me">
                 </div>
             </div>
         </div>
@@ -1608,6 +1694,8 @@
     </section>
 
     <!-- Footer -->
+        </main>
+
     <footer>
         <div class="container">
             <div class="footer-container">
@@ -1758,5 +1846,18 @@
         // Inicializar elementos decorativos
         createDecorElements();
     </script>
+
+    <script>
+      // Mostra o banner se ainda não aceitou
+      if (!localStorage.getItem('cookiesAccepted')) {
+        document.getElementById('cookie-banner').style.display = 'flex';
+      }
+      // Ao clicar em “Aceitar”
+      document.getElementById('accept-cookies').addEventListener('click', function() {
+        localStorage.setItem('cookiesAccepted', 'true');
+        document.getElementById('cookie-banner').remove();
+      });
+    </script>
+
 </body>
 </html>
