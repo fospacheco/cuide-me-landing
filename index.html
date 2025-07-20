@@ -94,13 +94,12 @@
     }
     .convite-logo {
       width: 110px;
-      height: 110px;
-      object-fit: contain;
-      background: none;
-      border-radius: 50%;
-      margin-bottom: 0.7em;
-      box-shadow: none;
+      height: auto;
       display: block;
+      margin: 0 auto 0.7em auto;
+      background: none;
+      border-radius: 0;
+      box-shadow: none;
     }
     .convite-titulo {
       display: block;
@@ -166,7 +165,7 @@
       .convite-hero-cuide-me h2 {
         font-size: 1.02rem;
       }
-      .convite-logo { width: 70px; height: 70px;}
+      .convite-logo { width: 70px; }
     }
     /* FIM BLOCO DE CONVOCAÇÃO */
     .hero p {
@@ -409,12 +408,12 @@
 <body>
   <header>
     <img src="logo_cuide_me.png" alt="Logo Cuide-me">
-    <div style="font-family:'Montserrat';font-weight:700;color:var(--primary-color);font-size:0.8rem;">Cuidar com verdade. Conectar com responsabilidade.</div>
+    <div style="font-family:'Montserrat';font-weight:700;color:var(--primary-color);font-size:1.3rem;">Seja um cuidador parceiro</div>
   </header>
-  <div class="convite-hero-cuide-me" role="status" aria-live="polite">
+
   <section class="hero" role="region" aria-labelledby="hero-title">
     <h1 id="hero-title">Faça a diferença na vida de alguém</h1>
-    
+    <div class="convite-hero-cuide-me" role="status" aria-live="polite">
       <img src="logo_cuide_me.png" alt="Logo Cuide-me" class="convite-logo">
       <h2>
         <span class="convite-titulo">Junte-se ao movimento</span>
