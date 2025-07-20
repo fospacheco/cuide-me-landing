@@ -2,161 +2,171 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Política de Privacidade | Cuide-me</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Política de Privacidade Cuide-me - Segurança e transparência para clientes e especialistas.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Política de Privacidade | Cuide-me">
+  <meta property="og:description" content="Veja como seus dados são protegidos na plataforma Cuide-me, referência em conexão segura entre famílias e cuidadores.">
+  <meta property="og:image" content="logo_cuide_me.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
+    :root {
+      --primary-color: #1ba8c2;
+      --primary-light: #44c7e1;
+      --dark-text: #245063;
+      --white: #ffffff;
     }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Poppins', 'Montserrat', Arial, sans-serif;
       background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      color: #245063;
+      color: var(--dark-text);
       margin: 0;
       padding: 0;
     }
     .container {
-      width: 100%;
-      padding: 2rem 1rem;
-      background: white;
-    }
-    .content {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
+      max-width: 900px;
+      margin: 3rem auto;
+      background: var(--white);
+      border-radius: 18px;
       box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+      padding: 2.5rem 1.5rem;
     }
     h1, h2 {
-      color: #1ba8c2;
+      color: var(--primary-color);
+      font-family: 'Montserrat', sans-serif;
     }
-    h1 {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-    }
-    h2 {
-      font-size: 1.25rem;
-      margin-top: 2rem;
-    }
+    h1 { font-size: 2.1rem; }
+    h2 { font-size: 1.22rem; margin-top: 2rem; }
     p, li {
-      font-size: 1rem;
-      line-height: 1.6;
+      font-size: 1.07rem;
+      line-height: 1.7;
       color: #2e3a43;
     }
-    ul {
-      padding-left: 1.2rem;
-    }
-    a {
-      color: #00aacc;
-      text-decoration: underline;
-    }
-    footer {
-      text-align: center;
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      color: #6b7c86;
-    }
-    @media (min-width: 768px) {
-      h1 {
-        font-size: 2rem;
-      }
-      h2 {
-        font-size: 1.3rem;
-      }
-      p, li {
-        font-size: 1.05rem;
-      }
-    }
-      .back-button {
+    ul { padding-left: 1.3rem; }
+    a { color: var(--primary-color); text-decoration: underline; }
+    .back-button {
       display: inline-block;
-      background-color: #3ddad7;
-      color: white;
+      background-color: var(--primary-light);
+      color: var(--white);
       padding: 0.9rem 1.2rem;
       border-radius: 50px;
       font-weight: bold;
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      transition: opacity 0.2s ease-in-out;
+      margin-top: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      transition: opacity 0.2s;
     }
-    .back-button:hover {
-      opacity: 0.8;
+    .back-button:hover { opacity: 0.8; }
+    @media (max-width: 700px) {
+      .container { padding: 1.3rem 0.8rem; }
+      h1 { font-size: 1.45rem; }
     }
-</style>
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="content">
-      <h1>Política de Privacidade</h1>
-      <p>Esta política descreve como a Cuide-me coleta, usa e protege seus dados.</p>
+  <div class="container" role="main" aria-labelledby="privacy-title">
+    <h1 id="privacy-title">Política de Privacidade Cuide-me</h1>
+    <p>
+      A <strong>Cuide-me</strong> valoriza a segurança, a privacidade e a transparência no uso dos dados pessoais dos seus usuários – sejam clientes, familiares ou especialistas/cuidadores. Esta política explica como coletamos, utilizamos, armazenamos, protegemos e compartilhamos seus dados na nossa plataforma.
+    </p>
 
-      <h2>1. Quem somos</h2>
-      <p>O Cuide-me é uma plataforma digital que conecta cuidadores verificados a pessoas e famílias que precisam de apoio domiciliar.</p>
+    <h2>1. Quem somos</h2>
+    <p>
+      Somos uma plataforma digital que conecta famílias a cuidadores verificados, priorizando o cuidado humanizado e a proteção de dados pessoais em conformidade com a Lei Geral de Proteção de Dados (Lei 13.709/2018 – LGPD).
+    </p>
 
-      <h2>2. Quais dados coletamos?</h2>
-      <ul>
-        <li>Dados de cadastro: nome, e-mail, telefone, CPF, endereço, data de nascimento.</li>
-        <li>Perfil profissional (cuidador): formação, experiência, certificados.</li>
-        <li>Uso da plataforma: acessos, interações, localização (com consentimento).</li>
-        <li>Pagamentos: dados de transação, split de pagamentos e moeda virtual.</li>
-      </ul>
+    <h2>2. Quais dados coletamos?</h2>
+    <p>Podemos coletar as seguintes informações, sempre que necessário e mediante seu consentimento:</p>
+    <ul>
+      <li>Nome completo, e-mail, telefone, CPF, endereço, data de nascimento;</li>
+      <li>Dados profissionais (formação, experiência, certificados, currículo, LinkedIn, foto);</li>
+      <li>Preferências, histórico de serviços, avaliações e mensagens trocadas via plataforma;</li>
+      <li>Informações de pagamento, transações e dados bancários criptografados;</li>
+      <li>Dados de uso e acesso (logs, cookies, IP, localização, dispositivo);</li>
+      <li>Informações fornecidas voluntariamente via chat, suporte ou chatbot.</li>
+    </ul>
 
-      <h2>3. Como usamos esses dados?</h2>
-      <ul>
-        <li>Para conectar cuidadores e clientes com segurança.</li>
-        <li>Personalizar experiência e melhorar serviços.</li>
-        <li>Cumprir a LGPD e demais obrigações legais.</li>
-        <li>Prevenir fraudes e garantir segurança.</li>
-        <li>Enviar comunicações útis (com opção de descadastro).</li>
-      </ul>
+    <h2>3. Para que usamos seus dados?</h2>
+    <ul>
+      <li>Para viabilizar o funcionamento da plataforma e promover conexões seguras entre clientes e cuidadores;</li>
+      <li>Para autenticar usuários, prevenir fraudes e garantir a integridade do ambiente;</li>
+      <li>Para análise e melhoria de experiência, recomendações e personalização de serviços;</li>
+      <li>Para cumprir obrigações legais e regulatórias, inclusive de retenção e auditoria;</li>
+      <li>Para enviar comunicações úteis, informativas ou transacionais (com opção de descadastro);</li>
+      <li>Para atendimento via chatbot e suporte humano, inclusive registro de interações para melhoria do serviço.</li>
+    </ul>
 
-      <h2>4. Compartilhamento com terceiros</h2>
-      <p>Compartilhamos dados com:</p>
-      <ul>
-        <li>Firebase Authentication</li>
-        <li>Processadores de pagamento</li>
-        <li>Airtable</li>
-        <li>Autoridades legais (quando exigido)</li>
-      </ul>
-      <p><strong>Nunca vendemos seus dados.</strong></p>
+    <h2>4. Compartilhamento de dados</h2>
+    <p>
+      A Cuide-me poderá compartilhar dados pessoais apenas quando estritamente necessário, e com:
+    </p>
+    <ul>
+      <li>Plataformas de autenticação (como Firebase, Google Auth, etc.);</li>
+      <li>Meios de pagamento e processadores financeiros;</li>
+      <li>Plataformas de análise de dados e comunicação (ex: Airtable, e-mail, WhatsApp, chatbot);</li>
+      <li>Autoridades legais e órgãos reguladores, em cumprimento à lei;</li>
+      <li>Parceiros e fornecedores, exclusivamente para execução dos serviços contratados.</li>
+    </ul>
+    <p>
+      <strong>Jamais vendemos, alugamos ou comercializamos seus dados pessoais.</strong>
+    </p>
 
-      <h2>5. Cookies e tecnologias similares</h2>
-      <p>Utilizamos cookies para melhorar sua navegação, guardar preferências e coletar dados de uso anônimos.</p>
+    <h2>5. Como protegemos seus dados?</h2>
+    <ul>
+      <li>Utilizamos criptografia de ponta em dados sensíveis (como CPF e dados bancários);</li>
+      <li>Implementamos controle rígido de acesso e autenticação em múltiplos fatores para administradores;</li>
+      <li>Monitoramos acessos, detectamos e bloqueamos comportamentos suspeitos automaticamente;</li>
+      <li>Armazenamos dados em servidores com alto padrão de segurança, auditoria e redundância;</li>
+      <li>Utilizamos práticas de segurança, revisão de código e atualização contínua da infraestrutura.</li>
+    </ul>
 
-      <h2>6. Seus direitos</h2>
-      <p>Você pode:</p>
-      <ul>
-        <li>Acessar, corrigir ou excluir seus dados.</li>
-        <li>Revogar consentimentos.</li>
-        <li>Solicitar informações sobre compartilhamento.</li>
-      </ul>
-      <p>Solicite pelo e-mail <a href="mailto:privacidade@cuide-me.app">privacidade@cuide-me.app</a>.</p>
+    <h2>6. Direitos do titular</h2>
+    <p>
+      Você pode, a qualquer momento:
+    </p>
+    <ul>
+      <li>Solicitar acesso, correção, atualização ou exclusão de seus dados pessoais;</li>
+      <li>Revogar consentimentos e limitar o uso de determinadas informações;</li>
+      <li>Obter informações sobre o compartilhamento de seus dados com terceiros;</li>
+      <li>Solicitar portabilidade dos dados e explicações sobre decisões automatizadas.</li>
+    </ul>
+    <p>
+      Para exercer seus direitos, envie um e-mail para <a href="mailto:cuideme.cuidados@gmail.com">cuideme.cuidados@gmail.com</a>.
+    </p>
 
-      <h2>7. Armazenamento e segurança</h2>
-      <p>Utilizamos criptografia, controle de acesso e monitoramento para manter seus dados seguros.</p>
+    <h2>7. Cookies e tecnologias similares</h2>
+    <p>
+      Utilizamos cookies e tecnologias equivalentes para melhorar sua navegação, personalizar conteúdo, armazenar preferências, analisar uso da plataforma e oferecer funcionalidades de segurança. Você pode gerenciar cookies nas configurações do seu navegador.
+    </p>
 
-      <h2>8. Retenção de dados</h2>
-      <p>Os dados são mantidos pelo tempo necessário para:</p>
-      <ul>
-        <li>Execução do serviço</li>
-        <li>Obrigações legais</li>
-        <li>Defesa em processos</li>
-      </ul>
+    <h2>8. Retenção e exclusão de dados</h2>
+    <ul>
+      <li>Seus dados são mantidos enquanto sua conta estiver ativa e pelo tempo necessário ao cumprimento de obrigações legais e para defesa em processos;</li>
+      <li>Após solicitação de exclusão ou encerramento da conta, mantemos apenas informações essenciais por prazo legalmente exigido.</li>
+    </ul>
 
-      <h2>9. Atualizações</h2>
-      <p>Esta política pode ser alterada. Notificaremos você com antecedência razoável.</p>
+    <h2>9. Transferência internacional de dados</h2>
+    <p>
+      Parte da infraestrutura do Cuide-me pode estar hospedada em servidores fora do Brasil. Garantimos que todo o tratamento e transferência respeita padrões internacionais de segurança e a LGPD.
+    </p>
 
-      <h2>10. Fale com a gente</h2>
-      <p>DPO: <a href="mailto:privacidade@cuide-me.app">privacidade@cuide-me.app</a><br>WhatsApp: (11) 91234-5678</p>
+    <h2>10. Atualizações desta política</h2>
+    <p>
+      Esta política poderá ser alterada a qualquer momento para refletir mudanças legais ou operacionais. Notificações de mudanças relevantes serão comunicadas via e-mail ou pela própria plataforma.
+    </p>
 
-      <footer>
-        Versão 1.0 &mdash; Atualizada em 17/06/2025<br>
-        &copy; 2025 Cuide-me. Todos os direitos reservados.
-      </footer>
-      <div style="text-align: center; margin: 2rem 0;">
-        <a href="pagina-homepage.html" class="back-button">Voltar à Página inicial</a>
-      </div>
+    <h2>11. Contato e dúvidas</h2>
+    <p>
+      Para dúvidas, solicitações ou qualquer necessidade relacionada à sua privacidade, fale com nosso DPO (Encarregado de Dados) pelo e-mail <a href="mailto:cuideme.cuidados@gmail.com">cuideme.cuidados@gmail.com</a> ou WhatsApp (11) 91234-5678.
+    </p>
+
+    <footer style="margin-top:2.5rem; color:#607080; font-size:0.95rem;">
+      Versão 1.1 – Atualizada em 20/07/2025<br>
+      © 2025 Cuide-me. Todos os direitos reservados.
+    </footer>
+    <div style="text-align:center;">
+      <a href="pagina-homepage.html" class="back-button">Voltar à Página inicial</a>
     </div>
   </div>
 </body>
