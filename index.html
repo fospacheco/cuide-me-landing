@@ -75,14 +75,14 @@
       margin-bottom: 1.5rem;
       letter-spacing: -1px;
     }
-    /* BLOCO DE CONVOCAÇÃO INOVADOR */
+    /* BLOCO DE CONVOCAÇÃO AJUSTADO */
     .convite-hero-cuide-me {
-      background: linear-gradient(110deg, #e5fafd 70%, #f6fdff 100%);
+      background: #eafafd;
       border-radius: 2.2rem;
-      box-shadow: 0 6px 32px rgba(27,168,194,0.06), 0 1.5px 8px rgba(27,168,194,0.09);
-      max-width: 600px;
+      box-shadow: 0 4px 20px rgba(27,168,194,0.09);
+      max-width: 650px;
       margin: 2.5rem auto 2.5rem auto;
-      padding: 2.3rem 2.2rem 2.3rem 2.2rem;
+      padding: 2.5rem 2.1rem 2.2rem 2.1rem;
       text-align: center;
       position: relative;
       overflow: hidden;
@@ -90,106 +90,84 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 1.8rem;
-      animation: fadeinUp 1s cubic-bezier(.2,.9,.44,1.01);
+      gap: 1.5rem;
     }
-
-    .convite-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: linear-gradient(120deg, #1ba8c2 60%, #44c7e1 100%);
-      color: #fff;
+    .convite-logo {
       width: 62px;
       height: 62px;
+      object-fit: contain;
+      background: #d7f5fb;
       border-radius: 50%;
-      font-size: 2.4rem;
-      margin-bottom: 0.6rem;
-      box-shadow: 0 2px 12px rgba(27,168,194,0.09);
-      animation: pulseIcon 2.1s infinite alternate;
+      margin-bottom: 0.4em;
+      box-shadow: 0 2px 9px #b8eafd42;
     }
-
-    @keyframes pulseIcon {
-      0% { box-shadow: 0 0 0 #fff0; }
-      100% { box-shadow: 0 0 12px #1ba8c244; }
-    }
-
-    .convite-hero-cuide-me h2 {
+    .convite-titulo {
+      display: block;
       font-family: 'Montserrat', sans-serif;
-      color: var(--primary-dark);
-      font-size: 1.5rem;
-      font-weight: 800;
-      line-height: 1.3;
-      margin: 0 0 0.3em 0;
-      letter-spacing: -1px;
+      color: #1592a8;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.15em;
+      margin-top: 0.3em;
     }
-
     .convite-highlight {
       display: block;
-      font-size: 1.23em;
-      font-weight: 900;
+      font-size: 1.4rem;
+      font-weight: 800;
       color: #ff6b6b;
-      margin-top: 0.25em;
-      letter-spacing: -0.5px;
-      background: linear-gradient(90deg, #ffc145 30%, #ff6b6b 100%);
+      margin: 0.1em 0 0.4em 0;
+      background: linear-gradient(90deg, #ffc145 25%, #ff6b6b 85%);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
       -webkit-text-fill-color: transparent;
-      animation: gradientText 5s ease-in-out infinite alternate;
+      letter-spacing: -1px;
     }
-
-    @keyframes gradientText {
-      0% { background-position: 0% 50%; }
-      100% { background-position: 100% 50%; }
-    }
-
     .convite-msg {
-      font-size: 1.10em;
-      color: #245063;
+      font-size: 1.13em;
+      color: #2d3e49;
       line-height: 1.7;
-      margin: 0;
-      max-width: 96%;
+      margin: 0 0 0.2em 0;
+      max-width: 97%;
     }
-
     .convite-txt-highlight {
       background: #ffe7bb;
       color: #ff6b6b;
-      padding: 0.06em 0.35em;
-      border-radius: 0.6em;
+      padding: 0.11em 0.6em;
+      border-radius: 0.7em;
       font-weight: 700;
-      letter-spacing: -0.1px;
       font-size: 1em;
-      transition: background .3s;
+      margin: 0 0.08em;
     }
-
+    .convite-msg b, .convite-msg strong {
+      color: #1592a8;
+      font-weight: 700;
+    }
     .convite-cta-msg {
       background: #fff8e1;
-      color: #b87012;
+      color: #e39419;
       border-radius: 1.2em;
       display: inline-block;
-      font-weight: 600;
-      padding: 0.65em 1.6em;
-      font-size: 1.01em;
-      margin-top: 1.0em;
+      font-weight: 700;
+      padding: 0.7em 1.6em;
+      font-size: 1.07em;
+      margin-top: 1.3em;
       box-shadow: 0 1px 4px #ffc14529;
       letter-spacing: 0.01em;
     }
-
     @media (max-width: 700px) {
       .convite-hero-cuide-me {
-        padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+        padding: 1.2rem 0.5rem 1.3rem 0.5rem;
         border-radius: 1.4em;
         font-size: .97em;
         gap: 1.0rem;
       }
       .convite-hero-cuide-me h2 {
-        font-size: 1.1rem;
-        font-weight: 800;
+        font-size: 1.02rem;
       }
+      .convite-logo { width: 44px; height: 44px;}
     }
     /* FIM BLOCO DE CONVOCAÇÃO */
-
     .hero p {
       color: var(--dark-text);
       font-size: 1.1rem;
@@ -325,6 +303,51 @@
       font-size: .96rem;
       margin: 3rem 0 1rem;
     }
+    /* LGPD e selo de segurança */
+    .footer-lgpd {
+      margin: 1.3em auto 0 auto;
+      padding: 0.7em 0 0.5em 0;
+      font-size: 1em;
+      color: #245063;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1em;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid #e0f0f7;
+      max-width: 700px;
+    }
+    .footer-lgpd i {
+      color: #1ba8c2;
+      margin-right: 0.45em;
+      font-size: 1.13em;
+    }
+    .footer-lgpd a {
+      color: #1ba8c2;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+    .footer-seguro {
+      margin-left: 1em;
+      color: #4ba942;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.3em;
+    }
+    .footer-seguro i {
+      color: #4ba942;
+      font-size: 1.1em;
+      margin-right: 0.18em;
+    }
+    @media (max-width: 700px) {
+      .footer-lgpd {
+        flex-direction: column;
+        gap: 0.2em;
+        font-size: .96em;
+        padding: .4em 0;
+      }
+    }
     @media (max-width: 700px) {
       header {
         flex-direction: column;
@@ -385,31 +408,30 @@
 <body>
   <header>
     <img src="logo_cuide_me.png" alt="Logo Cuide-me">
-    <div style="font-family:'Montserrat';font-weight:700;color:var(--primary-color);font-size:0,8rem;">Cuidar com verdade. Conectar com responsabilidade.</div>
+    <div style="font-family:'Montserrat';font-weight:700;color:var(--primary-color);font-size:0.5rem;">Cuidar com verdade. Conectar com responsabilidade.</div>
   </header>
 
   <section class="hero" role="region" aria-labelledby="hero-title">
     <h1 id="hero-title">Faça a diferença na vida de alguém</h1>
     <div class="convite-hero-cuide-me" role="status" aria-live="polite">
-      <span class="convite-icon">
-        <i class="fas fa-heartbeat"></i>
-      </span>
+      <img src="logo_cuide_me.png" alt="Logo Cuide-me" class="convite-logo">
       <h2>
-        Junte-se ao movimento<br>
+        <span class="convite-titulo">Junte-se ao movimento</span>
         <span class="convite-highlight">que está mudando o cuidado no Brasil</span>
       </h2>
       <p class="convite-msg">
-        Estamos formando uma comunidade de cuidadorxs que acreditam que <span class="convite-txt-highlight">cuidar é arte, ciência e propósito</span>.<br>
-        Se você sonha em impactar vidas, <strong>venha ser o protagonista da sua carreira com a gente</strong>.
+        Estamos formando uma comunidade de cuidadores(as) que acreditam que
+        <span class="convite-txt-highlight">cuidar é arte, ciência e propósito</span>.<br>
+        Se você sonha em impactar vidas, <strong>venha ser protagonista da sua carreira com a gente.</strong>
       </p>
       <div class="convite-cta-msg">
-        <span>⚡️ Cadastre-se e faça parte dos primeiros profissionais da nossa plataforma.</span>
+        <span>⚡ Cadastre-se e faça parte dos primeiros profissionais da nossa plataforma.</span>
       </div>
     </div>
     <p>Conecte-se a famílias, amplie sua renda, conte com suporte e visibilidade em uma comunidade que valoriza o cuidado humanizado.<br>
     <strong>Cadastre-se no Cuide-me e transforme o cuidado no Brasil!</strong></p>
-    <button class="btn-cta" id="cta-cadastro" aria-label="Quero ser cuidador(a)/ Especialista">
-      <i class="fas fa-user-plus"></i> Quero ser cuidador(a)/ Especialista
+    <button class="btn-cta" id="cta-cadastro" aria-label="Quero ser cuidador(a)/Especialista">
+      <i class="fas fa-user-plus"></i> Quero ser cuidador(a)/Especialista
     </button>
     
   </section>
@@ -468,32 +490,57 @@
     <div class="faq-list" id="faqList">
       <div class="faq-item">
         <div class="faq-q"><i class="fas fa-question-circle"></i>O cadastro é gratuito?</div>
-        <div class="faq-a">Sim, não cobramos para você se cadastrar nem para participar do processo seletivo.</div>
+        <div class="faq-a">Sim, não cobramos para você se cadastrar nem para utilizar a nossa plataforma.</div>
+      </div>
+       <div class="faq-item">
+        <div class="faq-q"><i class="fas fa-question-circle"></i>O que acontece depois que faço meu cadastro?</div>
+        <div class="faq-a">Assim que concluir seu cadastro, seu perfil ficará disponível para análise e recomendações de nossos algoritmos. 
+          Nossa equipe pode revisar suas informações para garantir a segurança da comunidade e, em alguns casos, pedir documentos complementares para valorizar ainda mais seu perfil.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q"><i class="fas fa-question-circle"></i>Que documentos preciso?</div>
-        <div class="faq-a">RG, CPF, comprovante de residência e documentos comprobatórios de experiência ou formação, quando houver.</div>
+        <div class="faq-a"> Nossa proposta é ser uma plataforma verdadeiramente democrática e acessível para todos os profissionais. 
+          No entanto, algumas informações são essenciais para garantir segurança e confiança aos nossos clientes. 
+          Por isso, pedimos que você complete 100% do seu cadastro, incluindo foto de perfil, CPF, certificados de formação ou cursos específicos, currículo (quando disponível)
+          e o link para sua página no LinkedIn. Dessa forma, podemos valorizar ainda mais seu perfil e proporcionar oportunidades com máxima transparência.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q"><i class="fas fa-question-circle"></i>Como funciona o pagamento?</div>
         <div class="faq-a">Os pagamentos são feitos pela plataforma, com liberação após o serviço prestado. Você recebe na conta cadastrada.</div>
       </div>
       <div class="faq-item">
+        <div class="faq-q"><i class="fas fa-question-circle"></i>Quem pode ver meus dados?</div>
+        <div class="faq-a">Somente clientes cadastrados e verificados, interessados em contratar serviços, podem visualizar seu perfil público (nome, foto, experiência e certificados). Dados sensíveis, como CPF e contato pessoal, 
+          são protegidos e só são compartilhados após confirmação do serviço, conforme nossa Política de Privacidade</div>
+      </div>
+      <div class="faq-item">
         <div class="faq-q"><i class="fas fa-question-circle"></i>Tenho suporte se precisar?</div>
-        <div class="faq-a">Sim, temos equipe dedicada para apoiar nossos especialistas em qualquer situação.</div>
+        <div class="faq-a">Sim! Você conta com um canal de suporte exclusivo: nosso chatbot está disponível 24h para dúvidas rápidas, e, se precisar, 
+          temos também uma equipe humana pronta para apoiar nossos especialistas em qualquer situação. Assim, garantimos agilidade e atendimento sempre que você precisar.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q"><i class="fas fa-question-circle"></i>E se não for aprovado?</div>
-        <div class="faq-a">Você será informado por e-mail, com orientações para corrigir possíveis pendências ou reenviar documentos.</div>
+        <div class="faq-a">Sempre que você atualizar seu perfil ou adicionar novos documentos, enviamos um e-mail com orientações personalizadas para ajudar a tornar seu cadastro ainda mais completo. 
+          Quanto mais informações e certificados você incluir, maiores as chances de ser escolhido por nossos clientes!</div>
       </div>
     </div>
   </section>
 
   <footer class="footer">
-    Dúvidas? <a href="mailto:contato@cuide-me.app">cuide-me.cuidados@gmail.com</a> |
-    <a href="pagina_termo_de_uso.html" target="_blank">Termos de Uso</a> •
-    <a href="pagina_politica_de_privacidade.html" target="_blank">Política de Privacidade</a>
-    <br><br>
+    Dúvidas? <a href="mailto:contato@cuide-me.app">cuideme.cuidados@gmail.com</a> |
+    <a href="https://cuide-me.vercel.app/termos_de_uso_cuide_me.html" target="_blank" rel="noopener">Termos de Uso</a> •
+    <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>
+    <br>
+    <div class="footer-lgpd">
+      <i class="fas fa-user-shield" aria-hidden="true"></i>
+      <span>
+        Seus dados são tratados de acordo com a <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank" rel="noopener">LGPD</a>. Ambiente seguro e criptografado.
+      </span>
+      <span class="footer-seguro">
+        <i class="fas fa-lock"></i> Ambiente Seguro
+      </span>
+    </div>
+    <br>
     © 2025 Cuide-me. Todos os direitos reservados.
   </footer>
 
