@@ -414,14 +414,14 @@
 
   <section class="hero" role="region" aria-labelledby="hero-title">
     <h1 id="hero-title">Faça a diferença na vida de alguém</h1>
-    <div class="convite-hero-cuide-me" role="status" aria-live="polite">
+    
       <img src="logo_cuide_me.png" alt="Logo Cuide-me" class="convite-logo">
       <h2>
         <span class="convite-titulo">Junte-se ao movimento</span>
-        <span class="convite-highlight">que vai mudar o cuidado no Brasil</span>
+        <span class="convite-highlight">que está mudando o cuidado no Brasil</span>
       </h2>
       <p class="convite-msg">
-        Estamos formando uma comunidade de cuidadores(as) que acreditam que
+        Estamos formando uma comunidade de cuidadorxs que acreditam que
         <span class="convite-txt-highlight">cuidar é arte, ciência e propósito</span>.<br>
         Se você sonha em impactar vidas, <strong>venha ser protagonista da sua carreira com a gente.</strong>
       </p>
@@ -431,8 +431,8 @@
     </div>
     <p>Conecte-se a famílias, amplie sua renda, conte com suporte e visibilidade em uma comunidade que valoriza o cuidado humanizado.<br>
     <strong>Cadastre-se no Cuide-me e transforme o cuidado no Brasil!</strong></p>
-    <button class="btn-cta" id="cta-cadastro" aria-label="Quero ser cuidador(a)/Especialista">
-      <i class="fas fa-user-plus"></i> Quero ser cuidador(a)/Especialista
+    <button class="btn-cta" id="cta-cadastro" aria-label="Quero ser cuidador(a)">
+      <i class="fas fa-user-plus"></i> Quero ser cuidador(a)
     </button>
     <div>
       <small style="color:#245063;">Já tem cadastro? <a href="pagina_login.html" style="color:var(--primary-color);text-decoration:underline;">Acesse sua conta</a></small>
@@ -488,50 +488,31 @@
     </div>
   </section>
 
-  <section class="faq-container" aria-labelledby="faq-title">
-  <h2 id="faq-title" style="color: var(--primary-color); font-family: 'Montserrat', sans-serif;">Perguntas Frequentes para Especialistas</h2>
-  <div class="faq-item">
-    <button class="faq-question"><span>O que acontece depois que faço meu cadastro?</span></button>
-    <div class="faq-answer"><p>Assim que concluir seu cadastro, seu perfil ficará disponível para análise e recomendações de nossos algoritmos. Nossa equipe pode revisar suas informações para garantir a segurança da comunidade e, em alguns casos, pedir documentos complementares para valorizar ainda mais seu perfil.</p></div>
-  </div>
-  <div class="faq-item">
-    <button class="faq-question"><span>Existe reprovação de cadastro?</span></button>
-    <div class="faq-answer"><p>Não! Nosso objetivo é ajudar você a construir o perfil mais completo e atrativo possível. Se faltar algum documento, avisamos por e-mail com orientações personalizadas.</p></div>
-  </div>
-  <div class="faq-item">
-    <button class="faq-question"><span>Quais documentos e informações aumentam minhas chances na plataforma?</span></button>
-    <div class="faq-answer"><p>Foto, CPF, certificados de formação, cursos extras, currículo e LinkedIn aumentam suas oportunidades. Perfis completos aparecem mais para os clientes.</p></div>
-  </div>
-  <div class="faq-item">
-    <button class="faq-question"><span>Como sou informado se preciso adicionar algo novo?</span></button>
-    <div class="faq-answer"><p>Você recebe um e-mail automático com orientações sempre que necessário. Também pode ver alertas na plataforma.</p></div>
-  </div>
-  <div class="faq-item">
-    <button class="faq-question"><span>Meu perfil fica visível mesmo se estiver incompleto?</span></button>
-    <div class="faq-answer"><p>Sim, mas perfis completos têm prioridade nas buscas. Complete seu cadastro para se destacar.</p></div>
-  </div>
-  <div class="faq-item">
-    <button class="faq-question"><span>Quem pode ver meus dados?</span></button>
-    <div class="faq-answer"><p>Apenas clientes verificados podem ver seu perfil profissional. Dados sensíveis são protegidos e só liberados após confirmação do serviço, conforme nossa <a href="politica_privacidade.html">Política de Privacidade</a>.</p></div>
-  </div>
-  <div class="faq-item">
-    <button class="faq-question"><span>Como funciona o suporte ao especialista?</span></button>
-    <div class="faq-answer"><p>Nosso chatbot está disponível 24h para dúvidas rápidas e, quando necessário, uma equipe humana de suporte está pronta para ajudar.</p></div>
-  </div>
-  <div class="faq-item">
-    <button class="faq-question"><span>O que posso fazer se tiver dificuldades para enviar meus documentos?</span></button>
-    <div class="faq-answer"><p>Fale conosco pelo chat, WhatsApp ou e-mail. Podemos ajudar a validar e receber documentos de forma segura.</p></div>
-  </div>
-  <div class="faq-item">
-    <button class="faq-question"><span>Como sei se fui escolhido por um cliente?</span></button>
-    <div class="faq-answer"><p>Você será notificado por e-mail e/ou pela plataforma assim que um cliente se interessar pelo seu perfil.</p></div>
-  </div>
-  <div class="faq-item">
-    <button class="faq-question"><span>Tenho controle sobre meus dados e perfil?</span></button>
-    <div class="faq-answer"><p>Sim! Você pode editar ou excluir seus dados a qualquer momento. Solicite informações pelo e-mail privacidade@cuide-me.app.</p></div>
-  </div>
-</section>
-
+  <section class="faq-section" aria-labelledby="faq-title">
+    <h2 id="faq-title">Perguntas frequentes</h2>
+    <div class="faq-list" id="faqList">
+      <div class="faq-item">
+        <div class="faq-q"><i class="fas fa-question-circle"></i>O cadastro é gratuito?</div>
+        <div class="faq-a">Sim, não cobramos para você se cadastrar nem para participar do processo seletivo.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><i class="fas fa-question-circle"></i>Que documentos preciso?</div>
+        <div class="faq-a">RG, CPF, comprovante de residência e documentos comprobatórios de experiência ou formação, quando houver.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><i class="fas fa-question-circle"></i>Como funciona o pagamento?</div>
+        <div class="faq-a">Os pagamentos são feitos pela plataforma, com liberação após o serviço prestado. Você recebe na conta cadastrada.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><i class="fas fa-question-circle"></i>Tenho suporte se precisar?</div>
+        <div class="faq-a">Sim, temos equipe dedicada para apoiar nossos especialistas em qualquer situação.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><i class="fas fa-question-circle"></i>E se não for aprovado?</div>
+        <div class="faq-a">Você será informado por e-mail, com orientações para corrigir possíveis pendências ou reenviar documentos.</div>
+      </div>
+    </div>
+  </section>
 
   <footer class="footer">
     Dúvidas? <a href="mailto:contato@cuide-me.app">contato@cuide-me.app</a> |
