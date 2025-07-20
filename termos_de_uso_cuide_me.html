@@ -2,134 +2,178 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Termos de Uso | Cuide-me</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta name="description" content="Termos de Uso Cuide-me - Plataforma segura para conexão entre famílias e cuidadores verificados.">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="Termos de Uso | Cuide-me">
+  <meta property="og:description" content="Leia os termos de uso da Cuide-me e saiba como protegemos clientes e especialistas.">
+  <meta property="og:image" content="logo_cuide_me.png">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
   <style>
-    * { box-sizing: border-box; }
+    :root {
+      --primary-color: #1ba8c2;
+      --primary-light: #44c7e1;
+      --dark-text: #245063;
+      --white: #ffffff;
+    }
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: 'Poppins', 'Montserrat', Arial, sans-serif;
       background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      color: #245063;
+      color: var(--dark-text);
       margin: 0;
       padding: 0;
     }
     .container {
-      width: 100%;
-      padding: 2rem 1rem;
-      background: white;
-    }
-    .content {
-      max-width: 800px;
-      margin: 0 auto;
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
+      max-width: 900px;
+      margin: 3rem auto;
+      background: var(--white);
+      border-radius: 18px;
       box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+      padding: 2.5rem 1.5rem;
     }
     h1, h2 {
-      color: #1ba8c2;
+      color: var(--primary-color);
+      font-family: 'Montserrat', sans-serif;
     }
-    h1 {
-      font-size: 1.75rem;
-      margin-bottom: 1rem;
-    }
-    h2 {
-      font-size: 1.25rem;
-      margin-top: 2rem;
-    }
+    h1 { font-size: 2.1rem; }
+    h2 { font-size: 1.22rem; margin-top: 2rem; }
     p, li {
-      font-size: 1rem;
-      line-height: 1.6;
+      font-size: 1.07rem;
+      line-height: 1.7;
       color: #2e3a43;
     }
-    ul {
-      padding-left: 1.2rem;
-    }
-    a {
-      color: #00aacc;
-      text-decoration: underline;
-    }
-    footer {
-      text-align: center;
-      margin-top: 3rem;
-      font-size: 0.9rem;
-      color: #6b7c86;
-    }
-    @media (min-width: 768px) {
-      h1 { font-size: 2rem; }
-      h2 { font-size: 1.3rem; }
-      p, li { font-size: 1.05rem; }
-    }
-      .back-button {
+    ul { padding-left: 1.3rem; }
+    a { color: var(--primary-color); text-decoration: underline; }
+    .back-button {
       display: inline-block;
-      background-color: #3ddad7;
-      color: white;
+      background-color: var(--primary-light);
+      color: var(--white);
       padding: 0.9rem 1.2rem;
       border-radius: 50px;
       font-weight: bold;
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      transition: opacity 0.2s ease-in-out;
       margin-top: 2rem;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+      transition: opacity 0.2s;
     }
-    .back-button:hover {
-      opacity: 0.8;
+    .back-button:hover { opacity: 0.8; }
+    @media (max-width: 700px) {
+      .container { padding: 1.3rem 0.8rem; }
+      h1 { font-size: 1.45rem; }
     }
-
-</style>
+  </style>
 </head>
 <body>
-  <div class="container">
-    <div class="content">
-      <h1>Termos de Uso</h1>
-      <p>Bem-vindo(a) à plataforma Cuide-me. Ao acessar e utilizar nossos serviços, você concorda com os termos abaixo. Leia com atenção.</p>
+  <div class="container" role="main" aria-labelledby="terms-title">
+    <h1 id="terms-title">Termos de Uso Cuide-me</h1>
+    <p>
+      Bem-vindo(a) à plataforma <strong>Cuide-me</strong>. Ao acessar, navegar ou utilizar nossos serviços, você declara estar de acordo com os presentes Termos de Uso. Leia atentamente, pois eles regem a relação entre clientes, especialistas/cuidadores e a Cuide-me.
+    </p>
 
-      <h2>1. Objetivo da Plataforma</h2>
-      <p>O Cuide-me conecta cuidadores e clientes de forma segura, prática e transparente, oferecendo funcionalidades de cadastro, busca, pagamento e avaliação.</p>
+    <h2>1. Objetivo da Plataforma</h2>
+    <p>
+      A Cuide-me é uma plataforma digital que conecta clientes, famílias e pessoas interessadas em contratar serviços de cuidado domiciliar a cuidadores e especialistas verificados. Oferecemos ambiente seguro para cadastro, busca, contratação, pagamento e avaliação de serviços, promovendo confiança e profissionalismo para todos os envolvidos.
+    </p>
 
-      <h2>2. Aceite dos Termos</h2>
-      <p>O uso da plataforma implica na aceitação plena dos termos aqui descritos. Caso não concorde, por favor, não utilize nossos serviços.</p>
+    <h2>2. Cadastro e Responsabilidades dos Usuários</h2>
+    <ul>
+      <li>O acesso a funcionalidades depende de cadastro com informações completas e verídicas;</li>
+      <li>O usuário deve ser maior de 18 anos ou legalmente emancipado para se cadastrar ou contratar serviços;</li>
+      <li>Você é responsável por manter a confidencialidade dos seus dados de acesso (login, senha);</li>
+      <li>É proibido ceder, compartilhar ou transferir sua conta para terceiros;</li>
+      <li>Toda informação falsa, incompleta ou fraudulenta poderá levar à suspensão ou exclusão do cadastro.</li>
+    </ul>
 
-      <h2>3. Cadastro e Responsabilidade</h2>
-      <ul>
-        <li>O usuário deve fornecer informações verídicas e completas.</li>
-        <li>É proibido compartilhar sua conta com terceiros.</li>
-        <li>O cuidador é responsável pelas informações e documentos enviados.</li>
-      </ul>
+    <h2>3. Uso Adequado da Plataforma</h2>
+    <p>
+      Ao utilizar a Cuide-me, você concorda em:
+    </p>
+    <ul>
+      <li>Respeitar todos os usuários, independentemente de gênero, raça, orientação sexual, condição de saúde, idade ou religião;</li>
+      <li>Não praticar, incitar ou permitir qualquer forma de agressão, ameaça, injúria, difamação, calúnia, assédio, discriminação ou comportamento abusivo;</li>
+      <li>Não divulgar informações falsas, ofensivas, ilegais ou protegidas por direitos autorais sem autorização;</li>
+      <li>Não utilizar a plataforma para fins ilícitos, fraudes, concorrência desleal ou captação irregular de clientes/profissionais;</li>
+      <li>Não tentar acessar, modificar, copiar, distribuir, desmontar ou explorar sistemas internos da Cuide-me, APIs, bancos de dados ou código-fonte;</li>
+      <li>Não enviar, compartilhar ou armazenar conteúdos inapropriados, incluindo imagens, áudios ou mensagens ofensivas ou inadequadas.</li>
+    </ul>
 
-      <h2>4. Conduta na Plataforma</h2>
-      <ul>
-        <li>Respeito mútuo entre usuários é obrigatório.</li>
-        <li>É proibido publicar conteúdos ofensivos, discriminatórios ou falsos.</li>
-        <li>Reservamo-nos o direito de suspender contas em caso de violação.</li>
-      </ul>
+    <h2>4. Política de Banimento e Suspensão</h2>
+    <ul>
+      <li>O descumprimento destes termos, bem como a prática de fraudes, má-fé, má conduta, agressões físicas ou verbais, assédio, injúria, discriminação, tentativas de golpe, ameaças, divulgação de informações falsas ou comportamento incompatível com os valores da Cuide-me poderá acarretar na <strong>imediata suspensão ou banimento da conta</strong>, sem prejuízo de comunicação às autoridades competentes;</li>
+      <li>A Cuide-me se reserva ao direito de, a qualquer tempo, bloquear ou remover o acesso de usuários em caso de risco à comunidade, segurança, denúncia fundamentada ou ordem judicial;</li>
+      <li>Caso o usuário se sinta injustiçado por uma decisão de bloqueio ou banimento, poderá recorrer formalmente pelo e-mail <a href="mailto:cuideme.cuidados@gmail.com">cuideme.cuidados@gmail.com</a> apresentando justificativas, que serão analisadas por nossa equipe de compliance;</li>
+      <li>Nos casos mais graves, as informações poderão ser encaminhadas às autoridades policiais e judiciais competentes.</li>
+    </ul>
 
-      <h2>5. Pagamentos e Comissões</h2>
-      <p>Pagamentos são processados via sistemas terceiros. O Cuide-me poderá reter uma comissão por serviço intermediado, informada previamente ao usuário.</p>
+    <h2>5. Obrigações dos Cuidadores/Especialistas</h2>
+    <ul>
+      <li>Fornecer informações verídicas, manter perfil atualizado, enviar documentos válidos e respeitar a privacidade dos clientes;</li>
+      <li>Não prestar serviços fora da plataforma antes da confirmação do cliente e da contratação pelos meios oficiais;</li>
+      <li>Manter postura ética, cordial e respeitosa em todas as interações com clientes e equipe Cuide-me;</li>
+      <li>Jamais repassar, divulgar ou usar dados dos clientes para fins diferentes daqueles definidos na plataforma;</li>
+      <li>Respeitar acordos de valores, horários e condições definidos nas propostas, bem como comunicar imprevistos com antecedência.</li>
+    </ul>
 
-      <h2>6. Limitação de Responsabilidade</h2>
-      <p>O Cuide-me não se responsabiliza por atos dos cuidadores ou clientes fora da plataforma. Atuamos como facilitadores da conexão, não como empregadores.</p>
+    <h2>6. Obrigações dos Clientes/Famílias</h2>
+    <ul>
+      <li>Fornecer informações verdadeiras e completas sobre necessidades, preferências e condições do paciente;</li>
+      <li>Não exigir dos cuidadores tarefas fora do escopo contratado ou atividades que coloquem em risco sua integridade física ou moral;</li>
+      <li>Manter respeito e cordialidade nas comunicações e avaliações dos profissionais;</li>
+      <li>Não promover discriminação, abuso, assédio ou condutas ilegais;</li>
+      <li>Utilizar a plataforma exclusivamente para fins lícitos e de acordo com os valores da Cuide-me.</li>
+    </ul>
 
-      <h2>7. Propriedade Intelectual</h2>
-      <p>Todo conteúdo da plataforma é de propriedade do Cuide-me. É proibido copiar, reproduzir ou distribuir sem autorização.</p>
+    <h2>7. Avaliações e Comentários</h2>
+    <ul>
+      <li>A plataforma permite avaliações públicas de cuidadores e clientes, que devem ser honestas, respeitosas e baseadas em experiências reais;</li>
+      <li>Comentários contendo ofensas, ameaças, discriminação, linguagem inapropriada, fake news ou informações sigilosas poderão ser removidos sem aviso prévio, além de motivar banimento;</li>
+      <li>É proibido publicar avaliações fraudulentas ou com objetivo de prejudicar indevidamente qualquer usuário.</li>
+    </ul>
 
-      <h2>8. Privacidade e Dados</h2>
-      <p>O uso dos dados pessoais é regido pela nossa <a href="/privacidade">Política de Privacidade</a>.</p>
+    <h2>8. Pagamentos, Comissões e Cancelamentos</h2>
+    <ul>
+      <li>Os pagamentos são processados de maneira segura, exclusivamente pelos meios oficiais da Cuide-me;</li>
+      <li>Poderá ser cobrada comissão sobre os serviços intermediados, informada de forma transparente antes da contratação;</li>
+      <li>Cancelamentos e reembolsos seguem políticas específicas, disponíveis na plataforma ou mediante contato com suporte;</li>
+      <li>Cuide-me não se responsabiliza por valores ou acordos firmados fora do ambiente oficial da plataforma.</li>
+    </ul>
 
-      <h2>9. Alterações nos Termos</h2>
-      <p>Podemos atualizar este documento a qualquer momento. Notificações serão feitas por e-mail ou na própria plataforma.</p>
+    <h2>9. Propriedade Intelectual</h2>
+    <ul>
+      <li>Todo conteúdo da plataforma (textos, imagens, marcas, logotipos, código-fonte, design) pertence à Cuide-me e é protegido por direitos autorais e propriedade intelectual;</li>
+      <li>É proibido copiar, reproduzir, modificar, publicar, distribuir ou explorar qualquer conteúdo sem autorização formal da Cuide-me.</li>
+    </ul>
 
-      <h2>10. Contato</h2>
-      <p>Em caso de dúvidas, fale conosco pelo e-mail <a href="mailto:contato@cuide-me.app">contato@cuide-me.app</a> ou WhatsApp (11) 91234-5678.</p>
+    <h2>10. Privacidade e Proteção de Dados</h2>
+    <p>
+      O uso dos dados pessoais é regido pela nossa <a href="politica_privacidade.html" target="_blank">Política de Privacidade</a>. A Cuide-me adota medidas de segurança, sigilo e governança para proteger dados sensíveis, respeitando a LGPD e demais legislações.
+    </p>
 
-      <footer>
-        Versão 1.0 &mdash; Atualizada em 17/06/2025<br>
-        &copy; 2025 Cuide-me. Todos os direitos reservados.
-      </footer>
-      <div style="text-align: center; margin: 2rem 0;">
-        <a href="pagina-homepage.html" class="back-button">Voltar à Página inicial</a>
-      </div>
+    <h2>11. Limitação de Responsabilidade</h2>
+    <ul>
+      <li>A Cuide-me atua como intermediadora, facilitando a conexão entre clientes e cuidadores, mas não é empregadora, responsável ou corresponsável pelas ações dos usuários fora da plataforma;</li>
+      <li>Não nos responsabilizamos por perdas, danos, prejuízos ou situações decorrentes de negociações diretas, ocorrências externas ou informações falsas fornecidas por terceiros;</li>
+      <li>Em caso de irregularidades, sugerimos comunicar imediatamente pelo e-mail <a href="mailto:cuideme.cuidados@gmail.com">cuideme.cuidados@gmail.com</a> para apuração e providências.</li>
+    </ul>
+
+    <h2>12. Alterações destes Termos</h2>
+    <ul>
+      <li>Os termos podem ser alterados a qualquer tempo por atualização deste documento, com comunicação prévia aos usuários cadastrados por e-mail ou pela própria plataforma;</li>
+      <li>O uso contínuo dos serviços após publicação de alterações implica aceitação integral das novas condições.</li>
+    </ul>
+
+    <h2>13. Contato e Suporte</h2>
+    <p>
+      Dúvidas, denúncias, solicitações ou informações podem ser encaminhadas para o e-mail <a href="mailto:cuideme.cuidados@gmail.com">cuideme.cuidados@gmail.com</a> ou WhatsApp (11) 91234-5678.
+    </p>
+
+    <footer style="margin-top:2.5rem; color:#607080; font-size:0.95rem;">
+      Versão 1.1 – Atualizada em 20/07/2025<br>
+      © 2025 Cuide-me. Todos os direitos reservados.
+    </footer>
+    <div style="text-align:center;">
+      <a href="pagina-homepage.html" class="back-button">Voltar à Página inicial</a>
     </div>
   </div>
 </body>
