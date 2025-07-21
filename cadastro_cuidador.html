@@ -30,131 +30,83 @@
       background: var(--bg-gradient);
     }
     body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       padding: 1rem;
     }
     .skip-link {
-      position: absolute;
-      top: -40px;
-      left: 0;
-      background: var(--primary-color);
-      color: #fff;
-      padding: 0.5rem;
-      z-index: 100;
+      position: absolute; top: -40px; left: 0;
+      background: var(--primary-color); color: #fff;
+      padding: 0.5rem; z-index: 100;
       transition: top 0.3s;
     }
     .skip-link:focus { top: 0; }
     .container {
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
+      width: 100%; max-width: 400px; text-align: center;
     }
     .modal {
-      position: fixed;
-      inset: 0;
+      position: fixed; inset: 0;
       background: rgba(0,0,0,0.6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-      z-index: 10;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1rem; z-index: 10;
     }
     .modal__content {
-      background: #fff;
-      border-radius: var(--card-radius);
-      box-shadow: var(--card-shadow);
-      padding: 2rem;
-      text-align: center;
+      background: #fff; border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow); padding: 2rem; text-align: center;
       outline: none;
     }
     .modal__content h2 {
-      font-family: var(--font-heading);
-      margin-bottom: 1rem;
+      font-family: var(--font-heading); margin-bottom: 1rem;
       color: var(--primary-color);
     }
     .modal__content label {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1rem;
+      display: flex; align-items: center; margin-bottom: 1rem;
       font-size: 0.9rem;
     }
     .modal__content input[type="checkbox"] { margin-right: 0.5rem; }
     .modal__content .form__btn { width: 100%; margin-top: 1rem; }
     .form {
-      background: #fff;
-      border-radius: var(--card-radius);
-      box-shadow: var(--card-shadow);
-      padding: 2rem;
-      display: none;
-      flex-direction: column;
-      align-items: center;
+      background: #fff; border-radius: var(--card-radius);
+      box-shadow: var(--card-shadow); padding: 2rem;
+      display: none; flex-direction: column; align-items: center;
       margin-top: 1rem;
     }
     .form--active { display: flex; }
     .form h2 {
-      font-family: var(--font-heading);
-      margin-bottom: 1.5rem;
+      font-family: var(--font-heading); margin-bottom: 1.5rem;
       color: var(--primary-color);
     }
-    .form__group {
-      width: 100%;
-      margin-bottom: 1rem;
-      text-align: left;
-    }
+    .form__group { width: 100%; margin-bottom: 1rem; text-align: left; }
     .form__label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
     .form__input {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--input-border);
-      border-radius: 0.5rem;
+      width: 100%; padding: 0.75rem;
+      border: 1px solid var(--input-border); border-radius: 0.5rem;
       transition: border-color 0.2s;
     }
     .form__input:focus {
-      outline: none;
-      border-color: var(--input-focus);
+      outline: none; border-color: var(--input-focus);
       box-shadow: 0 0 0 3px rgba(66,194,211,0.2);
     }
     .form__btn {
-      width: 100%;
-      padding: 0.75rem;
-      font-family: var(--font-heading);
-      font-size: 1rem;
-      border: none;
-      border-radius: 2rem;
-      cursor: pointer;
+      width: 100%; padding: 0.75rem;
+      font-family: var(--font-heading); font-size: 1rem;
+      border: none; border-radius: 2rem; cursor: pointer;
       transition: background-color 0.2s;
     }
     .form__btn:focus { outline: var(--focus-outline); outline-offset: 2px; }
     .form__btn--primary {
-      background: var(--primary-color);
-      color: #fff;
-      margin-top: 1rem;
+      background: var(--primary-color); color: #fff; margin-top: 1rem;
     }
     .form__btn--primary:hover { background: var(--primary-hover); }
     .form__btn--google {
-      background: #fff;
-      color: #333;
+      background: #fff; color: #333;
       border: 1px solid var(--input-border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 1rem;
-      width: 100%;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1rem; width: 100%;
     }
     .form__btn--google img { width: 20px; height: 20px; margin-right: 0.5rem; }
-    .divider {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      margin: 1rem 0;
-    }
+    .divider { display: flex; align-items: center; width: 100%; margin: 1rem 0; }
     .divider::before, .divider::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--input-border);
+      content: ''; flex: 1; height: 1px; background: var(--input-border);
     }
     .divider:not(:empty)::before { margin-right: 0.5em; }
     .divider:not(:empty)::after { margin-left: 0.5em; }
@@ -179,7 +131,6 @@
         <button id="btnLGPD" class="form__btn form__btn--primary" disabled>Aceitar</button>
       </div>
     </div>
-
     <!-- Autenticação (Etapa 1) -->
     <form id="authForm" class="form" aria-hidden="true" aria-labelledby="authTitle">
       <h2 id="authTitle">Crie sua Conta</h2>
@@ -198,7 +149,6 @@
       </div>
       <button type="submit" class="form__btn form__btn--primary">Continuar</button>
     </form>
-
     <!-- Perfil (Etapa 2) -->
     <form id="profileForm" class="form" aria-hidden="true" aria-labelledby="profileTitle">
       <h2 id="profileTitle">Complete seu Perfil</h2>
@@ -219,14 +169,11 @@
       <button type="submit" class="form__btn form__btn--primary">Finalizar Cadastro</button>
     </form>
   </div>
-
   <!-- Firebase e chamada ao seu endpoint -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
     import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-    // analytics opcional
-
-    // Configuração (do Firebase Console)
+    // Configuração Firebase
     const firebaseConfig = {
       apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
       authDomain: "cuide-me-f57f8.firebaseapp.com",
@@ -247,6 +194,7 @@
     const profileForm = document.getElementById('profileForm');
     const googleBtn = document.getElementById('googleSignIn');
 
+    // LGPD
     consentCheckbox.addEventListener('change', () => btnLGPD.disabled = !consentCheckbox.checked);
     btnLGPD.addEventListener('click', () => {
       lgpdModal.style.display = 'none';
@@ -255,6 +203,7 @@
       document.getElementById('email').focus();
     });
 
+    // Google Sign-In
     googleBtn.addEventListener('click', async () => {
       try {
         const result = await signInWithPopup(auth, googleProvider);
@@ -265,6 +214,7 @@
       }
     });
 
+    // E-mail/Password Sign-Up
     authForm.addEventListener('submit', async e => {
       e.preventDefault();
       try {
@@ -279,13 +229,12 @@
     });
 
     function switchToProfile() {
-      authForm.classList.remove('form--active');
-      authForm.setAttribute('aria-hidden','true');
-      profileForm.classList.add('form--active');
-      profileForm.removeAttribute('aria-hidden');
+      authForm.classList.remove('form--active'); authForm.setAttribute('aria-hidden','true');
+      profileForm.classList.add('form--active'); profileForm.removeAttribute('aria-hidden');
       document.getElementById('nome').focus();
     }
 
+    // Submissão ao backend, tratando não-JSON
     profileForm.addEventListener('submit', async e => {
       e.preventDefault();
       const payload = {
@@ -296,13 +245,18 @@
       };
       try {
         const res = await fetch('/api/create-cuidadores', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
         if (!res.ok) {
-          const err = await res.json();
-          throw new Error(err.error || 'Erro desconhecido');
+          let message;
+          try {
+            const errorJson = await res.json();
+            message = errorJson.error || JSON.stringify(errorJson);
+          } catch {
+            message = await res.text();
+          }
+          throw new Error(message);
         }
         window.location.href = '/pagina_especialista.html';
       } catch (e) {
