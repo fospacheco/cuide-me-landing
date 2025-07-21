@@ -9,7 +9,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    /* Tema Cuide-me */
     :root {
       --primary-color: #42c2d3;
       --primary-hover: #389cad;
@@ -24,99 +23,37 @@
       --focus-outline: 3px solid var(--secondary-color);
     }
     *, *::before, *::after { box-sizing: border-box; }
-    html, body {
-      height: 100%; margin: 0; padding: 0;
-      font-family: var(--font-sans);
-      background: var(--bg-gradient);
-    }
-    body {
-      display: flex; align-items: center; justify-content: center;
-      padding: 1rem;
-    }
-    .skip-link {
-      position: absolute; top: -40px; left: 0;
-      background: var(--primary-color); color: #fff;
-      padding: 0.5rem; z-index: 100;
-      transition: top 0.3s;
-    }
+    html, body { height: 100%; margin: 0; padding: 0; background: var(--bg-gradient); font-family: var(--font-sans); }
+    body { display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .skip-link { position: absolute; top: -40px; left: 0; background: var(--primary-color); color: #fff; padding: 0.5rem; z-index: 100; transition: top 0.3s; }
     .skip-link:focus { top: 0; }
-    .container {
-      width: 100%; max-width: 400px; text-align: center;
-    }
-    .modal {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.6);
-      display: flex; align-items: center; justify-content: center;
-      padding: 1rem; z-index: 10;
-    }
-    .modal__content {
-      background: #fff; border-radius: var(--card-radius);
-      box-shadow: var(--card-shadow); padding: 2rem; text-align: center;
-      outline: none;
-    }
-    .modal__content h2 {
-      font-family: var(--font-heading); margin-bottom: 1rem;
-      color: var(--primary-color);
-    }
-    .modal__content label {
-      display: flex; align-items: center; margin-bottom: 1rem;
-      font-size: 0.9rem;
-    }
+    .container { width: 100%; max-width: 400px; text-align: center; }
+    .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.6); display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 10; }
+    .modal__content { background: #fff; border-radius: var(--card-radius); box-shadow: var(--card-shadow); padding: 2rem; text-align: center; outline: none; }
+    .modal__content h2 { font-family: var(--font-heading); margin-bottom: 1rem; color: var(--primary-color); }
+    .modal__content label { display: flex; align-items: center; margin-bottom: 1rem; font-size: 0.9rem; }
     .modal__content input[type="checkbox"] { margin-right: 0.5rem; }
     .modal__content .form__btn { width: 100%; margin-top: 1rem; }
-    .form {
-      background: #fff; border-radius: var(--card-radius);
-      box-shadow: var(--card-shadow); padding: 2rem;
-      display: none; flex-direction: column; align-items: center;
-      margin-top: 1rem;
-    }
+    .form { background: #fff; border-radius: var(--card-radius); box-shadow: var(--card-shadow); padding: 2rem; display: none; flex-direction: column; align-items: center; margin-top: 1rem; }
     .form--active { display: flex; }
-    .form h2 {
-      font-family: var(--font-heading); margin-bottom: 1.5rem;
-      color: var(--primary-color);
-    }
+    .form h2 { font-family: var(--font-heading); margin-bottom: 1.5rem; color: var(--primary-color); }
     .form__group { width: 100%; margin-bottom: 1rem; text-align: left; }
     .form__label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
-    .form__input {
-      width: 100%; padding: 0.75rem;
-      border: 1px solid var(--input-border); border-radius: 0.5rem;
-      transition: border-color 0.2s;
-    }
-    .form__input:focus {
-      outline: none; border-color: var(--input-focus);
-      box-shadow: 0 0 0 3px rgba(66,194,211,0.2);
-    }
-    .form__btn {
-      width: 100%; padding: 0.75rem;
-      font-family: var(--font-heading); font-size: 1rem;
-      border: none; border-radius: 2rem; cursor: pointer;
-      transition: background-color 0.2s;
-    }
+    .form__input { width: 100%; padding: 0.75rem; border: 1px solid var(--input-border); border-radius: 0.5rem; transition: border-color 0.2s; }
+    .form__input:focus { outline: none; border-color: var(--input-focus); box-shadow: 0 0 0 3px rgba(66,194,211,0.2); }
+    .form__btn { width: 100%; padding: 0.75rem; font-family: var(--font-heading); font-size: 1rem; border: none; border-radius: 2rem; cursor: pointer; transition: background-color 0.2s; }
     .form__btn:focus { outline: var(--focus-outline); outline-offset: 2px; }
-    .form__btn--primary {
-      background: var(--primary-color); color: #fff; margin-top: 1rem;
-    }
+    .form__btn--primary { background: var(--primary-color); color: #fff; margin-top: 1rem; }
     .form__btn--primary:hover { background: var(--primary-hover); }
-    .form__btn--google {
-      background: #fff; color: #333;
-      border: 1px solid var(--input-border);
-      display: flex; align-items: center; justify-content: center;
-      margin-bottom: 1rem; width: 100%;
-    }
+    .form__btn--google { background: #fff; color: #333; border: 1px solid var(--input-border); display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; width: 100%; }
     .form__btn--google img { width: 20px; height: 20px; margin-right: 0.5rem; }
     .divider { display: flex; align-items: center; width: 100%; margin: 1rem 0; }
-    .divider::before, .divider::after {
-      content: ''; flex: 1; height: 1px; background: var(--input-border);
-    }
+    .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--input-border); }
     .divider:not(:empty)::before { margin-right: 0.5em; }
     .divider:not(:empty)::after { margin-left: 0.5em; }
     small { color: #666; }
-    @media (max-width: 360px) {
-      .form { padding: 1.5rem; margin-top: 0.5rem; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { transition: none !important; animation: none !important; }
-    }
+    @media (max-width: 360px) { .form { padding: 1.5rem; margin-top: 0.5rem; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition: none !important; animation: none !important; } }
   </style>
 </head>
 <body>
@@ -139,82 +76,42 @@
         Continuar com Google
       </button>
       <div class="divider">ou</div>
-      <div class="form__group">
-        <label for="email" class="form__label">E-mail</label>
-        <input type="email" id="email" class="form__input" required autocomplete="email" />
-      </div>
-      <div class="form__group">
-        <label for="password" class="form__label">Senha</label>
-        <input type="password" id="password" class="form__input" required minlength="6" autocomplete="new-password" />
-      </div>
+      <div class="form__group"><label for="email" class="form__label">E-mail</label><input type="email" id="email" class="form__input" required autocomplete="email" /></div>
+      <div class="form__group"><label for="password" class="form__label">Senha</label><input type="password" id="password" class="form__input" required minlength="6" autocomplete="new-password" /></div>
       <button type="submit" class="form__btn form__btn--primary">Continuar</button>
     </form>
     <!-- Perfil (Etapa 2) -->
     <form id="profileForm" class="form" aria-hidden="true" aria-labelledby="profileTitle">
       <h2 id="profileTitle">Complete seu Perfil</h2>
       <input type="hidden" id="uid" name="uid" />
-      <div class="form__group">
-        <label for="nome" class="form__label">Nome completo</label>
-        <input type="text" id="nome" name="nome" class="form__input" required autocomplete="name" />
-      </div>
-      <div class="form__group">
-        <label for="cpf" class="form__label">CPF</label>
-        <input type="text" id="cpf" name="cpf" class="form__input" required pattern="\d{11}" placeholder="Somente números" />
-        <small>11 dígitos sem pontos ou traços</small>
-      </div>
-      <div class="form__group">
-        <label for="telefone" class="form__label">Telefone</label>
-        <input type="tel" id="telefone" name="telefone" class="form__input" required pattern="\d{10,11}" placeholder="DDD + número" />
-      </div>
+      <div class="form__group"><label for="nome" class="form__label">Nome completo</label><input type="text" id="nome" name="nome" class="form__input" required autocomplete="name" /></div>
+      <div class="form__group"><label for="cpf" class="form__label">CPF</label><input type="text" id="cpf" name="cpf" class="form__input" required pattern="\d{11}" placeholder="Somente números" /><small>11 dígitos sem pontos ou traços</small></div>
+      <div class="form__group"><label for="telefone" class="form__label">Telefone</label><input type="tel" id="telefone" name="telefone" class="form__input" required pattern="\d{10,11}" placeholder="DDD + número" /></div>
       <button type="submit" class="form__btn form__btn--primary">Finalizar Cadastro</button>
     </form>
   </div>
-  <!-- Firebase e chamada ao seu endpoint -->
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
     import { getAuth, GoogleAuthProvider, createUserWithEmailAndPassword, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js';
-    // Configuração Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo",
-      authDomain: "cuide-me-f57f8.firebaseapp.com",
-      projectId: "cuide-me-f57f8",
-      storageBucket: "cuide-me-f57f8.appspot.com",
-      messagingSenderId: "846926668384",
-      appId: "1:846926668384:web:c8022e110171969f6b5905",
-      measurementId: "G-6EHSLH65WZ"
-    };
+    const firebaseConfig = { apiKey: "AIzaSyCAIq_rBcV0i2q_xrXucrEVXFDpdA1eBDo", authDomain: "cuide-me-f57f8.firebaseapp.com", projectId: "cuide-me-f57f8", storageBucket: "cuide-me-f57f8.appspot.com", messagingSenderId: "846926668384", appId: "1:846926668384:web:c8022e110171969f6b5905", measurementId: "G-6EHSLH65WZ" };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const googleProvider = new GoogleAuthProvider();
-
     const lgpdModal = document.getElementById('lgpdModal');
     const consentCheckbox = document.getElementById('consentCheckbox');
     const btnLGPD = document.getElementById('btnLGPD');
     const authForm = document.getElementById('authForm');
     const profileForm = document.getElementById('profileForm');
     const googleBtn = document.getElementById('googleSignIn');
-
-    // LGPD
     consentCheckbox.addEventListener('change', () => btnLGPD.disabled = !consentCheckbox.checked);
-    btnLGPD.addEventListener('click', () => {
-      lgpdModal.style.display = 'none';
-      authForm.classList.add('form--active');
-      authForm.removeAttribute('aria-hidden');
-      document.getElementById('email').focus();
-    });
-
-    // Google Sign-In
+    btnLGPD.addEventListener('click', () => { lgpdModal.style.display = 'none'; authForm.classList.add('form--active'); authForm.removeAttribute('aria-hidden'); document.getElementById('email').focus(); });
     googleBtn.addEventListener('click', async () => {
       try {
         const result = await signInWithPopup(auth, googleProvider);
         document.getElementById('uid').value = result.user.uid;
         switchToProfile();
-      } catch (e) {
-        alert('Erro no Google Sign-In: ' + e.message);
-      }
+      } catch (e) { alert('Erro no Google Sign-In: ' + e.message); }
     });
-
-    // E-mail/Password Sign-Up
     authForm.addEventListener('submit', async e => {
       e.preventDefault();
       try {
@@ -223,45 +120,22 @@
         const uc = await createUserWithEmailAndPassword(auth, email, pwd);
         document.getElementById('uid').value = uc.user.uid;
         switchToProfile();
-      } catch (e) {
-        alert('Erro no cadastro: ' + e.message);
-      }
+      } catch (e) { alert('Erro no cadastro: ' + e.message); }
     });
-
-    function switchToProfile() {
-      authForm.classList.remove('form--active'); authForm.setAttribute('aria-hidden','true');
-      profileForm.classList.add('form--active'); profileForm.removeAttribute('aria-hidden');
-      document.getElementById('nome').focus();
-    }
-
-    // Submissão ao backend, tratando não-JSON
+    function switchToProfile() { authForm.classList.remove('form--active'); authForm.setAttribute('aria-hidden','true'); profileForm.classList.add('form--active'); profileForm.removeAttribute('aria-hidden'); document.getElementById('nome').focus(); }
     profileForm.addEventListener('submit', async e => {
       e.preventDefault();
-      const payload = {
-        uid: document.getElementById('uid').value,
-        nome: document.getElementById('nome').value.trim(),
-        cpf: document.getElementById('cpf').value.replace(/\D/g,''),
-        telefone: document.getElementById('telefone').value.trim()
-      };
+      const payload = { uid: document.getElementById('uid').value, nome: document.getElementById('nome').value.trim(), cpf: document.getElementById('cpf').value.replace(/\D/g,''), telefone: document.getElementById('telefone').value.trim() };
       try {
-        const res = await fetch('/api/create-cuidadores', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
+        const res = await fetch('/api/create-cuidadores', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
         if (!res.ok) {
+          const text = await res.clone().text();
           let message;
-          try {
-            const errorJson = await res.json();
-            message = errorJson.error || JSON.stringify(errorJson);
-          } catch {
-            message = await res.text();
-          }
+          try { const data = JSON.parse(text); message = data.error || text; } catch { message = text; }
           throw new Error(message);
         }
         window.location.href = '/pagina_especialista.html';
-      } catch (e) {
-        alert('Erro ao finalizar cadastro: ' + e.message);
-      }
+      } catch (e) { alert('Erro ao finalizar cadastro: ' + e.message); }
     });
   </script>
 </body>
