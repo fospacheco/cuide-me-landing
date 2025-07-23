@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil do Cliente • Cuide-me</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYKS8LN7ZT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-WYKS8LN7ZT');
+  </script>
+  <style>
+    :root {
+      --primary-color: #1ba8c2;
+      --secondary-color: #44c7e1;
+      --accent-color: #ffc145;
+      --white: #ffffff;
+      --light-bg: #f2fbfd;
+      --dark-text: #245063;
+      --gray: #666;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--light-bg);
+      color: var(--dark-text);
+      margin: 0;
+    }
+    header {
+      background: var(--white);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    header img {
+      height: 60px;
+    }
+    header h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    .perfil-topo {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+    }
+    .foto-cliente {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+      overflow: hidden;
+    }
+    .foto-cliente img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .dados-cliente h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem;
+      margin: 0 0 0.3rem;
+    }
+    .dados-cliente p {
+      margin: 0.2rem 0;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+    section {
+      margin-top: 2rem;
+    }
+    section h3 {
+      font-size: 1.3rem;
+      border-left: 4px solid var(--primary-color);
+      padding-left: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .info-box {
+      background: var(--light-bg);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .info-box p, .info-box li {
+      margin: 0.3rem 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo_cuide_me.png" alt="Logo Cuide-me">
+    <h1>Perfil do Cliente</h1>
+  </header>
+  <main>
+    <div class="perfil-topo">
+      <div class="foto-cliente" id="foto"></div>
+      <div class="dados-cliente" id="dados"></div>
+    </div>
+
+    <section>
+      <h3>Necessidades</h3>
+      <div class="info-box" id="necessidades"></div>
+    </section>
+
+    <section>
+      <h3>Observações</h3>
+      <div class="info-box" id="observacao"></div>
+    </section>
+  </main>
+
+  <script>
+    const apiKey = "patmFPPQtaRfGjO4M.2779fc56e07f99a3f5c829ad2d26a0cd77ffaa417ee2baae14874e98c6da5f3c";
+    const baseId = "appVxCKjvJAah2r27";
+    const table = "Clientes";
+    const urlParams = new URLSearchParams(window.location.search);
+    const recordId = urlParams.get("id");
+
+    if (!recordId) {
+      alert("ID do cliente não encontrado na URL.");
+    } else {
+      fetch(`https://api.airtable.com/v0/${baseId}/${table}/${recordId}`, {
+        headers: { Authorization: `Bearer ${apiKey}` }
+      })
+      .then(res => res.json())
+      .then(({ fields: f }) => {
+        const fotoDiv = document.getElementById('foto');
+        if (f.Foto?.[0]?.url) {
+          fotoDiv.innerHTML = `<img src="${f.Foto[0].url}" alt="Foto de ${f['Nome Completo']}" loading="lazy">`;
+        } else {
+          fotoDiv.textContent = f['Nome Completo'].split(' ').map(n => n[0]).join('').toUpperCase();
+        }
+
+        document.getElementById('dados').innerHTML = `
+          <h2>${f['Nome Completo']}</h2>
+          <p><i class="fas fa-birthday-cake"></i> ${f['Idade'] || 'Idade não informada'}</p>
+        `;
+
+        document.getElementById('necessidades').innerHTML = `<p>${f['Necessidades'] || 'Não informado'}</p>`;
+        document.getElementById('observacao').innerHTML = `<p>${f['Observação'] || 'Não informada'}</p>`;
+      })
+      .catch(err => {
+        console.error("Erro ao buscar cliente:", err);
+        alert("Não foi possível carregar os dados do cliente.");
+      });
+    }
+  </script>
+</body>
+</html>
