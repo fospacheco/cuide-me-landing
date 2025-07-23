@@ -3,6 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Perfil do cuidador verificado na Cuide-me, com experiência, disponibilidade e certificados."/>
+  <meta property="og:title" content="Perfil do Cuidador | Cuide-me"/>
+  <meta property="og:image" content="logo_cuide_me.png"/>
+  <meta name="robots" content="noindex, nofollow"/>
   <title>Perfil do Cuidador • Cuide-me</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
@@ -14,13 +18,30 @@
       --white: #ffffff;
       --light-bg: #f2fbfd;
       --dark-text: #245063;
-      --gray: #888;
+      --gray: #666;
     }
     body {
       font-family: 'Poppins', sans-serif;
       background: var(--light-bg);
       color: var(--dark-text);
       margin: 0;
+    }
+    a.skip-link {
+      position: absolute;
+      left: -999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    a.skip-link:focus {
+      position: static;
+      width: auto;
+      height: auto;
+      padding: 1rem;
+      background: var(--primary-color);
+      color: var(--white);
+      z-index: 1000;
     }
     header {
       background: var(--white);
@@ -98,6 +119,11 @@
     .info-box p, .info-box li {
       margin: 0.3rem 0;
     }
+    .botoes-acao {
+      display: flex;
+      gap: 1rem;
+      margin-top: 2rem;
+    }
     .botao-contato {
       background: var(--primary-color);
       color: white;
@@ -106,8 +132,8 @@
       font-weight: bold;
       border-radius: 50px;
       cursor: pointer;
-      margin-top: 1rem;
       transition: background 0.3s ease;
+      flex: 1;
     }
     .botao-contato:hover {
       background: var(--secondary-color);
@@ -119,42 +145,41 @@
   </style>
 </head>
 <body>
+  <a href="#main" class="skip-link">Pular para o conteúdo</a>
   <header>
     <img src="logo_cuide_me.png" alt="Logo Cuide-me">
     <h1>Perfil do Cuidador</h1>
   </header>
-
-  <main>
+  <main id="main">
     <div class="perfil-topo">
       <div class="foto-cuidador" id="foto"></div>
       <div class="dados-cuidador" id="dados"></div>
     </div>
-
     <section>
       <h3>Sobre</h3>
       <div class="info-box" id="sobre"></div>
     </section>
-
     <section>
       <h3>Disponibilidade</h3>
       <div class="info-box" id="disponibilidade"></div>
     </section>
-
     <section>
       <h3>Links e Certificados</h3>
       <div class="info-box" id="links"></div>
     </section>
-
-    <button class="botao-contato" id="btn-whatsapp">
-      <i class="fab fa-whatsapp"></i> Entrar em contato
-    </button>
+    <div class="botoes-acao">
+      <button class="botao-contato" id="btn-whatsapp" aria-label="Agendar entrevista pelo WhatsApp">
+        <i class="fab fa-whatsapp" aria-hidden="true"></i> Agendar Entrevista
+      </button>
+      <button class="botao-contato" id="btn-contratar" aria-label="Efetuar contratação">
+        <i class="fas fa-user-check" aria-hidden="true"></i> Efetuar Contratação
+      </button>
+    </div>
   </main>
-
   <script>
     const apiKey = "patmFPPQtaRfGjO4M.2779fc56e07f99a3f5c829ad2d26a0cd77ffaa417ee2baae14874e98c6da5f3c";
     const baseId = "appVxCKjvJAah2r27";
     const table = "Cuidadores";
-
     const urlParams = new URLSearchParams(window.location.search);
     const recordId = urlParams.get("id");
 
@@ -166,51 +191,34 @@
       })
       .then(res => res.json())
       .then(({ fields: f }) => {
-        // Foto
         const fotoDiv = document.getElementById('foto');
         if (f.Foto?.[0]?.url) {
-          fotoDiv.innerHTML = `<img src="${f.Foto[0].url}" alt="Foto de ${f['Nome Completo']}">`;
+          fotoDiv.innerHTML = `<img src="${f.Foto[0].url}" alt="Foto de ${f['Nome Completo']}" loading="lazy">`;
         } else {
           fotoDiv.textContent = f['Nome Completo'].split(' ').map(n => n[0]).join('').toUpperCase();
         }
-
-        // Dados topo com correções de array
-        const local = f.Localização?.[0] ? `<p><i class="fas fa-map-marker-alt"></i> ${f.Localização[0]}</p>` : '';
-        const esp = f.Especialidade?.length ? `<p><i class="fas fa-briefcase-medical"></i> ${f.Especialidade.join(', ')}</p>` : '';
-        const status = f.Status ? `<p><i class="fas fa-check-circle"></i> ${f.Status}</p>` : '';
-
-        document.getElementById('dados').innerHTML = `
-          <h2>${f['Nome Completo']}</h2>
-          ${local}
-          ${esp}
-          ${status}
-        `;
-
-        // Sobre
+        const local = f.Localização?.[0] ? `<p><i class='fas fa-map-marker-alt'></i> ${f.Localização[0]}</p>` : '';
+        const esp = f.Especialidade?.length ? `<p><i class='fas fa-briefcase-medical'></i> ${f.Especialidade.join(', ')}</p>` : '';
+        const status = f.Status ? `<p><i class='fas fa-check-circle'></i> ${f.Status}</p>` : '';
+        document.getElementById('dados').innerHTML = `<h2>${f['Nome Completo']}</h2>${local}${esp}${status}`;
         document.getElementById('sobre').innerHTML = `<p>${f['Sobre mim'] || 'Não informado.'}</p>`;
-
-        // Disponibilidade
         document.getElementById('disponibilidade').innerHTML = `<p>${f.Disponibilidade || 'Não informada'}</p>`;
-
-        // Links
         const links = [];
-        if (f.Linkedin) links.push(`<p><a href="${f.Linkedin}" target="_blank">Linkedin</a></p>`);
-        if (f.Curriculo?.[0]?.url) links.push(`<p><a href="${f.Curriculo[0].url}" target="_blank">Currículo</a></p>`);
+        if (f.Linkedin) links.push(`<p><a href="${f.Linkedin}" target="_blank" rel="noopener noreferrer">Linkedin</a></p>`);
+        if (f.Curriculo?.[0]?.url) links.push(`<p><a href="${f.Curriculo[0].url}" target="_blank" rel="noopener noreferrer">Currículo</a></p>`);
         if (Array.isArray(f.Certificados)) {
           f.Certificados.forEach(c => {
-            if (c.url) links.push(`<p><a href="${c.url}" target="_blank">Certificado</a></p>`);
+            if (c.url) links.push(`<p><a href="${c.url}" target="_blank" rel="noopener noreferrer">Certificado</a></p>`);
           });
         }
         document.getElementById('links').innerHTML = links.join('');
-
-        // WhatsApp
         if (f['Telefone/WhatsApp']) {
           const whatsapp = f['Telefone/WhatsApp'].replace(/\D/g, '');
-          document.getElementById('btn-whatsapp').onclick = () =>
-            window.location.href = `https://wa.me/${whatsapp}`;
+          document.getElementById('btn-whatsapp').onclick = () => window.location.href = `https://wa.me/${whatsapp}`;
         } else {
-          document.getElementById('btn-whatsapp').disabled = true;
-          document.getElementById('btn-whatsapp').innerText = 'WhatsApp não disponível';
+          const btn = document.getElementById('btn-whatsapp');
+          btn.disabled = true;
+          btn.innerText = 'WhatsApp não disponível';
         }
       })
       .catch(err => {
