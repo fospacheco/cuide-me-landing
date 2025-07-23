@@ -98,18 +98,7 @@
     .info-box p, .info-box li {
       margin: 0.3rem 0;
     }
-    a {
-      color: var(--primary-color);
-      text-decoration: none;
-    }
-
-    #botoes-acao {
-      display: flex;
-      gap: 1rem;
-      margin-top: 2rem;
-      flex-wrap: wrap;
-    }
-    .acao {
+    .botao-contato {
       background: var(--primary-color);
       color: white;
       border: none;
@@ -117,14 +106,15 @@
       font-weight: bold;
       border-radius: 50px;
       cursor: pointer;
+      margin-top: 1rem;
       transition: background 0.3s ease;
     }
-    .acao:hover {
+    .botao-contato:hover {
       background: var(--secondary-color);
     }
-    .acao.secundario {
-      background: var(--accent-color);
-      color: #245063;
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
     }
   </style>
 </head>
@@ -155,7 +145,9 @@
       <div class="info-box" id="links"></div>
     </section>
 
-    <div id="botoes-acao"></div>
+    <button class="botao-contato" id="btn-whatsapp">
+      <i class="fab fa-whatsapp"></i> Entrar em contato
+    </button>
   </main>
 
   <script>
@@ -163,12 +155,13 @@
     const baseId = "appVxCKjvJAah2r27";
     const table = "Cuidadores";
 
-    const recordId = new URLSearchParams(window.location.search).get("id");
+    const urlParams = new URLSearchParams(window.location.search);
+    const recordId = urlParams.get("id");
 
     if (!recordId) {
       alert("ID do cuidador não encontrado na URL.");
     } else {
-      fetch(`https://api.airtable.com/v0/${baseId}/${table}/${recordId}?cellFormat=string`, {
+      fetch(`https://api.airtable.com/v0/${baseId}/${table}/${recordId}`, {
         headers: { Authorization: `Bearer ${apiKey}` }
       })
       .then(res => res.json())
@@ -181,9 +174,9 @@
           fotoDiv.textContent = f['Nome Completo'].split(' ').map(n => n[0]).join('').toUpperCase();
         }
 
-        // Dados principais
-        const local = f.Localização ? `<p><i class="fas fa-map-marker-alt"></i> ${f.Localização}</p>` : '';
-        const esp = f.Especialidade ? `<p><i class="fas fa-briefcase-medical"></i> ${f.Especialidade}</p>` : '';
+        // Dados topo com correções de array
+        const local = f.Localização?.[0] ? `<p><i class="fas fa-map-marker-alt"></i> ${f.Localização[0]}</p>` : '';
+        const esp = f.Especialidade?.length ? `<p><i class="fas fa-briefcase-medical"></i> ${f.Especialidade.join(', ')}</p>` : '';
         const status = f.Status ? `<p><i class="fas fa-check-circle"></i> ${f.Status}</p>` : '';
 
         document.getElementById('dados').innerHTML = `
@@ -210,16 +203,15 @@
         }
         document.getElementById('links').innerHTML = links.join('');
 
-        // Botões
-        const btns = document.getElementById('botoes-acao');
-        btns.innerHTML = `
-          <button class="acao" onclick="alert('Em breve: agendamento direto!')">
-            <i class="fas fa-calendar-alt"></i> Agendar Conversa
-          </button>
-          <button class="acao secundario" onclick="alert('Em breve: processo de contratação!')">
-            <i class="fas fa-handshake"></i> Contratar
-          </button>
-        `;
+        // WhatsApp
+        if (f['Telefone/WhatsApp']) {
+          const whatsapp = f['Telefone/WhatsApp'].replace(/\D/g, '');
+          document.getElementById('btn-whatsapp').onclick = () =>
+            window.location.href = `https://wa.me/${whatsapp}`;
+        } else {
+          document.getElementById('btn-whatsapp').disabled = true;
+          document.getElementById('btn-whatsapp').innerText = 'WhatsApp não disponível';
+        }
       })
       .catch(err => {
         console.error("Erro ao buscar cuidador:", err);
