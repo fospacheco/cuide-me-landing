@@ -168,8 +168,8 @@
       <div class="info-box" id="links"></div>
     </section>
     <div class="botoes-acao">
-      <button class="botao-contato" id="btn-whatsapp" aria-label="Agendar entrevista pelo WhatsApp">
-        <i class="fab fa-whatsapp" aria-hidden="true"></i> Agendar Entrevista
+      <button class="botao-contato" id="btn-entrevista" aria-label="Agendar entrevista">
+        <i class="fas fa-calendar-check" aria-hidden="true"></i> Agendar Entrevista
       </button>
       <button class="botao-contato" id="btn-contratar" aria-label="Efetuar contratação">
         <i class="fas fa-user-check" aria-hidden="true"></i> Efetuar Contratação
@@ -212,14 +212,6 @@
           });
         }
         document.getElementById('links').innerHTML = links.join('');
-        if (f['Telefone/WhatsApp']) {
-          const whatsapp = f['Telefone/WhatsApp'].replace(/\D/g, '');
-          document.getElementById('btn-whatsapp').onclick = () => window.location.href = `https://wa.me/${whatsapp}`;
-        } else {
-          const btn = document.getElementById('btn-whatsapp');
-          btn.disabled = true;
-          btn.innerText = 'WhatsApp não disponível';
-        }
       })
       .catch(err => {
         console.error("Erro ao buscar cuidador:", err);
