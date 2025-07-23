@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Perfil do Cuidador • Cuide-me</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+  <style>
+    :root {
+      --primary-color: #1ba8c2;
+      --secondary-color: #44c7e1;
+      --accent-color: #ffc145;
+      --white: #ffffff;
+      --light-bg: #f2fbfd;
+      --dark-text: #245063;
+      --gray: #888;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: var(--light-bg);
+      color: var(--dark-text);
+      margin: 0;
+    }
+    header {
+      background: var(--white);
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    header img {
+      height: 60px;
+    }
+    header h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.5rem;
+      color: var(--primary-color);
+    }
+    main {
+      max-width: 960px;
+      margin: 2rem auto;
+      background: var(--white);
+      border-radius: 16px;
+      padding: 2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    }
+    .perfil-topo {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+    }
+    .foto-cuidador {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3rem;
+      overflow: hidden;
+    }
+    .foto-cuidador img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .dados-cuidador h2 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.8rem;
+      margin: 0 0 0.3rem;
+    }
+    .dados-cuidador p {
+      margin: 0.2rem 0;
+      color: var(--gray);
+      font-size: 0.95rem;
+    }
+    section {
+      margin-top: 2rem;
+    }
+    section h3 {
+      font-size: 1.3rem;
+      border-left: 4px solid var(--primary-color);
+      padding-left: 0.75rem;
+      margin-bottom: 1rem;
+    }
+    .info-box {
+      background: var(--light-bg);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+    }
+    .info-box p, .info-box li {
+      margin: 0.3rem 0;
+    }
+    .botao-contato {
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 0.9rem 1.5rem;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      margin-top: 1rem;
+      transition: background 0.3s ease;
+    }
+    .botao-contato:hover {
+      background: var(--secondary-color);
+    }
+    a {
+      color: var(--primary-color);
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo_cuide_me.png" alt="Logo Cuide-me">
+    <h1>Perfil do Cuidador</h1>
+  </header>
+
+  <main>
+    <div class="perfil-topo">
+      <div class="foto-cuidador" id="foto"></div>
+      <div class="dados-cuidador" id="dados"></div>
+    </div>
+
+    <section>
+      <h3>Sobre</h3>
+      <div class="info-box" id="sobre"></div>
+    </section>
+
+    <section>
+      <h3>Disponibilidade</h3>
+      <div class="info-box" id="disponibilidade"></div>
+    </section>
+
+    <section>
+      <h3>Links e Certificados</h3>
+      <div class="info-box" id="links"></div>
+    </section>
+
+    <button class="botao-contato" id="btn-whatsapp">
+      <i class="fab fa-whatsapp"></i> Entrar em contato
+    </button>
+  </main>
+
+  <script>
+    const apiKey = "patmFPPQtaRfGjO4M.2779fc56e07f99a3f5c829ad2d26a0cd77ffaa417ee2baae14874e98c6da5f3c";
+    const baseId = "appVxCKjvJAah2r27";
+    const table = "Cuidadores";
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const recordId = urlParams.get("id");
+
+    if (!recordId) {
+      alert("ID do cuidador não encontrado na URL.");
+    } else {
+      fetch(`https://api.airtable.com/v0/${baseId}/${table}/${recordId}`, {
+        headers: { Authorization: `Bearer ${apiKey}` }
+      })
+      .then(res => res.json())
+      .then(({ fields: f }) => {
+        // Foto
+        const fotoDiv = document.getElementById('foto');
+        if (f.Foto?.[0]?.url) {
+          fotoDiv.innerHTML = `<img src="${f.Foto[0].url}" alt="Foto de ${f['Nome Completo']}">`;
+        } else {
+          fotoDiv.textContent = f['Nome Completo'].split(' ').map(n => n[0]).join('').toUpperCase();
+        }
+
+        // Dados topo
+        document.getElementById('dados').innerHTML = `
+          <h2>${f['Nome Completo']}</h2>
+          <p><i class="fas fa-map-marker-alt"></i> ${f.Localização}</p>
+          <p><i class="fas fa-briefcase-medical"></i> ${f.Especialidade}</p>
+          <p><i class="fas fa-check-circle"></i> ${f.Status}</p>
+        `;
+
+        // Sobre
+        document.getElementById('sobre').innerHTML = `<p>${f['Sobre mim'] || 'Não informado.'}</p>`;
+
+        // Disponibilidade
+        document.getElementById('disponibilidade').innerHTML = `<p>${f.Disponibilidade || 'Não informada'}</p>`;
+
+        // Links
+        const links = [];
+        if (f.Linkedin) links.push(`<p><a href="${f.Linkedin}" target="_blank">Linkedin</a></p>`);
+        if (f.Curriculo?.[0]?.url) links.push(`<p><a href="${f.Curriculo[0].url}" target="_blank">Currículo</a></p>`);
+        if (Array.isArray(f.Certificados)) {
+          f.Certificados.forEach(c => {
+            if (c.url) links.push(`<p><a href="${c.url}" target="_blank">Certificado</a></p>`);
+          });
+        }
+        document.getElementById('links').innerHTML = links.join('');
+
+        // WhatsApp
+        if (f['Telefone/WhatsApp']) {
+          const whatsapp = f['Telefone/WhatsApp'].replace(/\D/g, '');
+          document.getElementById('btn-whatsapp').onclick = () =>
+            window.location.href = `https://wa.me/${whatsapp}`;
+        } else {
+          document.getElementById('btn-whatsapp').disabled = true;
+          document.getElementById('btn-whatsapp').innerText = 'WhatsApp não disponível';
+        }
+      })
+      .catch(err => {
+        console.error("Erro ao buscar cuidador:", err);
+        alert("Não foi possível carregar os dados do cuidador.");
+      });
+    }
+  </script>
+</body>
+</html>
