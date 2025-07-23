@@ -174,12 +174,16 @@
           fotoDiv.textContent = f['Nome Completo'].split(' ').map(n => n[0]).join('').toUpperCase();
         }
 
-        // Dados topo
+        // Dados topo com correções de array
+        const local = f.Localização?.[0] ? `<p><i class="fas fa-map-marker-alt"></i> ${f.Localização[0]}</p>` : '';
+        const esp = f.Especialidade?.length ? `<p><i class="fas fa-briefcase-medical"></i> ${f.Especialidade.join(', ')}</p>` : '';
+        const status = f.Status ? `<p><i class="fas fa-check-circle"></i> ${f.Status}</p>` : '';
+
         document.getElementById('dados').innerHTML = `
           <h2>${f['Nome Completo']}</h2>
-          <p><i class="fas fa-map-marker-alt"></i> ${f.Localização}</p>
-          <p><i class="fas fa-briefcase-medical"></i> ${f.Especialidade}</p>
-          <p><i class="fas fa-check-circle"></i> ${f.Status}</p>
+          ${local}
+          ${esp}
+          ${status}
         `;
 
         // Sobre
