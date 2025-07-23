@@ -181,7 +181,7 @@
 
         document.getElementById('dados').innerHTML = `
           <h2>${f['Nome Completo']}</h2>
-          <p><i class="fas fa-birthday-cake"></i> ${f['Idade'] || 'Idade não informada'}</p>
+          <p><i class="fas fa-birthday-cake"></i> ${f['Idade'] ? f['Idade'] + ' anos' : 'Idade não informada'}</p>
         `;
 
         document.getElementById('necessidades').innerHTML = `<p>${necessidades}</p>`;
