@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cuide-me | Agendamento de Entrevista</title>
+  <meta name="description" content="Tela de agendamento de entrevistas para cuidadores e clientes.">
+
+  <!-- Preconnect para melhorar carregamento das fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Google Fonts: Poppins e Montserrat -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/main.min.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary-color: #0066CC;
+      --secondary-color: #CCCCCC;
+      --accent-color: #FFCC00;
+      --white: #FFFFFF;
+      --border-radius: 8px;
+      --shadow: 0 2px 4px rgba(0,0,0,0.1);
+      font-size: 16px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: #F9F9F9;
+      color: #333;
+    }
+    #calendar-container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: var(--white);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+    .fc .fc-button {
+      background: var(--primary-color);
+      border: none;
+      color: var(--white);
+      font-family: 'Montserrat', sans-serif;
+    }
+    .fc .fc-button:focus {
+      outline: 3px solid var(--accent-color);
+    }
+    .fc-event {
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow);
+    }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0,0,0,0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
+
+  <!-- FullCalendar UMD Global Bundles -->
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/index.global.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/index.global.min.js" defer></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      var calendarEl = document.getElementById('calendar');
+      var calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: [ 'dayGrid', 'timeGrid', 'interaction' ],
+        initialView: 'timeGridWeek',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        },
+        timeZone: 'America/Sao_Paulo',
+        locale: 'pt-br',
+        selectable: true,
+        selectMirror: true,
+        select: function(info) {
+          var title = prompt('Título da entrevista:');
+          if (title) {
+            calendar.addEvent({
+              title: title,
+              start: info.startStr,
+              end: info.endStr,
+              allDay: info.allDay
+            });
+          }
+          calendar.unselect();
+        },
+        events: []
+      });
+      calendar.render();
+    });
+  </script>
+</head>
+<body>
+  <h1 id="page-title" class="sr-only">Agendamento de Entrevista</h1>
+  <div id="calendar-container" aria-labelledby="page-title">
+    <div id="calendar"></div>
+  </div>
+</body>
+</html>
