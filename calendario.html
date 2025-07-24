@@ -1,22 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cuide-me | Agendamento de Entrevista</title>
-  <meta name="description" content="Tela de agendamento de entrevistas integrada ao Google Calendar.">
-  <!-- Preconnect para otimizar carregamento de fontes -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Cuide-me | Agendamento de Entrevista (Cuidador)</title>
+  <meta name="description" content="Painel do cuidador para aprovar ou rejeitar entrevistas e criar evento no Google Calendar.">
+
+  <!-- Preconnect para Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Google Fonts: Poppins e Montserrat -->
+  <!-- Poppins & Montserrat -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- FullCalendar CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/main.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/main.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/main.min.css" rel="stylesheet">
+
   <style>
     :root {
       --primary-color: #0066CC;
-      --accent-color: #FFCC00;
-      --white: #FFFFFF;
-      --border-radius: 8px;
-      --shadow: 0 2px 4px rgba(0,0,0,0.1);
+      --success-color: #28a745;
+      --warning-color: #ffc107;
+      --danger-color:  #dc3545;
+      --white:        #FFFFFF;
+      --radius:       8px;
+      --shadow:       0 2px 4px rgba(0,0,0,0.1);
     }
     *, *::before, *::after { box-sizing: border-box; }
     body {
@@ -30,33 +39,187 @@
       margin: 2rem auto;
       padding: 1rem;
       background: var(--white);
-      border-radius: var(--border-radius);
+      border-radius: var(--radius);
       box-shadow: var(--shadow);
+    }
+    .fc .fc-button {
+      background: var(--primary-color);
+      border: none;
+      color: var(--white);
+      font-family: 'Montserrat', sans-serif;
+    }
+    .fc .fc-button:focus {
+      outline: 3px solid var(--warning-color);
     }
     .sr-only {
       position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0,0,0,0);
-      white-space: nowrap;
-      border: 0;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0,0,0,0);
+      white-space: nowrap; border: 0;
     }
+    /* Modal */
+    .modal {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5);
+      display: none; align-items: center; justify-content: center;
+    }
+    .modal.show { display: flex; }
+    .modal-content {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      max-width: 400px;
+      width: 90%;
+    }
+    .modal-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+    }
+    .btn-approve { background: var(--success-color); color: var(--white); }
+    .btn-reject  { background: var(--danger-color);  color: var(--white); }
+    .btn-close   { background: var(--warning-color); color: #000; }
   </style>
+
+  <!-- Google API & FullCalendar UMD bundles -->
+  <script async defer src="https://apis.google.com/js/api.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.8/index.global.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/interaction@6.1.8/index.global.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.8/index.global.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/timegrid@6.1.8/index.global.min.js" defer></script>
 </head>
 <body>
-  <h1 id="page-title" class="sr-only">Agendamento de Entrevista</h1>
+  <h1 class="sr-only">Painel do Cuidador – Aprovação de Entrevistas</h1>
+
   <div id="calendar-container" aria-labelledby="page-title">
-    <!-- TODO: Substitua YOUR_CALENDAR_ID pelo ID do seu Google Calendar -->
-    <iframe
-      src="https://calendar.google.com/calendar/embed?src=YOUR_CALENDAR_ID&ctz=America/Sao_Paulo"
-      style="border:0; width:100%; height:600px;"
-      frameborder="0"
-      scrolling="no"
-      title="Agendamento de Entrevista - Google Calendar"
-    ></iframe>
+    <button id="authorize-button" class="btn" style="margin-bottom:1rem;">Conectar Google Calendar</button>
+    <button id="signout-button" class="btn btn-close" style="display:none; margin-bottom:1rem;">Desconectar</button>
+    <div id="calendar"></div>
   </div>
+
+  <!-- Modal de Aprovação/Reprovação -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-content">
+      <h2 id="modal-title">Confirmar Entrevista</h2>
+      <p id="modal-text">Deseja aprovar esta entrevista?</p>
+      <p id="modal-details"></p>
+      <div class="modal-buttons">
+        <button id="approve-btn" class="btn btn-approve">Aprovar</button>
+        <button id="reject-btn" class="btn btn-reject">Rejeitar</button>
+        <button id="close-btn"   class="btn btn-close">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // === CONFIGURAÇÃO Google API ===
+    const API_KEY    = 'YOUR_API_KEY';
+    const CLIENT_ID  = 'YOUR_CLIENT_ID.apps.googleusercontent.com';
+    const SCOPES     = 'https://www.googleapis.com/auth/calendar.events';
+    const DISCOVERY_DOCS = ["https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"];
+
+    let currentEvent = null;
+
+    function handleClientLoad() {
+      gapi.load('client:auth2', initClient);
+    }
+    function initClient() {
+      gapi.client.init({
+        apiKey: API_KEY,
+        clientId: CLIENT_ID,
+        discoveryDocs: DISCOVERY_DOCS,
+        scope: SCOPES
+      }).then(() => {
+        const auth = gapi.auth2.getAuthInstance();
+        updateSigninStatus(auth.isSignedIn.get());
+        auth.isSignedIn.listen(updateSigninStatus);
+        document.getElementById('authorize-button')
+                .onclick = () => auth.signIn();
+        document.getElementById('signout-button')
+                .onclick = () => auth.signOut();
+      });
+    }
+    function updateSigninStatus(isSignedIn) {
+      document.getElementById('authorize-button').style.display = isSignedIn ? 'none':'inline-block';
+      document.getElementById('signout-button').style.display  = isSignedIn ? 'inline-block':'none';
+    }
+    function insertEvent(startIso, endIso, summary, guests=[]) {
+      const event = { summary, start:{dateTime:startIso, timeZone:'America/Sao_Paulo'}, end:{dateTime:endIso, timeZone:'America/Sao_Paulo'}, attendees: guests.map(email=>({email})) };
+      return gapi.client.calendar.events.insert({ calendarId:'primary', resource:event })
+        .then(() => alert('Evento criado no seu Google Calendar!'))
+        .catch(err=>alert('Falha ao criar evento: '+ err.message));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      handleClientLoad();
+
+      // EXEMPLO DE EVENTS — troque pelo seu fetch('/api/interviews?role=caregiver')
+      const events = [
+        {
+          id: '1',
+          title: 'Entrevista',
+          start: '2025-07-28T10:00:00',
+          end:   '2025-07-28T11:00:00',
+          color: getComputedStyle(document.documentElement).getPropertyValue('--warning-color'),
+          extendedProps: { status:'pending', clientName:'João Silva', clientEmail:'joao@example.com' }
+        }
+      ];
+
+      const calendarEl = document.getElementById('calendar');
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        plugins: ['interaction','dayGrid','timeGrid'],
+        initialView: 'timeGridWeek',
+        headerToolbar: { left:'prev,next today', center:'title', right:'dayGridMonth,timeGridWeek,timeGridDay' },
+        timeZone: 'America/Sao_Paulo',
+        locale: 'pt-br',
+        events,
+        eventClick: info => {
+          const { status, clientName, clientEmail } = info.event.extendedProps;
+          if (status !== 'pending') return; // só abre modal em pendente
+          currentEvent = info.event;
+          // preenche modal
+          document.getElementById('modal-details').innerText =
+            `Cliente: ${clientName}\nDe ${info.event.startStr.replace('T',' ')} até ${info.event.endStr.replace('T',' ')}`;
+          document.getElementById('modal').classList.add('show');
+        }
+      });
+      calendar.render();
+
+      // botões do modal
+      document.getElementById('approve-btn').onclick = () => {
+        if (!currentEvent) return;
+        currentEvent.setProp('color', getComputedStyle(document.documentElement).getPropertyValue('--success-color'));
+        currentEvent.setExtendedProp('status','approved');
+        // cria no Google Calendar
+        insertEvent(
+          currentEvent.startStr,
+          currentEvent.endStr,
+          `Entrevista: ${currentEvent.extendedProps.clientName}`,
+          [ currentEvent.extendedProps.clientEmail ]
+        );
+        document.getElementById('modal').classList.remove('show');
+      };
+      document.getElementById('reject-btn').onclick = () => {
+        if (!currentEvent) return;
+        currentEvent.setProp('color', getComputedStyle(document.documentElement).getPropertyValue('--danger-color'));
+        currentEvent.setExtendedProp('status','rejected');
+        document.getElementById('modal').classList.remove('show');
+      };
+      document.getElementById('close-btn').onclick = () => {
+        document.getElementById('modal').classList.remove('show');
+      };
+    });
+  </script>
 </body>
 </html>
