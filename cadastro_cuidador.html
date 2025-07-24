@@ -1,29 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
+  <!-- Meta tags obrigatórios -->
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Cadastro Cuidador | Cuide-me</title>
+
+  <!-- Pré-conexão e fontes (Poppins e Montserrat) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet"/>
+
+  <!-- Google Analytics 4 (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYKS8LN7ZT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ dataLayer.push(arguments); }
+    gtag('js', new Date());
+    // Configuração GA4: coleta page_view, scrolls, outbound clicks, vídeos, formulários — métricas de engajamento (bounce rate via 1-engagement_rate)
+    gtag('config', 'G-WYKS8LN7ZT', {
+      'anonymize_ip': true,
+      'send_page_view': true,
+      'allow_ad_personalization_signals': false // respeita privacidade LGPD
+    });
+  </script>
+
+  <!-- CSS principal -->
   <style>
+    :root {
+      --primary-color: #3ddad7;
+      --primary-dark: #1ba8c2;
+      --text-color: #245063;
+      --bg-gradient-start: #f2fbfd;
+      --bg-gradient-end: #ffffff;
+      --font-sans: 'Poppins', sans-serif;
+      --font-alt: 'Montserrat', sans-serif;
+    }
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
     body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      color: #245063;
-      font-size: 1.08rem;
       margin: 0;
       padding: 0;
+      font-family: var(--font-sans);
+      background: linear-gradient(to bottom, var(--bg-gradient-start), var(--bg-gradient-end));
+      color: var(--text-color);
+      font-size: 1.125rem;
     }
-    .form-container {
-      max-width: 800px;
-      margin: 4rem auto;
-      background: white;
-      padding: 2rem;
-      border-radius: 16px;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
-      display: none;
+    a {
+      color: var(--primary-dark);
+      text-decoration: none;
+    }
+    a:focus, button:focus, input:focus {
+      outline: 3px solid var(--primary-color);
+      outline-offset: 2px;
     }
     h2 {
-      color: #1ba8c2;
+      font-family: var(--font-alt);
+      color: var(--primary-dark);
+      font-weight: 600;
       text-align: center;
       margin-bottom: 1rem;
     }
@@ -32,151 +67,160 @@
       margin-bottom: 2rem;
       color: #4a5d68;
     }
+    .form-container {
+      display: none;
+      max-width: 800px;
+      margin: 4rem auto;
+      background: #fff;
+      padding: 2rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+    }
     iframe.airtable-embed {
-      border: 1px solid #ccc;
-      background: transparent;
       width: 100%;
       height: 1300px;
+      border: none;
+      background: transparent;
+      loading: lazy;
+    }
+    .back-button,
+    .floating-cta {
+      display: inline-block;
+      background-color: var(--primary-color);
+      color: #fff;
+      padding: 0.9rem 1.2rem;
+      border-radius: 50px;
+      font-family: var(--font-alt);
+      font-weight: 600;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: opacity 0.2s ease-in-out;
+    }
+    .back-button:hover,
+    .floating-cta:hover {
+      opacity: 0.85;
     }
     .floating-cta {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      background-color: #3ddad7;
-      color: white;
-      padding: 0.9rem 1.2rem;
-      border-radius: 50px;
-      font-weight: bold;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       z-index: 1000;
     }
-    /* Botão de voltar à página inicial */
-    .back-button {
-      display: inline-block;
-      background-color: #3ddad7;
-      color: white;
-      padding: 0.9rem 1.2rem;
-      border-radius: 50px;
-      font-weight: bold;
-      text-decoration: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      transition: opacity 0.2s ease-in-out;
-    }
-    .back-button:hover {
-      opacity: 0.8;
-    }
     #modal-bloqueio {
-      position: fixed;
-      top: 0; left: 0;
+      position: fixed; top: 0; left: 0;
       width: 100%; height: 100%;
-      background: linear-gradient(to bottom, #f2fbfd, #ffffff);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 99999;
+      background: linear-gradient(to bottom, var(--bg-gradient-start), var(--bg-gradient-end));
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9999;
     }
     #modal-bloqueio .modal-content {
-      background: white;
+      background: #fff;
       padding: 2rem;
       border-radius: 16px;
-      max-width: 90%;
-      width: 400px;
+      width: 90%; max-width: 400px;
       box-shadow: 0 4px 20px rgba(0,0,0,0.1);
       text-align: center;
     }
     #aceitarLGPD {
-      background-color: #00d4ff;
-      color: white;
-      padding: 0.9rem 1.5rem;
-      border-radius: 9999px;
-      font-weight: bold;
+      background-color: var(--primary-color);
+      color: #fff;
       border: none;
+      border-radius: 9999px;
+      padding: 0.9rem 1.5rem;
+      font-family: var(--font-alt);
+      font-weight: 600;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       opacity: 0.6;
       pointer-events: none;
+      transition: opacity 0.2s ease-in-out;
     }
     @media (max-width: 768px) {
-      .form-container {
-        margin: 2rem 1rem;
-      }
-      iframe.airtable-embed {
-        height: 1000px;
-      }
+      .form-container { margin: 2rem 1rem; }
+      iframe.airtable-embed { height: 1000px; }
     }
   </style>
 </head>
+
 <body>
-
-<!-- Modal LGPD -->
-<div id="modal-bloqueio">
-  <div class="modal-content">
-    <h2 style="color: #1ba8c2;">Antes de continuar...</h2>
-    <p>Para se cadastrar como cuidador, você precisa aceitar nossa política de privacidade.</p>
-    <div style="text-align: center; margin: 1rem 0;">
-      <label style="font-size: 0.9rem; color: #333;">
-        <input id="consentimentoLGPD" type="checkbox" style="margin-right: 0.5rem;"/>
-        Li e concordo com a <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank" style="color: #00aacc; text-decoration: underline;">Política de Privacidade</a>.
+  <!-- Modal de Consentimento (LGPD) -->
+  <div id="modal-bloqueio" role="dialog" aria-labelledby="lgpd-title" aria-modal="true">
+    <div class="modal-content">
+      <h2 id="lgpd-title">Antes de continuar...</h2>
+      <p>Para se cadastrar como cuidador, você precisa aceitar nossa política de privacidade.</p>
+      <label style="font-size:0.9rem; color:#333;" for="consentimentoLGPD">
+        <input id="consentimentoLGPD" type="checkbox" style="margin-right:0.5rem;" />
+        Li e concordo com a <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank">Política de Privacidade</a>.
       </label>
-    </div>
-    <div style="text-align: center;">
-      <button id="aceitarLGPD">Aceitar</button>
+      <div style="margin-top:1rem;">
+        <button id="aceitarLGPD">Aceitar</button>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- Formulário -->
-<div class="form-container" id="form-cuidador">
-  <div style="display: flex; align-items: center; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-    <img src="logo_cuide_me.png" alt="Logo Cuide-me" style="height: 48px;">
-    <h2 style="margin: 0;">Sou cuidador(a)/Especialista e quero me cadastrar</h2>
+  <!-- Conteúdo do formulário -->
+  <div class="form-container" id="form-cuidador">
+    <div style="display:flex; align-items:center; gap:1rem; justify-content:center; flex-wrap:wrap;">
+      <img src="logo_cuide_me.png" alt="Logo Cuide-me" style="height:48px;" loading="lazy"/>
+      <h2>Sou cuidador(a)/Especialista e quero me cadastrar</h2>
+    </div>
+    <p>Preencha o formulário abaixo. Em breve entraremos em contato para concluir seu cadastro na plataforma Cuide-me.</p>
+    <iframe
+      class="airtable-embed"
+      title="Formulário de cadastro de cuidador"
+      src="https://airtable.com/embed/appVxCKjvJAah2r27/shrP5sKLT00RybPmc"
+      allow="clipboard-write; encrypted-media"
+      loading="lazy"
+    ></iframe>
   </div>
-  <p>Preencha o formulário abaixo em breve vamos lhe informar para cadastrar a base de profissionais da plataforma Cuide-me:</p>
-  <iframe class="airtable-embed" frameborder="0" src="https://airtable.com/embed/appVxCKjvJAah2r27/shrP5sKLT00RybPmc"></iframe>
-</div>
 
-<!-- Botão voltar à página inicial -->
-<div style="text-align: center; margin: 2rem 0;">
-  <a href="https://cuide-me.vercel.app/" class="back-button">Voltar à Página inicial</a>
-</div>
+  <!-- Botão voltar à homepage -->
+  <div style="text-align:center; margin:2rem 0;">
+    <a href="https://cuide-me.vercel.app/" class="back-button">← Voltar à Página Inicial</a>
+  </div>
 
-<!-- WhatsApp CTA -->
-<a href="https://wa.me/5599999999999" target="_blank" class="floating-cta">❓ Dúvidas? Fale com a gente</a>
+  <!-- CTA WhatsApp -->
+  <a
+    href="https://wa.me/5599999999999"
+    target="_blank"
+    class="floating-cta"
+    aria-label="Chamar no WhatsApp para dúvidas"
+  >❓ Dúvidas? Fale com a gente</a>
 
-<script>
-  const aceitarBtn = document.getElementById('aceitarLGPD');
-  const checkbox = document.getElementById('consentimentoLGPD');
-  const modal = document.getElementById('modal-bloqueio');
-  const form = document.getElementById('form-cuidador');
+  <!-- Scripts de interação -->
+  <script>
+    const aceitarBtn = document.getElementById('aceitarLGPD');
+    const checkbox = document.getElementById('consentimentoLGPD');
+    const modal = document.getElementById('modal-bloqueio');
+    const form  = document.getElementById('form-cuidador');
 
-  checkbox.addEventListener('change', () => {
-    if (checkbox.checked) {
-      aceitarBtn.style.opacity = '1';
-      aceitarBtn.style.pointerEvents = 'auto';
-    } else {
-      aceitarBtn.style.opacity = '0.6';
-      aceitarBtn.style.pointerEvents = 'none';
-    }
-  });
+    // Ativa botão ao aceitar LGPD
+    checkbox.addEventListener('change', () => {
+      if (checkbox.checked) {
+        aceitarBtn.style.opacity = '1';
+        aceitarBtn.style.pointerEvents = 'auto';
+      } else {
+        aceitarBtn.style.opacity = '0.6';
+        aceitarBtn.style.pointerEvents = 'none';
+      }
+    });
 
-  aceitarBtn.addEventListener('click', () => {
-    if (checkbox.checked) {
-      modal.style.display = 'none';
-      form.style.display = 'block';
-      document.body.style.overflow = 'auto';
-    }
-  });
+    // Exibe formulário após consentimento
+    aceitarBtn.addEventListener('click', () => {
+      if (checkbox.checked) {
+        modal.style.display = 'none';
+        form.style.display = 'block';
+        document.body.style.overflow = 'auto';
+      }
+    });
 
-  // Impede rolagem enquanto o modal estiver ativo
-  document.body.style.overflow = 'hidden';
-</script>
+    // Previne rolagem antes do consentimento
+    document.body.style.overflow = 'hidden';
+  </script>
 
-<div style="text-align: center; margin-top: 2rem; font-size: 0.9rem;">
-  <a href="termos_de_uso_cuide_me.html" target="_blank" style="margin-right: 1rem; color: #087f8c; text-decoration: underline;">Termos de Uso</a>
-  <a href="politica_privacidade.html" target="_blank" style="color: #087f8c; text-decoration: underline;">Política de Privacidade</a>
-</div>
-
+  <!-- Links de rodapé -->
+  <footer style="text-align:center; margin:2rem 0; font-size:0.9rem;">
+    <a href="pagina_termo_de_uso.html" target="_blank" style="margin-right:1rem;">Termos de Uso</a>
+    <a href="pagina_politica_de_privacidade.html" target="_blank">Política de Privacidade</a>
+  </footer>
 </body>
 </html>
