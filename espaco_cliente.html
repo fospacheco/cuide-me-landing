@@ -577,7 +577,7 @@
   <section class="search-section">
     <div class="search-container">
       <h1 class="search-title">Encontre o cuidador ideal</h1>
-      <p class="search-subtitle">Conectamos você a cuidadores verificados com experiência em diversas especialidades</p>
+      <p class="search-subtitle">Conectamos você a cuidadores verificados com experiência em diversas Especialidade</p>
       
       <form class="search-form" id="specialtySearchForm">
         <select id="specialtySelect" class="search-input" required>
@@ -591,8 +591,8 @@
       
       <div class="popular-searches">
         <span>Buscas populares:</span>
-        <span class="popular-tag" data-specialty="Enfermagem">Enfermagem</span>
-        <span class="popular-tag" data-specialty="Geriatria">Geriatria</span>
+        <span class="popular-tag" data-specialty="Cuidador de Idoso">Cuidador de Idoso</span>
+        <span class="popular-tag" data-specialty="Técnico de Enfermagem">Técnico de Enfermagem</span>
         <span class="popular-tag" data-specialty="Pediatria">Pediatria</span>
         <span class="popular-tag" data-specialty="Fisioterapia">Fisioterapia</span>
         <span class="popular-tag" data-specialty="Demência">Demência</span>
@@ -826,9 +826,9 @@
     const AIRTABLE_BASE_ID = 'appVxCKjvJAah2r27';
     const AIRTABLE_API_KEY = 'patrmTBeVgEPAzvS0.32c80ba0e8212db59f5fd216d9c60dfd120bc30e35e4ff0d5e5da1112da1d9a2';
     const CARE_TABLE = 'tblujobnwKoRKY96e'; // Tabela Cuidadores
-    const SPECIALTY_TABLE = 'tblwcTla83jlEprw8'; // Tabela Especialidades
+    const SPECIALTY_TABLE = 'tblwcTla83jlEprw8'; // Tabela Especialidade
 
-    // Carrega especialidades do Airtable
+    // Carrega Especialidade do Airtable
     async function loadSpecialties() {
       try {
         const response = await fetch(
@@ -856,7 +856,7 @@
           specialtySelect.appendChild(option);
         });
       } catch (error) {
-        console.error('Erro ao carregar especialidades:', error);
+        console.error('Erro ao carregar Especialidade:', error);
       }
     }
 
@@ -909,7 +909,7 @@
             photoContent = `<img src="${fields.Foto[0].thumbnails.large.url}" alt="${fields['Nome Completo'] || 'Cuidador'}">`;
           }
           
-          // Formata as especialidades
+          // Formata as Especialidade
           const specialties = fields.Especialidade ? fields.Especialidade.join(', ') : 'Não informado';
           
           card.innerHTML = `
@@ -950,7 +950,7 @@
         });
       });
 
-      // Carrega especialidades
+      // Carrega Especialidade
       loadSpecialties();
 
       // Formulário de busca
