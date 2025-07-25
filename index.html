@@ -7,11 +7,12 @@
   <meta name="description" content="Cadastre-se como cuidador(a) na Cuide-me e faça parte da rede mais confiável do Brasil. Conecte-se a famílias com segurança, suporte e autonomia.">
   <meta property="og:title" content="Seja um cuidador(a) parceiro do Cuide-me">
   <meta property="og:description" content="Venha cuidar de quem precisa com apoio, segurança e reconhecimento.">
-  <meta property="og:image" content="logo_cuide_me.png">
-  <meta property="og:url" content="https://cuide-me.com.br/seja-cuidador">
+  <meta property="og:image" content="https://cuide-me.com.br/assets/og-image.jpg">
+  <meta property="og:url" content="https://cuide-me.vercel.app/seja-cuidador.html">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="robots" content="index, follow">
-  
+  <link rel="canonical" href="https://cuide-me.vercel.app/seja-cuidador.html">
+
   <!-- Google Analytics 4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0W1X2JB5L"></script>
   <script>
@@ -24,15 +25,17 @@
       'event_label': 'Página visitada'
     });
   </script>
-  
+
   <!-- Otimização de fontes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
-  
-  <!-- Font Awesome com carregamento otimizado -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
-  
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+        integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+
   <style>
     :root {
       --primary-color: #1ba8c2;
@@ -48,13 +51,7 @@
       --transition: all 0.3s cubic-bezier(.25,.8,.25,1);
       --success-color: #4ba942;
     }
-    
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Poppins', Arial, sans-serif;
       background: linear-gradient(to bottom, var(--light-bg), var(--white));
@@ -64,7 +61,7 @@
       overflow-x: hidden;
       position: relative;
     }
-    
+
     /* === HEADER === */
     header {
       background: var(--white);
@@ -79,19 +76,16 @@
       top: 0;
       z-index: 100;
     }
-    
     .header-left {
       display: flex;
       align-items: center;
       gap: 1rem;
     }
-    
     .header-left img {
       height: 44px;
       width: auto;
       max-width: 100%;
     }
-    
     .tagline {
       font-family: 'Montserrat';
       font-weight: 700;
@@ -99,26 +93,23 @@
       font-size: 0.8rem;
       max-width: 200px;
     }
-    
     .social-icons {
       display: flex;
       gap: 0.8rem;
     }
-    
     .social-icons a {
       font-size: 1.2rem;
       color: var(--primary-dark);
       transition: var(--transition);
       text-decoration: none;
     }
-    
     .social-icons a:hover,
     .social-icons a:focus {
       color: var(--primary-color);
       transform: scale(1.1);
       outline: none;
     }
-    
+
     /* HERO */
     .hero {
       padding: 2rem 1rem;
@@ -129,7 +120,6 @@
       position: relative;
       overflow: hidden;
     }
-    
     .hero::before {
       content: "";
       position: absolute;
@@ -141,7 +131,6 @@
       opacity: 0.2;
       z-index: 0;
     }
-    
     .hero h1 {
       font-family: 'Montserrat', sans-serif;
       font-size: 1.8rem;
@@ -150,7 +139,6 @@
       position: relative;
       z-index: 1;
     }
-    
     .convite-hero-cuide-me {
       background: #eafafd;
       border-radius: 1.4em;
@@ -163,7 +151,6 @@
       overflow: hidden;
       z-index: 1;
     }
-    
     .convite-logo {
       width: 250px;
       height: auto;
@@ -173,7 +160,6 @@
       border-radius: 0;
       box-shadow: none;
     }
-    
     .convite-titulo {
       display: block;
       font-family: 'Montserrat', sans-serif;
@@ -183,12 +169,10 @@
       margin-bottom: 0.15em;
       margin-top: 0.3em;
     }
-    
     .convite-highlight {
       display: block;
       font-size: 1.2rem;
       font-weight: 800;
-      color: #ff6b6b;
       margin: 0.3em 0 0.4em 0;
       background: linear-gradient(90deg, #ffc145 25%, #ff6b6b 85%);
       background-clip: text;
@@ -196,7 +180,6 @@
       color: transparent;
       -webkit-text-fill-color: transparent;
     }
-    
     .convite-msg {
       font-size: 1em;
       color: #2d3e49;
@@ -204,7 +187,6 @@
       margin: 0 0 0.2em 0;
       max-width: 97%;
     }
-    
     .convite-txt-highlight {
       background: #ffe7bb;
       color: #ff6b6b;
@@ -215,12 +197,10 @@
       margin: 0 0.08em;
       display: inline-block;
     }
-    
     .convite-msg b, .convite-msg strong {
       color: var(--primary-dark);
       font-weight: 700;
     }
-    
     .convite-cta-msg {
       background: #fff8e1;
       color: #e39419;
@@ -233,7 +213,6 @@
       box-shadow: 0 1px 4px #ffc14529;
       letter-spacing: 0.01em;
     }
-    
     .hero p {
       color: var(--dark-text);
       font-size: 1rem;
@@ -242,7 +221,8 @@
       position: relative;
       z-index: 1;
     }
-    
+
+    /* CTA BUTTON */  
     .btn-cta {
       background: var(--primary-color);
       color: var(--white);
@@ -260,18 +240,18 @@
       gap: 0.5rem;
       position: relative;
       z-index: 1;
+      text-decoration: none;
     }
-    
-    .btn-cta:focus, .btn-cta:hover {
+    .btn-cta:hover,
+    .btn-cta:focus {
       background: var(--primary-dark);
       transform: translateY(-3px);
       box-shadow: 0 8px 20px rgba(27,168,194,0.3);
     }
-    
     .btn-cta:focus {
       outline: 3px solid var(--accent-color);
     }
-    
+
     /* Floating CTA */
     .floating-cta {
       position: fixed;
@@ -293,19 +273,18 @@
       border: none;
       cursor: pointer;
     }
-    
-    .floating-cta:hover, .floating-cta:focus {
+    .floating-cta:hover,
+    .floating-cta:focus {
       background: #ff5252;
       transform: scale(1.1);
       outline: none;
     }
-    
     @keyframes pulse {
       0% { box-shadow: 0 0 0 0 rgba(255,107,107,0.7); }
       70% { box-shadow: 0 0 0 15px rgba(255,107,107,0); }
       100% { box-shadow: 0 0 0 0 rgba(255,107,107,0); }
     }
-    
+
     /* BENEFITS */
     .benefits {
       display: grid;
@@ -315,7 +294,6 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-    
     .benefit-card {
       background: var(--white);
       border-radius: var(--border-radius);
@@ -327,37 +305,32 @@
       flex-direction: column;
       align-items: center;
     }
-    
     .benefit-card:hover {
       transform: translateY(-5px);
       box-shadow: 0 12px 20px rgba(0,0,0,0.1);
     }
-    
     .benefit-card i {
       color: var(--primary-color);
       font-size: 2.5rem;
       margin-bottom: 1rem;
-      display: block;
-      background: #eafafd;
       width: 70px;
       height: 70px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
+      background: #eafafd;
     }
-    
     .benefit-card h3 {
       font-family: 'Montserrat', sans-serif;
       color: var(--primary-dark);
       font-size: 1.2rem;
       margin-bottom: 1rem;
     }
-    
     .benefit-card p {
       color: var(--dark-text);
     }
-    
+
     /* PROCESS SECTION */
     .process-section {
       background: var(--light-bg);
@@ -366,15 +339,13 @@
       max-width: 1200px;
       margin: 0 auto;
     }
-    
     .section-title {
       color: var(--primary-color);
       text-align: center;
       font-size: 1.8rem;
-      margin-bottom: 2rem;
+      margin-bottom: 2rem;  
       font-family: 'Montserrat', sans-serif;
     }
-    
     .process-steps {
       display: grid;
       grid-template-columns: 1fr;
@@ -382,7 +353,6 @@
       max-width: 1000px;
       margin: 0 auto;
     }
-    
     .step {
       background: var(--white);
       border-radius: var(--border-radius);
@@ -392,11 +362,9 @@
       position: relative;
       transition: var(--transition);
     }
-    
     .step:hover {
       transform: scale(1.02);
     }
-    
     .step .step-number {
       width: 48px;
       height: 48px;
@@ -411,14 +379,13 @@
       margin: 0 auto 1.5rem;
       font-family: 'Montserrat', sans-serif;
     }
-    
     .step h3 {
       margin-bottom: 1rem;
       font-size: 1.3rem;
       color: var(--primary-color);
       font-family: 'Montserrat', sans-serif;
     }
-    
+
     /* FAQ */
     .faq-container {
       max-width: 800px;
@@ -428,18 +395,15 @@
       box-shadow: 0 5px 25px rgba(27,168,194,0.1);
       padding: 2rem 1.5rem;
     }
-    
     .faq-item {
       margin-bottom: 1.2rem;
       border-radius: 8px;
       overflow: hidden;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
-    
     .faq-item + .faq-item {
       margin-top: 1.2rem;
     }
-    
     .faq-question {
       background: #eaf6fb;
       color: #136784;
@@ -458,21 +422,17 @@
       justify-content: space-between;
       align-items: center;
     }
-    
     .faq-question:focus, .faq-question:hover {
       background: #d1eef8;
     }
-    
     .faq-question::after {
       content: "+";
       font-size: 1.5rem;
       transition: transform 0.3s;
     }
-    
     .faq-item.active .faq-question::after {
       transform: rotate(45deg);
     }
-    
     .faq-answer {
       display: none;
       background: #f7fbfc;
@@ -481,72 +441,12 @@
       border-left: 4px solid var(--primary-color);
       animation: fadeinFaq .45s;
     }
-    
     .faq-item.active .faq-answer {
       display: block;
     }
-    
-    @keyframes fadeinFaq {
-      from { opacity: 0; transform: translateY(10px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
-    
-    /* FORM SECTION */
-    .form-section {
-      background: linear-gradient(135deg, #1ba8c2 0%, #1592a8 100%);
-      padding: 3rem 1rem;
-      color: white;
-      border-radius: var(--border-radius);
-      margin: 3rem auto;
-      max-width: 600px;
-      text-align: center;
-    }
-    
-    .form-container {
-      background: white;
-      border-radius: var(--border-radius);
-      padding: 2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-      color: var(--dark-text);
-      text-align: left;
-    }
-    
-    .form-title {
-      color: var(--primary-dark);
-      text-align: center;
-      margin-bottom: 1.5rem;
-      font-family: 'Montserrat', sans-serif;
-    }
-    
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-weight: 600;
-    }
-    
-    .form-group input,
-    .form-group select {
-      width: 100%;
-      padding: 0.8rem;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 1rem;
-      transition: var(--transition);
-    }
-    
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: var(--primary-color);
-      outline: none;
-      box-shadow: 0 0 0 3px rgba(27,168,194,0.2);
-    }
-    
-    /* FOOTER & LGPD */
+    @keyframes fadeinFaq { from { opacity: 0; transform: translateY(10px);} to { opacity: 1; transform: translateY(0);} }
+
+    /* FOOTER */
     .footer {
       text-align: center;
       color: #6b7c86;
@@ -555,7 +455,6 @@
       padding: 2rem 1rem;
       background: #eaf6fb;
     }
-    
     .footer-links {
       display: flex;
       justify-content: center;
@@ -563,19 +462,15 @@
       gap: 1rem;
       margin-bottom: 1.5rem;
     }
-    
     .footer-links a {
       color: var(--primary-dark);
       text-decoration: none;
       transition: var(--transition);
     }
-    
-    .footer-links a:hover,
-    .footer-links a:focus {
+    .footer-links a:hover, .footer-links a:focus {
       color: var(--primary-color);
       text-decoration: underline;
     }
-    
     .footer-lgpd {
       margin: 1.3em auto 0 auto;
       padding: .4em 0;
@@ -590,78 +485,51 @@
       max-width: 700px;
       padding-top: 1.5rem;
     }
-    
     .footer-lgpd i {
       color: var(--primary-color);
       margin-right: 0.45em;
       font-size: 1.13em;
     }
-    
     .footer-lgpd a {
       color: var(--primary-color);
       text-decoration: underline;
       font-weight: 600;
     }
-    
     .footer-seguro {
-      margin-left: 0;
-      color: var(--success-color);
-      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 0.3em;
+      color: var(--success-color);
+      font-weight: 600;
+      margin-top: 0.5rem;
     }
-    
     .footer-seguro i {
       color: var(--success-color);
       font-size: 1.1em;
       margin-right: 0.18em;
     }
-    
     .copyright {
       margin-top: 1.5rem;
       color: var(--dark-text);
     }
-    
+
     /* === Desktop adjustments === */
     @media (min-width: 701px) {
       body { font-size: 1.08rem; }
-      header {
-        padding: 1.5rem 2rem;
-      }
+      header { padding: 1.5rem 2rem; }
       .header-left img { height: 56px; }
-      .hero {
-        padding: 4rem 1.5rem;
-      }
+      .hero { padding: 4rem 1.5rem; }
       .hero h1 { font-size: 2.5rem; }
-      .convite-hero-cuide-me {
-        max-width: 700px;
-        padding: 2.8rem 2.1rem;
-        border-radius: 2.2rem;
-      }
+      .convite-hero-cuide-me { max-width: 700px; padding: 2.8rem 2.1rem; border-radius: 2.2rem; }
       .convite-logo { width: 180px; }
       .convite-titulo { font-size: 1.4rem; }
       .convite-highlight { font-size: 1.6rem; }
-      .benefits {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
-      }
-      .process-steps {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 2rem;
-      }
-      .form-section {
-        padding: 4rem 1rem;
-      }
+      .benefits { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
+      .process-steps { grid-template-columns: repeat(2, 1fr); gap: 2rem; }
     }
-    
     @media (min-width: 992px) {
-      .benefits {
-        grid-template-columns: repeat(4, 1fr);
-      }
-      .process-steps {
-        grid-template-columns: repeat(4, 1fr);
-      }
+      .benefits { grid-template-columns: repeat(4, 1fr); }
+      .process-steps { grid-template-columns: repeat(4, 1fr); }
     }
   </style>
 </head>
@@ -673,16 +541,13 @@
       <div class="tagline">Cuidar com verdade. Conectar com responsabilidade.</div>
     </div>
     <div class="social-icons">
-      <a href="https://www.linkedin.com/company/cuide-me-cuidados/?viewAsMember=true"
-         target="_blank" rel="noopener" aria-label="LinkedIn Cuide-me">
+      <a href="https://www.linkedin.com/company/cuide-me-cuidados/?viewAsMember=true" target="_blank" rel="noopener" aria-label="LinkedIn Cuide-me">
         <i class="fab fa-linkedin"></i>
       </a>
-      <a href="https://www.facebook.com/profile.php?id=61578234434474&locale=pt_BR"
-         target="_blank" rel="noopener" aria-label="Facebook Cuide-me">
+      <a href="https://www.facebook.com/profile.php?id=61578234434474&locale=pt_BR" target="_blank" rel="noopener" aria-label="Facebook Cuide-me">
         <i class="fab fa-facebook"></i>
       </a>
-      <a href="https://www.instagram.com/cuideme.cuidados/"
-         target="_blank" rel="noopener" aria-label="Instagram Cuide-me">
+      <a href="https://www.instagram.com/cuideme.cuidados/" target="_blank" rel="noopener" aria-label="Instagram Cuide-me">
         <i class="fab fa-instagram"></i>
       </a>
     </div>
@@ -692,7 +557,9 @@
     <section class="hero" role="region" aria-labelledby="hero-title">
       <h1 id="hero-title">Faça a diferença na vida de alguém</h1>
       <div class="convite-hero-cuide-me" role="status" aria-live="polite">
-        <img src="logo_cuide_me.png" alt="Logo Cuide-me - Transformando o cuidado no Brasil" class="convite-logo" loading="lazy">
+        <img src="logo_cuide_me.png"
+             alt="Logo Cuide-me - Transformando o cuidado no Brasil"
+             class="convite-logo" loading="lazy">
         <h2>
           <span class="convite-titulo">Junte-se ao movimento</span>
           <span class="convite-highlight">que vai mudar o cuidado no Brasil</span>
@@ -703,14 +570,20 @@
           Se você sonha em impactar vidas, <strong>venha ser protagonista da sua carreira com a gente.</strong>
         </p>
         <div class="convite-cta-msg">
-          <span>⚡ Cadastre-se e faça parte dos primeiros profissionais da nossa plataforma.</span>
+          ⚡ Cadastre-se e faça parte dos primeiros profissionais da nossa plataforma.
         </div>
       </div>
-      <p>Conecte-se a famílias, amplie sua renda, conte com suporte e visibilidade em uma comunidade que valoriza o cuidado humanizado.<br>
-      <strong>Cadastre-se no Cuide-me e transforme o cuidado no Brasil!</strong></p>
-      <button class="btn-cta" id="cta-cadastro" aria-label="Quero ser cuidador(a)/Especialista">
+      <p>
+        Conecte-se a famílias, amplie sua renda, conte com suporte e visibilidade em
+        uma comunidade que valoriza o cuidado humanizado.<br>
+        <strong>Cadastre-se no Cuide-me e transforme o cuidado no Brasil!</strong>
+      </p>
+      <a href="https://cuide-me.vercel.app/cadastro_cuidador.html"
+         id="cta-cadastro"
+         class="btn-cta"
+         aria-label="Quero ser cuidador(a)/Especialista">
         <i class="fas fa-user-plus"></i> Quero ser cuidador(a)/Especialista
-      </button>
+      </a>
     </section>
 
     <div class="benefits" aria-label="Benefícios para especialistas">
@@ -762,58 +635,58 @@
       </div>
     </section>
 
-<section class="faq-container" aria-labelledby="faq-title">
+    <section class="faq-container" aria-labelledby="faq-title">
       <h2 id="faq-title" class="section-title">Perguntas Frequentes</h2>
-      
+
       <div class="faq-item">
         <button class="faq-question"><span>O que acontece após meu cadastro?</span></button>
         <div class="faq-answer">
           <p>Assim que você conclui o cadastro, nosso sistema cuida do resto! Seu perfil passa por uma análise cuidadosa para garantir segurança a todos. Caso precise enviar algum documento ou informação extra, avisamos você rapidinho. Estamos juntos em cada etapa!</p>
         </div>
       </div>
-      
+
       <div class="faq-item">
         <button class="faq-question"><span>Posso ser reprovado?</span></button>
         <div class="faq-answer">
           <p>Não se preocupe! Nosso time sempre te orienta para completar o perfil. Se faltar algo, enviamos um e-mail com todas as dicas para você concluir sem estresse.</p>
         </div>
       </div>
-      
+
       <div class="faq-item">
         <button class="faq-question"><span>Como deixo meu perfil mais atraente?</span></button>
         <div class="faq-answer">
           <p>Quanto mais completo, melhor! Adicione foto, CPF, certificados, cursos, currículo ou até LinkedIn. Isso aumenta sua visibilidade e chances de ser chamado(a) pelos clientes.</p>
         </div>
       </div>
-      
+
       <div class="faq-item">
         <button class="faq-question"><span>Como saberei se preciso atualizar algo?</span></button>
         <div class="faq-answer">
           <p>Se faltar qualquer informação, você recebe um e-mail e também verá avisos na própria plataforma. Sempre avisamos de forma clara e rápida!</p>
         </div>
       </div>
-      
+
       <div class="faq-item">
         <button class="faq-question"><span>Meu perfil aparece mesmo se incompleto?</span></button>
         <div class="faq-answer">
           <p>Aparece sim, mas quem completa o perfil aparece mais para as famílias e tem prioridade nas buscas. Capriche no cadastro para se destacar!</p>
         </div>
       </div>
-      
+
       <div class="faq-item">
         <button class="faq-question"><span>Meus dados estão protegidos?</span></button>
         <div class="faq-answer">
           <p>Sim! Só clientes verificados acessam seu perfil profissional. Seus dados pessoais são protegidos conforme a nossa <a href="https://cuide-me.com.br/politica_privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a> e nunca são expostos sem sua permissão.</p>
         </div>
       </div>
-      
+
       <div class="faq-item">
         <button class="faq-question"><span>Como funciona o suporte para especialistas?</span></button>
         <div class="faq-answer">
           <p>Conte com nosso chatbot 24h para dúvidas rápidas. Se preferir, temos uma equipe de suporte humanizado pronta para te ajudar sempre que precisar!</p>
         </div>
       </div>
-      
+
       <div class="faq-item">
         <button class="faq-question"><span>E se eu tiver dificuldade para enviar documentos?</span></button>
         <div class="faq-answer">
@@ -844,102 +717,74 @@
   </footer>
 
   <!-- Floating CTA -->
-  <button class="floating-cta" id="floating-cta" aria-label="Cadastre-se agora">
+  <button class="floating-cta" id="floating-cta" aria-label="Quero ser cuidador(a)/Especialista">
     <i class="fas fa-user-plus"></i>
   </button>
 
-  <!-- Scripts para interatividade, rastreamento de eventos e acessibilidade -->
   <script>
-    // FAQ amigável (acessível por teclado)
+    // FAQ toggling
     document.querySelectorAll('.faq-question').forEach(btn => {
       btn.setAttribute('tabindex', '0');
       btn.setAttribute('aria-expanded', 'false');
-      
       btn.addEventListener('click', () => {
         const parent = btn.parentNode;
         const isActive = parent.classList.toggle('active');
-        btn.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+        btn.setAttribute('aria-expanded', isActive);
+        if (isActive) {
+          gtag('event', 'faq_open', {
+            'event_category': 'FAQ',
+            'event_label': btn.textContent.trim()
+          });
+        }
       });
-      
       btn.addEventListener('keydown', e => {
-        if (e.key === "Enter" || e.key === " ") {
-          const parent = btn.parentNode;
-          const isActive = parent.classList.toggle('active');
-          btn.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+        if (e.key === 'Enter' || e.key === ' ') {
+          btn.click();
           e.preventDefault();
         }
       });
     });
 
-    // Evento de clique no CTA
-    document.getElementById('cta-cadastro').addEventListener('click', function() {
-      document.getElementById('form-section').scrollIntoView({behavior: 'smooth'});
+    // CTA main button
+    document.getElementById('cta-cadastro').addEventListener('click', e => {
+      e.preventDefault();
       gtag('event', 'especialista_cadastro_cta', {
         'event_category': 'Especialista Captação',
         'event_label': 'Clique CTA Quero ser cuidador(a)'
       });
+      window.location.href = 'https://cuide-me.vercel.app/cadastro_cuidador.html';
     });
 
     // Floating CTA
-    document.getElementById('floating-cta').addEventListener('click', function() {
-      document.getElementById('form-section').scrollIntoView({behavior: 'smooth'});
+    document.getElementById('floating-cta').addEventListener('click', () => {
       gtag('event', 'floating_cta_click', {
         'event_category': 'CTA Flutuante',
         'event_label': 'Botão flutuante clicado'
       });
+      window.location.href = 'https://cuide-me.vercel.app/cadastro_cuidador.html';
     });
 
-    // Formulário de cadastro
-    document.getElementById('cadastro-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Simulação de envio
-      alert('Cadastro enviado com sucesso! Nossa equipe entrará em contato em breve.');
-      this.reset();
-      
-      // Evento de conversão
-      gtag('event', 'conversion', {
-        'event_category': 'Cadastro Cuidador',
-        'event_label': 'Formulário enviado'
-      });
+    // Exit-intent for analytics
+    let ctaClicked = false;
+    document.getElementById('cta-cadastro').addEventListener('click', () => {
+      ctaClicked = true;
     });
-
-    // INTENÇÃO DE SAÍDA/desistência
-    let ctaClicado = false;
-    document.getElementById('cta-cadastro').addEventListener('click', function() {
-      ctaClicado = true;
-    });
-    
-    document.addEventListener('mouseout', function(e) {
-      if (!ctaClicado && e.clientY <= 0) {
+    document.addEventListener('mouseout', e => {
+      if (!ctaClicked && e.clientY <= 0) {
         gtag('event', 'especialista_abandono', {
           'event_category': 'Especialista Captação',
           'event_label': 'Intenção de saída - mouse topo'
         });
-        ctaClicado = true;
+        ctaClicked = true;
       }
     });
-    
-    window.addEventListener('pagehide', function(e) {
-      if (!ctaClicado) {
+    window.addEventListener('pagehide', () => {
+      if (!ctaClicked) {
         gtag('event', 'especialista_abandono', {
           'event_category': 'Especialista Captação',
           'event_label': 'Pagehide/mobile abandono'
         });
       }
-    });
-    
-    // Rastreamento de visualização de FAQ
-    document.querySelectorAll('.faq-item').forEach(item => {
-      const question = item.querySelector('.faq-question');
-      question.addEventListener('click', () => {
-        if (item.classList.contains('active')) {
-          gtag('event', 'faq_open', {
-            'event_category': 'FAQ',
-            'event_label': question.textContent.trim()
-          });
-        }
-      });
     });
   </script>
 </body>
