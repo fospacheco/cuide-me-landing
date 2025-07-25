@@ -1,32 +1,38 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8"/>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Seja um Cuidador Parceiro | Cuide-me</title>
-  <meta name="description" content="Cadastre-se como cuidador(a) no Cuide-me e faça parte da rede mais confiável do Brasil. Conecte-se a famílias com segurança, suporte e autonomia.">
+  <title>Seja um Cuidador Parceiro | Cuide-me - Plataforma de Cuidados</title>
+  <meta name="description" content="Cadastre-se como cuidador(a) na Cuide-me e faça parte da rede mais confiável do Brasil. Conecte-se a famílias com segurança, suporte e autonomia.">
   <meta property="og:title" content="Seja um cuidador(a) parceiro do Cuide-me">
   <meta property="og:description" content="Venha cuidar de quem precisa com apoio, segurança e reconhecimento.">
-  <meta property="og:image" content="logo_cuide_me.png">
+  <meta property="og:image" content="https://cuide-me.com.br/assets/og-image.jpg">
+  <meta property="og:url" content="https://cuide-me.com.br/seja-cuidador">
+  <meta name="twitter:card" content="summary_large_image">
   <meta name="robots" content="index, follow">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+  
   <!-- Google Analytics 4 -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-WYKS8LN7ZT"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z0W1X2JB5L"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-WYKS8LN7ZT');
+    gtag('config', 'G-Z0W1X2JB5L');
     gtag('event', 'especialista_view', {
       'event_category': 'Especialista Captação',
       'event_label': 'Página visitada'
     });
   </script>
-
+  
+  <!-- Otimização de fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@700;800&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome com carregamento otimizado -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
+  
   <style>
     :root {
       --primary-color: #1ba8c2;
@@ -40,89 +46,124 @@
       --border-radius: 16px;
       --shadow: 0 6px 24px rgba(27,168,194,0.09);
       --transition: all 0.3s cubic-bezier(.25,.8,.25,1);
+      --success-color: #4ba942;
     }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
     body {
-      font-family: 'Poppins', 'Montserrat', Arial, sans-serif;
+      font-family: 'Poppins', Arial, sans-serif;
       background: linear-gradient(to bottom, var(--light-bg), var(--white));
       color: var(--dark-text);
-      margin: 0; padding: 0;
       font-size: 1rem;
+      line-height: 1.6;
       overflow-x: hidden;
+      position: relative;
     }
-
+    
     /* === HEADER === */
     header {
       background: var(--white);
       box-shadow: var(--shadow);
-      padding: 1rem 0.5rem;
+      padding: 1rem;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
       border-bottom: 4px solid var(--primary-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
+    
     .header-left {
       display: flex;
       align-items: center;
       gap: 1rem;
     }
+    
     .header-left img {
       height: 44px;
       width: auto;
+      max-width: 100%;
     }
+    
     .tagline {
       font-family: 'Montserrat';
       font-weight: 700;
       color: var(--primary-color);
       font-size: 0.8rem;
+      max-width: 200px;
     }
+    
     .social-icons {
       display: flex;
       gap: 0.8rem;
     }
+    
     .social-icons a {
       font-size: 1.2rem;
       color: var(--primary-dark);
       transition: var(--transition);
       text-decoration: none;
     }
+    
     .social-icons a:hover,
     .social-icons a:focus {
       color: var(--primary-color);
       transform: scale(1.1);
       outline: none;
     }
-
+    
     /* HERO */
     .hero {
-      padding: 1.5rem 0.5rem 1rem;
+      padding: 2rem 1rem;
       text-align: center;
       background: linear-gradient(135deg, #e6f7ff 0%, #f2fbfd 100%);
       border-bottom-left-radius: 28px;
       border-bottom-right-radius: 28px;
+      position: relative;
+      overflow: hidden;
     }
+    
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: -50px;
+      right: -50px;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, var(--primary-light) 0%, transparent 70%);
+      opacity: 0.2;
+      z-index: 0;
+    }
+    
     .hero h1 {
       font-family: 'Montserrat', sans-serif;
-      font-size: 1.3rem;
-      color: var(--primary-color);
+      font-size: 1.8rem;
+      color: var(--primary-dark);
       margin-bottom: 1.1rem;
-      letter-spacing: -1px;
+      position: relative;
+      z-index: 1;
     }
+    
     .convite-hero-cuide-me {
       background: #eafafd;
       border-radius: 1.4em;
       box-shadow: 0 4px 20px rgba(27,168,194,0.09);
       max-width: 98vw;
-      margin: 1.5rem auto 1.5rem auto;
-      padding: 1.2rem 0.5rem 1.3rem 0.5rem;
+      margin: 1.5rem auto;
+      padding: 1.5rem;
       text-align: center;
       position: relative;
       overflow: hidden;
-      font-family: 'Poppins', 'Montserrat', Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 1.0rem;
+      z-index: 1;
     }
+    
     .convite-logo {
       width: 250px;
       height: auto;
@@ -132,28 +173,30 @@
       border-radius: 0;
       box-shadow: none;
     }
+    
     .convite-titulo {
       display: block;
       font-family: 'Montserrat', sans-serif;
-      color: #1592a8;
-      font-size: 1.02rem;
+      color: var(--primary-dark);
+      font-size: 1.1rem;
       font-weight: 700;
       margin-bottom: 0.15em;
       margin-top: 0.3em;
     }
+    
     .convite-highlight {
       display: block;
-      font-size: 1.08rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: #ff6b6b;
-      margin: 0.1em 0 0.4em 0;
+      margin: 0.3em 0 0.4em 0;
       background: linear-gradient(90deg, #ffc145 25%, #ff6b6b 85%);
       background-clip: text;
       -webkit-background-clip: text;
       color: transparent;
       -webkit-text-fill-color: transparent;
-      letter-spacing: -1px;
     }
+    
     .convite-msg {
       font-size: 1em;
       color: #2d3e49;
@@ -161,6 +204,7 @@
       margin: 0 0 0.2em 0;
       max-width: 97%;
     }
+    
     .convite-txt-highlight {
       background: #ffe7bb;
       color: #ff6b6b;
@@ -169,34 +213,40 @@
       font-weight: 700;
       font-size: 1em;
       margin: 0 0.08em;
+      display: inline-block;
     }
+    
     .convite-msg b, .convite-msg strong {
-      color: #1592a8;
+      color: var(--primary-dark);
       font-weight: 700;
     }
+    
     .convite-cta-msg {
       background: #fff8e1;
       color: #e39419;
       border-radius: 1.2em;
       display: inline-block;
       font-weight: 700;
-      padding: 0.7em 1.6em;
+      padding: 0.8em 1.6em;
       font-size: 1.07em;
       margin-top: 1.3em;
       box-shadow: 0 1px 4px #ffc14529;
       letter-spacing: 0.01em;
     }
+    
     .hero p {
       color: var(--dark-text);
-      font-size: 0.98rem;
+      font-size: 1rem;
       max-width: 600px;
-      margin: 0 auto 2rem;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      z-index: 1;
     }
-    .hero .btn-cta {
+    
+    .btn-cta {
       background: var(--primary-color);
       color: var(--white);
-      width: 100%;
-      padding: 1.2rem 0;
+      padding: 1.2rem 2rem;
       border: none;
       border-radius: 50px;
       font-size: 1rem;
@@ -204,250 +254,414 @@
       transition: var(--transition);
       box-shadow: var(--shadow);
       cursor: pointer;
-      margin-top: 1rem;
-      margin-bottom: 1rem;
+      outline: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    .btn-cta:focus, .btn-cta:hover {
+      background: var(--primary-dark);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(27,168,194,0.3);
+    }
+    
+    .btn-cta:focus {
+      outline: 3px solid var(--accent-color);
+    }
+    
+    /* Floating CTA */
+    .floating-cta {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: var(--secondary-color);
+      color: white;
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      box-shadow: 0 5px 15px rgba(255,107,107,0.4);
+      z-index: 1000;
+      transition: var(--transition);
+      animation: pulse 2s infinite;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .floating-cta:hover, .floating-cta:focus {
+      background: #ff5252;
+      transform: scale(1.1);
       outline: none;
     }
-    .hero .btn-cta:focus, .hero .btn-cta:hover {
-      background: var(--primary-dark);
-      outline: 2px solid var(--accent-color);
+    
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(255,107,107,0.7); }
+      70% { box-shadow: 0 0 0 15px rgba(255,107,107,0); }
+      100% { box-shadow: 0 0 0 0 rgba(255,107,107,0); }
     }
-
+    
     /* BENEFITS */
     .benefits {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      padding: 0;
-      justify-content: center;
-      margin: 2rem auto 0;
-      max-width: 900px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      padding: 2rem 1rem;
+      max-width: 1200px;
+      margin: 0 auto;
     }
+    
     .benefit-card {
       background: var(--white);
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
-      min-width: 0;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 1.1rem;
-      margin-bottom: .5rem;
+      padding: 1.5rem;
       transition: var(--transition);
-      text-align: left;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
+    
     .benefit-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.11);
+      transform: translateY(-5px);
+      box-shadow: 0 12px 20px rgba(0,0,0,0.1);
     }
+    
     .benefit-card i {
       color: var(--primary-color);
-      font-size: 2rem;
-      margin-bottom: .8rem;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
       display: block;
+      background: #eafafd;
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
+    
     .benefit-card h3 {
       font-family: 'Montserrat', sans-serif;
       color: var(--primary-dark);
-      font-size: 1.1rem;
-      margin-bottom: .7rem;
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
     }
-
+    
+    .benefit-card p {
+      color: var(--dark-text);
+    }
+    
     /* PROCESS SECTION */
     .process-section {
       background: var(--light-bg);
-      margin-top: 1.5rem;
-      padding: 1.3rem 0.5rem;
+      padding: 2.5rem 1rem;
       border-radius: var(--border-radius);
-      max-width: 900px;
-      margin-left: auto;
-      margin-right: auto;
+      max-width: 1200px;
+      margin: 0 auto;
     }
-    .process-section h2 {
+    
+    .section-title {
       color: var(--primary-color);
       text-align: center;
-      font-size: 1.1rem;
-      margin-bottom: 1.4rem;
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      font-family: 'Montserrat', sans-serif;
     }
+    
     .process-steps {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      justify-content: center;
-      padding: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
     }
+    
     .step {
       background: var(--white);
       border-radius: var(--border-radius);
       box-shadow: var(--shadow);
-      min-width: 0;
-      width: 100%;
-      box-sizing: border-box;
-      padding: 1.1rem;
-      margin-bottom: .5rem;
+      padding: 1.8rem 1.5rem;
       text-align: center;
+      position: relative;
+      transition: var(--transition);
     }
+    
+    .step:hover {
+      transform: scale(1.02);
+    }
+    
     .step .step-number {
-      width: 38px;
-      height: 38px;
+      width: 48px;
+      height: 48px;
       background: var(--primary-light);
       color: var(--white);
       border-radius: 50%;
-      font-size: 1.2rem;
+      font-size: 1.4rem;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      margin: 0 auto 1rem;
+      margin: 0 auto 1.5rem;
+      font-family: 'Montserrat', sans-serif;
     }
-    .step h3 { margin-bottom: .6rem; font-size: 1.05rem; color: var(--primary-color);}
-
-    /* FAQ amistosa */
-    .faq-container {
-      max-width: 680px;
-      margin: 2.5rem auto 1.5rem auto;
-      background: #fff;
-      border-radius: 18px;
-      box-shadow: 0 2px 16px rgba(27,168,194,0.07);
-      padding: 1.1rem 0.2rem;
-    }
-    .faq-container h2 {
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-      text-align: center;
+    
+    .step h3 {
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
       color: var(--primary-color);
       font-family: 'Montserrat', sans-serif;
     }
-    .faq-item + .faq-item {
-      margin-top: 1.1rem;
+    
+    /* FAQ */
+    .faq-container {
+      max-width: 800px;
+      margin: 3rem auto;
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 5px 25px rgba(27,168,194,0.1);
+      padding: 2rem 1.5rem;
     }
+    
+    .faq-item {
+      margin-bottom: 1.2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .faq-item + .faq-item {
+      margin-top: 1.2rem;
+    }
+    
     .faq-question {
       background: #eaf6fb;
       color: #136784;
       border: none;
       border-radius: 8px;
-      font-size: 1rem;
+      font-size: 1.1rem;
       font-family: inherit;
-      padding: 0.8em 1em;
+      padding: 1.2rem;
       width: 100%;
       text-align: left;
       cursor: pointer;
       outline: none;
       transition: background .2s;
       font-weight: 600;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
+    
     .faq-question:focus, .faq-question:hover {
       background: #d1eef8;
     }
+    
+    .faq-question::after {
+      content: "+";
+      font-size: 1.5rem;
+      transition: transform 0.3s;
+    }
+    
+    .faq-item.active .faq-question::after {
+      transform: rotate(45deg);
+    }
+    
     .faq-answer {
       display: none;
       background: #f7fbfc;
       color: #3c5a62;
-      padding: 1em 1.6em 1em 1.2em;
+      padding: 1.5rem;
       border-left: 4px solid var(--primary-color);
-      border-radius: 0 0 12px 12px;
-      margin-top: -6px;
-      font-size: 1em;
       animation: fadeinFaq .45s;
     }
+    
     .faq-item.active .faq-answer {
       display: block;
     }
+    
     @keyframes fadeinFaq {
       from { opacity: 0; transform: translateY(10px);}
       to { opacity: 1; transform: translateY(0);}
     }
-
+    
+    /* FORM SECTION */
+    .form-section {
+      background: linear-gradient(135deg, #1ba8c2 0%, #1592a8 100%);
+      padding: 3rem 1rem;
+      color: white;
+      border-radius: var(--border-radius);
+      margin: 3rem auto;
+      max-width: 600px;
+      text-align: center;
+    }
+    
+    .form-container {
+      background: white;
+      border-radius: var(--border-radius);
+      padding: 2rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      color: var(--dark-text);
+      text-align: left;
+    }
+    
+    .form-title {
+      color: var(--primary-dark);
+      text-align: center;
+      margin-bottom: 1.5rem;
+      font-family: 'Montserrat', sans-serif;
+    }
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+    
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.8rem;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-family: inherit;
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+    
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--primary-color);
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(27,168,194,0.2);
+    }
+    
     /* FOOTER & LGPD */
     .footer {
       text-align: center;
       color: #6b7c86;
       font-size: 0.93rem;
       margin: 1.2rem 0 0.5rem;
+      padding: 2rem 1rem;
+      background: #eaf6fb;
     }
+    
+    .footer-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .footer-links a {
+      color: var(--primary-dark);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .footer-links a:hover,
+    .footer-links a:focus {
+      color: var(--primary-color);
+      text-decoration: underline;
+    }
+    
     .footer-lgpd {
       margin: 1.3em auto 0 auto;
       padding: .4em 0;
       font-size: .96em;
-      color: #245063;
+      color: var(--dark-text);
       display: flex;
       flex-direction: column;
       gap: 0.2em;
       align-items: center;
       justify-content: center;
-      border-top: 1px solid #e0f0f7;
+      border-top: 1px solid #cfe9f2;
       max-width: 700px;
+      padding-top: 1.5rem;
     }
+    
     .footer-lgpd i {
-      color: #1ba8c2;
+      color: var(--primary-color);
       margin-right: 0.45em;
       font-size: 1.13em;
     }
+    
     .footer-lgpd a {
-      color: #1ba8c2;
+      color: var(--primary-color);
       text-decoration: underline;
       font-weight: 600;
     }
+    
     .footer-seguro {
       margin-left: 0;
-      color: #4ba942;
+      color: var(--success-color);
       font-weight: 600;
       display: flex;
       align-items: center;
       gap: 0.3em;
     }
+    
     .footer-seguro i {
-      color: #4ba942;
+      color: var(--success-color);
       font-size: 1.1em;
       margin-right: 0.18em;
     }
-
+    
+    .copyright {
+      margin-top: 1.5rem;
+      color: var(--dark-text);
+    }
+    
     /* === Desktop adjustments === */
     @media (min-width: 701px) {
       body { font-size: 1.08rem; }
       header {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
         padding: 1.5rem 2rem;
       }
       .header-left img { height: 56px; }
       .hero {
-        padding: 3rem 1.5rem 2rem;
-        border-bottom-left-radius: 70px;
-        border-bottom-right-radius: 70px;
+        padding: 4rem 1.5rem;
       }
-      .hero h1 { font-size: 2.2rem; }
+      .hero h1 { font-size: 2.5rem; }
       .convite-hero-cuide-me {
-        max-width: 650px;
-        padding: 2.8rem 2.1rem 2.2rem 2.1rem;
+        max-width: 700px;
+        padding: 2.8rem 2.1rem;
         border-radius: 2.2rem;
-        gap: 1.5rem;
       }
-      .convite-logo { width: 110px; }
-      .convite-titulo { font-size: 1.25rem; }
-      .convite-highlight { font-size: 1.4rem; }
-      .benefits, .process-steps {
-        flex-direction: row;
+      .convite-logo { width: 180px; }
+      .convite-titulo { font-size: 1.4rem; }
+      .convite-highlight { font-size: 1.6rem; }
+      .benefits {
+        grid-template-columns: repeat(2, 1fr);
         gap: 2rem;
-        margin: 2.5rem auto 0;
       }
-      .benefit-card, .step {
-        min-width: 240px;
-        max-width: 340px;
-        padding: 1.5rem;
+      .process-steps {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2rem;
       }
-      .process-section { padding: 3rem 1rem; margin-top: 2.5rem; }
-      .faq-section, .faq-container { padding: 2.2rem 1.1rem; }
-      .faq-container h2 { font-size: 1.32rem; }
-      .faq-question { font-size: 1.07rem; padding: 1em 1.2em;}
-      .footer { font-size: .96rem; margin: 3rem 0 1rem;}
-      .footer-lgpd {
-        flex-direction: row;
-        gap: 1em;
-        font-size: 1em;
-        padding: 0.7em 0 0.5em 0;
+      .form-section {
+        padding: 4rem 1rem;
       }
-      .footer-seguro { margin-left: 1em; }
+    }
+    
+    @media (min-width: 992px) {
+      .benefits {
+        grid-template-columns: repeat(4, 1fr);
+      }
+      .process-steps {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
   </style>
 </head>
@@ -455,7 +669,7 @@
 <body>
   <header>
     <div class="header-left">
-      <img src="logo_cuide_me.png" alt="Logo Cuide-me">
+      <img src="https://cuide-me.com.br/assets/logo.svg" alt="Logo Cuide-me - Plataforma de cuidados profissionais">
       <div class="tagline">Cuidar com verdade. Conectar com responsabilidade.</div>
     </div>
     <div class="social-icons">
@@ -474,199 +688,228 @@
     </div>
   </header>
 
-  <section class="hero" role="region" aria-labelledby="hero-title">
-    <h1 id="hero-title">Faça a diferença na vida de alguém</h1>
-    <div class="convite-hero-cuide-me" role="status" aria-live="polite">
-      <img src="logo_cuide_me.png" alt="Logo Cuide-me" class="convite-logo" loading="lazy">
-      <h2>
-        <span class="convite-titulo">Junte-se ao movimento</span>
-        <span class="convite-highlight">que está vai mudar o cuidado no Brasil</span>
-      </h2>
-      <p class="convite-msg">
-        Estamos formando uma comunidade de cuidadores(as) que acreditam que
-        <span class="convite-txt-highlight">cuidar é arte, ciência e propósito</span>.<br>
-        Se você sonha em impactar vidas, <strong>venha ser protagonista da sua carreira com a gente.</strong>
-      </p>
-      <div class="convite-cta-msg">
-        <span>⚡ Cadastre-se e faça parte dos primeiros profissionais da nossa plataforma.</span>
+  <main>
+    <section class="hero" role="region" aria-labelledby="hero-title">
+      <h1 id="hero-title">Faça a diferença na vida de alguém</h1>
+      <div class="convite-hero-cuide-me" role="status" aria-live="polite">
+        <img src="https://cuide-me.com.br/assets/logo.svg" alt="Logo Cuide-me - Transformando o cuidado no Brasil" class="convite-logo" loading="lazy">
+        <h2>
+          <span class="convite-titulo">Junte-se ao movimento</span>
+          <span class="convite-highlight">que vai mudar o cuidado no Brasil</span>
+        </h2>
+        <p class="convite-msg">
+          Estamos formando uma comunidade de cuidadores(as) que acreditam que
+          <span class="convite-txt-highlight">cuidar é arte, ciência e propósito</span>.<br>
+          Se você sonha em impactar vidas, <strong>venha ser protagonista da sua carreira com a gente.</strong>
+        </p>
+        <div class="convite-cta-msg">
+          <span>⚡ Cadastre-se e faça parte dos primeiros profissionais da nossa plataforma.</span>
+        </div>
       </div>
-    </div>
-    <p>Conecte-se a famílias, amplie sua renda, conte com suporte e visibilidade em uma comunidade que valoriza o cuidado humanizado.<br>
-    <strong>Cadastre-se no Cuide-me e transforme o cuidado no Brasil!</strong></p>
-    <button class="btn-cta" id="cta-cadastro" aria-label="Quero ser cuidador(a)/Especialista">
-      <i class="fas fa-user-plus"></i> Quero ser cuidador(a)/Especialista
-    </button>
-  </section>
+      <p>Conecte-se a famílias, amplie sua renda, conte com suporte e visibilidade em uma comunidade que valoriza o cuidado humanizado.<br>
+      <strong>Cadastre-se no Cuide-me e transforme o cuidado no Brasil!</strong></p>
+      <button class="btn-cta" id="cta-cadastro" aria-label="Quero ser cuidador(a)/Especialista">
+        <i class="fas fa-user-plus"></i> Quero ser cuidador(a)/Especialista
+      </button>
+    </section>
 
-  <div class="benefits" aria-label="Benefícios para especialistas">
-    <div class="benefit-card">
-      <i class="fas fa-shield-alt"></i>
-      <h3>Segurança para você</h3>
-      <p>Verificação de clientes, pagamentos garantidos e canal direto com nossa equipe.</p>
+    <div class="benefits" aria-label="Benefícios para especialistas">
+      <div class="benefit-card">
+        <i class="fas fa-shield-alt"></i>
+        <h3>Segurança para você</h3>
+        <p>Verificação de clientes, pagamentos garantidos e canal direto com nossa equipe.</p>
+      </div>
+      <div class="benefit-card">
+        <i class="fas fa-user-md"></i>
+        <h3>Valorização profissional</h3>
+        <p>Destaque seu perfil, receba avaliações e seja encontrado por famílias que precisam do seu serviço.</p>
+      </div>
+      <div class="benefit-card">
+        <i class="fas fa-calendar-check"></i>
+        <h3>Gestão de agenda fácil</h3>
+        <p>Gerencie seus horários, aceite ou recuse propostas e acompanhe todo o processo online.</p>
+      </div>
+      <div class="benefit-card">
+        <i class="fas fa-hands-helping"></i>
+        <h3>Apoio contínuo</h3>
+        <p>Suporte humanizado para dúvidas, orientações e eventuais intercorrências.</p>
+      </div>
     </div>
-    <div class="benefit-card">
-      <i class="fas fa-user-md"></i>
-      <h3>Valorização profissional</h3>
-      <p>Destaque seu perfil, receba avaliações e seja encontrado por famílias que realmente precisam do seu serviço.</p>
-    </div>
-    <div class="benefit-card">
-      <i class="fas fa-calendar-check"></i>
-      <h3>Gestão de agenda fácil</h3>
-      <p>Gerencie seus horários, aceite ou recuse propostas e acompanhe todo o processo online.</p>
-    </div>
-    <div class="benefit-card">
-      <i class="fas fa-heart"></i>
-      <h3>Apoio contínuo</h3>
-      <p>Suporte humanizado para dúvidas, orientações e eventuais intercorrências.</p>
-    </div>
-  </div>
 
-  <section class="process-section" aria-labelledby="process-title">
-    <h2 id="process-title">Como funciona para o cuidador</h2>
-    <div class="process-steps">
-      <div class="step">
-        <div class="step-number">1</div>
-        <h3>Cadastro rápido</h3>
-        <p>Preencha seus dados e envie documentos direto pela plataforma.</p>
+    <section class="process-section" aria-labelledby="process-title">
+      <h2 id="process-title" class="section-title">Como funciona para o cuidador</h2>
+      <div class="process-steps">
+        <div class="step">
+          <div class="step-number">1</div>
+          <h3>Cadastro rápido</h3>
+          <p>Preencha seus dados e envie documentos direto pela plataforma.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">2</div>
+          <h3>Validação</h3>
+          <p>Nossa equipe analisa sua documentação e entra em contato se faltar algo.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">3</div>
+          <h3>Receba propostas</h3>
+          <p>Perfil aprovado? Comece a receber propostas e agendar entrevistas com famílias.</p>
+        </div>
+        <div class="step">
+          <div class="step-number">4</div>
+          <h3>Atenda e receba</h3>
+          <p>Atenda com excelência e receba pagamentos direto na sua conta. Simples e seguro!</p>
+        </div>
       </div>
-      <div class="step">
-        <div class="step-number">2</div>
-        <h3>Validação</h3>
-        <p>Nossa equipe analisa sua documentação e entra em contato se faltar algo.</p>
-      </div>
-      <div class="step">
-        <div class="step-number">3</div>
-        <h3>Receba propostas</h3>
-        <p>Perfil aprovado? Comece a receber propostas e agendar entrevistas com famílias.</p>
-      </div>
-      <div class="step">
-        <div class="step-number">4</div>
-        <h3>Atenda e receba</h3>
-        <p>Atenda com excelência e receba pagamentos direto na sua conta. Simples e seguro!</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="faq-container" aria-labelledby="faq-title">
-    <h2 id="faq-title">Perguntas Frequentes dos Especialistas</h2>
-    
-    <div class="faq-item">
-      <button class="faq-question"><span>O que acontece após meu cadastro?</span></button>
-      <div class="faq-answer">
-        <p>Assim que você conclui o cadastro, nosso sistema cuida do resto! Seu perfil passa por uma análise cuidadosa para garantir segurança a todos. Caso precise enviar algum documento ou informação extra, avisamos você rapidinho. Estamos juntos em cada etapa!</p>
+<section class="faq-container" aria-labelledby="faq-title">
+      <h2 id="faq-title" class="section-title">Perguntas Frequentes</h2>
+      
+      <div class="faq-item">
+        <button class="faq-question"><span>O que acontece após meu cadastro?</span></button>
+        <div class="faq-answer">
+          <p>Assim que você conclui o cadastro, nosso sistema cuida do resto! Seu perfil passa por uma análise cuidadosa para garantir segurança a todos. Caso precise enviar algum documento ou informação extra, avisamos você rapidinho. Estamos juntos em cada etapa!</p>
+        </div>
       </div>
-    </div>
-    
-    <div class="faq-item">
-      <button class="faq-question"><span>Posso ser reprovado?</span></button>
-      <div class="faq-answer">
-        <p>Não se preocupe! Nosso time sempre te orienta para completar o perfil. Se faltar algo, enviamos um e-mail com todas as dicas para você concluir sem estresse.</p>
+      
+      <div class="faq-item">
+        <button class="faq-question"><span>Posso ser reprovado?</span></button>
+        <div class="faq-answer">
+          <p>Não se preocupe! Nosso time sempre te orienta para completar o perfil. Se faltar algo, enviamos um e-mail com todas as dicas para você concluir sem estresse.</p>
+        </div>
       </div>
-    </div>
-    
-    <div class="faq-item">
-      <button class="faq-question"><span>Como deixo meu perfil mais atraente?</span></button>
-      <div class="faq-answer">
-        <p>Quanto mais completo, melhor! Adicione foto, CPF, certificados, cursos, currículo ou até LinkedIn. Isso aumenta sua visibilidade e chances de ser chamado(a) pelos clientes.</p>
+      
+      <div class="faq-item">
+        <button class="faq-question"><span>Como deixo meu perfil mais atraente?</span></button>
+        <div class="faq-answer">
+          <p>Quanto mais completo, melhor! Adicione foto, CPF, certificados, cursos, currículo ou até LinkedIn. Isso aumenta sua visibilidade e chances de ser chamado(a) pelos clientes.</p>
+        </div>
       </div>
-    </div>
-    
-    <div class="faq-item">
-      <button class="faq-question"><span>Como saberei se preciso atualizar algo?</span></button>
-      <div class="faq-answer">
-        <p>Se faltar qualquer informação, você recebe um e-mail e também verá avisos na própria plataforma. Sempre avisamos de forma clara e rápida!</p>
+      
+      <div class="faq-item">
+        <button class="faq-question"><span>Como saberei se preciso atualizar algo?</span></button>
+        <div class="faq-answer">
+          <p>Se faltar qualquer informação, você recebe um e-mail e também verá avisos na própria plataforma. Sempre avisamos de forma clara e rápida!</p>
+        </div>
       </div>
-    </div>
-    
-    <div class="faq-item">
-      <button class="faq-question"><span>Meu perfil aparece mesmo se incompleto?</span></button>
-      <div class="faq-answer">
-        <p>Aparece sim, mas quem completa o perfil aparece mais para as famílias e tem prioridade nas buscas. Capriche no cadastro para se destacar!</p>
+      
+      <div class="faq-item">
+        <button class="faq-question"><span>Meu perfil aparece mesmo se incompleto?</span></button>
+        <div class="faq-answer">
+          <p>Aparece sim, mas quem completa o perfil aparece mais para as famílias e tem prioridade nas buscas. Capriche no cadastro para se destacar!</p>
+        </div>
       </div>
-    </div>
-    
-    <div class="faq-item">
-      <button class="faq-question"><span>Meus dados estão protegidos?</span></button>
-      <div class="faq-answer">
-        <p>Sim! Só clientes verificados acessam seu perfil profissional. Seus dados pessoais são protegidos conforme a nossa <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a> e nunca são expostos sem sua permissão.</p>
+      
+      <div class="faq-item">
+        <button class="faq-question"><span>Meus dados estão protegidos?</span></button>
+        <div class="faq-answer">
+          <p>Sim! Só clientes verificados acessam seu perfil profissional. Seus dados pessoais são protegidos conforme a nossa <a href="https://cuide-me.com.br/politica_privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a> e nunca são expostos sem sua permissão.</p>
+        </div>
       </div>
-    </div>
-    
-    <div class="faq-item">
-      <button class="faq-question"><span>Como funciona o suporte para especialistas?</span></button>
-      <div class="faq-answer">
-        <p>Conte com nosso chatbot 24h para dúvidas rápidas. Se preferir, temos uma equipe de suporte humanizado pronta para te ajudar sempre que precisar!</p>
+      
+      <div class="faq-item">
+        <button class="faq-question"><span>Como funciona o suporte para especialistas?</span></button>
+        <div class="faq-answer">
+          <p>Conte com nosso chatbot 24h para dúvidas rápidas. Se preferir, temos uma equipe de suporte humanizado pronta para te ajudar sempre que precisar!</p>
+        </div>
       </div>
-    </div>
-    
-    <div class="faq-item">
-      <button class="faq-question"><span>E se eu tiver dificuldade para enviar documentos?</span></button>
-      <div class="faq-answer">
-        <p>Sem problemas! Fale conosco pelo chat, WhatsApp ou e-mail e ajudamos você a validar e enviar tudo de forma segura e tranquila.</p>
+      
+      <div class="faq-item">
+        <button class="faq-question"><span>E se eu tiver dificuldade para enviar documentos?</span></button>
+        <div class="faq-answer">
+          <p>Sem problemas! Fale conosco pelo chat, WhatsApp ou e-mail e ajudamos você a validar e enviar tudo de forma segura e tranquila.</p>
+        </div>
       </div>
-    </div>
-    
-    <div class="faq-item">
-      <button class="faq-question"><span>Como fico sabendo quando um cliente me escolhe?</span></button>
-      <div class="faq-answer">
-        <p>Você será avisado(a) por e-mail e dentro da plataforma assim que um cliente demonstrar interesse. Fique de olho nas notificações!</p>
-      </div>
-    </div>
-    
-    <div class="faq-item">
-      <button class="faq-question"><span>Tenho controle sobre meus dados e perfil?</span></button>
-      <div class="faq-answer">
-        <p>Sim, total controle! Você pode editar ou excluir informações quando quiser. Qualquer dúvida sobre dados, só enviar e-mail para <a href="mailto:privacidade@cuide-me.app">privacidade@cuide-me.app</a>.</p>
-      </div>
-    </div>
-  </section>
+    </section>
+  </main>
 
   <footer class="footer">
-    Dúvidas? <a href="mailto:contato@cuide-me.app">cuideme.cuidados@gmail.com</a> |
-    <a href="https://cuide-me.vercel.app/termos_de_uso_cuide_me.html" target="_blank" rel="noopener">Termos de Uso</a> •
-    <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>
-    <br>
+    <div class="footer-links">
+      <a href="mailto:contato@cuide-me.com.br">contato@cuide-me.com.br</a>
+      <a href="https://cuide-me.com.br/termos_de_uso.html" target="_blank" rel="noopener">Termos de Uso</a>
+      <a href="https://cuide-me.com.br/politica_privacidade.html" target="_blank" rel="noopener">Política de Privacidade</a>
+    </div>
     <div class="footer-lgpd">
       <i class="fas fa-user-shield" aria-hidden="true"></i>
       <span>
-        Seus dados são tratados de acordo com a <a href="https://cuide-me.vercel.app/politica_privacidade.html" target="_blank" rel="noopener">LGPD</a>. Ambiente seguro e criptografado.
+        Seus dados são tratados de acordo com a <a href="https://cuide-me.com.br/politica_privacidade.html" target="_blank" rel="noopener">LGPD</a>. Ambiente seguro e criptografado.
       </span>
       <span class="footer-seguro">
         <i class="fas fa-lock"></i> Ambiente Seguro
       </span>
     </div>
-    <br>
-    © 2025 Cuide-me. Todos os direitos reservados.
+    <div class="copyright">
+      © 2025 Cuide-me.com.br. Todos os direitos reservados.
+    </div>
   </footer>
+
+  <!-- Floating CTA -->
+  <button class="floating-cta" id="floating-cta" aria-label="Cadastre-se agora">
+    <i class="fas fa-user-plus"></i>
+  </button>
 
   <!-- Scripts para interatividade, rastreamento de eventos e acessibilidade -->
   <script>
     // FAQ amigável (acessível por teclado)
     document.querySelectorAll('.faq-question').forEach(btn => {
       btn.setAttribute('tabindex', '0');
-      btn.addEventListener('click', () => btn.parentNode.classList.toggle('active'));
+      btn.setAttribute('aria-expanded', 'false');
+      
+      btn.addEventListener('click', () => {
+        const parent = btn.parentNode;
+        const isActive = parent.classList.toggle('active');
+        btn.setAttribute('aria-expanded', isActive ? 'true' : 'false');
+      });
+      
       btn.addEventListener('keydown', e => {
         if (e.key === "Enter" || e.key === " ") {
-          btn.parentNode.classList.toggle('active');
+          const parent = btn.parentNode;
+          const isActive = parent.classList.toggle('active');
+          btn.setAttribute('aria-expanded', isActive ? 'true' : 'false');
           e.preventDefault();
         }
       });
     });
 
-    // Evento de clique no CTA (com redirecionamento atualizado)
+    // Evento de clique no CTA
     document.getElementById('cta-cadastro').addEventListener('click', function() {
+      document.getElementById('form-section').scrollIntoView({behavior: 'smooth'});
       gtag('event', 'especialista_cadastro_cta', {
         'event_category': 'Especialista Captação',
         'event_label': 'Clique CTA Quero ser cuidador(a)'
       });
-      window.location.href = 'https://cuide-me.vercel.app/cadastro_cuidador.html';
     });
 
-    // INTENÇÃO DE SAÍDA/desistência (desktop: mouse sai do topo)
+    // Floating CTA
+    document.getElementById('floating-cta').addEventListener('click', function() {
+      document.getElementById('form-section').scrollIntoView({behavior: 'smooth'});
+      gtag('event', 'floating_cta_click', {
+        'event_category': 'CTA Flutuante',
+        'event_label': 'Botão flutuante clicado'
+      });
+    });
+
+    // Formulário de cadastro
+    document.getElementById('cadastro-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Simulação de envio
+      alert('Cadastro enviado com sucesso! Nossa equipe entrará em contato em breve.');
+      this.reset();
+      
+      // Evento de conversão
+      gtag('event', 'conversion', {
+        'event_category': 'Cadastro Cuidador',
+        'event_label': 'Formulário enviado'
+      });
+    });
+
+    // INTENÇÃO DE SAÍDA/desistência
     let ctaClicado = false;
     document.getElementById('cta-cadastro').addEventListener('click', function() {
       ctaClicado = true;
     });
+    
     document.addEventListener('mouseout', function(e) {
       if (!ctaClicado && e.clientY <= 0) {
         gtag('event', 'especialista_abandono', {
@@ -676,6 +919,7 @@
         ctaClicado = true;
       }
     });
+    
     window.addEventListener('pagehide', function(e) {
       if (!ctaClicado) {
         gtag('event', 'especialista_abandono', {
@@ -683,6 +927,19 @@
           'event_label': 'Pagehide/mobile abandono'
         });
       }
+    });
+    
+    // Rastreamento de visualização de FAQ
+    document.querySelectorAll('.faq-item').forEach(item => {
+      const question = item.querySelector('.faq-question');
+      question.addEventListener('click', () => {
+        if (item.classList.contains('active')) {
+          gtag('event', 'faq_open', {
+            'event_category': 'FAQ',
+            'event_label': question.textContent.trim()
+          });
+        }
+      });
     });
   </script>
 </body>
